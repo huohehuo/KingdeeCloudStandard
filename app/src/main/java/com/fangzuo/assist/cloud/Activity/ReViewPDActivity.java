@@ -1,0 +1,201 @@
+package com.fangzuo.assist.cloud.Activity;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+
+import com.fangzuo.assist.cloud.ABase.BaseActivity;
+import com.fangzuo.assist.cloud.Adapter.ReViewPDAdapter;
+import com.fangzuo.assist.cloud.Dao.PushDownSub;
+import com.fangzuo.assist.cloud.Dao.T_Detail;
+import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.MathUtil;
+import com.fangzuo.assist.cloud.databinding.ActivityReViewPdBinding;
+import com.fangzuo.greendao.gen.PushDownSubDao;
+import com.fangzuo.greendao.gen.T_DetailDao;
+import com.fangzuo.greendao.gen.T_mainDao;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class ReViewPDActivity extends BaseActivity {
+    ActivityReViewPdBinding binding;
+    private int activity;
+    private List<T_Detail> list;
+    private ReViewPDAdapter adapter;
+    private List<Boolean> isCheck;
+
+    @Override
+    protected void initView() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_re_view_pd);
+        ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void initData() {
+        Intent in = getIntent();
+        Bundle extras = in.getExtras();
+        activity = extras.getInt("activity");
+        initList();
+    }
+
+    private void initList() {
+        double num = 0;
+        isCheck = new ArrayList<>();
+        list = new ArrayList<>();
+        list = t_detailDao.queryBuilder().where(
+                T_DetailDao.Properties.Activity.eq(activity)
+        ).build().list();
+        if (list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                isCheck.add(false);
+            }
+        }else{//若列表为空，删除所有该activity的表头信息
+            t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list());
+        }
+        Lg.e("列表数据：" + gson.toJson(list));
+        adapter = new ReViewPDAdapter(mContext, list, isCheck);
+        binding.lvResult.setAdapter(adapter);
+//        adapter.setInnerListener(this);
+        adapter.notifyDataSetChanged();
+        List<String> products = new ArrayList<>();
+        products.clear();
+        if (list.size() > 0) {
+            if (products.size() == 0) {
+                products.add(list.get(0).FMaterialId);
+            }
+            for (int i = 0; i < list.size(); i++) {
+                if (!products.contains(list.get(i).FMaterialId)) {
+                    products.add(list.get(i).FMaterialId);
+                }
+                num += MathUtil.toD(list.get(i).FRealQty);
+            }
+            binding.productcategory.setText("物料类别数:" + products.size() + "个");
+            binding.productnum.setText("物料总数为:" + num + "");
+        } else {
+            binding.productcategory.setText("物料类别数:" + 0 + "个");
+            binding.productnum.setText("物料总数为:" + 0 + "");
+        }
+
+    }
+
+    @Override
+    protected void initListener() {
+        binding.lvResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (isCheck.get(i)) {
+                    isCheck.set(i, false);
+                } else {
+                    isCheck.set(i, true);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    protected void OnReceive(String code) {
+
+    }
+    @OnClick({R.id.btn_back, R.id.delete_all, R.id.btn_delete})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_back:
+                finish();
+                break;
+//            case R.id.delete_all:
+//                AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+//                ab.setTitle("确认删除");
+//                ab.setMessage("确认删除所有么？");
+//                ab.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
+//                                T_DetailDao.Properties.Activity.eq(activity)).build().list());
+//                        initList();
+//                        t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
+//                                T_mainDao.Properties.Activity.eq(activity)).build().list());
+//                    }
+//                });
+//                ab.setNegativeButton("取消", null);
+//                ab.create().show();
+//                break;
+            case R.id.btn_delete:
+                AlertDialog.Builder delete = new AlertDialog.Builder(mContext);
+                delete.setTitle("确认删除");
+                delete.setMessage("确认删除选中单据么？");
+                delete.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        List<T_Detail> details = new ArrayList<>();
+                        for (int j = 0; j < list.size(); j++) {
+                            if (isCheck.get(j)) {
+                                details.add(t_detailDao.queryBuilder().where(
+                                        T_DetailDao.Properties.FIndex.eq(list.get(j).FIndex)
+                                ).build().unique());
+                                PushDownSubDao pushDownSubDao = daoSession.getPushDownSubDao();
+                                List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
+                                        PushDownSubDao.Properties.FEntryID.eq(list.get(j).FEntryID)
+                                ).build().list();
+                                Lg.e(pushDownSubs.size() + "多少个");
+                                if (pushDownSubs.size() > 0) {
+                                    //删除后，更新数据里面的已验收数
+                                    double result = MathUtil.toD(list.get(j).FRealQty);
+                                    pushDownSubs.get(0).FQtying = MathUtil.doubleSub(MathUtil.toD(pushDownSubs.get(0).FQtying), result) + "";
+                                    pushDownSubDao.update(pushDownSubs.get(0));
+                                }
+                            }
+                        }
+                        deleteMain(details);
+                        initList();
+                    }
+                });
+                delete.setNegativeButton("取消", null);
+                delete.create().show();
+                break;
+        }
+    }
+    //删除相应的表头信息
+    private void deleteMain(List<T_Detail> list){
+        TreeSet<String> treeSet = new TreeSet<>();
+        for (int i = 0; i < list.size(); i++) {
+            treeSet.add(list.get(i).FOrderId+"");
+        }
+        for (String string:treeSet) {
+            List<T_Detail> list1=t_detailDao.queryBuilder().where(
+                    T_DetailDao.Properties.FOrderId.eq(string)
+            ).build().list();
+            //当明细小于等于1时，删除该单据的表头数据
+            if (list1.size()<=1){
+                t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
+                        T_mainDao.Properties.FOrderId.eq(string)).build().list());
+            }
+        }
+        t_detailDao.deleteInTx(list);
+
+    }
+
+//    private double getUnitrateSub(PushDownSub pushDownSub) {
+//        UnitDao unitDao = daoSession.getUnitDao();
+//        List<Unit> units = unitDao.queryBuilder().where(
+//                UnitDao.Properties.FMeasureUnitID.eq(pushDownSub.FUnitID)
+//        ).build().list();
+//        if (units.size() > 0) {
+//            return Double.valueOf(units.get(0).FCoefficient);
+////            Lg.e("获得明细换算率：" + unitrateSub);
+//        } else {
+//            return  1;
+////            Lg.e("获得明细换算率失败：" + unitrateSub);
+//        }
+//    }
+}
