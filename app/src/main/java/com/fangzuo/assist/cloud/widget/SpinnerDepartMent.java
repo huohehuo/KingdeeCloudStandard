@@ -186,7 +186,10 @@ public class SpinnerDepartMent extends RelativeLayout {
         });
 
     }
-
+    public void setEnable(boolean b){
+        mTitleTv.setClickable(b);
+        mSp.setEnabled(b);
+    }
     //自动设置保存的值
 
 //
@@ -282,7 +285,7 @@ public class SpinnerDepartMent extends RelativeLayout {
                 yuandanTypeDao.deleteAll();
                 yuandanTypeDao.insertOrReplaceInTx(dBean.department);
                 yuandanTypeDao.detachAll();
-                Lg.e(T,dBean.department);
+//                Lg.e(T,dBean.department);
                 if (dBean.department.size() > 0 && container.size()<=0){
                     dealAuto(dBean.department,true);
 //                    if (activity instanceof ProductInStoreActivity || activity instanceof ProductGetActivity){
@@ -331,7 +334,7 @@ public class SpinnerDepartMent extends RelativeLayout {
     private void dealAuto(List<Department> listData, boolean check) {
         container.clear();
         if (check) {
-            if (activityTag== Config.ProductInStoreActivity || activityTag== Config.ProductGetActivity) {
+            if (activityTag== Config.ProductInStoreActivity||activityTag==Config.TbInActivity||activityTag==Config.DgInActivity||activityTag==Config.SimpleInActivity || activityTag== Config.ProductGetActivity) {
                 for (int i = 0; i < listData.size(); i++) {
                     if (listData.get(i).FOrg.equals(autoOrg)) {
                         if (listData.get(i).FISSTOCK.equals("1")){

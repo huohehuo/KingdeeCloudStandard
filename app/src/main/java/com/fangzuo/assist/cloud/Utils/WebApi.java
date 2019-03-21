@@ -70,6 +70,7 @@ public class WebApi {
     public static final String OtherInUpload = "OtherInUpload";
     public static final String OtherOutUpload = "OtherOutUpload";
     public static final String DBUpload = "DBUpload";
+    public static final String SaleOutUpload = "SaleOutUpload";
 
     public static final String AuxSignFirstCheck = "AuxSignFirstCheck";
     public static final String AuxSignSecCheck = "AuxSignSecCheck";

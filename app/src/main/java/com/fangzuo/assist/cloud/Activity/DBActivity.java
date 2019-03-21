@@ -255,7 +255,7 @@ public class DBActivity extends BaseActivity {
                     autoAuxSing = codeCheckBackDataBean.FAuxsign;
                     autoStorage = codeCheckBackDataBean.FStockID;
                     LoadingUtil.showDialog(mContext, "正在查找物料信息");
-                    DataModel.getProductForId(codeCheckBackDataBean.FItemID, orgOut);
+                    DataModel.getProductForNumber(codeCheckBackDataBean.FItemID, orgOut);
                 } else {
                     ReSetScan(cbScaning);
                     Toast.showText(mContext, codeCheckBackDataBean.FTip);
@@ -295,7 +295,7 @@ public class DBActivity extends BaseActivity {
         spWhichStorageOut.setAuto("", orgOut);
         spStoreman.setAuto(getString(R.string.spStoreman_db), "", orgOut);
         spWhichStorageIn.setAuto("", orgOut);
-        spUnit.setAuto("", orgOut, SpinnerUnit.Id);
+        spUnit.setAuto("",SpinnerUnit.Id);
 
         spOrgIn.setAutoSelection(getString(R.string.spOrgIn_db), Hawk.get(Info.user_org, ""));
         spOrgHuozhuIn.setAutoSelection(getString(R.string.spOrgHuozhuIn_db),orgIn, Hawk.get(Info.user_org, ""));

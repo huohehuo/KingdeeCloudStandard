@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Service.DataService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.DataModel;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
@@ -93,7 +95,7 @@ public class FragmentPrGetDetail extends BaseFragment {
     @BindView(R.id.sp_unit)
     SpinnerUnit spUnit;
     @BindView(R.id.ed_pihao)
-    EditText edPihao;
+    TextView edPihao;
     @BindView(R.id.ed_num)
     EditText edNum;
     @BindView(R.id.ed_purchase_no)
@@ -104,10 +106,12 @@ public class FragmentPrGetDetail extends BaseFragment {
     SpinnerActualModel spActualmodel;
     @BindView(R.id.zxing_barcode_scanner)
     DecoratedBarcodeView zxingBarcodeScanner;
-    @BindView(R.id.cb_scaning)
-    CheckBox cbScaning;
+//    @BindView(R.id.cb_scaning)
+//    CheckBox cbScaning;
     @BindView(R.id.tv_storenum)
     TextView tvStorenum;
+    @BindView(R.id.btn_add)
+    Button btnAdd;
     private FragmentActivity mContext;
     private PagerForActivity activityPager;
     Unbinder unbinder;
@@ -131,6 +135,7 @@ public class FragmentPrGetDetail extends BaseFragment {
     private String autoAuxSing = "";
     private String autoActualModel = "";
     private String autoStorage = "";
+    private String scanNum = "";
     private ScanManager mCaptureManager;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -138,11 +143,11 @@ public class FragmentPrGetDetail extends BaseFragment {
         switch (event.Msg) {
             case EventBusInfoCode.ScanResult:
                 BarcodeResult res = (BarcodeResult) event.postEvent;
-                if (cbScaning.isChecked()){
-                }else{
+//                if (cbScaning.isChecked()){
+//                }else{
                     mCaptureManager.onPause();
                     zxingBarcodeScanner.setVisibility(View.GONE);
-                }
+//                }
 
                 OnReceive(res.getResult().getText());
 //                Toast.showText(mContext, "扫描结果：" + res.getResult().getText());
@@ -181,7 +186,11 @@ public class FragmentPrGetDetail extends BaseFragment {
                             }
                         });
                     }
+                    ordercode++;
+                    Log.e("ordercode", ordercode + "");
+                    share.setOrderCode(activityPager.getActivity(), ordercode);
                     MediaPlayer.getInstance(mContext).ok();
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));//上传成功，解锁表头
                     Toast.showText(mContext, "上传成功");
 //                btnBackorder.setClickable(true);
                     LoadingUtil.dismiss();
@@ -193,7 +202,7 @@ public class FragmentPrGetDetail extends BaseFragment {
                         builder.append(error.getFieldName() + "\n");
                         builder.append(error.getMessage() + "\n");
                     }
-                    AlertDialog.Builder delete = new AlertDialog.Builder(activityPager.getApplicationContext());
+                    AlertDialog.Builder delete = new AlertDialog.Builder(activityPager);
                     delete.setTitle("上传错误");
                     delete.setMessage(builder.toString());
                     delete.setPositiveButton("确定", null);
@@ -211,17 +220,19 @@ public class FragmentPrGetDetail extends BaseFragment {
             case EventBusInfoCode.Code_Check://条码检测
                 LoadingUtil.dismiss();
                 codeCheckBackDataBean = (CodeCheckBackDataBean) event.postEvent;
+                Lg.e("条码检测：",codeCheckBackDataBean);
                 if (codeCheckBackDataBean.FTip.equals("OK")) {
                     edPihao.setText(codeCheckBackDataBean.FBatchNo);
                     edPurchaseNo.setText(codeCheckBackDataBean.FPurchaseNo);
+                    scanNum = codeCheckBackDataBean.FQty;
                     edNum.setText(codeCheckBackDataBean.FQty);
                     autoActualModel = codeCheckBackDataBean.FActualmodel;
                     autoAuxSing = codeCheckBackDataBean.FAuxsign;
                     autoStorage = codeCheckBackDataBean.FStockID;
                     LoadingUtil.showDialog(mContext, "正在查找物料信息");
-                    DataModel.getProductForId(codeCheckBackDataBean.FItemID, activityPager.getOrgOut());
+                    DataModel.getProductForNumber(codeCheckBackDataBean.FItemID, activityPager.getOrgOut());//03/12:已改为FNumber查找，不分org
                 } else {
-                    activityPager.ReSetScan(cbScaning);
+//                    activityPager.ReSetScan(cbScaning);
                     Toast.showText(mContext, codeCheckBackDataBean.FTip);
                 }
                 break;
@@ -230,12 +241,13 @@ public class FragmentPrGetDetail extends BaseFragment {
                 if (codeCheckBackDataBean.FTip.equals("OK")) {
                     Addorder();
                 } else {
+                    LoadingUtil.dismiss();
                     Toast.showText(mContext, codeCheckBackDataBean.FTip);
                 }
                 break;
             case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
                 if (null != activityPager) {
-                    spUnit.setAuto("", activityPager.getOrgOut(), SpinnerUnit.Id);
+                    spUnit.setAuto("",  SpinnerUnit.Id);
                     spWhichStorage.setAuto("", activityPager.getOrgOut());
                 }
                 break;
@@ -293,12 +305,13 @@ public class FragmentPrGetDetail extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             //相当于Fragment的onResume Lg.e("fragment显示");
-//            if (null!=activityPager){
+            if (null!=activityPager){
+                setfocus(search);
 //                spWhichStorage.setAuto("",activityPager.getOrgOut());
 //                spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pis),"",activityPager.getOrgOut());
 //                spUnit.setAuto("", activityPager.getOrgOut(),SpinnerUnit.Id);
 //                spUnitAux.setAuto("", activityPager.getOrgOut(),SpinnerUnit.Id);
-//            }
+            }
         } else {
             //相当于Fragment的onPause Lg.e("fragment隐藏");
         }
@@ -316,6 +329,12 @@ public class FragmentPrGetDetail extends BaseFragment {
 
     @Override
     protected void initListener() {
+        btnAdd.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View view) {
+                checkMainDlg();
+            }
+        });
         spWhichStorage.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
@@ -324,7 +343,7 @@ public class FragmentPrGetDetail extends BaseFragment {
                 Lg.e("选中仓库：", storage);
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, storage, "");
-                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum);
+                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getHuozhuOut());
 
             }
         });
@@ -351,11 +370,11 @@ public class FragmentPrGetDetail extends BaseFragment {
         }
         tvGoodName.setText(product.FName);tvModel.setText(product.FModel);tvCode.setText(product.FNumber);
         //带出物料的默认值
-        spUnit.setAuto(product.FPurchaseUnitID, activityPager.getOrgOut(), SpinnerUnit.Id);
-        if (activityPager.isStorage()) {
+        spUnit.setAuto(product.FPurchaseUnitID,SpinnerUnit.Id);
+//        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
-            spWhichStorage.setAuto(product.FStockID, activityPager.getOrgOut());
-        }
+            spWhichStorage.setAuto(autoStorage, activityPager.getOrgOut());
+//        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
             isOpenBatch = true;
             edPihao.setEnabled(true);
@@ -364,18 +383,38 @@ public class FragmentPrGetDetail extends BaseFragment {
             edPihao.setText("");
             isOpenBatch = false;
         }
-        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum);
+        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getHuozhuOut());
 
-        spAuxsign.getData(product.FMASTERID, "");
-        spActualmodel.getData(product.FMASTERID, "");
+        spAuxsign.getData(product.FMASTERID, autoAuxSing);
+        spActualmodel.getData(product.FMASTERID, autoActualModel);
 
         //自动添加
         if (activityPager.getIsAuto().isChecked()) {
-            if (!checkBeforeAdd()) {
-                activityPager.ReSetScan(cbScaning);
-            }
+            checkMainDlg();
+//            if (!checkBeforeAdd()) {
+//                activityPager.ReSetScan(cbScaning);
+//            }
         } else {
-            activityPager.ReSetScan(cbScaning);
+//            activityPager.ReSetScan(cbScaning);
+        }
+    }
+
+    //若为该单据为第一次，弹出确认框
+    private void checkMainDlg(){
+        if (!activityPager.isHasLock()){
+            AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+            ab.setTitle(getString(R.string.checkMainDlg_title));
+            ab.setMessage(getString(R.string.checkMainDlg_msg));
+            ab.setPositiveButton(getString(R.string.checkMainDlg_ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    checkBeforeAdd();
+                }
+            });
+            ab.setNegativeButton(getString(R.string.checkMainDlg_error), null);
+            ab.create().show();
+        }else{
+            checkBeforeAdd();
         }
     }
 
@@ -412,9 +451,19 @@ public class FragmentPrGetDetail extends BaseFragment {
             MediaPlayer.getInstance(mContext).error();
             return false;
         }//--------------------------------------------------
-
+        if (MathUtil.toD(tvStorenum.getText().toString())<=0) {
+            Toast.showText(mContext, "库存不足");
+            MediaPlayer.getInstance(mContext).error();
+            return false;
+        }
+        if (MathUtil.toD(edNum.getText().toString())>MathUtil.toD(scanNum)){
+            Toast.showText(mContext, "出库数量不能大于扫码出库数量");
+            MediaPlayer.getInstance(mContext).error();
+            return false;
+        }
+        LoadingUtil.showDialog(mContext,"正在添加...");
         //插入条码唯一临时表
-        CodeCheckBean bean = new CodeCheckBean(barcode,ordercode + "", BasicShareUtil.getInstance(mContext).getIMIE());
+        CodeCheckBean bean = new CodeCheckBean(barcode,ordercode + "", edNum.getText().toString(),BasicShareUtil.getInstance(mContext).getIMIE());
         DataModel.codeOnlyInsert(WebApi.CodeCheckInsertForOut,gson.toJson(bean));
 //        Addorder();
         return true;
@@ -458,7 +507,7 @@ public class FragmentPrGetDetail extends BaseFragment {
             main.setData(Info.getType(activity),activityPager.getOrgOut(0),activityPager.getOrgIn(0),activityPager.getHuozhuOut(0));
             main.FDepartmentNumber = activityPager.getDepartMent();
 //            main.FPurchaseDeptId = spDepartmentBuy.getDataNumber();
-            main.FPurchaserId = activityPager.getManGet();
+//            main.FPurchaserId = activityPager.getManGet();
             main.FStockerNumber = activityPager.getManStore();
             main.FDate = activityPager.getDate();
             main.FNot = activityPager.getNote();
@@ -475,6 +524,8 @@ public class FragmentPrGetDetail extends BaseFragment {
             detail.FIndex = timesecond;
             detail.FRemainInStockQty = num;
             detail.FRealQty = num;
+            detail.FStoreNum = tvStorenum.getText().toString();
+            detail.FBaseNum = num;
             detail.FProductNo = edPurchaseNo.getText().toString();
             detail.FBatch = edPihao.getText().toString();
             detail.AuxSign = spAuxsign.getDataNumber();
@@ -492,6 +543,7 @@ public class FragmentPrGetDetail extends BaseFragment {
                 Toast.showText(mContext,"添加成功");
                 resetAll();
             }else{
+                LoadingUtil.dismiss();
                 MediaPlayer.getInstance(mContext).error();
                 Toast.showText(mContext,"添加失败，请重试");
             }
@@ -538,19 +590,26 @@ public class FragmentPrGetDetail extends BaseFragment {
 //            });
 
         } catch (Exception e) {
+            LoadingUtil.dismiss();
             DataService.pushError(mContext, this.getClass().getSimpleName(), e);
         }
 
     }
     private void resetAll(){
-        activityPager.ReSetScan(cbScaning);
+        LoadingUtil.dismiss();
+//        activityPager.ReSetScan(cbScaning);
         edPurchaseNo.setText("");
         listOrder.clear();
         barcode="";
+        scanNum = "";
         edPihao.setText("");
         edNum.setText("");
         product = null;
-
+        //判断是否锁住表头
+        //判断是否有保存的业务单号，没有的话，锁定表头
+//        if ("".equals(Hawk.get(Config.OrderNo+activityPager.getActivity(),""))){
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+//        }
     }
 
     //执行完单，PDA单据编号+1
@@ -591,9 +650,9 @@ public class FragmentPrGetDetail extends BaseFragment {
 //                bundle1.putInt("activity", activity);
 //                startNewActivityForResult(activityPager, ProductSearchActivity.class, R.anim.activity_open, 0, Info.SEARCHFORRESULT, bundle1);
                 break;
-            case R.id.btn_add:
-                checkBeforeAdd();
-                break;
+//            case R.id.btn_add:
+//                checkBeforeAdd();
+//                break;
             case R.id.btn_backorder:
                 new AlertDialog.Builder(mContext)
                         .setTitle("确认上传？")

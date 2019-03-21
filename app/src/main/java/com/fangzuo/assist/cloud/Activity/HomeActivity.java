@@ -12,12 +12,15 @@ import com.fangzuo.assist.cloud.ABase.BaseActivity;
 import com.fangzuo.assist.cloud.Adapter.MenuFragmentAdapter;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Fragment.PurchaseFragment;
+import com.fangzuo.assist.cloud.Fragment.SaleFragment;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
+import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.UpdataLocData;
 import com.fangzuo.assist.cloud.databinding.ActivityHomeBinding;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 
@@ -51,26 +54,27 @@ public class HomeActivity extends BaseActivity {
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         initBar();
-        setDrawerLeftEdgeSize(this, binding.drawerLayout, 0.2f);//设置抽屉滑动响应范围
+        setDrawerLeftEdgeSize(this, binding.drawerLayout, 0.1f);//设置抽屉滑动响应范围
         binding.tvUser.setText("当前用户:"+ ShareUtil.getInstance(mContext).getUserName());
+        binding.tvData.setText("数据中心:"+ Hawk.get(Info.user_data,""));
     }
 
     @Override
     protected void initData() {
         FragmentManager fm = getSupportFragmentManager();
         PurchaseFragment purchaseFragment = new PurchaseFragment();
-//        SaleFragment saleFragment = new SaleFragment();
+        SaleFragment saleFragment = new SaleFragment();
 //        StorageFragment storageFragment = new StorageFragment();
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(purchaseFragment);
-//        fragments.add(saleFragment);
+        fragments.add(saleFragment);
 //        fragments.add(storageFragment);
         MenuFragmentAdapter menuFragmentAdapter = new MenuFragmentAdapter(fm, fragments);
         binding.viewPager.setAdapter(menuFragmentAdapter);
         binding.viewPager.setCurrentItem(0);
         binding.tabBottom.ivPurchase.setImageResource(R.mipmap.purchase);
         binding.tabBottom.tvPurchase.setTextColor(getResources().getColor(R.color.bottombartv));
-
+        binding.tvAbout.setText("测试号:"+ Info.TestNo);
     }
 
     @Override
@@ -95,11 +99,11 @@ public class HomeActivity extends BaseActivity {
                         binding.tabBottom.ivPurchase.setImageResource(R.mipmap.purchase);
                         binding.tabBottom.tvPurchase.setTextColor(getResources().getColor(R.color.bottombartv));
                         break;
-//                    case 1:
-//                        resetBottomView();
-//                        binding.tabBottom.ivSale.setImageResource(R.mipmap.sale);
-//                        binding.tabBottom.tvSale.setTextColor(getResources().getColor(R.color.bottombartv));
-//                        break;
+                    case 1:
+                        resetBottomView();
+                        binding.tabBottom.ivSale.setImageResource(R.mipmap.sale);
+                        binding.tabBottom.tvSale.setTextColor(getResources().getColor(R.color.bottombartv));
+                        break;
 //                    case 2:
 //                        resetBottomView();
 //                        binding.tabBottom.ivStorage.setImageResource(R.mipmap.storage);

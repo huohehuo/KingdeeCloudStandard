@@ -396,7 +396,9 @@ public class SpinnerStoreMan extends RelativeLayout {
         }
 
     }
-
+    public void setEnable(boolean b){
+        mSp.setEnabled(b);
+    }
 
     public StoreManSpAdapter getAdapter() {
         return adapter;

@@ -44,7 +44,7 @@ public class SaleManSpAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view==null){
-            view = LayoutInflater.from(context).inflate(R.layout.itemtext,null);
+            view = LayoutInflater.from(context).inflate(R.layout.item_org_text,null);
             viewHolder = new ViewHolder();
             viewHolder.tv = view.findViewById(R.id.textView);
             view.setTag(viewHolder);

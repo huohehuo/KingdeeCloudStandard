@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:textSize="@dimen/sp_in_size"
         android:singleLine="false"
-        android:gravity="center"
+        android:paddingLeft="46dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="TextView" />

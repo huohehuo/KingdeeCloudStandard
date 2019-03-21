@@ -31,6 +31,7 @@ import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
+import com.fangzuo.greendao.gen.ClientDao;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 
@@ -264,6 +265,10 @@ public class ProductSearchActivity extends BaseActivity {
                     public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
                         pg.setVisibility(View.GONE);
                         DownloadReturnBean dBean = new Gson().fromJson(cBean.returnJson, DownloadReturnBean.class);
+                        ClientDao clientDao = daoSession.getClientDao();
+                        clientDao.deleteAll();
+                        clientDao.insertOrReplaceInTx(dBean.clients);
+                        clientDao.detachAll();
                         itemClient = dBean.clients;
                         itemAllClient = new ArrayList<>();
                         itemAllClient.addAll(itemClient);
@@ -401,6 +406,9 @@ public class ProductSearchActivity extends BaseActivity {
                 FIsPurchase="1";
                 break;
             case Config.ProductInStoreActivity://产品入库
+            case Config.TbInActivity://产品入库
+            case Config.DgInActivity://产品入库
+            case Config.SimpleInActivity://产品入库
                 s2Product.FIsProduce="1";
                 FIsProduce="1";
                 break;

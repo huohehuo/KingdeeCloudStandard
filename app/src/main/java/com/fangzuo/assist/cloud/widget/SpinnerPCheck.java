@@ -34,6 +34,7 @@ public class SpinnerPCheck extends RelativeLayout {
     private String employeeId="";
     private String employeeName="";
     private String employeeNumber="";
+    private String autoString="";
     private String FPARENTID="";
     private String T="物料选择：";     //3
 
@@ -115,7 +116,8 @@ public class SpinnerPCheck extends RelativeLayout {
      *
      * @param fid       递归查询的值，0时为所有
      * */
-    public void setAutoSelection(String fid) {
+    public void setAutoSelection(String fid,String auto) {
+        autoString=auto;
         if (null==fid)return;
         if ("".equals(fid))return;
 //        container.clear();
@@ -145,26 +147,29 @@ public class SpinnerPCheck extends RelativeLayout {
         employeeName =      "";
         employeeNumber =    "";
         FPARENTID =    "";
+        container.add(new ProductTreeBeanList().new ProductTreeBean("","","",""));
         container.addAll(listData);
         mSp.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-//        if (container.size()>0){
-//            for (int j = 0; j < container.size(); j++) {
-//                if (container.get(j).FNumber.equals(autoString)
-//                        || container.get(j).FName.equals(autoString)) {
-//                    mSp.setSelection(j);
-////                autoString = null;
-//                    break;
-//                }
-//            }
-//        }
+        if (container.size()>0){
+            for (int j = 0; j < container.size(); j++) {
+                if (container.get(j).FNumber.equals(autoString)) {
+                    mSp.setSelection(j);
+                    break;
+                }
+            }
+        }
     }
 
     public void addItems(List<Product> products){
         container.clear();
         for (Product bean:products) {
             ProductTreeBeanList.ProductTreeBean productTreeBean = new ProductTreeBeanList().new ProductTreeBean();
-            productTreeBean.FName=bean.FModel;
+            if (bean.FModel.contains("*")){
+                productTreeBean.FName=bean.FModel.substring(0,bean.FModel.indexOf("*"));
+            }else{
+                productTreeBean.FName=bean.FModel;
+            }
             container.add(productTreeBean);
         }
         mSp.setAdapter(adapter);

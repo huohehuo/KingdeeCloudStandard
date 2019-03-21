@@ -1,6 +1,7 @@
 package com.fangzuo.assist.cloud.Adapter;
 
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -73,8 +74,13 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
              batch.setText(data.getFBatch());
              name.setText(data.getFName());
              model.setText(data.getFModel());
-             num.setText(data.getFNum());
-             num2.setText(data.getFNum2());
+             num.setText(data.getFNum()+"  "+data.getFUnit());//库存数量
+             if (null==data.getFNum2()){
+                 num2.setVisibility(View.GONE);
+             }else{
+                 num2.setVisibility(View.VISIBLE);
+                 num2.setText(data.getFNum2()+"  "+data.getFUnitAux());//基本数量
+             }
              note.setText(data.getFNot());
              wavehouse.setText(data.getFWaveHouse());
              date.setText(data.getFDate());

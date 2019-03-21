@@ -23,6 +23,7 @@ import com.fangzuo.assist.cloud.Activity.PrintHistoryActivity;
 import com.fangzuo.assist.cloud.Activity.PurchaseInStoreActivity;
 import com.fangzuo.assist.cloud.Activity.PurchaseOrderActivity;
 import com.fangzuo.assist.cloud.Activity.PushDownActivity;
+import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
 import com.fangzuo.assist.cloud.Activity.SaleOrderActivity;
 import com.fangzuo.assist.cloud.Activity.SaleOutActivity;
 import com.fangzuo.assist.cloud.Adapter.GridViewAdapter;
@@ -35,7 +36,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-//import com.fangzuo.assist.Activity.PurchaseOrderActivity;
 
 
 public class PurchaseFragment extends BaseFragment {
@@ -121,8 +121,8 @@ public class PurchaseFragment extends BaseFragment {
                         startNewActivity(PushDownActivity.class, null);
                         break;
                     case "采购入库":
-//                        startNewActivity(PurchaseOrderActivity.class, null);
-                        startNewActivity(PurchaseInStoreActivity.class, null);
+                        PagerForActivity.start(mContext, Config.PurchaseInStoreActivity);
+//                        startNewActivity(PurchaseInStoreActivity.class, null);
                         break;
                     case "采购订单":
                         startNewActivity(PurchaseOrderActivity.class, null);
@@ -142,10 +142,15 @@ public class PurchaseFragment extends BaseFragment {
                                                         int which) {
                                         switch (which) {
                                             case 0:
-                                                startNewActivity(SaleOutActivity.class, null);
+                                                PagerForActivity.start(mContext, Config.SaleOutActivity);
+//                                                startNewActivity(SaleOutActivity.class, null);
                                                 break;
                                             case 1:
-                                                startNewActivity(SaleOutActivity.class, null);
+                                                PushDownPagerActivity.start(getActivity(),2);
+//                                                Bundle b = new Bundle();
+//                                                b.putInt("123", 2);
+////                                                startNewActivity(PushDownPagerActivity.class, R.anim.activity_fade_in, R.anim.activity_fade_out, false, b);
+//                                                startNewActivity(PushDownPagerActivity.class, b);
                                                 break;
                                         }
                                     }

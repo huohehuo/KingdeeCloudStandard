@@ -6,6 +6,8 @@ public class CodeCheckBackDataBean {
     public String FItemID;
     public String FUnitID;
     public String FQty;
+    public String FBaseQty;
+    public String FStoreQty;
     public String FStockID;
     public String FStockPlaceID;
     public String FBatchNo;

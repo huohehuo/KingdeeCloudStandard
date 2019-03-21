@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Activity.Db2FDinActivity;
 import com.fangzuo.assist.cloud.Activity.Db2FDoutActivity;
+import com.fangzuo.assist.cloud.Activity.PagerForActivity;
 import com.fangzuo.assist.cloud.Activity.PdBackMsg2SaleBackActivity;
 import com.fangzuo.assist.cloud.Activity.PdCgOrder2WgrkActivity;
 import com.fangzuo.assist.cloud.Activity.PdSaleOrder2SaleBackActivity;
@@ -31,10 +32,12 @@ import com.fangzuo.assist.cloud.Adapter.PushDownListAdapter;
 import com.fangzuo.assist.cloud.Dao.PushDownMain;
 import com.fangzuo.assist.cloud.Dao.PushDownSub;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.widget.SpinnerClient;
+import com.fangzuo.assist.cloud.widget.SpinnerClientDlg;
 import com.fangzuo.assist.cloud.widget.SpinnerSupplier;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.PushDownMainDao;
@@ -77,9 +80,9 @@ public class ChooseFragment extends BaseFragment {
     @BindView(R.id.refresh)
     SwipeRefreshLayout refresh;
     @BindView(R.id.sp_client)
-    SpinnerClient spClient;
-    @BindView(R.id.sp_supplier)
-    SpinnerSupplier spSupplier;
+    SpinnerClientDlg spClient;
+//    @BindView(R.id.sp_supplier)
+//    SpinnerSupplier spSupplier;
     private FragmentActivity mContext;
     private DaoSession daosession;
     private ArrayList<Boolean> isCheck;
@@ -126,15 +129,15 @@ public class ChooseFragment extends BaseFragment {
         downloadIDs = new ArrayList<PushDownMain>();
         container = new ArrayList<>();
         daosession = GreenDaoManager.getmInstance(mContext).getDaoSession();
-        if (tag == 1) {
-            //供应商信息绑定
-            spClient.setVisibility(View.GONE);
-            spSupplier.setVisibility(View.VISIBLE);
-        } else {
-            //客户信息绑定
-            spClient.setVisibility(View.VISIBLE);
-            spSupplier.setVisibility(View.GONE);
-        }
+//        if (tag == 1) {
+//            //供应商信息绑定
+//            spClient.setVisibility(View.GONE);
+//            spSupplier.setVisibility(View.VISIBLE);
+//        } else {
+//            //客户信息绑定
+//            spClient.setVisibility(View.VISIBLE);
+//            spSupplier.setVisibility(View.GONE);
+//        }
         initList();
     }
 
@@ -172,7 +175,8 @@ public class ChooseFragment extends BaseFragment {
                     intent = new Intent(mContext, PdCgOrder2WgrkActivity.class);
                     break;
                 case 2://销售订单下推销售出库单
-                    intent = new Intent(mContext, PdSaleOrder2SaleOutActivity.class);
+                    PagerForActivity.start(mContext, Config.PdSaleOrder2SaleOutActivity,container);
+//                    intent = new Intent(mContext, PdSaleOrder2SaleOutActivity.class);
                     break;
                 case 3://销售订单下推销售退货单
                     intent = new Intent(mContext, PdSaleOrder2SaleBackActivity.class);
@@ -195,9 +199,9 @@ public class ChooseFragment extends BaseFragment {
             }
 
 
-            intent.putExtras(b);
-            startActivity(intent);
-            getActivity().finish();
+//            intent.putExtras(b);
+//            startActivity(intent);
+//            getActivity().finish();
         } else {
             if (!flag) Toast.showText(mContext, "供应商不一致");
             else if (downloadIDs.size() < 0) Toast.showText(mContext, "未选择下推单据");
@@ -328,7 +332,7 @@ public class ChooseFragment extends BaseFragment {
         PushDownSubDao pushDownSubDao = daosession.getPushDownSubDao();
         for (int i = 0; i < downloadIDs.size(); i++) {
             List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
-                    PushDownSubDao.Properties.FBillNo.eq(downloadIDs.get(i).FBillNo)).build().list();
+                    PushDownSubDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list();
             for (int j = 0; j < pushDownSubs.size(); j++) {
                 pushDownSubDao.delete(pushDownSubs.get(j));
             }
@@ -336,7 +340,7 @@ public class ChooseFragment extends BaseFragment {
 //            daosession.getT_DetailDao().deleteInTx(daosession.getT_DetailDao().queryBuilder().where(
 //                    T_DetailDao.Properties.FInterID.eq(downloadIDs.get(i).FInterID)).build().list());
             daosession.getT_mainDao().deleteInTx(daosession.getT_mainDao().queryBuilder().where(
-                    T_mainDao.Properties.FIndex.eq(downloadIDs.get(i).FBillNo)).build().list());
+                    T_mainDao.Properties.FIndex.eq(downloadIDs.get(i).FID)).build().list());
             pushDownMainDao.delete(downloadIDs.get(i));
             Toast.showText(mContext, "删除成功");
         }
@@ -347,13 +351,13 @@ public class ChooseFragment extends BaseFragment {
 
     //查找本地数据
     private void Search() {
-        if (tag == 1) {
-            //供应商信息绑定
-            supplierID=spSupplier.getDataId();
-        } else {
+//        if (tag == 1) {
+//            //供应商信息绑定
+//            supplierID=spSupplier.getDataId();
+//        } else {
             //客户信息绑定
-            supplierID=spClient.getDataId();
-        }
+            supplierID=spClient.getDataName();
+//        }
 
         container.clear();
         isCheck.clear();
@@ -362,7 +366,7 @@ public class ChooseFragment extends BaseFragment {
             con += " and  FDATE between " + "\'" + startDate.getText().toString()+" 00:00:00.0" + "\'" + "and" + "\'" + endDate.getText().toString()+" 00:00:00.0" + "\'";
         }
         if (!"".equals(supplierID)){
-            con+=" and FSUPPLY_ID='"+supplierID+"'";
+            con+=" and FSUPPLY='"+supplierID+"'";
         }
         if (!"".equals(edCode.getText().toString())){
             con+=" and FBILL_NO='"+edCode.getText().toString()+"'";
@@ -413,7 +417,7 @@ public class ChooseFragment extends BaseFragment {
 //            Toast.showText(mContext, "未查询到数据");
 //        }
 
-        pushDownListAdapter.notifyDataSetChanged();
+//        pushDownListAdapter.notifyDataSetChanged();
     }
 
 

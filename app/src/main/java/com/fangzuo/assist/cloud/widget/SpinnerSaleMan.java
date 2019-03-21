@@ -14,7 +14,9 @@ import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.SaleManSpAdapter;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
+import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.SaleMan;
+import com.fangzuo.assist.cloud.Dao.StoreMan;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
@@ -23,6 +25,7 @@ import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.SaleManDao;
+import com.fangzuo.greendao.gen.StoreManDao;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ public class SpinnerSaleMan extends RelativeLayout {
     private ArrayList<SaleMan> container;
     private SaleManSpAdapter adapter;
     private String autoString="";//用于联网时，再次去自动设置值
+    private String autoOrg="";//用于联网时，再次去自动设置值
     private String saveKeyString="";//用于保存数据的key
     private String employeeId="";
     private String employeeName="";
@@ -77,39 +81,39 @@ public class SpinnerSaleMan extends RelativeLayout {
         attrArray.recycle();
         adapter = new SaleManSpAdapter(context, container);
         mSp.setAdapter(adapter);
-        if (share.getIsOL()) {
-            ArrayList<Integer> choose = new ArrayList<>();
-            choose.add(10);
-            String json = JsonCreater.DownLoadData(
-                    share.getDatabaseIp(),
-                    share.getDatabasePort(),
-                    share.getDataBaseUser(),
-                    share.getDataBasePass(),
-                    share.getDataBase(),
-                    share.getVersion(),
-                    choose
-            );
-            App.getRService().downloadData(json, new MySubscribe<CommonResponse>() {
-                @Override
-                public void onNext(CommonResponse commonResponse) {
-                    DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
-                    SaleManDao payTypeDao = daoSession.getSaleManDao();
-                    payTypeDao.deleteAll();
-                    payTypeDao.insertOrReplaceInTx(dBean.saleMans);
-                    payTypeDao.detachAll();
-                    if (dBean.saleMans.size() > 0 && container.size()<=0){
-                        container.addAll(dBean.saleMans);
-                        adapter.notifyDataSetChanged();
-                        setAutoSelection(saveKeyString,autoString);
-                    }
-                }
-
-                @Override
-                public void onError(Throwable e) {
-//                    LoadingUtil.dismiss();
-//                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Updata_Error,e.toString()));
-                }
-            });
+//        if (share.getIsOL()) {
+//            ArrayList<Integer> choose = new ArrayList<>();
+//            choose.add(10);
+//            String json = JsonCreater.DownLoadData(
+//                    share.getDatabaseIp(),
+//                    share.getDatabasePort(),
+//                    share.getDataBaseUser(),
+//                    share.getDataBasePass(),
+//                    share.getDataBase(),
+//                    share.getVersion(),
+//                    choose
+//            );
+//            App.getRService().downloadData(json, new MySubscribe<CommonResponse>() {
+//                @Override
+//                public void onNext(CommonResponse commonResponse) {
+//                    DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+//                    SaleManDao payTypeDao = daoSession.getSaleManDao();
+//                    payTypeDao.deleteAll();
+//                    payTypeDao.insertOrReplaceInTx(dBean.saleMans);
+//                    payTypeDao.detachAll();
+//                    if (dBean.saleMans.size() > 0 && container.size()<=0){
+//                        container.addAll(dBean.saleMans);
+//                        adapter.notifyDataSetChanged();
+//                        setAutoSelection(saveKeyString,autoString);
+//                    }
+//                }
+//
+//                @Override
+//                public void onError(Throwable e) {
+////                    LoadingUtil.dismiss();
+////                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Updata_Error,e.toString()));
+//                }
+//            });
 //            Asynchttp.post(context, share.getBaseURL() + WebApi.DOWNLOADDATA, json, new Asynchttp.Response() {
 //                @Override
 //                public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
@@ -130,13 +134,13 @@ public class SpinnerSaleMan extends RelativeLayout {
 ////                    Toast.showText(context, Msg);
 //                }
 //            });
-        }
+//        }
 //        else {
-            SaleManDao employeeDao = daoSession.getSaleManDao();
-            List<SaleMan> employees = employeeDao.loadAll();
-            container.addAll(employees);
-            adapter.notifyDataSetChanged();
-            setAutoSelection(saveKeyString,autoString);
+//            SaleManDao employeeDao = daoSession.getSaleManDao();
+//            List<SaleMan> employees = employeeDao.loadAll();
+//            container.addAll(employees);
+//            adapter.notifyDataSetChanged();
+//            setAutoSelection(saveKeyString,autoString);
 
 //            Log.e("CommonMethod", "获取到本地数据：\n" + container.toString());
 //        }
@@ -161,78 +165,6 @@ public class SpinnerSaleMan extends RelativeLayout {
 
     }
 
-//    //仓库Spinner
-//    public StorageSpAdapter getStorageSpinner(AutoSpinner sp){
-//        final ArrayList<Storage> container = new ArrayList<>();
-//        final StorageSpAdapter adapter = new StorageSpAdapter(context, container);
-//        sp.setAdapter(adapter);
-//        if(share.getIsOL()){
-//            Log.e("CommonMethod:","getStorageSpinner联网");
-//            ArrayList<Integer> choose = new ArrayList<>();
-//            choose.add(6);
-//            String json = JsonCreater.DownLoadData(
-//                    share.getDatabaseIp(),
-//                    share.getDatabasePort(),
-//                    share.getDataBaseUser(),
-//                    share.getDataBasePass(),
-//                    share.getDataBase(),
-//                    share.getVersion(),
-//                    choose
-//            );
-//            Asynchttp.post(context,share.getBaseURL()+ WebApi.DOWNLOADDATA, json, new Asynchttp.Response() {
-//                @Override
-//                public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
-//                    Log.e("CommonMethod:","getStorageSpinner获得联网数据：\n"+cBean.returnJson);
-//                    DownloadReturnBean dBean = JsonCreater.gson.fromJson(cBean.returnJson, DownloadReturnBean.class);
-//                    container.addAll(dBean.storage);
-//                    adapter.notifyDataSetChanged();
-//                }
-//
-//                @Override
-//                public void onFailed(String Msg, AsyncHttpClient client) {
-//                    Toast.showText(context, Msg);
-//                }
-//            });
-////            RetrofitUtil.getInstance(context).createReq(WebAPI.class).
-////                    downloadData(RetrofitUtil.getParams(context,json)).enqueue(new CallBack() {
-////                @Override
-////                public void onSucceed(CommonResponse cBean) {
-////                    Log.e("CommonMethod:","getStorageSpinner获得数据：\n"+cBean.returnJson);
-////                    DownloadReturnBean dBean = JsonCreater.gson.fromJson(cBean.returnJson, DownloadReturnBean.class);
-////                    container.addAll(dBean.storage);
-////                    adapter.notifyDataSetChanged();
-////                }
-////
-////                @Override
-////                public void OnFail(String Msg) {
-////                    Toast.showText(context, Msg);
-////                }
-////            });
-//        }else{
-//            Log.e("CommonMethod:","getStorageSpinner不-联网");
-//            StorageDao storageDao = daoSession.getStorageDao();
-//            List<Storage> storages = storageDao.loadAll();
-//            container.addAll(storages);
-//            Log.e("CommonMethod","获取到本地数据：\n"+container.toString());
-//            adapter.notifyDataSetChanged();
-//        }
-//        return adapter;
-//    }
-    //自动设置保存的值
-
-
-    public SaleManSpAdapter getSpAdapter() {
-        if (adapter.getCount() < 0) {
-            Lg.e("adapter初始化失败，重新更新adapter");
-            SaleManDao employeeDao = daoSession.getSaleManDao();
-            List<SaleMan> employees = employeeDao.loadAll();
-            container.addAll(employees);
-            adapter.notifyDataSetChanged();
-            return adapter;
-        } else {
-            return adapter;
-        }
-    }
 
     // 为左侧返回按钮添加自定义点击事件
     public void setOnItemSelectedListener(AdapterView.OnItemSelectedListener listener) {
@@ -257,11 +189,153 @@ public class SpinnerSaleMan extends RelativeLayout {
     public String getDataNumber() {
         return employeeNumber == null ? "" : employeeNumber;
     }
+
+
+
+    public void setAuto(String saveKeyStr,String autoStr, Org org) {
+        employeeId = "";
+        employeeName = "";
+        employeeNumber = "";
+        saveKeyString =saveKeyStr;
+        autoString = autoStr;
+        autoOrg = org==null?"":org.FOrgID;
+        final List<SaleMan> listTemp = getLocData(autoOrg);
+        dealAuto(listTemp, false);
+
+        ArrayList<Integer> choose = new ArrayList<>();
+        choose.add(10);
+        String json = JsonCreater.DownLoadData(
+                share.getDatabaseIp(),
+                share.getDatabasePort(),
+                share.getDataBaseUser(),
+                share.getDataBasePass(),
+                share.getDataBase(),
+                share.getVersion(),
+                choose
+        );
+        App.getRService().downloadData(json, new MySubscribe<CommonResponse>() {
+            @Override
+            public void onNext(CommonResponse commonResponse) {
+                DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                SaleManDao payTypeDao = daoSession.getSaleManDao();
+                payTypeDao.deleteAll();
+                payTypeDao.insertOrReplaceInTx(dBean.saleMans);
+                payTypeDao.detachAll();
+                if (dBean.saleMans.size() > 0 && container.size() <= 0) {
+                    dealAuto(dBean.saleMans,true);
+//                    setAuto(autoString,autoOrg);
+//                    container.addAll(dBean.storeMans);
+//                    adapter.notifyDataSetChanged();
+//                    setAutoSelection(saveKeyString, autoString);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+//                    LoadingUtil.dismiss();
+//                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Updata_Error,e.toString()));
+            }
+        });
+    }
+    private List<SaleMan> getLocData(String org) {
+        SaleManDao employeeDao = daoSession.getSaleManDao();
+        List<SaleMan> employees = employeeDao.queryBuilder().where(SaleManDao.Properties.FOrg.eq(org)
+        ).build().list();
+        return employees;
+    }
+
+    private void dealAuto(List<SaleMan> listData, boolean check) {
+        container.clear();
+        if (check) {
+            for (int i = 0; i < listData.size(); i++) {
+                if (listData.get(i).FOrg.equals(autoOrg)) {
+                    container.add(listData.get(i));
+                }
+            }
+        } else {
+            container.addAll(listData);
+        }
+        if ("".equals(autoString) && !"".equals(saveKeyString)) {
+            autoString = Hawk.get(saveKeyString, "");
+        }
+        if (container.size() > 0) {
+            mSp.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            if (container.size() == 1) {//当只有一个的时候，重新适配器，为了spinner的监听能响应
+                employeeId = container.get(0).FID;
+                employeeName = container.get(0).FName;
+                employeeNumber = container.get(0).FNumber;
+            } else {//过滤设定的值
+                if (null == autoString || "".equals(autoString) || "0".equals(autoString)) {
+                    employeeId = container.get(0).FID;
+                    employeeName = container.get(0).FName;
+                    employeeNumber = container.get(0).FNumber;
+                    adapter.notifyDataSetChanged();
+                } else {
+                    for (int j = 0; j < container.size(); j++) {
+                        if (container.get(j).FName.equals(autoString)) {
+                            Lg.e("单位定位（自定义控件：" + autoString);
+                            employeeId = container.get(j).FID;
+                            employeeName = container.get(j).FName;
+                            employeeNumber = container.get(j).FNumber;
+                            mSp.setSelection(j);
+                            break;
+                        }
+                    }
+//                    if (Number.equals(type)) {
+//                        for (int j = 0; j < container.size(); j++) {
+//                            if (container.get(j).FNumber.equals(autoString)) {
+//                                Lg.e("单位定位（自定义控件：" + autoString);
+//                                employeeId = container.get(j).FID;
+//                                employeeName = container.get(j).FName;
+//                                employeeNumber = container.get(j).FNumber;
+//                                mSp.setSelection(j);
+//                                break;
+//                            }
+//                        }
+//                    } else if (Name.equals(type)) {
+//                        for (int j = 0; j < container.size(); j++) {
+//                            if (container.get(j).FName.equals(autoString)) {
+//                                Lg.e("单位定位（自定义控件：" + autoString);
+//                                employeeId = container.get(j).FID;
+//                                employeeName = container.get(j).FName;
+//                                employeeNumber = container.get(j).FNumber;
+//                                mSp.setSelection(j);
+//                                break;
+//                            }
+//                        }
+//                    } else if (Id.equals(type)) {
+//                        for (int j = 0; j < container.size(); j++) {
+//                            if (container.get(j).FID.equals(autoString)) {
+//                                Lg.e("单位定位（自定义控件：" + autoString);
+//                                employeeId = container.get(j).FID;
+//                                employeeName = container.get(j).FName;
+//                                employeeNumber = container.get(j).FNumber;
+//                                mSp.setSelection(j);
+//                                break;
+//                            }
+//                        }
+//                    }
+                    if ("".equals(employeeId) && "".equals(employeeName)) {
+                        employeeId = container.get(0).FID;
+                        employeeName = container.get(0).FName;
+                        employeeNumber = container.get(0).FNumber;
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        } else {
+            adapter.notifyDataSetChanged();
+        }
+
+    }
+
+
     /**
-     *
-     * @param saveKeyStr        用于保存的key
-     * @param string            自动设置的z值
-     * */
+         *
+         * @param saveKeyStr        用于保存的key
+         * @param string            自动设置的z值
+         * */
     public void setAutoSelection(String saveKeyStr,String string) {
         saveKeyString =saveKeyStr;
         autoString = string;

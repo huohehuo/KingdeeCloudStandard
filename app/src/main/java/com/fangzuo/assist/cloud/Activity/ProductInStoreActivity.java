@@ -181,7 +181,7 @@ public class ProductInStoreActivity extends BaseActivity {
 //                    binding.edPihao.setText(codeCheckBackDataBean.FBatchNo);
 //                    binding.edNum.setText(codeCheckBackDataBean.FQty);
 //                    LoadingUtil.showDialog(mContext,"正在查找物料信息");
-//                    DataModel.getProductForId(codeCheckBackDataBean.FItemID,org);
+//                    DataModel.getProductForNumber(codeCheckBackDataBean.FItemID,org);
 //                }else{
 //                    ReSetScan(binding.cbScaning);
 //                    Toast.showText(mContext,codeCheckBackDataBean.FTip);
@@ -227,8 +227,8 @@ public class ProductInStoreActivity extends BaseActivity {
 //        binding.spOrgIn.setEnable(false);
 //        binding.spOrgCreate.setEnable(false);
 
-        binding.spUnit.setAuto("", org, SpinnerUnit.Id);
-        binding.spUnitAux.setAuto("", org,SpinnerUnit.Id);
+        binding.spUnit.setAuto("",SpinnerUnit.Id);
+        binding.spUnitAux.setAuto("",SpinnerUnit.Id);
         binding.cbIsStorage.setChecked(Hawk.get(Info.Storage+activity,false));
 
         LoadingUtil.showDialog(mContext,"正在初始化打印机...");
@@ -251,8 +251,8 @@ public class ProductInStoreActivity extends BaseActivity {
                 binding.spStoreman.setAuto(getString(R.string.spStoreMan_pis),"",org);
                 binding.spWhichStorage.setAuto("",org);
                 binding.spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pis),"",org,activity);
-                binding.spUnit.setAuto("", org,SpinnerUnit.Id);
-                binding.spUnitAux.setAuto("", org,SpinnerUnit.Id);
+                binding.spUnit.setAuto("",SpinnerUnit.Id);
+                binding.spUnitAux.setAuto("",SpinnerUnit.Id);
 
                 binding.spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_pris), org.FName);
                 binding.spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_pris), org.FName);
@@ -312,8 +312,8 @@ public class ProductInStoreActivity extends BaseActivity {
             return;
         }
         //带出物料的默认值
-        binding.spUnit.setAuto(product.FPurchaseUnitID,org, SpinnerUnit.Id);
-        binding.spUnitAux.setAuto(product.FAuxUnitID,org, SpinnerUnit.Id);
+        binding.spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
+        binding.spUnitAux.setAuto(product.FAuxUnitID, SpinnerUnit.Id);
         if (binding.cbIsStorage.isChecked()) {
 //            binding.spWhichStorage.setAutoSelection("", product.FStockID);
             binding.spWhichStorage.setAuto(product.FStockID, org);

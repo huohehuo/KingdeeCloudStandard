@@ -10,9 +10,11 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.fangzuo.assist.cloud.ABase.BaseActivity;
+import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Dao.Client;
+import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.Product;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
@@ -25,6 +27,7 @@ import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.DataModel;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
+import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
@@ -143,15 +146,25 @@ public class SaleOrderActivity extends BaseActivity {
         ordercode = CommonUtil.createOrderCode(this);
         binding.tvDate.setText(getTime(true));
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-        binding.spDepartmentSale.setAutoSelection(getString(R.string.spDepartmentSale_sor), "");
-        binding.spSaleman.setAutoSelection(getString(R.string.spSaleman_sor), "");
         binding.spOrgSend.setAutoSelection(getString(R.string.spOrgSale_sor), Hawk.get(Info.user_org,""));
-        binding.spOrgSend.setEnable(false);
+//        binding.spOrgSend.setEnable(false);
+        binding.spDepartmentSale.setAuto(getString(R.string.spDepartmentGet_pris), Hawk.get(getString(R.string.spDepartmentGet_pris),""), org,activity);
+        binding.spSaleman.setAuto(getString(R.string.spSaleman_sor), "",org);
         binding.spUnit.setAuto(mContext, "", SpinnerUnit.Id);
     }
 
+    Org org;
     @Override
     protected void initListener() {
+        binding.spOrgSend.setOnItemSelectedListener(new ItemListener() {
+            @Override
+            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
+                org =(Org) binding.spOrgSend.getAdapter().getItem(i);
+                binding.spDepartmentSale.setAuto(getString(R.string.spDepartmentGet_pris), Hawk.get(getString(R.string.spDepartmentGet_pris),""), org, activity);
+                binding.spSaleman.setAuto(getString(R.string.spSaleman_sor), "",org);
+
+            }
+        });
 
 //        binding.spWhichStorage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
@@ -348,7 +361,7 @@ public class SaleOrderActivity extends BaseActivity {
             main.activity = activity;
             main.FOrderId = ordercode;
             main.FIndex = timesecond;
-            main.setData(Info.getType(activity),binding.spOrgSend.getDataNumber(),binding.spOrgSend.getDataNumber());
+            main.setData(Info.getType(activity),org.FNumber,org.FNumber);
             main.FDepartmentNumber = binding.spDepartmentSale.getDataNumber();
 //            main.FPurchaseDeptId = binding.spDepartmentSend.getDataNumber();
             main.FPurchaserId = binding.spSaleman.getDataNumber();

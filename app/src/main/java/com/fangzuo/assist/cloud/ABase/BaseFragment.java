@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.Toast;
 
 import java.util.Calendar;
@@ -149,6 +150,26 @@ public abstract class BaseFragment extends Fragment {
         startActivityForResult(mIntent, requestCode);
         activity.overridePendingTransition(enterAnim, exitAnim);
     }
+
+    public abstract  class NoDoubleClickListener implements View.OnClickListener{
+        public static final int MIN_CLICK_DELAY_TIME = 1500;
+        private long lastClickTime = 0;
+
+        @Override
+        public void onClick(View v) {
+            long currentTime = Calendar.getInstance().getTimeInMillis();
+            if (currentTime - lastClickTime > MIN_CLICK_DELAY_TIME) {
+                lastClickTime = currentTime;
+                Lg.e("点击OK");
+                onNoDoubleClick(v);
+            }else{
+//                Toast.showText(mContext,"别点太快");
+                Lg.e("太快了");
+            }
+        }
+        protected abstract void onNoDoubleClick(View view);
+    }
+
     public abstract class ItemListener implements AdapterView.OnItemSelectedListener{
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {

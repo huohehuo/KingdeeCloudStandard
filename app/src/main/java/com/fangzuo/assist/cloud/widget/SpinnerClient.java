@@ -87,7 +87,13 @@ public class SpinnerClient extends RelativeLayout {
         attrArray.recycle();
         adapter = new ClientSpAdapter(context, container);
         mSp.setAdapter(adapter);
-        if (share.getIsOL()) {
+        ClientDao inStoreTypeDao = daoSession.getClientDao();
+        List<Client> inStoreTypes = inStoreTypeDao.loadAll();
+        container.add(new Client("","","",""));
+        container.addAll(inStoreTypes);
+        adapter.notifyDataSetChanged();
+
+//        if (share.getIsOL()) {
             ArrayList<Integer> choose = new ArrayList<>();
             choose.add(13);
             String json = JsonCreater.DownLoadData(
@@ -102,14 +108,14 @@ public class SpinnerClient extends RelativeLayout {
             App.getRService().downloadData(json, new MySubscribe<CommonResponse>() {
                 @Override
                 public void onNext(CommonResponse commonResponse) {
-                    Lg.e("得到Client："+commonResponse.returnJson);
+//                    Lg.e("得到Client："+commonResponse.returnJson);
                     DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
-                    Lg.e("得到Client：",dBean.clients.get(0));
-                    ClientDao payTypeDao = daoSession.getClientDao();
-                    payTypeDao.deleteAll();
-                    payTypeDao.insertOrReplaceInTx(dBean.clients);
-                    payTypeDao.detachAll();
+                    Lg.e("得到Client：",dBean.clients.size());
                     if (dBean.clients.size() > 0 && container.size()<=1){
+                        ClientDao payTypeDao = daoSession.getClientDao();
+                        payTypeDao.deleteAll();
+                        payTypeDao.insertOrReplaceInTx(dBean.clients);
+                        payTypeDao.detachAll();
                         container.add(new Client("","","",""));
                         container.addAll(dBean.clients);
                         adapter.notifyDataSetChanged();
@@ -123,13 +129,9 @@ public class SpinnerClient extends RelativeLayout {
 //                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Updata_Error,e.toString()));
                 }
             });
-        }
+//        }
 
-        ClientDao inStoreTypeDao = daoSession.getClientDao();
-        List<Client> inStoreTypes = inStoreTypeDao.loadAll();
-        container.add(new Client("","","",""));
-        container.addAll(inStoreTypes);
-        adapter.notifyDataSetChanged();
+
 //        setAutoSelection(saveKeyString,autoString);
 
         mSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

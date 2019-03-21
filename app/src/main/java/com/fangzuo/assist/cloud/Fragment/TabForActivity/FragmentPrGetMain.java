@@ -18,14 +18,20 @@ import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
+import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.fangzuo.assist.cloud.widget.SpinnerDepartMent;
 import com.fangzuo.assist.cloud.widget.SpinnerEmployee;
 import com.fangzuo.assist.cloud.widget.SpinnerOrg;
 import com.fangzuo.assist.cloud.widget.SpinnerStoreMan;
 import com.orhanobut.hawk.Hawk;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,8 +55,8 @@ public class FragmentPrGetMain extends BaseFragment {
     SpinnerOrg spOrgCreate;
     @BindView(R.id.sp_org_huozhu)
     SpinnerOrg spOrgHuozhu;
-    @BindView(R.id.sp_getman)
-    SpinnerEmployee spGetman;
+//    @BindView(R.id.sp_getman)
+//    SpinnerEmployee spGetman;
     @BindView(R.id.sp_storeman)
     SpinnerStoreMan spStoreman;
     @BindView(R.id.ed_not)
@@ -60,7 +66,46 @@ public class FragmentPrGetMain extends BaseFragment {
     private FragmentActivity mContext;
     private PagerForActivity activityPager;
     Unbinder unbinder;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveEvent(ClassEvent event) {
+        switch (event.Msg) {
+            case EventBusInfoCode.Lock_Main:
+                String lock = (String) event.postEvent;
+                if (Config.Lock.equals(lock)){
+                    activityPager.setHasLock(true);
+                    spDepartment.setEnable(false);
+                    spOrgCreate.setEnable(false);
+                    spOrgSend.setEnable(false);
+                    spOrgHuozhu.setEnable(false);
+                    spStoreman.setEnable(false);
+                    edFfOrder.setFocusable(false);
+                    edNot.setFocusable(false);
 
+                    edFfOrder.setText(Hawk.get(Config.OrderNo+activityPager.getActivity(),""));
+                    edNot.setText(Hawk.get(Config.Note+activityPager.getActivity(),""));
+                    Hawk.put(Config.OrderNo+activityPager.getActivity(),edFfOrder.getText().toString());//保存业务单号
+                    Hawk.put(Config.Note+activityPager.getActivity(),edNot.getText().toString());//保存业务单号
+                }else{
+                    activityPager.setHasLock(false);
+                    spDepartment.setEnable(true);
+                    spOrgCreate.setEnable(true);
+                    spOrgSend.setEnable(true);
+                    spOrgHuozhu.setEnable(true);
+                    spStoreman.setEnable(true);
+                    edFfOrder.setFocusable(true);
+                    edFfOrder.setFocusableInTouchMode(true);
+                    edNot.setFocusable(true);
+                    edNot.setFocusableInTouchMode(true);
+
+                    edFfOrder.setText("");
+                    edNot.setText("");
+                    Hawk.put(Config.OrderNo+activityPager.getActivity(),"");//清空存储的业务单号
+                    Hawk.put(Config.Note+activityPager.getActivity(),"");//清空存储的业务单号
+                }
+                break;
+
+        }
+    }
     public FragmentPrGetMain() {
         // Required empty public constructor
     }
@@ -78,6 +123,7 @@ public class FragmentPrGetMain extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_prgetmain, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getActivity();
+        EventBusUtil.register(this);
         return view;
     }
 
@@ -95,19 +141,24 @@ public class FragmentPrGetMain extends BaseFragment {
     protected void initData() {
         tvDate.setText(CommonUtil.getTime(true));
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-        spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_pg), Hawk.get(Info.user_org,""));
-        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_pg), Hawk.get(Info.user_org,""));
-        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_pg), Hawk.get(Info.user_org,""));
-        spGetman.setAuto(getString(R.string.spBuyer_pg), "",activityPager.getOrgOut());
-        spDepartment.setAuto(getString(R.string.spDepartmentCreate_pg), "",activityPager.getOrgOut(),activityPager.getActivity());
-        spStoreman.setAuto(getString(R.string.spStoreman_pg), "",activityPager.getOrgOut());
+        spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_pg), Hawk.get(getString(R.string.spOrgCreate_pg),""));
+        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_pg), Hawk.get(getString(R.string.spOrgSend_pg),""));
+        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_pg), Hawk.get(getString(R.string.spOrgHuozhu_pg),""));
+//        spGetman.setAuto(getString(R.string.spBuyer_pg), "",activityPager.getOrgOut());
+        spDepartment.setAuto(getString(R.string.spDepartmentCreate_pg), Hawk.get(getString(R.string.spDepartmentCreate_pg),""),activityPager.getOrgOut(),activityPager.getActivity());
+        spStoreman.setAuto(getString(R.string.spStoreman_pg), Hawk.get(getString(R.string.spStoreman_pg),""),activityPager.getOrgOut());
 
 //        binding.spOrgIn.setEnable(false);
 //        binding.spOrgCreate.setEnable(false);
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
+        //判断是否有保存的业务单号，不存在的话，解锁表头
+        if (!LocDataUtil.hasTDetail(activityPager.getActivity())){
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));
+        }else{
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+        }
         setfocus(tvDate);
     }
-
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -120,9 +171,11 @@ public class FragmentPrGetMain extends BaseFragment {
                 activityPager.setDate(tvDate==null?"":tvDate.getText().toString());
                 activityPager.setNote(edNot==null?"":edNot.getText().toString());
                 activityPager.setManStore(spStoreman.getDataNumber());
-                activityPager.setManGet(spGetman.getDataNumber());
+//                activityPager.setManGet(spGetman.getDataNumber());
                 activityPager.setDepartMent(spDepartment.getDataNumber());
                 activityPager.setFOrderNo(edFfOrder == null ? "" : edFfOrder.getText().toString());
+                Hawk.put(Config.OrderNo+activityPager.getActivity(),edFfOrder.getText().toString());//保存业务单号
+                Hawk.put(Config.Note+activityPager.getActivity(),edNot.getText().toString());//保存业务单号
             }
         }
     }
@@ -134,9 +187,10 @@ public class FragmentPrGetMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgOut((Org) spOrgSend.getAdapter().getItem(i));
-                spDepartment.setAuto(getString(R.string.spDepartmentCreate_pg), "",activityPager.getOrgOut(),activityPager.getActivity());
-                spGetman.setAuto(getString(R.string.spBuyer_pg), "",activityPager.getOrgOut());
-                spStoreman.setAuto(getString(R.string.spStoreman_pg), "",activityPager.getOrgOut());
+                Hawk.put(getString(R.string.spOrgSend_pg),activityPager.getOrgOut().FName);
+//        spGetman.setAuto(getString(R.string.spBuyer_pg), "",activityPager.getOrgOut());
+                spDepartment.setAuto(getString(R.string.spDepartmentCreate_pg), Hawk.get(getString(R.string.spDepartmentCreate_pg),""),activityPager.getOrgOut(),activityPager.getActivity());
+                spStoreman.setAuto(getString(R.string.spStoreman_pg), Hawk.get(getString(R.string.spStoreman_pg),""),activityPager.getOrgOut());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView,""));
             }
         });
@@ -144,12 +198,14 @@ public class FragmentPrGetMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgIn((Org) spOrgCreate.getAdapter().getItem(i));
+                Hawk.put(getString(R.string.spOrgCreate_pg),activityPager.getOrgIn().FName);
             }
         });
         spOrgHuozhu.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setHuozhuOut((Org) spOrgHuozhu.getAdapter().getItem(i));
+                Hawk.put(getString(R.string.spOrgHuozhu_pg),activityPager.getHuozhuOut().FName);
             }
         });
         cbIsStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -166,7 +222,13 @@ public class FragmentPrGetMain extends BaseFragment {
         Hawk.put(Info.Storage+activityPager,cbIsStorage.isChecked());
         unbinder.unbind();
     }
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            EventBusUtil.unregister(this);
+        } catch (Exception e) { }
+    }
 
     @OnClick({R.id.tv_date, R.id.ed_not})
     public void onViewClicked(View view) {

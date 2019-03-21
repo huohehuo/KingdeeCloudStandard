@@ -101,6 +101,16 @@ public class ReViewAdapter extends BaseAdapter implements View.OnClickListener {
             viewHolder.wavehouse.setText("仓位:" + detail.get(i).FWaveHouse == null ? "" : detail.get(i).FWaveHouse);
         }
         viewHolder.tvBarCode.setText("条码:" + detail.get(i).FBarcode);
+        viewHolder.tvBatchNo.setText("批次:" + detail.get(i).FBatch);
+        viewHolder.tvModel.setText("规格:" + detail.get(i).model);
+        if (detail.get(i).activity==Config.ProductInStoreActivity||detail.get(i).activity==Config.TbInActivity
+                ||detail.get(i).activity==Config.DgInActivity||detail.get(i).activity==Config.SimpleInActivity){
+            viewHolder.tvStorenum.setText("库存数量:" + detail.get(i).FStoreNum+" "+detail.get(i).FStoreUnit);
+            viewHolder.tvBasenum.setText("基本数量:" + detail.get(i).FBaseNum+" "+detail.get(i).FBaseUnit);
+        }else{
+            viewHolder.tvStorenum.setText("添加数量:" + detail.get(i).FRemainInStockQty + detail.get(i).FUnit);
+        }
+
         if (mains.size()>0){
             viewHolder.date.setText("入库日期:" + mains.get(0).FDate);
         }
@@ -134,6 +144,14 @@ public class ReViewAdapter extends BaseAdapter implements View.OnClickListener {
         CheckBox cbIscheck;
         @BindView(R.id.productname)
         TextView productname;
+        @BindView(R.id.tv_storenum)
+        TextView tvStorenum;
+        @BindView(R.id.tv_batchNo)
+        TextView tvBatchNo;
+        @BindView(R.id.tv_model)
+        TextView tvModel;
+        @BindView(R.id.tv_basenum)
+        TextView tvBasenum;
         @BindView(R.id.tv_barcode)
         TextView tvBarCode;
         @BindView(R.id.productNumber)

@@ -9,8 +9,10 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
+import com.fangzuo.assist.cloud.Activity.PagerForActivity;
 import com.fangzuo.assist.cloud.Adapter.GridViewAdapter;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.GetSettingList;
 
 import butterknife.BindView;
@@ -60,13 +62,16 @@ public class SaleFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
-                    case 0://销售订单
+                    case 0://挑板入库
+                        PagerForActivity.start(mContext, Config.TbInActivity);
 //                        startNewActivity(SaleOrderActivity.class,null);
                         break;
-                    case 1://销售出库
+                    case 1://到柜入库
+                        PagerForActivity.start(mContext, Config.DgInActivity);
 //                        startNewActivity(SoldOutActivity.class,null);
                         break;
-                    case 2://单据下推
+                    case 2://简单生产入库
+                        PagerForActivity.start(mContext, Config.SimpleInActivity);
 //                        startNewActivity(PushDownActivity.class,null);
                         break;
                     case 3://生产领料

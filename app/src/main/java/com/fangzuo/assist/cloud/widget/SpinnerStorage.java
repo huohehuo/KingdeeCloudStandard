@@ -125,6 +125,7 @@ public class SpinnerStorage extends RelativeLayout {
 //            }
 //        });
 
+        //点击文字时，触发spinner点击
         mTitleTv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

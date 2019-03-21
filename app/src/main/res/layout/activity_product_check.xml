@@ -92,12 +92,14 @@
                 android:layout_height="wrap_content"
                 >
                 <TextView
+                    android:visibility="gone"
                     android:text="相关物料数据:"
                     android:textSize="18sp"
                     android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/tv_data_num"
                     android:textSize="12sp"
                     android:layout_marginRight="10dp"
@@ -105,17 +107,19 @@
                     android:layout_height="wrap_content" />
                 <Button
                     android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
                     android:id="@+id/btn_check"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:background="@drawable/btn_login"
-                    android:text="查找"
+                    android:text="确定"
                     android:textSize="20sp"
                     android:textColor="@android:color/white" />
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:id="@+id/ll"
@@ -154,7 +158,9 @@
                     android:gravity="center"
                     android:textSize="18sp"/>
             </LinearLayout>
+
             <android.support.v7.widget.RecyclerView
+                android:visibility="gone"
                 android:id="@+id/ry_product_search_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

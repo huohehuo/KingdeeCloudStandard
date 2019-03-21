@@ -8,26 +8,33 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
+import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
@@ -148,7 +155,7 @@ public abstract class BaseActivity extends FragmentActivity {
         //UBX
 //        initScan();
         this.savedInstanceState = savedInstanceState;
-
+//        initTipView();
 //        try{
 //            //手机4：不需要注册
 //            if (App.PDA_Choose == 1) {
@@ -189,6 +196,64 @@ public abstract class BaseActivity extends FragmentActivity {
 //    public BroadcastReceiver getBroadcastReceiver(){
 //        return mScanDataReceiver;
 //    }
+    //弹窗初始化
+    View mTipView;
+    WindowManager mWindowManager;
+    WindowManager.LayoutParams mLayoutParams;
+    private void initTipView() {
+        mWindowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        mLayoutParams = new WindowManager.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, 100,
+                WindowManager.LayoutParams.TYPE_APPLICATION,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                PixelFormat.TRANSLUCENT);
+        //使用非CENTER时，可以通过设置XY的值来改变View的位置
+        mLayoutParams.gravity = Gravity.TOP;
+        mLayoutParams.x = 0;
+        mLayoutParams.y = 0;
+    }
+    public void showTopView(String msg){
+        if (mTipView==null ){
+            Lg.e("m","等于空");
+            mWindowManager.addView(setViewTop(msg),mLayoutParams);
+        }else{
+//            if (mTipView.getParent() != null) {
+//                Lg.e("mTgetParent","不等于空");
+                mWindowManager.removeView(mTipView);
+//            }else{
+//                Lg.e("mTgetParent","等于空");
+//                mWindowManager.removeView(mTipView);
+                mWindowManager.addView(setViewTop(msg), mLayoutParams);
+//            }
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mTipView!=null){
+                    mWindowManager.removeView(mTipView);
+                    mTipView=null;
+                }
+            }
+        }, 1700);
+
+    }
+    private View setViewTop(String msg){
+        LayoutInflater inflater = getLayoutInflater();
+        mTipView = inflater.inflate(R.layout.layout_msg_top, null); //提示View布局
+        TextView textView = mTipView.findViewById(R.id.tv_msg);
+        ImageButton imageView = mTipView.findViewById(R.id.iv_close);
+        textView.setText(msg);
+        imageView.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View view) {
+                Lg.e("按钮点击");
+                mWindowManager.removeView(mTipView);
+                mTipView =null;
+            }
+        });
+        return mTipView;
+    }
 
     @Override
     protected void onDestroy() {
@@ -210,7 +275,10 @@ public abstract class BaseActivity extends FragmentActivity {
 //        }catch (Exception e){
 //
 //        }
-
+//当提示View被动态添加后直接关闭页面会导致该View内存溢出，所以需要在finish时移除
+        if (mTipView != null) {
+            mWindowManager.removeView(mTipView);
+        }
         if (isRegisterEventBus()) {
             EventBusUtil.unregister(this);
         }
@@ -513,23 +581,11 @@ public abstract class BaseActivity extends FragmentActivity {
             if (null!=mCaptureManager)mCaptureManager.decode();
         }
     }
-//spWhichStorageIn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//        @Override
-//        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-////                isSpStorageDefault = false;
-//            storage = (Storage) spWhichStorageIn.getAdapter().getItem(i);
-//            Lg.e("选中仓库：" + storage.toString());
-//            waveHouse = null;
-//            spWavehouseIn.setAuto(mContext, storage, "");
-//            DataModel.getStoreNum(product,storage,edPihao.getText().toString().trim(),mContext,tvStorenum);
-//
-//        }
-//        @Override
-//        public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//        }
-//    });
 
+
+
+
+    //防止点击事件短时间多次点击
     public abstract  class NoDoubleClickListener implements View.OnClickListener{
         public static final int MIN_CLICK_DELAY_TIME = 1500;
         private long lastClickTime = 0;
@@ -549,6 +605,7 @@ public abstract class BaseActivity extends FragmentActivity {
         protected abstract void onNoDoubleClick(View view);
     }
 
+    //为了简化spinner点击事件
     public abstract class ItemListener implements AdapterView.OnItemSelectedListener{
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {

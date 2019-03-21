@@ -31,9 +31,13 @@ public class EventBusInfoCode {
     public static final String Code_Only_Insert = "111110";
 
     public static final String UpdataView = "111111";
+    public static final String UpdataStorage = "111116";
+    public static final String UpdataWaveHouse = "111115";
     public static final String UpdataViewForDBInStorage = "111112";
 
     public static final String Print_Check = "111113";
     public static final String Print_Out = "111114";
+
+    public static final String Lock_Main = "111117";
 
 }

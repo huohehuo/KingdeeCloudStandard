@@ -87,7 +87,12 @@ public class SpinnerSupplier extends RelativeLayout {
         attrArray.recycle();
         adapter = new SupplierSpAdapter(context, container);
         mSp.setAdapter(adapter);
-        if (share.getIsOL()) {
+        SuppliersDao inStoreTypeDao = daoSession.getSuppliersDao();
+        List<Suppliers> inStoreTypes = inStoreTypeDao.loadAll();
+        container.add(new Suppliers("","","","","","","","","","",""));
+        container.addAll(inStoreTypes);
+        adapter.notifyDataSetChanged();
+//        if (share.getIsOL()) {
             ArrayList<Integer> choose = new ArrayList<>();
             choose.add(9);
             String json = JsonCreater.DownLoadData(
@@ -102,14 +107,14 @@ public class SpinnerSupplier extends RelativeLayout {
             App.getRService().downloadData(json, new MySubscribe<CommonResponse>() {
                 @Override
                 public void onNext(CommonResponse commonResponse) {
-                    Lg.e("得到Client："+commonResponse.returnJson);
+//                    Lg.e("得到Client："+commonResponse.returnJson);
                     DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
-                    Lg.e("得到Client：",dBean.suppliers.get(0));
-                    SuppliersDao payTypeDao = daoSession.getSuppliersDao();
-                    payTypeDao.deleteAll();
-                    payTypeDao.insertOrReplaceInTx(dBean.suppliers);
-                    payTypeDao.detachAll();
+                    Lg.e("得到Suppliers：",dBean.suppliers.size());
                     if (dBean.suppliers.size() > 0 && container.size()<=1){
+                        SuppliersDao payTypeDao = daoSession.getSuppliersDao();
+                        payTypeDao.deleteAll();
+                        payTypeDao.insertOrReplaceInTx(dBean.suppliers);
+                        payTypeDao.detachAll();
                         container.add(new Suppliers("","","","","","","","","","",""));
                         container.addAll(dBean.suppliers);
                         adapter.notifyDataSetChanged();
@@ -123,13 +128,9 @@ public class SpinnerSupplier extends RelativeLayout {
 //                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Updata_Error,e.toString()));
                 }
             });
-        }
+//        }
 
-        SuppliersDao inStoreTypeDao = daoSession.getSuppliersDao();
-        List<Suppliers> inStoreTypes = inStoreTypeDao.loadAll();
-        container.add(new Suppliers("","","","","","","","","","",""));
-        container.addAll(inStoreTypes);
-        adapter.notifyDataSetChanged();
+
 //        setAutoSelection(saveKeyString,autoString);
 
         mSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

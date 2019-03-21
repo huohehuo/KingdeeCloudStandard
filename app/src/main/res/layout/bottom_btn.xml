@@ -20,6 +20,7 @@
             android:textColor="@android:color/white" />
 
         <View
+            android:visibility="gone"
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:background="@color/divider_color" />
@@ -36,7 +37,6 @@
             android:textColor="@android:color/white" />
 
         <View
-            android:visibility="gone"
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:background="@color/divider_color" />

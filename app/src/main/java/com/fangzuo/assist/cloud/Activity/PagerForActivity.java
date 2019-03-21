@@ -12,13 +12,25 @@ import android.widget.CheckBox;
 
 import com.fangzuo.assist.cloud.ABase.BaseActivity;
 import com.fangzuo.assist.cloud.Adapter.StripAdapter;
+import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.Org;
+import com.fangzuo.assist.cloud.Dao.Storage;
+import com.fangzuo.assist.cloud.Dao.Suppliers;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentDBDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentDBMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPISDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPISMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrGetDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrGetMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrisDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrisMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOutDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOutMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisDGMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisSimpleInMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisTBDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisTBMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentSaleOutDetailForPD;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.Lg;
@@ -41,6 +53,9 @@ public class PagerForActivity extends BaseActivity {
     private Org orgOut;
     private Org huozhuIn;
     private Org huozhuOut;
+    private Storage storage;
+    private Client client;
+    private Suppliers suppliers;
     private String DBType;//调拨类型
     private String DBDirection;//调拨方向
     private String note;
@@ -49,7 +64,9 @@ public class PagerForActivity extends BaseActivity {
     private String ManSale;//销售员
     private String ManGet;//领料人
     private String DepartMent;//生产车间
+    private String DepartMentBuy;//采购部门
     private String date;//日期
+    private boolean hasLock=false;//判断表头是否被锁住
     private boolean isStorage=false;//是否带出默认仓库
     StripAdapter stripAdapter;
     @Override
@@ -93,7 +110,36 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentDBMain());
                 fragments.add(new FragmentDBDetail());
                 break;
-
+            case Config.SaleOutActivity:
+                binding.topActivity.tvTitle.setText("销售出库单");
+                fragments.add(new FragmentSaleOutMain());
+                fragments.add(new FragmentSaleOutDetail());
+                break;
+            case Config.PurchaseInStoreActivity:
+                binding.topActivity.tvTitle.setText("采购入库单");
+                fragments.add(new FragmentPISMain());
+                fragments.add(new FragmentPISDetail());
+                break;
+            case Config.PdSaleOrder2SaleOutActivity:
+                binding.topActivity.tvTitle.setText("销售订单下推销售出库");
+                fragments.add(new FragmentSaleOutMain());
+                fragments.add(new FragmentSaleOutDetailForPD());
+                break;
+            case Config.TbInActivity:
+                binding.topActivity.tvTitle.setText("挑板入库");
+                fragments.add(new FragmentPrisTBMain());
+                fragments.add(new FragmentPrisDetail());
+                break;
+            case Config.DgInActivity:
+                binding.topActivity.tvTitle.setText("到柜入库");
+                fragments.add(new FragmentPrisDGMain());
+                fragments.add(new FragmentPrisDetail());
+                break;
+            case Config.SimpleInActivity:
+                binding.topActivity.tvTitle.setText("简单生产入库");
+                fragments.add(new FragmentPrisSimpleInMain());
+                fragments.add(new FragmentPrisDetail());
+                break;
         }
         //设置pager
         if (null==stripAdapter){
@@ -123,6 +169,15 @@ public class PagerForActivity extends BaseActivity {
     protected void OnReceive(String code) {
 
     }
+
+
+    public boolean isHasLock() {
+        return hasLock;
+    }
+
+    public void setHasLock(boolean hasLock) {
+        this.hasLock = hasLock;
+    }
     public int getActivity(){
         return activity;
     }
@@ -141,6 +196,28 @@ public class PagerForActivity extends BaseActivity {
 
     public void setHuozhuOut(Org huozhuOut) {
         this.huozhuOut = huozhuOut;
+    }
+
+    public void setStorage(Storage s) {
+        this.storage = s;
+    }
+
+    public Storage getStorage() {
+        return storage!=null?storage:new Storage("","","","","","");
+    }
+
+    public void setClient(Client s) {
+        this.client = s;
+    }
+    public void setSuppliers(Suppliers s) {
+        this.suppliers = s;
+    }
+
+    public Client getClient() {
+        return client!=null?client:new Client("","","","");
+    }
+    public Suppliers getSuppliers() {
+        return suppliers!=null?suppliers:new Suppliers("","","","","","","","","","","");
     }
 
     public void setDBType(String DBType) {
@@ -178,7 +255,9 @@ public class PagerForActivity extends BaseActivity {
     public void setDepartMent(String departMent) {
         DepartMent = departMent;
     }
-
+    public void setDepartMentBuy(String departMent) {
+        DepartMentBuy = departMent;
+    }
     public void setDate(String date) {
         this.date = date;
     }
@@ -215,6 +294,9 @@ public class PagerForActivity extends BaseActivity {
 
     public String getDepartMent() {
         return DepartMent==null?"":DepartMent;
+    }
+    public String getDepartMentBuy() {
+        return DepartMentBuy==null?"":DepartMentBuy;
     }
 
     public String getDate() {
@@ -302,6 +384,12 @@ public class PagerForActivity extends BaseActivity {
     public static void start(Context context, int activity){
         Intent intent = new Intent(context,PagerForActivity.class);
         intent.putExtra("activity",activity);
+        context.startActivity(intent);
+    }
+    public static void start(Context context, int activity, ArrayList<String> fid){
+        Intent intent = new Intent(context,PagerForActivity.class);
+        intent.putExtra("activity",activity);
+        intent.putStringArrayListExtra("fid", fid);
         context.startActivity(intent);
     }
     /**

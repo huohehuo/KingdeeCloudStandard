@@ -18,6 +18,9 @@ public class PrintHistory {
     public String FNum;
     public String FNum2;
     public String FUnit;
+    public String FBaseUnit;
+    public String FBaseUnitID;
+    public String FStoreUnit;
     public String FUnitAux;
     public String FNot;
     public String FWaveHouse;
@@ -25,7 +28,8 @@ public class PrintHistory {
     public String FCheck;
     public String FDate;
     public String FMaterialid;
-    public String FBaseUnit;
+    public String FAuxSign;
+    public String FActualModel;
 
     public void setProduct(Product product){
         this.FName = product.FName;
@@ -61,11 +65,11 @@ public class PrintHistory {
 
 
 
-    @Generated(hash = 1548637610)
+    @Generated(hash = 1210314488)
     public PrintHistory(String FTitle, String FHuoquan, String FBarCode, String FBatch, String FName,
-            String FModel, String FNum, String FNum2, String FUnit, String FUnitAux, String FNot,
-            String FWaveHouse, String FSaveIn, String FCheck, String FDate, String FMaterialid,
-            String FBaseUnit) {
+            String FModel, String FNum, String FNum2, String FUnit, String FBaseUnit, String FBaseUnitID,
+            String FStoreUnit, String FUnitAux, String FNot, String FWaveHouse, String FSaveIn, String FCheck,
+            String FDate, String FMaterialid, String FAuxSign, String FActualModel) {
         this.FTitle = FTitle;
         this.FHuoquan = FHuoquan;
         this.FBarCode = FBarCode;
@@ -75,6 +79,9 @@ public class PrintHistory {
         this.FNum = FNum;
         this.FNum2 = FNum2;
         this.FUnit = FUnit;
+        this.FBaseUnit = FBaseUnit;
+        this.FBaseUnitID = FBaseUnitID;
+        this.FStoreUnit = FStoreUnit;
         this.FUnitAux = FUnitAux;
         this.FNot = FNot;
         this.FWaveHouse = FWaveHouse;
@@ -82,7 +89,8 @@ public class PrintHistory {
         this.FCheck = FCheck;
         this.FDate = FDate;
         this.FMaterialid = FMaterialid;
-        this.FBaseUnit = FBaseUnit;
+        this.FAuxSign = FAuxSign;
+        this.FActualModel = FActualModel;
     }
     @Generated(hash = 915761306)
     public PrintHistory() {
@@ -188,5 +196,29 @@ public class PrintHistory {
     }
     public void setFBaseUnit(String FBaseUnit) {
         this.FBaseUnit = FBaseUnit;
+    }
+    public String getFAuxSign() {
+        return this.FAuxSign;
+    }
+    public void setFAuxSign(String FAuxSign) {
+        this.FAuxSign = FAuxSign;
+    }
+    public String getFActualModel() {
+        return this.FActualModel;
+    }
+    public void setFActualModel(String FActualModel) {
+        this.FActualModel = FActualModel;
+    }
+    public String getFBaseUnitID() {
+        return this.FBaseUnitID;
+    }
+    public void setFBaseUnitID(String FBaseUnitID) {
+        this.FBaseUnitID = FBaseUnitID;
+    }
+    public String getFStoreUnit() {
+        return this.FStoreUnit;
+    }
+    public void setFStoreUnit(String FStoreUnit) {
+        this.FStoreUnit = FStoreUnit;
     }
 }

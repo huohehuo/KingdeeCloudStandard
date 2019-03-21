@@ -208,8 +208,8 @@ public class PrintHistoryActivity extends BaseActivity {
         batch.setText(data.getFBatch());
         name.setText(data.getFName());
         model.setText(data.getFModel());
-        num.setText(data.getFNum());
-        num2.setText(data.getFNum2());
+        num.setText(data.getFNum()+"  "+data.getFUnit());
+        num2.setText(data.getFNum2()+"  "+data.getFUnitAux());
         note.setText(data.getFNot());
         wavehouse.setText(data.getFWaveHouse());
         date.setText(data.getFDate());

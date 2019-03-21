@@ -72,6 +72,25 @@
             android:textColorHint="#888888" />
 
     </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:textColorHint="@color/colorPrimaryDark"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/ed_printnum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="默认打印次数:"
+                android:padding="13dp"
+                android:singleLine="true"
+                android:inputType="number"
+                android:textColorHint="#888888" />
+
+        </android.support.design.widget.TextInputLayout>
 
 
     <TextView

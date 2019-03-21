@@ -42,7 +42,7 @@
         </receiver>
 
         <activity
-            android:name=".Activity.SplashActivity"
+            android:name="com.fangzuo.assist.cloud.Activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"

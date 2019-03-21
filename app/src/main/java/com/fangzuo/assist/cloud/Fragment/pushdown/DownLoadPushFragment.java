@@ -36,10 +36,12 @@ import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
 import com.fangzuo.assist.cloud.widget.SpinnerClient;
+import com.fangzuo.assist.cloud.widget.SpinnerClientDlg;
 import com.fangzuo.assist.cloud.widget.SpinnerSupplier;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.PushDownMainDao;
@@ -83,9 +85,9 @@ public class DownLoadPushFragment extends BaseFragment {
     @BindView(R.id.refresh)
     SwipeRefreshLayout refresh;
     @BindView(R.id.sp_client)
-    SpinnerClient spClient;
-    @BindView(R.id.sp_supplier)
-    SpinnerSupplier spSupplier;
+    SpinnerClientDlg spClient;
+//    @BindView(R.id.sp_supplier)
+//    SpinnerSupplier spSupplier;
     private int tag;
     private FragmentActivity mContext;
     private ArrayList<Boolean> isCheck;
@@ -103,15 +105,15 @@ public class DownLoadPushFragment extends BaseFragment {
         downloadIDs = new ArrayList<>();
         daosession = GreenDaoManager.getmInstance(mContext).getDaoSession();
 
-        if (tag == 1) {
+//        if (tag == 1) {
             //供应商信息绑定
-            spClient.setVisibility(View.GONE);
-            spSupplier.setVisibility(View.VISIBLE);
-        } else {
-            //客户信息绑定
-            spClient.setVisibility(View.VISIBLE);
-            spSupplier.setVisibility(View.GONE);
-        }
+//            spClient.setVisibility(View.GONE);
+//            spSupplier.setVisibility(View.VISIBLE);
+//        } else {
+//            //客户信息绑定
+//            spClient.setVisibility(View.VISIBLE);
+//            spSupplier.setVisibility(View.GONE);
+//        }
     }
 
     @Override
@@ -259,6 +261,7 @@ public class DownLoadPushFragment extends BaseFragment {
                     }
                 } else {
                     isCheck.set(i, true);
+                    Lg.e("点击：",pushDownListReturnBean);
                     downloadIDs.add(pushDownListReturnBean);
                 }
                 pushDownListAdapter.notifyDataSetChanged();
@@ -419,11 +422,11 @@ public class DownLoadPushFragment extends BaseFragment {
         pBean.code = code;
         pBean.StartTime = startTime;
         pBean.endTime = endtime;
-        if (tag == 1) {
-            pBean.FWLUnitID = spSupplier.getDataId();
-        } else {
-            pBean.FWLUnitID = spClient.getDataId();
-        }
+//        if (tag == 1) {
+//            pBean.FWLUnitID = spSupplier.getDataId();
+//        } else {
+            pBean.FWLUnitID = spClient.getDataNumber();
+//        }
         String Json = new Gson().toJson(pBean);
         //获取单据信息
         Asynchttp.post(

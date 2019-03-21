@@ -27,6 +27,7 @@ import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.MD5;
 import com.fangzuo.assist.cloud.Utils.Toast;
@@ -270,9 +271,14 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
             View v = LayoutInflater.from(mContext).inflate(R.layout.ipport, null);
             final EditText mEdIp = v.findViewById(R.id.ed_ip);
             final EditText mEdPort = v.findViewById(R.id.ed_port);
+            if (Info.DATABASESETTING.equals("K3DBConfigerRY")){
+                mEdIp.setText("47.106.179.214");
+                mEdPort.setText("8080");
+            }else{
+                mEdIp.setText("192.168.0.19");
+                mEdPort.setText("8080");
 
-            mEdIp.setText("192.168.0.19");
-            mEdPort.setText("8080");
+            }
 
             ab.setView(v);
             ab.setPositiveButton("保存", new DialogInterface.OnClickListener() {

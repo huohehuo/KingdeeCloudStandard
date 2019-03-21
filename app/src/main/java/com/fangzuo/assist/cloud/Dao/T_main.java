@@ -141,6 +141,7 @@ public class T_main {
             return;
         }
         this.FCustomerID = client.FNumber;
+        this.FCustomer = client.FName;
 //        this.FSupplier= suppliers.FName;
     }
 

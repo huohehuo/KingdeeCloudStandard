@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -282,6 +283,16 @@ public class PdSaleOrder2SaleBackActivity extends BaseActivity {
 
             }
         });
+        //防止ScrollView与ListView滑动冲突
+                binding.lvPushsub.setOnTouchListener(new View.OnTouchListener() {
+
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                            binding.scrollView.requestDisallowInterceptTouchEvent(true);
+                        }
+                        return false;
+                    }
+                });
     }
 
     @Override

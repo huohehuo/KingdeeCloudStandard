@@ -174,7 +174,7 @@ public class OtherOutStoreActivity extends BaseActivity {
                     binding.edPihao.setText(codeCheckBackDataBean.FBatchNo);
                     binding.edNum.setText(codeCheckBackDataBean.FQty);
                     LoadingUtil.showDialog(mContext,"正在查找物料信息");
-                    DataModel.getProductForId(codeCheckBackDataBean.FItemID,org);
+                    DataModel.getProductForNumber(codeCheckBackDataBean.FItemID,org);
                 }else{
                     ReSetScan(binding.cbScaning);
                     Toast.showText(mContext,codeCheckBackDataBean.FTip);

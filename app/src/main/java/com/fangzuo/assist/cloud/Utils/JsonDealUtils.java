@@ -284,13 +284,18 @@ public class JsonDealUtils {
                 JSONObject inObject = new JSONObject();
                 inObject.put("FBillNo","");
                 addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
-                addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FStockOrgId);
-                addObject(inObject,"FDeliveryDeptID","FNUMBER",mains.get(i).FDepartmentNumber);
-                addObject(inObject,"FStockerID","FNUMBER",mains.get(i).FStockerNumber);
+                addObject(inObject,"FSaleOrgId","FNumber",mains.get(i).FStockOrgId);
+                addObject(inObject,"FSaleDeptID","FNUMBER",mains.get(i).FPurchaseDeptId);
                 addObject(inObject,"FSalesManID","FNUMBER",mains.get(i).FPurchaserId);
+                addObject(inObject,"FStockOrgId","FNumber",mains.get(i).FStockOrgId);
+                addObject(inObject,"FCustomerID","FNumber",mains.get(i).FCustomerID);
+                addObject(inObject,"FDeliveryDeptID","FNumber",mains.get(i).FDepartmentNumber);
+                addObject(inObject,"FStockerID","FNumber",mains.get(i).FStockerNumber);
+//                addObject(inObject,"FStockerID","FNumber",mains.get(i).FStockerNumber);
+//                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
+                addObject(inObject,"FOwnerIdHead","FNumber",mains.get(i).FStockOrgId);
                 inObject.put("FDate",mains.get(i).FDate);
-                inObject.put("FNote",mains.get(i).FDate);
-                addObject(inObject,"FCustomerID","FNUMBER",mains.get(i).FCustomerID);
+//                inObject.put("FNote",mains.get(i).FDate);
                 JSONObject stockObject = new JSONObject();
                 addObject(stockObject,"FSettleCurrID","FNUMBER",mains.get(i).FSettleCurrId);
 //                inObject.put("FSoorDerno",mains.get(i).FSoorDerno);
@@ -333,13 +338,16 @@ public class JsonDealUtils {
                 JSONObject inObject = new JSONObject();
                 inObject.put("FBillNo","");
                 addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
-                addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FStockOrgId);
-                addObject(inObject,"FDeliveryDeptID","FNUMBER",mains.get(i).FDepartmentNumber);
-                addObject(inObject,"FStockerID","FNUMBER",mains.get(i).FStockerNumber);
-                addObject(inObject,"FSalesManID","FNUMBER",mains.get(i).FPurchaserId);
+                addObject(inObject,"FSaleOrgId","FNumber",mains.get(i).FStockOrgId);
+                addObject(inObject,"FOwnerIdHead","FNumber",mains.get(i).FStockOrgId);
+                addObject(inObject,"FStockOrgId","FNumber",mains.get(i).FPurchaseOrgId);
+                addObject(inObject,"FCustomerID","FNumber",mains.get(i).FCustomerID);
+                addObject(inObject,"FSaleDeptID","FNumber",mains.get(i).FPurchaseDeptId);
+                addObject(inObject,"FSalesManID","FNumber",mains.get(i).FPurchaserId);
+                addObject(inObject,"FDeliveryDeptID","FNumber",mains.get(i).FDepartmentNumber);
+                addObject(inObject,"FStockerID","FNumber",mains.get(i).FStockerNumber);
                 inObject.put("FDate",mains.get(i).FDate);
-                inObject.put("FNote",mains.get(i).FDate);
-                addObject(inObject,"FCustomerID","FNUMBER",mains.get(i).FCustomerID);
+//                inObject.put("FNote",mains.get(i).FDate);
                 JSONObject stockObject = new JSONObject();
                 addObject(stockObject,"FSettleCurrID","FNUMBER",mains.get(i).FSettleCurrId);
 //                inObject.put("FSoorDerno",mains.get(i).FSoorDerno);
@@ -353,14 +361,15 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FStockID","FNumber",beans.get(j).FStorageId);
                     addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
                     jsonAr.put("FRealQty",beans.get(j).FRealQty);
+                    addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
                     jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
                     jsonAr.put("FBaseMustQty",beans.get(j).FRemainInStockQty);
                     jsonAr.put("FARNOTJOINQTY",beans.get(j).FRealQty);
+
                     jsonAr.put("FSOEntryId",beans.get(j).FSOEntryId);
                     jsonAr.put("FSrcBillNo",mains.get(0).FSoorDerno);
                     jsonAr.put("FSoorDerno",mains.get(0).FSoorDerno);
                     jsonAr.put("FSrcType","SAL_SaleOrder");
-                    addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
                     jsonAr.put("FIsFree",beans.get(j).FIsFree);
                     jsonArray.put(jsonAr);
                     JSONArray jsonA2 = new JSONArray();
@@ -372,6 +381,14 @@ public class JsonDealUtils {
                         jsonAr2.put("FEntity_Link_FSBillId",beans.get(j).FID);
                         jsonAr2.put("FEntity_Link_FSId",beans.get(j).FEntryID);
 
+//                        jsonAr2.put("FEntity_Link_FBaseUnitQtyOld",beans.get(j).FRealQty);
+//                        jsonAr2.put("FEntity_Link_FBaseUnitQty",beans.get(j).FRealQty);
+//                        jsonAr2.put("FEntity_Link_FSALBASEQTYOld",beans.get(j).FRealQty);
+//                        jsonAr2.put("FEntity_Link_FSALBASEQTY",beans.get(j).FRealQty);
+//                        jsonAr2.put("FEntity_Link_FAuxUnitQtyOld",beans.get(j).FRealQty);
+//                        jsonAr2.put("FEntity_Link_FAuxUnitQty",beans.get(j).FRealQty);
+//                        jsonAr2.put("FEntity_Link_FLnkAmount",beans.get(j).FRealQty);
+//                        jsonAr2.put("FEntity_Link_FLnk1Amount",beans.get(j).FRealQty);
 //                        jsonAr2.put("FEntity_Link_FSOEntryId",beans.get(0).FSOEntryId);
 //                        jsonAr2.put("FEntity_Link_FSoorDerno",mains.get(0).FSoorDerno);
 //                        jsonAr2.put("FEntity_Link_FSrcType","SAL_SaleOrder");
@@ -1103,7 +1120,25 @@ public class JsonDealUtils {
         return outOjbect.toString();
     }
 
+    //调拨单的JSON拼接（提交和审核的json）
+    public static String JSonDB_Check(String id){
+                JSONObject inObject = new JSONObject();
+        try {
+//                String[] strings = new String[1];
+//                strings[0]=id;
+                inObject.put("CreateOrgId",0);
+                JSONArray array = new JSONArray();//Model
+                array.put(id);
+                inObject.put("Numbers",array);
+                inObject.put("Ids","");
+//                inObject.put("InterationFlags","");
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Lg.e("解析错误："+e.toString());
+        }
+        return inObject.toString();
+    }
 
 
 

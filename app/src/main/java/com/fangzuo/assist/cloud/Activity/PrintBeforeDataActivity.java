@@ -51,7 +51,7 @@ public class PrintBeforeDataActivity extends BaseActivity {
                     binding.toolbar.tvRight.setText("打印机就绪");
                     binding.toolbar.tvRight.setTextColor(Color.BLACK);
                 }else{
-                    binding.toolbar.tvRight.setText("连接打印机错误");
+                    binding.toolbar.tvRight.setText("点击重连打印机");
                     binding.toolbar.tvRight.setTextColor(Color.RED);
                 }
                 break;
@@ -63,10 +63,12 @@ public class PrintBeforeDataActivity extends BaseActivity {
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_print_before_data);
         zpSDK=new zpBluetoothPrinter(this);
-        binding.toolbar.tvTitle.setText("条码补打");
+        binding.toolbar.tvTitle.setText("期初物料补打");
         binding.ryPrintHistory.setAdapter(adapter = new PrintHistoryAdapter(this));
         binding.ryPrintHistory.setLayoutManager(new LinearLayoutManager(this));
         bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
+        LoadingUtil.showDialog(mContext,"正在连接打印机...");
+
         linkBluePrint();
     }
 
@@ -82,10 +84,16 @@ public class PrintBeforeDataActivity extends BaseActivity {
             public void onItemClick(int position) {
                 PrintHistory bean =adapter.getAllData().get(position);
                 Lg.e("点击历史：",bean);
-                String stringdata = bean.FMaterialid+"|"+bean.FBaseUnit+"|"+bean.FNum+"|"+
-                        bean.FBatch+"|"+ BasicShareUtil.getInstance(mContext).getIMIE()+"|"+"";
+//                if (binding.toolbar.tvRight.getText().toString().equals("点击重连打印机")){
+//                    Toast.showText(mContext,"请先配置好打印机");
+//                }else{
+                    String stringdata = bean.FMaterialid+"|"+bean.FBaseUnitID+"|"+bean.FNum+"|"+
+                            bean.FBatch+"|"+ BasicShareUtil.getInstance(mContext).getIMIE()+"|"+bean.FHuoquan +"|"+
+                            bean.FActualModel+"|"+bean.FAuxSign;
 //                bean.FBatch = binding.edPihao.getText().toString();
-                pushAndCreateCode(bean,stringdata);
+                    pushAndCreateCode(bean,stringdata);
+//                }
+
             }
         });
         binding.ivFind.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +123,8 @@ public class PrintBeforeDataActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (!"打印机就绪".equals(binding.toolbar.tvRight.getText().toString())){
+                    LoadingUtil.showDialog(mContext,"正在连接打印机...");
+
                     linkBluePrint();
                 }
             }
@@ -164,7 +174,8 @@ public class PrintBeforeDataActivity extends BaseActivity {
                 if (!commonResponse.state)return;
                 DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
                 if (null != dBean && dBean.codeCheckBackDataBeans.size() > 0) {
-                    data.FNum2=dBean.codeCheckBackDataBeans.get(0).FQty;
+                    data.FNum=dBean.codeCheckBackDataBeans.get(0).FStoreQty;
+                    data.FNum2=dBean.codeCheckBackDataBeans.get(0).FBaseQty;
                     data.FBarCode = dBean.codeCheckBackDataBeans.get(0).FBarCode;
                     data.FDate = getTime(true);
                     try {
@@ -185,55 +196,10 @@ public class PrintBeforeDataActivity extends BaseActivity {
         });
     }
 
-    //展示打印数据
-    private void showMsg(final PrintHistory data){
-        if (null==data.FDate || "".equals(data.FDate)){
-            data.FDate = getTime(true);
-        }
-        Lg.e("Data:打印信息：",data);
-        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
-        ab.setTitle("打印信息：");
-        View v = LayoutInflater.from(mContext).inflate(R.layout.show_print_history, null);
-        TextView huoquan     = v.findViewById(R.id.tv_huoquan);
-        TextView batch       = v.findViewById(R.id.tv_batch);
-        TextView name        = v.findViewById(R.id.tv_name);
-        TextView model       = v.findViewById(R.id.tv_model);
-        TextView num         = v.findViewById(R.id.tv_num);
-        TextView num2        = v.findViewById(R.id.tv_num2);
-        TextView note        = v.findViewById(R.id.tv_note);
-        TextView wavehouse   = v.findViewById(R.id.tv_wavehouse);
-        TextView date        = v.findViewById(R.id.tv_date);
-        TextView btn        = v.findViewById(R.id.btn_print);
-        huoquan.setText(data.getFHuoquan());
-        batch.setText(data.getFBatch());
-        name.setText(data.getFName());
-        model.setText(data.getFModel());
-        num.setText(data.getFNum());
-        num2.setText(data.getFNum2());
-        note.setText(data.getFNot());
-        wavehouse.setText(data.getFWaveHouse());
-        date.setText(data.getFDate());
-        ab.setView(v);
-        final AlertDialog alertDialog = ab.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    CommonUtil.doPrint(zpSDK,data);
-                } catch (Exception e) {
-//                    e.printStackTrace();
-                    LoadingUtil.showAlter(mContext,"打印错误","请检查打印机是否已连接");
-                }
-                alertDialog.dismiss();
-            }
-        });
-    }
 
     //连接打印机
     private void linkBluePrint(){
-        LoadingUtil.showDialog(mContext,"正在连接打印机...");
+        Lg.e("点击打印机重连");
         new Thread(new Runnable() {
             @Override
             public void run() {

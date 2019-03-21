@@ -37,6 +37,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <CheckBox
+                        android:visibility="gone"
                         android:id="@+id/cb_scaning"
                         android:layout_margin="10dp"
                         android:layout_gravity="center_vertical"
@@ -56,6 +57,12 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
+            <LinearLayout
+                android:layout_marginBottom="5dp"
+                android:background="#93d2d2d2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -193,7 +200,7 @@
                         app:TextView_Title_justone="true"
                         app:TextView_Title_one="调入仓库"
                         app:TextView_Title_size="@dimen/size_detail" />
-                    <com.fangzuo.assist.cloud.widget.SpinnerStorage
+                    <com.fangzuo.assist.cloud.widget.SpinnerStorageDlg
                         android:id="@+id/sp_which_storage_in"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -250,41 +257,28 @@
                         android:layout_weight="4"
                         android:layout_height="wrap_content"
                         app:TextView_Title_justone="true"
-                        app:TextView_Title_one="数量"
+                        app:TextView_Title_one="批号"
                         app:TextView_Title_size="@dimen/size_detail" />
-                    <EditText
-                        android:id="@+id/ed_num"
+                    <TextView
+                        android:id="@+id/ed_pihao"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="6"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:background="@drawable/bg_edittext_selector"
-                        android:inputType="numberDecimal"
+                        android:gravity="center"
                         android:singleLine="true"
-                        android:textSize="22sp" />
-                </LinearLayout>
-                <include layout="@layout/line_heng"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <com.fangzuo.assist.cloud.widget.TextViewTitle
-                        android:layout_width="0dp"
-                        android:layout_weight="4"
-                        android:layout_height="wrap_content"
-                        app:TextView_Title_justone="true"
-                        app:TextView_Title_one="批号"
-                        app:TextView_Title_size="@dimen/size_detail" />
-                    <EditText
+                        android:textSize="@dimen/size_product" />
+                    <!--<EditText
                         android:id="@+id/ed_pihao"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="6"
                         android:gravity="center_horizontal|center_vertical"
                         android:background="@drawable/bg_edittext_selector"
-                        android:inputType="numberDecimal"
-                        android:textSize="22sp" />
+                        android:textSize="22sp" />-->
                 </LinearLayout>
+            </LinearLayout>
+
+                <include layout="@layout/line_heng"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -322,7 +316,32 @@
                         android:layout_weight="6"
                         app:Uspinner_title="请选择实际规格" />
                 </LinearLayout>
-
+                <include layout="@layout/line_heng"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.fangzuo.assist.cloud.widget.TextViewTitle
+                        android:layout_width="0dp"
+                        android:layout_weight="4"
+                        android:layout_height="wrap_content"
+                        app:TextView_Title_justone="true"
+                        app:TextView_Title_one="数量"
+                        app:TextView_Title_size="@dimen/size_detail" />
+                    <EditText
+                        android:id="@+id/ed_num"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:background="@drawable/bg_edittext_selector"
+                        android:inputType="numberDecimal"
+                        android:hint="扫码带出数量"
+                        android:singleLine="true"
+                        android:textSize="22sp" />
+                </LinearLayout>
 
 
 

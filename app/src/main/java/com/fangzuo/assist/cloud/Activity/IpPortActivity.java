@@ -1,5 +1,6 @@
 package com.fangzuo.assist.cloud.Activity;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +17,7 @@ import com.fangzuo.assist.cloud.Beans.UseTimeBean;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.orhanobut.hawk.Hawk;
 
@@ -45,6 +47,8 @@ public class IpPortActivity extends BaseActivity {
     EditText edUrl;
     @BindView(R.id.tv_endtime)
     TextView tvEndtime;
+    @BindView(R.id.ed_printnum)
+    EditText edPrintnum;
     private BasicShareUtil share;
     ArrayAdapter<String> adapter;
     private String string;
@@ -55,19 +59,23 @@ public class IpPortActivity extends BaseActivity {
         mContext = this;
         ButterKnife.bind(this);
         tvTitle.setText("服务器设置");
-        edUrl.setText(Hawk.get(Config.Cloud_Url, "http://192.168.0.201/K3Cloud/"));
         share = BasicShareUtil.getInstance(mContext);
         if (!share.getIP().equals("")) {
             edIp.setText(share.getIP());
-        } else {
-            edIp.setText("192.168.0.136");
-        }
-
-        if (!share.getPort().equals("")) {
             edPort.setText(share.getPort());
+            edUrl.setText(Hawk.get(Config.Cloud_Url, "http://47.106.179.214/K3Cloud/"));
         } else {
-            edPort.setText("8082");
+            if (Info.DATABASESETTING.equals("K3DBConfigerRY")) {
+                edUrl.setText(Hawk.get(Config.Cloud_Url, "http://47.106.179.214/K3Cloud/"));
+                edIp.setText("47.106.179.214");
+                edPort.setText("8080");
+            } else {
+                edUrl.setText("http://192.168.0.201/K3Cloud/");
+                edIp.setText("192.168.0.136");
+                edPort.setText("8082");
+            }
         }
+        edPrintnum.setText(Hawk.get(Config.PrintNum,"2"));
     }
 
     @Override
@@ -82,9 +90,9 @@ public class IpPortActivity extends BaseActivity {
         }, 100);
 
         if (null != Hawk.get(Config.SaveTime, null)) {
-            UseTimeBean bean= Hawk.get(Config.SaveTime);
-            tvEndtime.setText("有效期："+dealTime(bean.endTime));
-        }else{
+            UseTimeBean bean = Hawk.get(Config.SaveTime);
+            tvEndtime.setText("有效期：" + dealTime(bean.endTime));
+        } else {
             tvEndtime.setText("获取时间失效");
         }
     }
@@ -130,6 +138,9 @@ public class IpPortActivity extends BaseActivity {
         if (!edUrl.getText().toString().equals("")) {
             Hawk.put(Config.Cloud_Url, edUrl.getText().toString());
         }
+        if (!edPrintnum.getText().toString().equals("")) {
+            Hawk.put(Config.PrintNum, edPrintnum.getText().toString());
+        }
         super.onDestroy();
     }
 
@@ -151,4 +162,10 @@ public class IpPortActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

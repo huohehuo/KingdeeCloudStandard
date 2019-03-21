@@ -66,6 +66,7 @@
     <string name="spDepartmentCreate_pg">spDepartmentCreate_pg</string>
 
     <string name="spDepartmentSend_so">spDepartmentSend_so</string>
+    <string name="spDepartmentSale_so">spDepartmentSale_so</string>
     <string name="spOrgSend_so">spOrgSend_so</string>
     <string name="spStoreman_so">spStoreman_so</string>
     <string name="spSaleman_so">spSaleman_so</string>
@@ -133,10 +134,35 @@
     <string name="spSignPerson_pis">spSignPerson_pis</string>
     <string name="spCapturePerson_pis">spCapturePerson_pis</string>
 
+    <!--简单生产入库-->
     <string name="spStoreman_pris">spStoreman_pris</string>
+    <string name="spDepartmentGet_pris">spDepartmentGet_pris</string>
+    <string name="spWhichStorage_pris">spWhichStorage_pris</string>
     <string name="spOrgIn_pris">spOrgIn_pris</string>
     <string name="spOrgCreate_pris">spOrgCreate_pris</string>
     <string name="spOrgHuozhu_pris">spOrgHuozhu_pris</string>
+
+    <!--挑板入库-->
+    <string name="spStoreman_pris_tb">spStoreman_pris_tb</string>
+    <string name="spDepartmentGet_pris_tb">spDepartmentGet_pris_tb</string>
+    <string name="spWhichStorage_pris_tb">spWhichStorage_pris_tb</string>
+    <string name="spOrgIn_pris_tb">spOrgIn_pris_tb</string>
+    <string name="spOrgCreate_pris_tb">spOrgCreate_pris_tb</string>
+    <string name="spOrgHuozhu_pris_tb">spOrgHuozhu_pris_tb</string>
+    <!--到柜入库-->
+    <string name="spStoreman_pris_dg">spStoreman_pris_dg</string>
+    <string name="spDepartmentGet_pris_dg">spDepartmentGet_pris_dg</string>
+    <string name="spWhichStorage_pris_dg">spWhichStorage_pris_dg</string>
+    <string name="spOrgIn_pris_dg">spOrgIn_pris_dg</string>
+    <string name="spOrgCreate_pris_dg">spOrgCreate_pris_dg</string>
+    <string name="spOrgHuozhu_pris_dg">spOrgHuozhu_pris_dg</string>
+    <!--简单生产入库-->
+    <string name="spStoreman_pris_simplein">spStoreman_pris_simplein</string>
+    <string name="spDepartmentGet_pris_simplein">spDepartmentGet_pris_simplein</string>
+    <string name="spWhichStorage_pris_simplein">spWhichStorage_pris_simplein</string>
+    <string name="spOrgIn_pris_simplein">spOrgIn_pris_simplein</string>
+    <string name="spOrgCreate_pris_simplein">spOrgCreate_pris_simplein</string>
+    <string name="spOrgHuozhu_pris_simplein">spOrgHuozhu_pris_simplein</string>
 
     <string name="spYuandan_so">spYuandan_so</string>
     <string name="spPayMethod_so">spPayMethod_so</string>
@@ -248,6 +274,8 @@
     <string name="spOrgIn_db">spOrgIn_db</string>
     <string name="spOrgHuozhuIn_db">spOrgHuozhuIn_db</string>
     <string name="spStoreman_db">spStoreman_db</string>
+    <string name="spDbType_db">spDbType_db</string>
+    <string name="spDbDirection_db">spDbDirection_db</string>
 
     <!--===========================================================================-->
 
@@ -271,5 +299,10 @@
     <string name="title_activity_pd_xs_order2_xsdd">PdXsOrder2XsddActivity</string>
     <string name="scanGo">连\n扫</string>
 
+    <!--表头锁定的提示语-->
+    <string name="checkMainDlg_title">是否已确定表头数据无误</string>
+    <string name="checkMainDlg_msg">确定后表头将被锁定,直至上传之前</string>
+    <string name="checkMainDlg_ok">已确定,继续添加</string>
+    <string name="checkMainDlg_error">取消</string>
 
 </resources>

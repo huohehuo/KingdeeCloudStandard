@@ -6,11 +6,10 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:textSize="15sp"
-        android:singleLine="true"
+        android:textSize="18sp"
         android:gravity="center"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="7dp"
         android:text="TextView" />
     <!---->
     <!--<View-->

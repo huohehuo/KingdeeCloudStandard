@@ -145,9 +145,15 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
                     LoadingUtil.dismiss();
                     ab.setTitle("配置结果");
                     ab.setMessage("配置成功，请继续下一步操作");
-                    ab.setPositiveButton("确认", null);
+                    ab.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startNewActivity(LoginActivity.class,
+                                    R.anim.activity_fade_in, R.anim.activity_fade_out, true, null);
+                        }
+                    });
                     ab.create().show();
-
+                    DataService.UpdateData(this);
                     App.getRService().doIOAction(WebApi.DetailTableDeleteAll,BasicShareUtil.getInstance(mContext).getIMIE(), new MySubscribe<CommonResponse>() {
                         @Override
                         public void onNext(CommonResponse commonResponse) {
@@ -227,6 +233,18 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
             edPort.setText(share.getDatabasePort());
             edUsername.setText(share.getDataBaseUser());
             edPass.setText(share.getDataBasePass());
+        }else{
+            if (Info.DATABASESETTING.equals("K3DBConfigerRY")){
+                edServerip.setText("233z13987d.51mypc.cn");
+                edPort.setText("49717");
+                edUsername.setText("sa");
+                edPass.setText("rongyuan@888");
+            }else{
+                edServerip.setText("192.168.0.201");
+                edPort.setText("1433");
+                edUsername.setText("sa");
+                edPass.setText("Abc123");
+            }
         }
 
         dataSearchRyAdapter = new DataSearchRyAdapter(mContext, container);
@@ -235,6 +253,7 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
         ryDataSearch.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         dataSearchRyAdapter.setOnItemClickListener(this);
         dataSearchRyAdapter.notifyDataSetChanged();
+
     }
 
     @Override

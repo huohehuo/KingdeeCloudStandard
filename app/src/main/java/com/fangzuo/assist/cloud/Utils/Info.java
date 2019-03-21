@@ -12,6 +12,7 @@ import org.json.JSONArray;
 public class Info {
 //    public static final String DATABASESETTING = "K3DBConfiger201811123395555";//数据库名称
     public static final String DATABASESETTING = "K3DBConfigerRY";
+    public static final String TestNo = "2.4";
     public static final int SEARCHFORRESULT = 9998;
     public static final int SEARCHFORRESULTPRODUCT = 9997;
     public static final int SEARCHFORRESULTCLIRNT = 9999;
@@ -32,6 +33,7 @@ public class Info {
     public static final String useragent="ApiClient";
     public static final String user_org="user_org";//登录时获取到的组织名称
     public static final String user_id="user_id";//登录时获取到的组织名称
+    public static final String user_data="user_data";//登录时获取到的数据中心
 
     //表单ID
     public static final String FormID_PIS = "STK_InStock";//采购入库单/采购订单下推采购入库单/收料通知单下推采购入库单
@@ -84,6 +86,9 @@ public class Info {
                 backString=FormID_PIS;
                 break;
             case Config.ProductInStoreActivity://产品入库
+            case Config.TbInActivity://产品入库
+            case Config.DgInActivity://产品入库
+            case Config.SimpleInActivity://产品入库
                 backString=FormID_ProductIS;
                 break;
             case Config.ProductGetActivity://生产领料
@@ -137,6 +142,9 @@ public class Info {
                 backString=BT_PIS;
                 break;
             case Config.ProductInStoreActivity:
+            case Config.TbInActivity://产品入库
+            case Config.DgInActivity://产品入库
+            case Config.SimpleInActivity://产品入库
                 backString=BT_ProductIS;
                 break;
             case Config.ProductGetActivity:

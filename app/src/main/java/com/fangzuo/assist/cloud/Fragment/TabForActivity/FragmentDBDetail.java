@@ -32,13 +32,16 @@ import com.fangzuo.assist.cloud.Dao.Unit;
 import com.fangzuo.assist.cloud.Dao.WaveHouse;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
+import com.fangzuo.assist.cloud.RxSerivce.ToSubscribe;
 import com.fangzuo.assist.cloud.Service.DataService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.DataModel;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
+import com.fangzuo.assist.cloud.Utils.JsonDealUtils;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.MediaPlayer;
@@ -51,6 +54,7 @@ import com.fangzuo.assist.cloud.widget.MyWaveHouseSpinner;
 import com.fangzuo.assist.cloud.widget.SpinnerActualModel;
 import com.fangzuo.assist.cloud.widget.SpinnerAuxSign;
 import com.fangzuo.assist.cloud.widget.SpinnerStorage;
+import com.fangzuo.assist.cloud.widget.SpinnerStorageDlg;
 import com.fangzuo.assist.cloud.widget.SpinnerUnit;
 import com.fangzuo.assist.cloud.zxing.ScanManager;
 import com.fangzuo.greendao.gen.DaoSession;
@@ -88,11 +92,11 @@ SpinnerStorage spWhichStorageOut;
     @BindView(R.id.sp_wavehouse_out)
     MyWaveHouseSpinner spWavehouseOut;
     @BindView(R.id.sp_which_storage_in)
-    SpinnerStorage spWhichStorageIn;
+    SpinnerStorageDlg spWhichStorageIn;
     @BindView(R.id.sp_wavehouse_in)
     MyWaveHouseSpinner spWavehouseIn;
-    @BindView(R.id.cb_scaning)
-    CheckBox cbScaning;
+//    @BindView(R.id.cb_scaning)
+//    CheckBox cbScaning;
 //    @BindView(R.id.scanbyCamera)
 //    RelativeLayout scanbyCamera;
 //    @BindView(R.id.ed_code)
@@ -110,7 +114,7 @@ SpinnerStorage spWhichStorageOut;
     @BindView(R.id.sp_unit)
     SpinnerUnit spUnit;
     @BindView(R.id.ed_pihao)
-    EditText edPihao;
+    TextView edPihao;
     @BindView(R.id.ed_num)
     EditText edNum;
     @BindView(R.id.ed_purchase_no)
@@ -160,14 +164,14 @@ SpinnerStorage spWhichStorageOut;
         switch (event.Msg) {
             case EventBusInfoCode.ScanResult:
                 BarcodeResult res = (BarcodeResult) event.postEvent;
-                if (cbScaning.isChecked()) {
-                } else {
+//                if (cbScaning.isChecked()) {
+//                } else {
                     mCaptureManager.onPause();
                     zxingBarcodeScanner.setVisibility(View.GONE);
-                }
+//                }
 
                 OnReceive(res.getResult().getText());
-                Toast.showText(mContext, "扫描结果：" + res.getResult().getText());
+//                Toast.showText(mContext, "扫描结果：" + res.getResult().getText());
                 break;
             case EventBusInfoCode.Product:
                 product = (Product) event.postEvent;
@@ -209,8 +213,10 @@ SpinnerStorage spWhichStorageOut;
                     ordercode++;
                     Log.e("ordercode", ordercode + "");
                     share.setOrderCode(activityPager.getActivity(), ordercode);
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock + "NO"));//上传成功，解锁表头
 //                btnBackorder.setClickable(true);
                     LoadingUtil.dismiss();
+                    submitAndAudit(listOrder.get(0));//是否提交并审核
                 } else {
                     LoadingUtil.dismiss();
                     List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
@@ -245,9 +251,9 @@ SpinnerStorage spWhichStorageOut;
                     autoAuxSing = codeCheckBackDataBean.FAuxsign;
                     autoStorage = codeCheckBackDataBean.FStockID;
                     LoadingUtil.showDialog(mContext, "正在查找物料信息");
-                    DataModel.getProductForId(codeCheckBackDataBean.FItemID, activityPager.getOrgOut());
+                    DataModel.getProductForNumber(codeCheckBackDataBean.FItemID, activityPager.getOrgOut());
                 } else {
-                    activityPager.ReSetScan(cbScaning);
+//                    activityPager.ReSetScan(cbScaning);
                     Toast.showText(mContext, codeCheckBackDataBean.FTip);
                 }
                 break;
@@ -256,12 +262,13 @@ SpinnerStorage spWhichStorageOut;
                 if (codeCheckBackDataBean.FTip.equals("OK")) {
                     Addorder();
                 } else {
+                    LoadingUtil.dismiss();
                     Toast.showText(mContext, codeCheckBackDataBean.FTip);
                 }
                 break;
             case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
                 if (null != activityPager||null != spUnit) {
-                    spUnit.setAuto("", activityPager.getOrgOut(), SpinnerUnit.Id);
+//                    spUnit.setAuto("", SpinnerUnit.Id);
                     Lg.e("-----------",activityPager.getOrgOut());
                     spWhichStorageOut.setAuto("", activityPager.getOrgOut());
                 }
@@ -315,7 +322,6 @@ SpinnerStorage spWhichStorageOut;
         ordercode = CommonUtil.createOrderCode(activityPager.getActivity());//单据编号
         spAuxsign.setEnabled(false);
         spActualmodel.setEnabled(false);
-
     }
 
     //在oncreateView之前使用 不要使用控件
@@ -349,6 +355,12 @@ SpinnerStorage spWhichStorageOut;
 
     @Override
     protected void initListener() {
+        btnAdd.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View view) {
+                checkMainDlg();
+            }
+        });
         spWhichStorageOut.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
@@ -357,7 +369,7 @@ SpinnerStorage spWhichStorageOut;
                 Lg.e("选中调出仓库：", storageOut);
                 waveHouseOut = null;
                 spWavehouseOut.setAuto(mContext, storageOut, "");
-                DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum);
+                DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getHuozhuOut());
 
             }
         });
@@ -404,11 +416,10 @@ SpinnerStorage spWhichStorageOut;
         //设置物料信息
         tvCode.setText(product.FNumber);tvGoodName.setText(product.FName);tvModel.setText(product.FModel);
         //带出物料的默认值
-        spUnit.setAuto(product.FPurchaseUnitID, activityPager.getOrgOut(), SpinnerUnit.Id);
-        if (activityPager.isStorage()) {
-//            spWhichStorage.setAutoSelection("", product.FStockID);
+        spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
+//        if (activityPager.isStorage()) {
             spWhichStorageOut.setAuto(autoStorage, activityPager.getOrgOut());
-        }
+//        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
             isOpenBatch = true;
             edPihao.setEnabled(true);
@@ -417,18 +428,38 @@ SpinnerStorage spWhichStorageOut;
             edPihao.setEnabled(false);
             isOpenBatch = false;
         }
-        DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum);
+        DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getHuozhuOut());
 
-        spAuxsign.getData(product.FMASTERID, "");
-        spActualmodel.getData(product.FMASTERID, "");
+        spAuxsign.getData(product.FMASTERID, autoAuxSing);
+        spActualmodel.getData(product.FMASTERID, autoActualModel);
 
         //自动添加
         if (activityPager.getIsAuto().isChecked()) {
-            if (!checkBeforeAdd()) {
-                activityPager.ReSetScan(cbScaning);
-            }
+            checkMainDlg();
+//            if (!checkBeforeAdd()) {
+//                activityPager.ReSetScan(cbScaning);
+//            }
         } else {
-            activityPager.ReSetScan(cbScaning);
+//            activityPager.ReSetScan(cbScaning);
+        }
+    }
+
+    //若为该单据为第一次，弹出确认框
+    private void checkMainDlg(){
+        if (!activityPager.isHasLock()){
+            AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+            ab.setTitle(getString(R.string.checkMainDlg_title));
+            ab.setMessage(getString(R.string.checkMainDlg_msg));
+            ab.setPositiveButton(getString(R.string.checkMainDlg_ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    checkBeforeAdd();
+                }
+            });
+            ab.setNegativeButton(getString(R.string.checkMainDlg_error), null);
+            ab.create().show();
+        }else{
+            checkBeforeAdd();
         }
     }
 
@@ -498,7 +529,7 @@ SpinnerStorage spWhichStorageOut;
                 return false;
             }
         }
-
+        LoadingUtil.showDialog(mContext,"正在添加...");
 
         //插入条码唯一临时表
         CodeCheckBean bean = new CodeCheckBean(barcode, ordercode + "", storageIn.FItemID,waveHouseIn==null?"0":waveHouseIn.FSPID, BasicShareUtil.getInstance(mContext).getIMIE());
@@ -569,6 +600,8 @@ SpinnerStorage spWhichStorageOut;
             detail.FIndex = timesecond;
             detail.FRemainInStockQty = num;
             detail.FRealQty = num;
+            detail.FStoreNum = tvStorenum.getText().toString();
+            detail.FBaseNum = num;
             detail.FProductNo = edPurchaseNo.getText().toString();
             detail.FBatch = edPihao.getText().toString();
             detail.AuxSign = spAuxsign.getDataNumber();
@@ -588,17 +621,20 @@ SpinnerStorage spWhichStorageOut;
                 Toast.showText(mContext, "添加成功");
                 resetAll();
             } else {
+                LoadingUtil.dismiss();
                 MediaPlayer.getInstance(mContext).error();
                 Toast.showText(mContext, "添加失败，请重试");
             }
 
         } catch (Exception e) {
+            LoadingUtil.dismiss();
             DataService.pushError(mContext, this.getClass().getSimpleName(), e);
         }
     }
 
     private void resetAll() {
-        activityPager.ReSetScan(cbScaning);
+        LoadingUtil.dismiss();
+//        activityPager.ReSetScan(cbScaning);
         listOrder.clear();
         barcode = "";
         edPihao.setText("");
@@ -606,7 +642,76 @@ SpinnerStorage spWhichStorageOut;
         tvGoodName.setText("");
         tvModel.setText("");
         product = null;
+        //判断是否锁住表头
+        //判断是否有保存的业务单号，没有的话，锁定表头
+//        if ("".equals(Hawk.get(Config.OrderNo+activityPager.getActivity(),""))){
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+//        }
+    }
 
+    //提交并且审核
+    private void submitAndAudit(final String order){
+        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+        ab.setTitle("是否直接审核");
+        ab.setMessage("确认？");
+        ab.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                LoadingUtil.showDialog(mContext,"正在审核...");
+                final String json = Info.getJson(Config.DBActivity, JsonDealUtils.JSonDB_Check(order));
+                App.CloudService().doIOAction(Config.C_Submit, json, new ToSubscribe<BackData>() {
+                    @Override
+                    public void onNext(BackData backData) {
+                        super.onNext(backData);
+                        if (backData.getResult().getResponseStatus().getIsSuccess()) {
+                            Lg.e("提交成功");
+                            App.CloudService().doIOAction(Config.C_Audit, json, new ToSubscribe<BackData>() {
+                                @Override
+                                public void onNext(BackData backData) {
+                                    super.onNext(backData);
+                                        LoadingUtil.dismiss();
+                                    if (backData.getResult().getResponseStatus().getIsSuccess()) {
+                                        Toast.showText(mContext,"审核成功");
+                                        Lg.e("审核成功");
+                                    }else{
+                                        List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
+                                        StringBuilder builder = new StringBuilder();
+                                        for (BackData.ResultBean.ResponseStatusBean.ErrorsBean error : errorsBeans) {
+                                            builder.append(error.getFieldName() + "\n");
+                                            builder.append(error.getMessage() + "\n");
+                                        }
+                                        LoadingUtil.showAlter(mContext,"",builder.toString());
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                    LoadingUtil.dismiss();
+                                    Lg.e("审核失败，请于系统中审核");
+                                }
+                            });
+                        } else {
+                            LoadingUtil.dismiss();
+                            Toast.showText(mContext,"提交失败，请于系统中提交并审核");
+                            Lg.e("提交失败");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        LoadingUtil.dismiss();
+                        Toast.showText(mContext,"提交失败，请于系统中提交并审核");
+                        Lg.e("审核失败");
+                    }
+                });
+            }
+        });
+        ab.setNegativeButton("取消", null);
+        final AlertDialog alertDialog = ab.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
     //执行完单，PDA单据编号+1
@@ -647,9 +752,9 @@ SpinnerStorage spWhichStorageOut;
 //                bundle1.putInt("activity", activity);
 //                startNewActivityForResult(activityPager, ProductSearchActivity.class, R.anim.activity_open, 0, Info.SEARCHFORRESULT, bundle1);
                 break;
-            case R.id.btn_add:
-                checkBeforeAdd();
-                break;
+//            case R.id.btn_add:
+//                checkBeforeAdd();
+//                break;
             case R.id.btn_backorder:
                 new AlertDialog.Builder(mContext)
                         .setTitle("确认上传？")

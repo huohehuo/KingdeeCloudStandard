@@ -5,14 +5,14 @@ public class Config {
 //    public static final String Error_Url = "http://192.168.0.115:8083/Assist/GetLogMessage";
     public static final String Error_Url = "http://148.70.108.65:8080/LogAssist/GetLogMessage";
     public static final String Apk_Url = "http://148.70.108.65:8080/AppFile/Cloud/app-debug.apk";
-    public static final String Data_Url = "/DownData/AllData.txt";
     public static String Company="通用Cloud版";
     public static String SaveTime="SaveTime";//用于保存使用截止日期
     public static String Key="01235679";//用于保存使用截止日期（需要web端的key与之相同,并且不能倒序，只能递增的数字）
 
 
-    public static final String Cloud_Url = "http://192.168.0.201/K3Cloud/";
+    public static final String Cloud_Url = "http://47.106.179.214/K3Cloud/";
     public static final String Cloud_ID = "DataBaseID";
+    //回单的接口key
     public static final String C_Draft =        "Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Draft.common.kdsvc";//暂存
     public static final String C_Save =         "Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Save.common.kdsvc";//保存
     public static final String C_BatcnSave =    "Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.BatchSave.common.kdsvc";//批量保存
@@ -27,6 +27,7 @@ public class Config {
     public static final String DATABASESETTING = "master";
     public static final String OBJ_BLUETOOTH="key_Bluetooth_object";
     public static final String PDA = "PDA";
+    public static final String PrintNum = "PrintNum";
     public static final String[] PDA_Type = {"请选择设备型号","G02A设备", "8000设备", "5000设备","M60","手机端"};
 
     //用于接口回调的判断------------------------------------------
@@ -87,6 +88,9 @@ public class Config {
 //    public static final int PDActivity                              =10024;
 
 
+    public static final String Lock                              ="Lock";//用于判断是否锁定表头的string
+    public static final String OrderNo                              ="OrderNo";//用于锁定表头业务单号的key
+    public static final String Note                              ="Note";//用于锁定表头备注的key
     public static final int PurchaseInStoreActivity                 =10025;//采购入库
     public static final int ProductInStoreActivity                  =10026;//产品入库
     public static final int ProductGetActivity                      =10027;//生产领料
@@ -105,5 +109,8 @@ public class Config {
     public static final int Db2FDoutActivity                        =10040;//调拨申请单下推分布式调出单
     public static final int PDActivity                              =10041;//盘点单
     public static final int DBActivity                              =10042;//调拨单
+    public static final int TbInActivity                            =10043;//调拨单
+    public static final int DgInActivity                            =10044;//调拨单
+    public static final int SimpleInActivity                        =10045;//调拨单
 
 }

@@ -207,6 +207,8 @@ public class DataModel {
                 "ACTIVITY," +
                 "FORDER_ID," +
                 "FSTORAGE_ID," +
+                "FID," +
+                "FENTRY_ID," +
                 "FPRODUCT_NO," +
                 "FSTORAGE_OUT_ID," +
                 "FSTORAGE_OUT," +
@@ -282,6 +284,8 @@ public class DataModel {
             t_detail.FWaveHouseOut = cursor.getString(cursor.getColumnIndex("FWAVE_HOUSE_OUT"));
             t_detail.FWaveHouseInId = cursor.getString(cursor.getColumnIndex("FWAVE_HOUSE_IN_ID"));
             t_detail.FWaveHouseIn = cursor.getString(cursor.getColumnIndex("FWAVE_HOUSE_IN"));
+            t_detail.FEntryID = cursor.getString(cursor.getColumnIndex("FENTRY_ID"));
+            t_detail.FID = cursor.getString(cursor.getColumnIndex("FID"));
 
 
             list.add(t_detail);
@@ -290,8 +294,62 @@ public class DataModel {
         return list;
     }
 
-
     //获取库存
+    public static void getStoreNum(Product product, Storage storage, String batch, Context mContext, final TextView textView,Org org){
+        if (product == null || storage == null){
+            return;
+        }
+        Lg.e("库存查找条件：",product.FMASTERID+"-"+storage.FItemID+"-"+batch);
+        if (BasicShareUtil.getInstance(mContext).getIsOL()) {
+            InStoreNumBean storageNum = new InStoreNumBean(product.FMASTERID,storage.FItemID,"",batch,org==null?"":org.FOrgID);
+            App.getRService().doIOAction(WebApi.GETINSTORENUM, new Gson().toJson(storageNum), new MySubscribe<CommonResponse>() {
+                @Override
+                public void onNext(CommonResponse commonResponse) {
+                    super.onNext(commonResponse);
+                    if (!commonResponse.state)return;
+                    if (!MathUtil.isNumeric(commonResponse.returnJson)){
+                        textView.setText("0");
+                    }else{
+                        textView.setText(commonResponse.returnJson);
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+//                    super.onError(e);
+                    textView.setText("0");
+                }
+            });
+        }else{
+            List<InStorageNum> container = new ArrayList<>();
+            String con="";
+            if (!"".equals(storage.FItemID)){
+                con+=" and FSTOCK_ID='"+storage.FItemID+"'";
+            }
+            if (!"".equals(product.FMaterialid)){
+                con+=" and FITEM_ID='"+product.FMaterialid+"'";
+            }
+            if (!"".equals(batch)){
+                con+=" and FBATCH_NO='"+batch+"'";
+            }
+            String SQL = "SELECT * FROM IN_STORAGE_NUM WHERE 1=1 "+con;
+            Lg.e("库存查询SQL:"+SQL);
+            Cursor cursor = GreenDaoManager.getmInstance(mContext).getDaoSession().getDatabase().rawQuery(SQL, null);
+            while (cursor.moveToNext()) {
+                InStorageNum f = new InStorageNum();
+                f.FQty = cursor.getString(cursor.getColumnIndex("FQTY"));
+                Lg.e("库存查询存在FQty："+f.FQty);
+                container.add(f);
+            }
+            if (container.size() > 0) {
+                textView.setText(container.get(0).FQty);
+            } else {
+                textView.setText("0");
+            }
+        }
+    }
+
+    //获取库存()舍弃
     public static void getStoreNum(Product product, Storage storage, String batch, Context mContext, final TextView textView){
         if (product == null || storage == null){
             return;
@@ -304,8 +362,11 @@ public class DataModel {
                 public void onNext(CommonResponse commonResponse) {
                     super.onNext(commonResponse);
                     if (!commonResponse.state)return;
-                    if (!MathUtil.isNumeric(commonResponse.returnJson))textView.setText("0");
-                    textView.setText(commonResponse.returnJson);
+                    if (!MathUtil.isNumeric(commonResponse.returnJson)){
+                        textView.setText("0");
+                    }else{
+                        textView.setText(commonResponse.returnJson);
+                    }
                 }
 
                 @Override
@@ -344,8 +405,8 @@ public class DataModel {
     }
 
     //条码检测后，通过ID查找物料数据
-    public static void getProductForId(String barCode, Org org){
-        App.getRService().doIOAction(WebApi.S2Product, new Gson().toJson(new SearchBean(SearchBean.product_for_id, new Gson().toJson(new SearchBean.S2Product(barCode,org==null?"":org.FOrgID)))), new MySubscribe<CommonResponse>() {
+    public static void getProductForNumber(String barCode, Org org){
+        App.getRService().doIOAction(WebApi.S2Product, new Gson().toJson(new SearchBean(SearchBean.product_for_number, new Gson().toJson(new SearchBean.S2Product(barCode,org==null?"":org.FOrgID)))), new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
                 super.onNext(commonResponse);

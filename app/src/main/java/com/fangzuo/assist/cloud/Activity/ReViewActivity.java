@@ -102,7 +102,7 @@ public class ReViewActivity extends BaseActivity {
         Bundle extras = in.getExtras();
         activity = extras.getInt("activity");
         //当为产品入库时，初始化打印机并连接
-        if (activity == Config.ProductInStoreActivity) {
+        if (activity == Config.ProductInStoreActivity||activity==Config.TbInActivity||activity==Config.DgInActivity||activity==Config.SimpleInActivity) {
             zpSDK = new zpBluetoothPrinter(this);
             bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
             linkBluePrint();
@@ -125,6 +125,7 @@ public class ReViewActivity extends BaseActivity {
             }
         } else {//若列表为空，删除所有该activity的表头信息
             t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list());
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));
         }
         Lg.e("列表数据：" + gson.toJson(list));
         adapter = new ReViewAdapter(mContext, list, isCheck);
@@ -135,15 +136,16 @@ public class ReViewActivity extends BaseActivity {
         products.clear();
         if (list.size() > 0) {
             if (products.size() == 0) {
-                products.add(list.get(0).FMaterialId);
+                products.add(list.get(0).FBarcode);
             }
             for (int i = 0; i < list.size(); i++) {
-                if (!products.contains(list.get(i).FMaterialId)) {
-                    products.add(list.get(i).FMaterialId);
+                if (!products.contains(list.get(i).FBarcode)) {
+                    products.add(list.get(i).FBarcode);
                 }
                 num += MathUtil.toD(list.get(i).FRealQty);
             }
-            binding.productcategory.setText("物料类别数:" + products.size() + "个");
+
+            binding.productcategory.setText("已添加数量:" + products.size() + "个");
             binding.productnum.setText("物料总数为:" + num + "");
         } else {
             binding.productcategory.setText("物料类别数:" + 0 + "个");
@@ -492,7 +494,7 @@ public class ReViewActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         Lg.e("ReView：","OnPause");
-        if (activity==Config.ProductInStoreActivity){
+        if (activity==Config.ProductInStoreActivity||activity==Config.TbInActivity||activity==Config.DgInActivity||activity==Config.SimpleInActivity){
             try {
                 zpSDK.disconnect();
             }catch (Exception e){}

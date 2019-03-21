@@ -238,6 +238,8 @@ public class SpinnerActualModel extends RelativeLayout {
         });
     }
     private void dealAuto(List<AuxSignSecCheckBean> listData){
+//        Lg.e("实际规格自动：",listData);
+//        Lg.e("实际规格自动：",autoString);
         if (listData.size()>0){
             list.addAll(listData);
             mSp.setAdapter(adapter);

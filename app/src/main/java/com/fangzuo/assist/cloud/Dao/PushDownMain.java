@@ -18,16 +18,24 @@ public class PushDownMain {
     public String FDate;
     public String FSupplyID;
     public String FSupply;
+    public String FSaleOrgID;
+    public String FSaleManID;
+    public String FSaleDeptID;
+    public String FNot;
     public int tag;
-    @Generated(hash = 89079877)
-    public PushDownMain(Long id, String FID, String FBillNo, String FDate,
-            String FSupplyID, String FSupply, int tag) {
+    @Generated(hash = 891791430)
+    public PushDownMain(Long id, String FID, String FBillNo, String FDate, String FSupplyID, String FSupply,
+            String FSaleOrgID, String FSaleManID, String FSaleDeptID, String FNot, int tag) {
         this.id = id;
         this.FID = FID;
         this.FBillNo = FBillNo;
         this.FDate = FDate;
         this.FSupplyID = FSupplyID;
         this.FSupply = FSupply;
+        this.FSaleOrgID = FSaleOrgID;
+        this.FSaleManID = FSaleManID;
+        this.FSaleDeptID = FSaleDeptID;
+        this.FNot = FNot;
         this.tag = tag;
     }
     @Generated(hash = 92092905)
@@ -84,6 +92,30 @@ public class PushDownMain {
     }
     public void setTag(int tag) {
         this.tag = tag;
+    }
+    public String getFSaleOrgID() {
+        return this.FSaleOrgID;
+    }
+    public void setFSaleOrgID(String FSaleOrgID) {
+        this.FSaleOrgID = FSaleOrgID;
+    }
+    public String getFSaleManID() {
+        return this.FSaleManID;
+    }
+    public void setFSaleManID(String FSaleManID) {
+        this.FSaleManID = FSaleManID;
+    }
+    public String getFSaleDeptID() {
+        return this.FSaleDeptID;
+    }
+    public void setFSaleDeptID(String FSaleDeptID) {
+        this.FSaleDeptID = FSaleDeptID;
+    }
+    public String getFNot() {
+        return this.FNot;
+    }
+    public void setFNot(String FNot) {
+        this.FNot = FNot;
     }
 
 //    public String FName;

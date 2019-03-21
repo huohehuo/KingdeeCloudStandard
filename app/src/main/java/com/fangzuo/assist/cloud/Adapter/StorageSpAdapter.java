@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.R;
 
@@ -36,6 +37,16 @@ public class StorageSpAdapter extends BaseAdapter {
         return items.get(i);
     }
 
+    public void addData(List<Storage> clients) {
+        items.clear();
+        items.addAll(clients);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        items.clear();
+        notifyDataSetChanged();
+    }
     @Override
     public long getItemId(int i) {
         return i;

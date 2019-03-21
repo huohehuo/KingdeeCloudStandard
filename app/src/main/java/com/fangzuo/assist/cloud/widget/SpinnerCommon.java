@@ -142,14 +142,15 @@ public class SpinnerCommon extends RelativeLayout {
      * @param string            自动设置的z值
      * */
     public void setAutoSelection(String saveKeyStr,String string) {
+        Lg.e("调拨自动："+string);
         saveKeyString =saveKeyStr;
         autoString = string;
         if ("".equals(string)&&!"".equals(saveKeyStr)){
             autoString = Hawk.get(saveKeyString,"");
         }
         for (int j = 0; j < adapter.getCount(); j++) {
-            if (((Org) adapter.getItem(j)).FNumber.equals(autoString)
-                    || ((Org) adapter.getItem(j)).FName.equals(autoString)) {
+            if (((CommonBean) adapter.getItem(j)).FNumber.equals(autoString)
+                    || ((CommonBean) adapter.getItem(j)).FName.equals(autoString)) {
                 mSp.setSelection(j);
 //                autoString = null;
                 break;

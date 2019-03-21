@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.fangzuo.assist.cloud.ABase.BaseActivity;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.LoginSpAdapter;
+import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.BackDataLogin;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
@@ -35,11 +36,13 @@ import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
+import com.fangzuo.assist.cloud.Utils.JsonDealUtils;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
+import com.fangzuo.greendao.gen.SaleManDao;
 import com.fangzuo.greendao.gen.UserDao;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -178,7 +181,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 //        });
     }
     //检测是否符合时间要求
-    private boolean checkTime(){
+    private boolean checkTime (){
         if (null== Hawk.get(Config.SaveTime,null)){
             LoadingUtil.showDialog(mContext,"正在获取配置信息...");
             DownLoadUseTime();
@@ -211,11 +214,13 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         String json = JsonCreater.DownLoadData(share.getDatabaseIp(),
                 share.getDatabasePort(), share.getDataBaseUser(), share.getDataBasePass(),
                 share.getDataBase(), share.getVersion(), chooseAll);
-        Asynchttp.post(mContext, getBaseUrl() + WebApi.DOWNLOADDATA, json, new Asynchttp.Response() {
+        App.getRService().doIOAction(WebApi.DOWNLOADDATA, json, new MySubscribe<CommonResponse>() {
             @Override
-            public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
-                Log.e(TAG, "获取用户数据：" + cBean.returnJson);
-                DownloadReturnBean dBean = gson.fromJson(cBean.returnJson, DownloadReturnBean.class);
+            public void onNext(CommonResponse commonResponse) {
+                super.onNext(commonResponse);
+                if (!commonResponse.state)return;
+                Log.e(TAG, "获取用户数据：" + commonResponse.returnJson);
+                DownloadReturnBean dBean = gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
                 userDao.deleteAll();
                 userDao.detachAll();
                 userDao.insertInTx(dBean.User);
@@ -224,7 +229,8 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
             }
 
             @Override
-            public void onFailed(String Msg, AsyncHttpClient client) {
+            public void onError(Throwable e) {
+//                super.onError(e);
                 LoadingUtil.dismiss();
             }
         });
@@ -352,6 +358,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                     ShareUtil.getInstance(mContext).setUserName(userName);
                     Hawk.put(Info.user_org,bean.getContext().getCurrentOrganizationInfo().getName());
                     Hawk.put(Info.user_id,bean.getContext().getUserId()+"");
+                    Hawk.put(Info.user_data,bean.getContext().getDataCenterName()+"");
 //                    ShareUtil.getInstance(mContext).setUserID(userID);
                     if (isRemPass.isChecked()){
 //                        保存该用户的密码

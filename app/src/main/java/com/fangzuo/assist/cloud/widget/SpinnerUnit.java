@@ -206,15 +206,16 @@ public class SpinnerUnit extends RelativeLayout {
 
     //自动设置保存的值
     //type: 根据什么字段定位：number，id，name
-    public void setAuto(String autoStr, Org org, final String type) {
+    public void setAuto(String autoStr, final String type) {
         unitId = "";
         unitName = "";
         unitNumber = "";
         thisunit = null;
         Lg.e(TGP+"setAuto:" + autoStr);
         autoString = autoStr;
-        autoOrg = org==null?"":org.FOrgID;
-        final List<Unit> listTemp =getLocData(autoOrg);
+//        autoOrg = org==null?"":org.FOrgID;
+        final List<Unit> listTemp =getLocData();
+        Lg.e("单位本地过滤：",listTemp);
         dealAuto(listTemp,type,false);
 
 //        if (share.getIsOL()) {

@@ -20,6 +20,7 @@
                 android:orientation="vertical">
 
                 <CheckBox
+                    android:visibility="gone"
                     android:id="@+id/cb_isStorage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,11 +54,35 @@
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:paddingLeft="8dp"
+                    android:hint="请输入业务单号"
                     android:gravity="center_horizontal|center_vertical"
                     android:background="@drawable/bg_edittext_selector"
-                    android:inputType="numberDecimal"
                     android:singleLine="true"
                     android:textSize="20sp" />
+                <TextView
+                    android:text="生产车间:"
+                    android:textSize="22sp"
+                    android:textColor="#1e1e1e"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <com.fangzuo.assist.cloud.widget.SpinnerDepartMent
+                    android:id="@+id/sp_department_get"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    app:Uspinner_title="请选择生产车间"/>
+                <TextView
+                    android:text="仓库:"
+                    android:textSize="22sp"
+                    android:textColor="#1e1e1e"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <com.fangzuo.assist.cloud.widget.SpinnerStorage
+                    android:id="@+id/sp_which_storage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    app:Uspinner_title="请选择仓库"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
                     android:id="@+id/sp_org_in"
                     android:layout_width="match_parent"
@@ -65,14 +90,15 @@
                     app:manspinner_name="入库组织:"
                     app:manspinner_title="请选择入库组织"
                     app:manspinner_size="@dimen/sp_title_size" />
-                <com.fangzuo.assist.cloud.widget.SpinnerOrg
+                <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
                     android:id="@+id/sp_org_create"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="生产组织:"
+                    app:manspinner_name="货主:"
                     app:manspinner_title="请选择生产组织"
                     app:manspinner_size="@dimen/sp_title_size" />
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
+                    android:visibility="gone"
                     android:id="@+id/sp_org_huozhu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

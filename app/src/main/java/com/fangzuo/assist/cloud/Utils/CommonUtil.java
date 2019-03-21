@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.PrintHistory;
+import com.orhanobut.hawk.Hawk;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,87 +27,49 @@ import zpSDK.zpSDK.zpBluetoothPrinter;
 public class CommonUtil {
 
     public static void doPrint(zpBluetoothPrinter zpSDK, PrintHistory bean) throws Exception{
+        Lg.e("打印数据:",bean);
         if (null== zpSDK)return;
         int size=4;
         int size2=3;
         int lineSize=3;
-        zpSDK.pageSetup(668, 973);
-        zpSDK.drawText(0, 5, "______________________________________________", 2, 0, 0, false, false);
+        int printNum = Integer.parseInt(Hawk.get(Config.PrintNum,"2"));
+        for (int i = 0; i < printNum; i++) {
+            zpSDK.pageSetup(668, 973);
+            zpSDK.drawText(0, 5, "______________________________________________", 2, 0, 0, false, false);
 
-        zpSDK.drawText(105, 50, "荣源木业物料标签", size, 0, 1, false, false);
-        zpSDK.drawText(0, 90, "______________________________________________", 2, 0, 0, false, false);
-        zpSDK.drawText(10, 120, "货权：", size, 0, 0, false, false);
-        zpSDK.drawText(160, 124, bean.FHuoquan==null?"":bean.FHuoquan,size2, 0, 0, false, false);
-        zpSDK.drawText(10, 170, "批号：", size, 0, 0, false, false);
-        zpSDK.drawText(160, 174, bean.FBatch,size2, 0, 0, false, false);
-        zpSDK.drawText(10, 220, "品名：", size, 0, 0, false, false);
-        zpSDK.drawText(160, 224, bean.FName,size2, 0, 0, false, false);
-        zpSDK.drawText(10, 280, "规格：", size, 0, 0, false, false);
-        zpSDK.drawText(160, 284, bean.FModel,size2, 0, 0, false, false);
-        zpSDK.drawText(10, 340, "数量1：", size, 0, 0, false, false);
-        zpSDK.drawText(160, 344, bean.FNum,size2, 0, 0, false, false);
-        zpSDK.drawText(450, 344, bean.FUnit,size2, 0, 0, false, false);
-        zpSDK.drawText(10, 400, "数量2：", size, 0, 0, false, false);
-        zpSDK.drawText(160, 404, bean.FNum2,size2, 0, 0, false, false);
-        zpSDK.drawText(450, 404, bean.FUnitAux,size2, 0, 0, false, false);
-        zpSDK.drawText(10, 460, "备注：", size, 0, 0, false, false);
-        zpSDK.drawText(160, 464, bean.FNot==null?"":bean.FNot,size2, 0, 0, false, false);
-        zpSDK.drawText(10, 500, "______________________________________________", 2, 0, 0, false, false);
-        zpSDK.drawQrCode(10, 560, bean.FBarCode, 0, 11, 0);
-        zpSDK.drawText(300, 560, "仓位：",size2, 0, 0, false, false);
-        zpSDK.drawText(380, 560, bean.FWaveHouse==null?"":bean.FWaveHouse,size2, 0, 0, false, false);
-        zpSDK.drawText(300, 640, "录入：",size2, 0, 0, false, false);
-        zpSDK.drawText(380, 640, bean.FSaveIn==null?"":bean.FSaveIn,size2, 0, 0, false, false);
-        zpSDK.drawText(300, 720, "审核：",size2, 0, 0, false, false);
-        zpSDK.drawText(380, 720, bean.FCheck==null?"":bean.FCheck,size2, 0, 0, false, false);
-        zpSDK.drawText(300, 790, "日期：",size2, 0, 0, false, false);
-        zpSDK.drawText(380, 790, bean.FDate,size2, 0, 0, false, false);
+            zpSDK.drawText(105, 50, "荣源木业物料标签", size, 0, 1, false, false);
+            zpSDK.drawText(0, 90, "______________________________________________", 2, 0, 0, false, false);
+            zpSDK.drawText(10, 120, "货权：", size, 0, 0, false, false);
+            zpSDK.drawText(160, 124, bean.FHuoquan==null?"":bean.FHuoquan,size2, 0, 0, false, false);
+            zpSDK.drawText(10, 170, "批号：", size, 0, 0, false, false);
+            zpSDK.drawText(160, 174, bean.FBatch,size2, 0, 0, false, false);
+            zpSDK.drawText(10, 220, "品名：", size, 0, 0, false, false);
+            zpSDK.drawText(160, 224, bean.FName,size2, 0, 0, false, false);
+            zpSDK.drawText(10, 280, "规格：", size, 0, 0, false, false);
+            zpSDK.drawText(160, 284, bean.FModel,size2, 0, 0, false, false);
+            zpSDK.drawText(10, 340, "数量1：", size, 0, 0, false, false);
+            zpSDK.drawText(160, 344, bean.FNum==null?"":bean.FNum,size2, 0, 0, false, false);
+            zpSDK.drawText(450, 344, bean.FUnit==null?"":bean.FUnit,size2, 0, 0, false, false);
+            zpSDK.drawText(10, 400, "数量2：", size, 0, 0, false, false);
+            zpSDK.drawText(160, 404, bean.FNum2==null?"":bean.FNum2,size2, 0, 0, false, false);
+            zpSDK.drawText(450, 404, bean.FUnitAux==null?"":bean.FUnitAux,size2, 0, 0, false, false);
+            zpSDK.drawText(10, 460, "备注：", size, 0, 0, false, false);
+            zpSDK.drawText(160, 464, bean.FNot==null?"":bean.FNot,size2, 0, 0, false, false);
+            zpSDK.drawText(10, 500, "______________________________________________", 2, 0, 0, false, false);
+            zpSDK.drawQrCode(10, 560, bean.FBarCode, 0, 11, 0);
+            zpSDK.drawText(300, 560, "仓位：",size2, 0, 0, false, false);
+            zpSDK.drawText(380, 560, bean.FWaveHouse==null?"":bean.FWaveHouse,size2, 0, 0, false, false);
+            zpSDK.drawText(300, 640, "录入：",size2, 0, 0, false, false);
+            zpSDK.drawText(380, 640, bean.FSaveIn==null?"":bean.FSaveIn,size2, 0, 0, false, false);
+            zpSDK.drawText(300, 720, "审核：",size2, 0, 0, false, false);
+            zpSDK.drawText(380, 720, bean.FCheck==null?"":bean.FCheck,size2, 0, 0, false, false);
+            zpSDK.drawText(300, 790, "日期：",size2, 0, 0, false, false);
+            zpSDK.drawText(380, 790, bean.FDate,size2, 0, 0, false, false);
+            zpSDK.drawText(10, 850, "______________________________________________", 2, 0, 0, false, false);
 
+            zpSDK.print(0, 0);
+        }
 
-//        zpSDK.drawText(0, 5, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 50, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 100, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 150, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 200, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 250, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 300, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 350, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 400, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 450, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 500, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 550, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 600, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 650, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 700, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 750, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 800, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 850, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 900, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(0, 950, "|", lineSize, 0, 0, false, false);
-//
-//        zpSDK.drawText(950, 5, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 50, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 100, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 150, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 200, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 250, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 300, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 350, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 400, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 450, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 500, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 550, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 600, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 650, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 700, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 750, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 800, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 850, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 900, "|", lineSize, 0, 0, false, false);
-//        zpSDK.drawText(950, 950, "|", lineSize, 0, 0, false, false);
-        zpSDK.drawText(10, 850, "______________________________________________", 2, 0, 0, false, false);
-
-        zpSDK.print(0, 0);
 //        }
 //            zpSDK.drawBarCode(8, 540, "12345678901234567", 128, true, 3, 60);
 //              zpSDK.drawGraphic(90, 70, 0, 0, bmp);

@@ -238,6 +238,8 @@ public class SpinnerAuxSign extends RelativeLayout {
         });
     }
     private void dealAuto(List<AuxSignSecCheckBean> listData){
+//        Lg.e("辅助标识自动：",listData);
+//        Lg.e("辅助标识自动：",autoString);
         if (listData.size()>0){
             list.addAll(listData);
             mSp.setAdapter(adapter);
@@ -252,8 +254,8 @@ public class SpinnerAuxSign extends RelativeLayout {
         }else{
             autoString="";
             mSp.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
-        adapter.notifyDataSetChanged();
     }
     //自动设置保存的值
     //type: 根据什么字段定位：number，id，name

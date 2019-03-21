@@ -2,6 +2,7 @@ package com.fangzuo.assist.cloud.Utils;
 
 import android.content.Context;
 
+import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
 import com.fangzuo.assist.cloud.Dao.T_main;
 import com.fangzuo.assist.cloud.Service.DataService;
@@ -31,6 +32,7 @@ public class UpLoadModel {
                 List<T_main> mains = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
                 if (mains.size()<=0){
                     Toast.showText(mContext,"本地不存在单据数据");
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));//本地不存在单据，解锁该单据的表头
                     LoadingUtil.dismiss();
                     return;
                 }
@@ -88,6 +90,9 @@ public class UpLoadModel {
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPuO(mains,details)));
                 break;
             case Config.ProductInStoreActivity://产品入库
+            case Config.TbInActivity://产品入库
+            case Config.DgInActivity://产品入库
+            case Config.SimpleInActivity://产品入库
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPrIS(mains,details)));
                 break;
             case Config.ProductGetActivity://生产领料

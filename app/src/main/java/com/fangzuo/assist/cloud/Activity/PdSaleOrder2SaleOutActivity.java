@@ -39,6 +39,7 @@ import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.MediaPlayer;
 import com.fangzuo.assist.cloud.Utils.Toast;
@@ -89,6 +90,13 @@ public class PdSaleOrder2SaleOutActivity extends BaseActivity {
     private List<String> listOrder;
     protected PushDownMain pushDownMain;
     private SearchBean.S2Product s2Product;//用于数据查找...
+    private String autoAuxSing = "";
+    private String autoActualModel = "";
+    private String autoStorage = "";
+
+    private String mainSaleDept = "";//表头带出
+    private String mainSaleMan = "";//表头带出
+    private String mainSaleOrg = "";//表头带出
 
     @Override
     protected boolean isRegisterEventBus() {
@@ -128,7 +136,7 @@ public class PdSaleOrder2SaleOutActivity extends BaseActivity {
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
                         String reString = mains.get(i).FBillerID+"|"+listOrder.get(i)+"|"+mains.get(i).FOrderId+"|"+mains.get(i).IMIE;
-                        App.getRService().doIOAction(WebApi.OtherOutUpload, reString, new MySubscribe<CommonResponse>() {
+                        App.getRService().doIOAction(WebApi.SaleOutUpload, reString, new MySubscribe<CommonResponse>() {
                             @Override
                             public void onNext(CommonResponse commonResponse) {
                                 super.onNext(commonResponse);
@@ -202,10 +210,12 @@ public class PdSaleOrder2SaleOutActivity extends BaseActivity {
                 LoadingUtil.dismiss();
                 codeCheckBackDataBean = (CodeCheckBackDataBean)event.postEvent;
                 if (codeCheckBackDataBean.FTip.equals("OK")){
-//                    binding.edPihao.setText(codeCheckBackDataBean.FBatchNo);
+                    binding.edBatchNo.setText(codeCheckBackDataBean.FBatchNo);
                     binding.edNum.setText(codeCheckBackDataBean.FQty);
+                    autoAuxSing = codeCheckBackDataBean.FAuxsign;
+                    autoStorage = codeCheckBackDataBean.FStockID;
                     LoadingUtil.showDialog(mContext,"正在查找物料信息");
-                    DataModel.getProductForId(codeCheckBackDataBean.FItemID,org);
+                    DataModel.getProductForNumber(codeCheckBackDataBean.FItemID,org);
                 }else{
 //                    ReSetScan(binding.cbScaning);
                     Toast.showText(mContext,codeCheckBackDataBean.FTip);
@@ -216,6 +226,7 @@ public class PdSaleOrder2SaleOutActivity extends BaseActivity {
                 if (codeCheckBackDataBean.FTip.equals("OK")){
                     Addorder();
                 }else{
+                    LoadingUtil.dismiss();
 //                    ReSetScan(binding.cbScaning);
                     Toast.showText(mContext,codeCheckBackDataBean.FTip);
                 }
@@ -254,6 +265,10 @@ public class PdSaleOrder2SaleOutActivity extends BaseActivity {
         if (pushDownMains.size() > 0) {
             Lg.e("表头：",pushDownMains.get(0));
             pushDownMain = pushDownMains.get(0);
+            mainSaleDept=LocDataUtil.getDept(pushDownMain.FSaleDeptID).FNumber;
+            mainSaleMan=LocDataUtil.getSaleMan(pushDownMain.FSaleManID).FNumber;
+            mainSaleOrg=LocDataUtil.getOrg(pushDownMain.FSaleDeptID).FNumber;
+
 //            fwanglaiUnit = list1.get(0).FSupplyID;
 //            employeeId = list1.get(0).FEmpID;
 //            departmentId = list1.get(0).FDeptID;
@@ -496,10 +511,13 @@ public class PdSaleOrder2SaleOutActivity extends BaseActivity {
         }
         DataModel.getStoreNum(product,storage,binding.edBatchNo.getText().toString().trim(),mContext,binding.tvKucun);
 
-        if (binding.isAutoAdd.isChecked()){
-            binding.edNum.setText("1");
-            Addorder();
-        }
+//        binding.spAuxsign.getData(product.FMASTERID, autoAuxSing);
+//        binding.spActualmodel.getData(product.FMASTERID, autoActualModel);
+
+//        if (binding.isAutoAdd.isChecked()){
+//            binding.edNum.setText("1");
+//            Addorder();
+//        }
     }
 
     //添加前检测
@@ -524,6 +542,12 @@ public class PdSaleOrder2SaleOutActivity extends BaseActivity {
             Toast.showText(mContext, "大兄弟,您的数量超过我的想象");
             return false;
         }
+
+        LoadingUtil.showDialog(mContext, "正在添加...");
+        //插入条码唯一临时表
+        CodeCheckBean bean = new CodeCheckBean(barcode, ordercode + "",binding.edNum.getText().toString(), BasicShareUtil.getInstance(mContext).getIMIE());
+        DataModel.codeOnlyInsert(WebApi.CodeCheckInsertForOut, gson.toJson(bean));
+
         //--------------------------------------------------
 //        if ("".equals(binding.edClient.getText().toString())){
 //            binding.drawerLayout.openDrawer(Gravity.RIGHT);
@@ -585,10 +609,10 @@ public class PdSaleOrder2SaleOutActivity extends BaseActivity {
             main.FSoorDerno = pushDownMain.FBillNo;
             main.FIndex = timesecond;
             main.FBillNo = pushDownMain.FBillNo;
-            main.setData(Info.getType(activity), org.FNumber,org.FNumber);
+            main.setData(Info.getType(activity), mainSaleOrg,org.FNumber);
             main.FDepartmentNumber = binding.spDepartmentSend.getDataNumber();
-//            main.FPurchaseDeptId = binding.spDepartmentSend.getDataNumber();
-            main.FPurchaserId = binding.spSaleman.getDataNumber();
+            main.FPurchaseDeptId =mainSaleDept;
+            main.FPurchaserId = mainSaleMan;
             main.FStockerNumber = binding.spStoreman.getDataNumber();
             main.FDate = binding.tvDate.getText().toString();
             main.FCustomerID = pushDownMain.FSupplyID;
@@ -652,7 +676,7 @@ public class PdSaleOrder2SaleOutActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_add:
-                Addorder();
+                checkBeforeAdd();
                 break;
             case R.id.btn_scan:
                 if (binding.zxingBarcodeScanner.getVisibility()==View.VISIBLE){

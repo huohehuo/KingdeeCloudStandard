@@ -191,6 +191,9 @@ public class ProductGettingActivity extends BaseActivity implements ProductGetti
 //                FIsPurchase="1";
                 break;
             case Config.ProductInStoreActivity://产品入库
+            case Config.TbInActivity://产品入库
+            case Config.DgInActivity://产品入库
+            case Config.SimpleInActivity://产品入库
                 s2Product.FIsProduce="1";
 //                FIsProduce="1";
                 break;

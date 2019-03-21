@@ -64,6 +64,13 @@ public class T_Detail {
     public String AuxSign;//辅助标识
     public String ActualModel;//实际规格
     public String FProductNo;//生产编号
+    public String FStoreNum;//生产编号
+    public String FBaseNum;//生产编号
+
+    public String FStoreUnit;//库存单位
+    public String FStoreUnitID;//库存单位
+    public String FBaseUnit;//基本单位
+    public String FBaseUnitID;//库存单位
     //-----------------------------------------
 
     //盘点
@@ -85,7 +92,7 @@ public class T_Detail {
 
 
 
-    @Generated(hash = 1273864512)
+    @Generated(hash = 31596488)
     public T_Detail(String FIndex, String FBarcode, String IMIE, String FBillerID,
             long FOrderId, int activity, String FEntryID, String FID,
             String FProductName, String model, String FStorageId,
@@ -99,7 +106,9 @@ public class T_Detail {
             String FWorkShopId1, String FRemainInStockQty, String FRealQty,
             String FRemainInStockUnitId, String FPriceUnitID, String FMaterialId,
             String FMaterialIdForPD, String FUnitID, String FUnitIDForPD,
-            String AuxSign, String ActualModel, String FProductNo, String FBillNo,
+            String AuxSign, String ActualModel, String FProductNo, String FStoreNum,
+            String FBaseNum, String FStoreUnit, String FStoreUnitID,
+            String FBaseUnit, String FBaseUnitID, String FBillNo,
             String FAllowAddMaterial, String FZeroStockInCount, String FBillTypeID,
             String FCheckQtyDefault, String FNotIncludeForbidMat,
             String FStockOrgId, String FDocumentStatus, String FCloseStatus,
@@ -150,6 +159,12 @@ public class T_Detail {
         this.AuxSign = AuxSign;
         this.ActualModel = ActualModel;
         this.FProductNo = FProductNo;
+        this.FStoreNum = FStoreNum;
+        this.FBaseNum = FBaseNum;
+        this.FStoreUnit = FStoreUnit;
+        this.FStoreUnitID = FStoreUnitID;
+        this.FBaseUnit = FBaseUnit;
+        this.FBaseUnitID = FBaseUnitID;
         this.FBillNo = FBillNo;
         this.FAllowAddMaterial = FAllowAddMaterial;
         this.FZeroStockInCount = FZeroStockInCount;
@@ -249,6 +264,22 @@ public class T_Detail {
         this.FRemainInStockUnitId = unit.FNumber;////采购单位
     }
 
+    //设置单位基础信息
+    public void setBaseUnit(Unit unit){
+        if (null==unit){
+            return;
+        }
+        this.FBaseUnit = unit.FName;
+        this.FBaseUnitID = unit.FNumber;
+    }
+    //设置单位基础信息
+    public void setStoreUnit(Unit unit){
+        if (null==unit){
+            return;
+        }
+        this.FStoreUnit = unit.FName;
+        this.FStoreUnitID = unit.FNumber;
+    }
     public String getFIndex() {
         return this.FIndex;
     }
@@ -602,6 +633,42 @@ public class T_Detail {
     }
     public void setFProductNo(String FProductNo) {
         this.FProductNo = FProductNo;
+    }
+    public String getFStoreNum() {
+        return this.FStoreNum;
+    }
+    public void setFStoreNum(String FStoreNum) {
+        this.FStoreNum = FStoreNum;
+    }
+    public String getFBaseNum() {
+        return this.FBaseNum;
+    }
+    public void setFBaseNum(String FBaseNum) {
+        this.FBaseNum = FBaseNum;
+    }
+    public String getFStoreUnit() {
+        return this.FStoreUnit;
+    }
+    public void setFStoreUnit(String FStoreUnit) {
+        this.FStoreUnit = FStoreUnit;
+    }
+    public String getFStoreUnitID() {
+        return this.FStoreUnitID;
+    }
+    public void setFStoreUnitID(String FStoreUnitID) {
+        this.FStoreUnitID = FStoreUnitID;
+    }
+    public String getFBaseUnit() {
+        return this.FBaseUnit;
+    }
+    public void setFBaseUnit(String FBaseUnit) {
+        this.FBaseUnit = FBaseUnit;
+    }
+    public String getFBaseUnitID() {
+        return this.FBaseUnitID;
+    }
+    public void setFBaseUnitID(String FBaseUnitID) {
+        this.FBaseUnitID = FBaseUnitID;
     }
 
 

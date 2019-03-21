@@ -37,7 +37,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/bottom_btn_sale"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -55,7 +54,7 @@
                 android:id="@+id/tv_sale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="销售"
+                android:text="入库"
                 android:textColor="@color/fragment_text" />
         </LinearLayout>
 

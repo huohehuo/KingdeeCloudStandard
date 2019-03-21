@@ -255,14 +255,14 @@ public class MyWaveHouseSpinner extends RelativeLayout {
 //            waveHouseList.add(new WaveHouse());
         if (waveHouseList.size()>0){
             waveHouses.clear();
-            Lg.e("过滤仓位");
+//            Lg.e("过滤仓位");
             waveHouses.addAll(waveHouseList);
             mSp.setAdapter(adapter);
 //                Log.e("CommonMethod:","获取到本地数据waveHouse:"+waveHouseList.toString());
             waveHouseSpAdapter.notifyDataSetChanged();
             for (int j = 0; j < waveHouses.size(); j++) {
                 if (((WaveHouse) waveHouses.get(j)).FSPID.equals(autoString)) {
-                    Lg.e("过滤出仓位："+autoString);
+//                    Lg.e("过滤出仓位："+autoString);
                     waveHouseId = ((WaveHouse) waveHouses.get(j)).FSPID;
                     waveHouse = ((WaveHouse) waveHouses.get(j)).FName;
                     waveHouseNumber = ((WaveHouse) waveHouses.get(j)).FNumber;
@@ -270,11 +270,11 @@ public class MyWaveHouseSpinner extends RelativeLayout {
                     break;
                 }
             }
-            Lg.e("过滤完毕");
+//            Lg.e("过滤完毕");
         }else{
             waveHouseId="0";
             waveHouse="";
-            Lg.e("过滤出仓位--空");
+//            Lg.e("过滤出仓位--空");
             waveHouses.clear();
             waveHouseSpAdapter.notifyDataSetChanged();
 

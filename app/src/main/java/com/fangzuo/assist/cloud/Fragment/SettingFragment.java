@@ -226,6 +226,7 @@ public class SettingFragment extends BaseFragment {
             pDialog = new ProgressDialog(mContext);
             pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pDialog.setTitle("下载中");
+            pDialog.setCanceledOnTouchOutside(false);
             pDialog.show();
             String target = Environment.getExternalStorageDirectory()
                     + "/NewApp"+getTimeLong(false)+".apk";

@@ -1,5 +1,7 @@
 package com.fangzuo.assist.cloud.Activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -125,5 +127,11 @@ public class PushDownPagerActivity extends BaseActivity {
         }else{
             tvPdname.setVisibility(View.GONE);
         }
+    }
+
+    public static void start(Context context,int id) {
+        Intent starter = new Intent(context, PushDownPagerActivity.class);
+        starter.putExtra("123", id);
+        context.startActivity(starter);
     }
 }

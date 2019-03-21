@@ -6,13 +6,22 @@ import android.content.Intent;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
+import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
+import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.JsonCreater;
+import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.WebApi;
+import com.fangzuo.greendao.gen.ClientDao;
 import com.fangzuo.greendao.gen.DaoSession;
+import com.fangzuo.greendao.gen.SaleManDao;
+import com.fangzuo.greendao.gen.UnitDao;
 import com.loopj.android.http.AsyncHttpClient;
+
+import java.util.ArrayList;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -27,6 +36,7 @@ public class DataService extends IntentService {
     private static final String ACTION_FOO = "com.fangzuo.assist.Service.action.FOO";
     private static final String ACTION_BAZ = "com.fangzuo.assist.Service.action.BAZ";
     private static final String UpdateTime = "com.fangzuo.assist.Service.action.UpdateTime";
+    private static final String UpdateData = "com.fangzuo.assist.Service.action.UpdateData";
 
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "com.fangzuo.assist.Service.extra.PARAM1";
@@ -56,26 +66,35 @@ public class DataService extends IntentService {
         intent.setAction(ACTION_FOO);
         context.startService(intent);
     }
+
     //更新服务器中的当前时间
     public static void updateTime(Context context) {
         Intent intent = new Intent(context, DataService.class);
         intent.setAction(UpdateTime);
         context.startService(intent);
     }
+
+    //更新服务器中的当前时间
+    public static void UpdateData(Context context) {
+        Intent intent = new Intent(context, DataService.class);
+        intent.setAction(UpdateData);
+        context.startService(intent);
+    }
+
     /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
+     * 处理报错数据
      *
-     * @see IntentService
+     * @param context
+     * @param txtName
+     * @param ex
      */
-//    // TODO: Customize helper method
-    public static void pushError(Context context, String txtName,Throwable ex) {
+    public static void pushError(Context context, String txtName, Throwable ex) {
         Intent intent = new Intent(context, DataService.class);
         StackTraceElement[] stes = ex.getStackTrace();
         StringBuilder builder = new StringBuilder();
-        builder.append(ex.toString()+"\n");
-        for (int i = 0; i < stes.length; i ++) {
-            builder.append(i + "->"  + stes[i].getClassName() + "-->" + stes[i].getMethodName() + "-->" + stes[i].getFileName()+"\n");
+        builder.append(ex.toString() + "\n");
+        for (int i = 0; i < stes.length; i++) {
+            builder.append(i + "->" + stes[i].getClassName() + "-->" + stes[i].getMethodName() + "-->" + stes[i].getFileName() + "\n");
         }
         intent.setAction(ACTION_BAZ);
         intent.putExtra(EXTRA_PARAM1, txtName);
@@ -92,14 +111,17 @@ public class DataService extends IntentService {
             } else if (ACTION_BAZ.equals(action)) {
                 final String txtNa = intent.getStringExtra(EXTRA_PARAM1);
                 final String err = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(txtNa,err);
-            }else if (UpdateTime.equals(action)) {
+                handleActionBaz(txtNa, err);
+            } else if (UpdateTime.equals(action)) {
                 handleActionUpdateTime();
+            } else if (UpdateData.equals(action)) {
+                handleActionUpdateData();
             }
 
         }
     }
 
+    //删除所有
     private void handleActionFoo() {
         session.getBibieDao().deleteAll();
         session.getBarCodeDao().deleteAll();
@@ -128,21 +150,23 @@ public class DataService extends IntentService {
         session.getYuandanTypeDao().deleteAll();
     }
 
-    private void handleActionBaz(String txtN,String param1) {
+    //上传错误数据
+    private void handleActionBaz(String txtN, String param1) {
 
-        Asynchttp.post(App.getContext(), Config.Error_Url, Config.Company+"^"+txtN+"^"+param1, new Asynchttp.Response() {
+        Asynchttp.post(App.getContext(), Config.Error_Url, Config.Company + "^" + txtN + "^" + param1, new Asynchttp.Response() {
             @Override
             public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
 
             }
+
             @Override
             public void onFailed(String Msg, AsyncHttpClient client) {
             }
         });
     }
 
-
-    private void handleActionUpdateTime(){
+    //更新时间
+    private void handleActionUpdateTime() {
         App.getRService().doIOAction(WebApi.SetUseTime, "更新时间", new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
@@ -152,6 +176,55 @@ public class DataService extends IntentService {
             @Override
             public void onError(Throwable e) {
 //                super.onError(e);
+            }
+        });
+    }
+
+    //下载数据,只能小数据，数据多的会崩溃
+    private void handleActionUpdateData() {
+        ArrayList<Integer> choose = new ArrayList<>();
+        choose.add(7);//单位
+        choose.add(10);//销售员
+//        choose.add(13);//销售员
+        String json = JsonCreater.DownLoadData(
+                BasicShareUtil.getInstance(App.getContext()).getDatabaseIp(),
+                BasicShareUtil.getInstance(App.getContext()).getDatabasePort(),
+                BasicShareUtil.getInstance(App.getContext()).getDataBaseUser(),
+                BasicShareUtil.getInstance(App.getContext()).getDataBasePass(),
+                BasicShareUtil.getInstance(App.getContext()).getDataBase(),
+                BasicShareUtil.getInstance(App.getContext()).getVersion(),
+                choose
+        );
+        App.getRService().downloadData(json, new MySubscribe<CommonResponse>() {
+            @Override
+            public void onNext(CommonResponse commonResponse) {
+                DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                if (dBean.units != null && dBean.units.size() > 0) {
+                    UnitDao unitDao = session.getUnitDao();
+                    unitDao.deleteAll();
+                    unitDao.insertOrReplaceInTx(dBean.units);
+                    unitDao.detachAll();
+                    Lg.e("OK单位");
+                }
+                if (dBean.saleMans != null && dBean.saleMans.size() > 0) {
+                    SaleManDao saleManDao = session.getSaleManDao();
+                    saleManDao.deleteAll();
+                    saleManDao.insertOrReplaceInTx(dBean.saleMans);
+                    saleManDao.detachAll();
+                    Lg.e("OK销售员");
+                }
+//                if (dBean.clients != null && dBean.clients.size() > 0) {
+//                    ClientDao clientDao = session.getClientDao();
+//                    clientDao.deleteAll();
+//                    clientDao.insertOrReplaceInTx(dBean.clients);
+//                    clientDao.detachAll();
+//                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+//                    LoadingUtil.dismiss();
+//                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Updata_Error,e.toString()));
             }
         });
     }

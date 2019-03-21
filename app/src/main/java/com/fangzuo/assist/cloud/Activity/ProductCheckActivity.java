@@ -1,8 +1,10 @@
 package com.fangzuo.assist.cloud.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.databinding.ActivityProductCheckBinding;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
 import com.google.gson.Gson;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,15 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
     private ArrayList<Product> products;
     private ArrayList<Product> productsForSearch;
     private ProductTreeBeanList.ProductTreeBean type1,type2,treeType,lv,ply,ht,wt;
+    private String[] split;
+    private final static String Sc_type1="Sc_type1";
+    private final static String Sc_type2="Sc_type2";
+    private final static String Sc_treeType="Sc_treeType";
+    private final static String Sc_lv="Sc_lv";
+    private final static String Sc_ply="Sc_ply";
+    private final static String Sc_ht="Sc_ht";
+    private final static String Sc_wt="Sc_wt";
+    private boolean isFirstCheck=true;//用于检测是否是第一次进入，
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_product_check);
@@ -64,7 +76,16 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
         binding.ryProductSearchList.setItemAnimator(new DefaultItemAnimator());
         binding.ryProductSearchList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         productRyAdapter.setOnItemClickListener(this);
-        binding.spType1.setAutoSelection("0");
+        binding.spType1.setAutoSelection("0",Hawk.get(Sc_type1,""));
+//        LoadingUtil.showDialog(mContext,"正在处理数据...");
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                checkSearch();
+//            }
+//        }, 500);
+
+
     }
 
     @Override
@@ -73,54 +94,80 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 type1 = (ProductTreeBeanList.ProductTreeBean) binding.spType1.getAdapter().getItem(i);
-                clearOther();
-                binding.spType2.setAutoSelection(type1.FID);
+                if ("".equals(type1.FNumber))clearOther();
+                Hawk.put(Sc_type1,type1.FNumber);
+                Lg.e("分类1",type1);
+                binding.spType2.setAutoSelection(type1.FID,Hawk.get(Sc_type2,""));
+//                if (!isFirstCheck)getProduct(type1.FNumber);
             }
         });
         binding.spType2.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 type2 = (ProductTreeBeanList.ProductTreeBean) binding.spType2.getAdapter().getItem(i);
+                Hawk.put(Sc_type2,type2.FNumber);
                 binding.spTreeType.clear();treeType=null;
-                binding.spTreeType.setAutoSelection(type2.FID);
+                binding.spLv.clear();lv=null;
+                binding.spPly.clear();ply=null;
+                binding.spHt.clear();ht=null;
+//                binding.spWt.clear();wt=null;
+                binding.spTreeType.setAutoSelection(type2.FID,Hawk.get(Sc_treeType,""));
+//                if (!isFirstCheck)getProduct(type2.FNumber);
             }
         });
         binding.spTreeType.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 treeType = (ProductTreeBeanList.ProductTreeBean) binding.spTreeType.getAdapter().getItem(i);
+                Hawk.put(Sc_treeType,treeType.FNumber);
                 binding.spLv.clear();lv=null;
-                binding.spLv.setAutoSelection(treeType.FID);
+                binding.spPly.clear();ply=null;
+                binding.spHt.clear();ht=null;
+//                binding.spWt.clear();wt=null;
+                binding.spLv.setAutoSelection(treeType.FID,Hawk.get(Sc_lv,""));
+//                if (!isFirstCheck)getProduct(treeType.FNumber);
             }
         });
         binding.spLv.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 lv = (ProductTreeBeanList.ProductTreeBean) binding.spLv.getAdapter().getItem(i);
+                Hawk.put(Sc_lv,lv.FNumber);
                 binding.spPly.clear();ply=null;
-                binding.spPly.setAutoSelection(lv.FID);
+                binding.spHt.clear();ht=null;
+//                binding.spWt.clear();wt=null;
+                binding.spPly.setAutoSelection(lv.FID,Hawk.get(Sc_ply,""));
+//                if (!isFirstCheck)getProduct(lv.FNumber);
             }
         });
         binding.spPly.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 ply = (ProductTreeBeanList.ProductTreeBean) binding.spPly.getAdapter().getItem(i);
+                Hawk.put(Sc_ply,ply.FNumber);
                 binding.spHt.clear();ht=null;
-                binding.spHt.setAutoSelection(ply.FID);
+//                binding.spWt.clear();wt=null;
+                binding.spHt.setAutoSelection(ply.FID,Hawk.get(Sc_ht,""));
+//                if (!isFirstCheck)getProduct(ply.FNumber);
             }
         });
         binding.spHt.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 ht = (ProductTreeBeanList.ProductTreeBean) binding.spHt.getAdapter().getItem(i);
+                Hawk.put(Sc_ht,ht.FNumber);
                 binding.spWt.clear();wt=null;
-                binding.spWt.setAutoSelection(ht.FID);
+                Lg.e("选中ht",wt);
+                binding.spWt.setAutoSelection(ht.FID,Hawk.get(Sc_wt,""));
+//                if (!isFirstCheck)
+                    getProduct(ht.FNumber);
             }
         });
         binding.spWt.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 wt = (ProductTreeBeanList.ProductTreeBean) binding.spWt.getAdapter().getItem(i);
+                Hawk.put(Sc_wt,wt.FNumber);
                 Lg.e("选中wt",wt);
                 dealProduct(wt.FName);
             }
@@ -129,17 +176,31 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
         binding.btnCheck.setOnClickListener(new NoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View view) {
-                productRyAdapter.clear();
-                products.clear();
-                productsForSearch.clear();
-                LoadingUtil.showDialog(mContext,"正在查找...");
-                getProduct(checkProduct());
+                Lg.e("products:",products.size());
+                if (products!=null&&products.size()>0){
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Product,products.get(0)));
+                    finish();
+                }
+//                productRyAdapter.clear();
+//                products.clear();
+//                productsForSearch.clear();
+//                LoadingUtil.showDialog(mContext,"正在查找...");
+//                getProduct(checkProduct());
             }
         });
     }
 
     //查找物料
     private void getProduct(String number){
+        Lg.e("getProduct:"+number);
+        if ("".equals(number)){
+            LoadingUtil.dismiss();
+            return;
+        }
+        binding.spWt.clear();
+        productRyAdapter.clear();
+        products.clear();
+        productsForSearch.clear();
         s2Product.likeOr = number;
         App.getRService().doIOAction(WebApi.ProductSearchForTree, gson.toJson(new SearchBean(SearchBean.product_for_like,gson.toJson(s2Product))), new MySubscribe<CommonResponse>() {
             @Override
@@ -150,14 +211,14 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
                 if (!commonResponse.state)return;
                 DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
                 if (dBean.products.size()>0){
-                    if (dBean.products.size()==1){
-                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Product,dBean.products.get(0)));
-                        finish();
-                    }else{
+//                    if (dBean.products.size()==1){
+//                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Product,dBean.products.get(0)));
+//                        finish();
+//                    }else{
                         getWtData(dBean.products);
                         products.addAll(dBean.products);
                         productsForSearch.addAll(dBean.products);
-                    }
+//                    }
 
                 }else{
                     binding.spWt.clear();
@@ -175,13 +236,13 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
     private void dealProduct(String string){
         List<Product> productList = new ArrayList<>();
 //        productList.addAll(products);
-        Lg.e("333333:",productsForSearch);
+        Lg.e("333333:",string+products.size());
 //        Lg.e("1111:",productList);
         if (!"".equals(string)){
             for (int i = 0; i < productsForSearch.size(); i++) {
-                    Lg.e("1111",productsForSearch.get(i));
-                if (string.equals(productsForSearch.get(i).FModel)){
-                    Lg.e("22222",productsForSearch.get(i));
+//                    Lg.e("1111",productsForSearch.get(i));
+                if (productsForSearch.get(i).FModel.contains(string)){
+                    Lg.e("包含：",productsForSearch.get(i));
                     productList.add(productsForSearch.get(i));
                 }
             }
@@ -198,15 +259,69 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
     private void getWtData(List<Product> products){
         binding.spWt.addItems(products);
     }
+
+    //获取FNumber用于物料查询
+    private void checkSearch(){
+        if (!"".equals(Hawk.get(Sc_ht,""))){
+            getProduct(Hawk.get(Sc_ht,""));
+            isFirstCheck=false;Lg.e("取宽度：");
+            return;
+        }
+        if (!"".equals(Hawk.get(Sc_ply,""))){
+            getProduct(Hawk.get(Sc_ply,""));
+            isFirstCheck=false;Lg.e("取厚度：");
+            return;
+        }
+        if (!"".equals(Hawk.get(Sc_lv,""))){
+            getProduct(Hawk.get(Sc_lv,""));
+            isFirstCheck=false;Lg.e("取等级：");
+            return;
+        }
+        if (!"".equals(Hawk.get(Sc_treeType,""))){
+            getProduct(Hawk.get(Sc_treeType,""));
+            isFirstCheck=false;Lg.e("取树种：");
+            return;
+        }
+        if (!"".equals(Hawk.get(Sc_type2,""))){
+            getProduct(Hawk.get(Sc_type2,""));
+            isFirstCheck=false;Lg.e("取分类2：");
+            return;
+        }
+        if (!"".equals(Hawk.get(Sc_type1,""))){
+            getProduct(Hawk.get(Sc_type1,""));
+            isFirstCheck=false;Lg.e("取分类1：");
+            return;
+        }
+        isFirstCheck = false;Lg.e("取空：");
+    }
+
     //获取FNumber用于物料查询
     private String checkProduct(){
 //            if (wt!=null)return wt.FNumber;
-            if (ht!=null)return ht.FNumber;
-            if (ply!=null)return ply.FNumber;
-            if (lv!=null)return lv.FNumber;
-            if (treeType!=null)return treeType.FNumber;
-            if (type2!=null)return type2.FNumber;
-            if (type1!=null)return type1.FNumber;
+            if (ht!=null&&ply!=null&&!ply.FNumber.equals("")){
+                Lg.e("ht");
+                return ht.FNumber.equals("")?ply.FNumber:ht.FNumber;
+            }
+            if (ply!=null&&lv!=null&&!lv.FNumber.equals("")){
+                Lg.e("ply");
+                return ply.FNumber.equals("")?lv.FNumber:ply.FNumber;
+            }
+            if (lv!=null&&treeType!=null&&!treeType.FNumber.equals("")){
+                Lg.e("lv");
+                return lv.FNumber.equals("")?treeType.FNumber:lv.FNumber;
+            }
+            if (treeType!=null&&type2!=null&&!type2.FNumber.equals("")){
+                Lg.e("treeType");
+                return treeType.FNumber.equals("")?type2.FNumber:treeType.FNumber;
+            }
+            if (type2!=null&&type1!=null&&!type1.FNumber.equals("")){
+                Lg.e("type2");
+                return type2.FNumber.equals("")?type1.FNumber:type2.FNumber;
+            }
+            if (type1!=null){
+                Lg.e("type1");
+                return type1.FNumber;
+            }
             return "";
     }
     //清楚
@@ -217,6 +332,7 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
         binding.spPly.clear();ply=null;
         binding.spHt.clear();ht=null;
         binding.spWt.clear();wt=null;
+        Hawk.delete(Sc_wt);Hawk.delete(Sc_ht);Hawk.delete(Sc_ply);Hawk.delete(Sc_lv);Hawk.delete(Sc_treeType);Hawk.delete(Sc_type2);;Hawk.delete(Sc_type1);
     }
 
     //物料点击
@@ -224,6 +340,11 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
     public void onProductItemClick(View view, int position) {
         EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Product,products.get(position)));
         finish();
+    }
+
+    private void getCodeCut(String code){
+         split = code.split(".");
+         Lg.e("编码截取："+code,split[0]);
     }
 
     //根据activity过滤是否物料（是否允许生产，是否允许采购等)
@@ -234,6 +355,9 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
 //                FIsPurchase="1";
                 break;
             case Config.ProductInStoreActivity://产品入库
+            case Config.TbInActivity://产品入库
+            case Config.DgInActivity://产品入库
+            case Config.SimpleInActivity://产品入库
                 s2Product.FIsProduce="1";
 //                FIsProduce="1";
                 break;
@@ -267,6 +391,14 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
     @Override
     protected void OnReceive(String code) {
 
+    }
+
+    public static void start(Context context, int activity,String search,String org){
+        Intent intent = new Intent(context,ProductCheckActivity.class);
+        intent.putExtra("search",search);
+        intent.putExtra("org",org);
+        intent.putExtra("activity",activity);
+        context.startActivity(intent);
     }
 
 
