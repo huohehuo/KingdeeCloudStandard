@@ -148,7 +148,7 @@ public class ReViewActivity extends BaseActivity {
             binding.productcategory.setText("已添加数量:" + products.size() + "个");
             binding.productnum.setText("物料总数为:" + num + "");
         } else {
-            binding.productcategory.setText("物料类别数:" + 0 + "个");
+            binding.productcategory.setText("已添加数量:" + 0 + "个");
             binding.productnum.setText("物料总数为:" + 0 + "");
         }
 
