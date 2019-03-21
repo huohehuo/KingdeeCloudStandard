@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.fangzuo.assist.Activity.SettingActivity">
+    android:layout_height="match_parent">
     <include layout="@layout/top_bar"
         android:id="@+id/toolbar"
         />
@@ -34,7 +33,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="服务器:"
+                    android:text="@string/server"
                     android:textSize="15dp"
                     android:textColor="@android:color/black"/>
 <!--
@@ -53,7 +52,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="端口:"
+                    android:text="@string/port"
                     android:textSize="15dp"
                     android:textColor="@android:color/black"/>
 <!--
@@ -83,7 +82,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="用户名:"
+                    android:text="@string/username"
                     android:textSize="15dp"
                     android:textColor="@android:color/black"/>
                 <EditText
@@ -99,7 +98,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="密码:"
+                    android:text="@string/password"
                     android:textSize="15dp"
                     android:textColor="@android:color/black"/>
 <!--                    android:text="rongyuan@888"-->
@@ -125,7 +124,7 @@
                     android:id="@+id/btn_connect"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:text="连接"
+                    android:text="@string/Connection"
                     android:background="@drawable/btn_login"
 
                     android:layout_marginRight="1dp"
@@ -134,7 +133,7 @@
                     android:id="@+id/btn_prop"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:text="配置"
+                    android:text="@string/setup"
                     android:background="@drawable/btn_login"
 
                     android:layout_marginRight="1dp"
@@ -156,7 +155,7 @@
         <TextView
             android:layout_marginLeft="5dp"
             android:id="@+id/tvtiti"
-            android:text="账套选择："
+            android:text="@string/account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <View

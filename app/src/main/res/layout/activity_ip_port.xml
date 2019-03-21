@@ -24,7 +24,7 @@
             android:layout_weight="9"
             android:background="@null"
             android:gravity="top"
-            android:hint="请输入IP:"
+            android:hint="@string/ip_hint"
             android:singleLine="true"
             android:padding="13dp"
             android:textColorHint="#888888" />
@@ -48,7 +48,7 @@
             android:layout_weight="9"
             android:background="@null"
             android:gravity="top"
-            android:hint="请输入端口:"
+            android:hint="@string/port_hint"
             android:padding="13dp"
             android:singleLine="true"
             android:textColorHint="#888888" />
@@ -66,7 +66,7 @@
             android:layout_weight="9"
             android:background="@null"
             android:gravity="top"
-            android:hint="回单入口:"
+            android:hint="@string/backup_url"
             android:padding="13dp"
             android:singleLine="true"
             android:textColorHint="#888888" />
@@ -84,7 +84,7 @@
                 android:layout_weight="9"
                 android:background="@null"
                 android:gravity="top"
-                android:hint="默认打印次数:"
+                android:hint="@string/print_time"
                 android:padding="13dp"
                 android:singleLine="true"
                 android:inputType="number"
@@ -122,7 +122,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_login"
-        android:text="保存"
+        android:text="@string/save"
         android:id="@+id/btn_save"/>
 
 </RelativeLayout>

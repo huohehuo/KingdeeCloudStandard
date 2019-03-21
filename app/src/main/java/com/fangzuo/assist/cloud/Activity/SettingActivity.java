@@ -218,7 +218,7 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
     public void initView() {
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
-        tvTitle.setText("下载配置");
+        tvTitle.setText(getResources().getString(R.string.down_set));
     }
 
     @Override

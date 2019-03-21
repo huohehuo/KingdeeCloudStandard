@@ -543,8 +543,8 @@ public class FragmentSaleOutDetail extends BaseFragment {
             long insert2 = t_detailDao.insert(detail);
 
             if (insert1 > 0 && insert2 > 0) {
-                Lg.e("成功添加：" + main.toString());
-                Lg.e("成功添加：" + detail.toString());
+                Lg.e("成功添加：" , main);
+                Lg.e("成功添加：", detail);
                 MediaPlayer.getInstance(mContext).ok();
                 Toast.showText(mContext, "添加成功");
                 resetAll();

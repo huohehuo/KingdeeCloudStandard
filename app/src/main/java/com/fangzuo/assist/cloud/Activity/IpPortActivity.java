@@ -58,7 +58,7 @@ public class IpPortActivity extends BaseActivity {
         setContentView(R.layout.activity_ip_port);
         mContext = this;
         ButterKnife.bind(this);
-        tvTitle.setText("服务器设置");
+        tvTitle.setText(getResources().getString(R.string.server_set));
         share = BasicShareUtil.getInstance(mContext);
         if (!share.getIP().equals("")) {
             edIp.setText(share.getIP());

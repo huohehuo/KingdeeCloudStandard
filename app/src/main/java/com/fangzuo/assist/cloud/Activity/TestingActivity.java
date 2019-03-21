@@ -25,7 +25,7 @@ public class TestingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_testing);
         mContext = this;
-        binding.top.tvTitle.setText("网络测试");
+        binding.top.tvTitle.setText(getResources().getString(R.string.net_set));
         actionListener();
     }
 

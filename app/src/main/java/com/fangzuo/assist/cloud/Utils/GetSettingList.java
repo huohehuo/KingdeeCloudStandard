@@ -1,6 +1,7 @@
 package com.fangzuo.assist.cloud.Utils;
 
 
+import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.SettingList;
 import com.fangzuo.assist.cloud.R;
 
@@ -13,13 +14,13 @@ import java.util.ArrayList;
 public class GetSettingList {
     public static ArrayList<SettingList> getList() {
         ArrayList<SettingList> items = new ArrayList<>();
-        items.add(new SettingList("下载配置", R.mipmap.download));
-        items.add(new SettingList("wifi连接",R.mipmap.wifi));
-        items.add(new SettingList("声音设置",R.mipmap.sound));
-        items.add(new SettingList("更新版本",R.mipmap.getnewversion));
-        items.add(new SettingList("服务器设置",R.mipmap.tomcat));
-        items.add(new SettingList("打印配置与测试",R.mipmap.test));
-        items.add(new SettingList("网络测试",R.mipmap.test));
+        items.add(new SettingList(App.getContext().getResources().getString(R.string.down_set), R.mipmap.download));
+        items.add(new SettingList(App.getContext().getResources().getString(R.string.Wifi_set),R.mipmap.wifi));
+        items.add(new SettingList(App.getContext().getResources().getString(R.string.voice_set),R.mipmap.sound));
+        items.add(new SettingList(App.getContext().getResources().getString(R.string.updata_app),R.mipmap.getnewversion));
+        items.add(new SettingList(App.getContext().getResources().getString(R.string.server_set),R.mipmap.tomcat));
+        items.add(new SettingList(App.getContext().getResources().getString(R.string.print_set),R.mipmap.test));
+        items.add(new SettingList(App.getContext().getResources().getString(R.string.net_set),R.mipmap.test));
         return items;
     }
     public static ArrayList<SettingList> getPurchaseList() {

@@ -10,6 +10,7 @@ import com.fangzuo.assist.cloud.RxSerivce.RService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.orhanobut.hawk.Hawk;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -83,7 +84,7 @@ public class App extends MultiDexApplication {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
         mContext = this;
-
+        LeakCanary.install(this);
         Hawk.init(mContext).build();
         PDA_Choose= Hawk.get(Config.PDA,1);
         NowUrl = BasicShareUtil.getInstance(mContext).getBaseURL();

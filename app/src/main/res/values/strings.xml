@@ -304,5 +304,31 @@
     <string name="checkMainDlg_msg">确定后表头将被锁定,直至上传之前</string>
     <string name="checkMainDlg_ok">已确定,继续添加</string>
     <string name="checkMainDlg_error">取消</string>
+    <string name="username">用户名:</string>
+    <string name="password">密码:   </string>
+    <string name="password_hint">请输入密码</string>
+    <string name="login">登录</string>
+    <string name="set">设置</string>
+    <string name="down_set">下载配置</string>
+    <string name="Wifi_set">wifi连接</string>
+    <string name="voice_set">声音设置</string>
+    <string name="updata_app">更新版本</string>
+    <string name="server_set">服务器设置</string>
+    <string name="print_set">打印配置与测试</string>
+    <string name="net_set">网络测试</string>
+    <string name="remaber">记住密码</string>
+    <string name="server">服务器:</string>
+    <string name="port">端口:</string>
+    <string name="Connection">连接</string>
+    <string name="setup">配置</string>
+    <string name="account">账套选择：</string>
+    <string name="ip_hint">请输入IP:</string>
+    <string name="port_hint">请输入端口:</string>
+    <string name="backup_url">回单入口:</string>
+    <string name="print_time">默认打印次数:</string>
+    <string name="save">保存</string>
+    <string name="tomcat_test">测试Tomcat服务器</string>
+    <string name="db_test">测试数据库链接</string>
+    <string name="test_hint">说明: 如果结果为网络错误，则连不上tomcat服务器r 如果结果为其他，就为可以连接</string>
 
 </resources>
