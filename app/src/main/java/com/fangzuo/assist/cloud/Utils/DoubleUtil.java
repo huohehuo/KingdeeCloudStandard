@@ -41,6 +41,22 @@ public class DoubleUtil {
         bd = null;
         return d;
     }
+    //舍掉小数取整:Math.floor(3.5)=3
+    //四舍五入取整:Math.rint(3.5)=4
+    //进位取整:Math.ceil(3.1)=4
+   public static String Cut0(String value) {
+        if (value==null||"".equals(value)){
+            return "0";
+        }
+        String str=Math.rint(Double.parseDouble(value))+"";
+        return str.substring(0,value.lastIndexOf("."));
+//       Lg.e("TEST",DoubleUtil.Cut0("0.50"));0
+//       Lg.e("TEST",DoubleUtil.Cut0("1.50"));2
+//       Lg.e("TEST",DoubleUtil.Cut0("1.40"));1
+//       Lg.e("TEST",DoubleUtil.Cut0("0.45"));0
+    }
+
+
     /**
      * double 相加
      * @param d1

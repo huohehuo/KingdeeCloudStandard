@@ -90,12 +90,12 @@ public class ReViewAdapter extends BaseAdapter implements View.OnClickListener {
             viewHolder.wavehouse.setVisibility(View.GONE);
             viewHolder.storagein.setVisibility(View.VISIBLE);
             viewHolder.storageout.setVisibility(View.VISIBLE);
-            viewHolder.wavehouseout.setVisibility(View.VISIBLE);
-            viewHolder.wavehousein.setVisibility(View.VISIBLE);
+//            viewHolder.wavehouseout.setVisibility(View.VISIBLE);
+//            viewHolder.wavehousein.setVisibility(View.VISIBLE);
             viewHolder.storageout.setText("调出仓库:" + detail.get(i).FStorageOut);
             viewHolder.storagein.setText("调入仓库:" + detail.get(i).FStorageIn);
-            viewHolder.wavehouseout.setText("调出仓位:" + detail.get(i).FWaveHouseOut == null ? "" : detail.get(i).FWaveHouseOut);
-            viewHolder.wavehousein.setText("调入仓位:" + detail.get(i).FWaveHouseIn == null ? "" : detail.get(i).FWaveHouseIn);
+//            viewHolder.wavehouseout.setText("调出仓位:" + detail.get(i).FWaveHouseOut == null ? "" : detail.get(i).FWaveHouseOut);
+//            viewHolder.wavehousein.setText("调入仓位:" + detail.get(i).FWaveHouseIn == null ? "" : detail.get(i).FWaveHouseIn);
         }else{
             viewHolder.storage.setText("仓库:" + detail.get(i).FStorage);
             viewHolder.wavehouse.setText("仓位:" + detail.get(i).FWaveHouse == null ? "" : detail.get(i).FWaveHouse);
@@ -158,12 +158,12 @@ public class ReViewAdapter extends BaseAdapter implements View.OnClickListener {
         TextView productNumber;
         @BindView(R.id.storageout)
         TextView storageout;
-        @BindView(R.id.wavehouseout)
-        TextView wavehouseout;
+//        @BindView(R.id.wavehouseout)
+//        TextView wavehouseout;
         @BindView(R.id.storagein)
         TextView storagein;
-        @BindView(R.id.wavehousein)
-        TextView wavehousein;
+//        @BindView(R.id.wavehousein)
+//        TextView wavehousein;
         @BindView(R.id.storage)
         TextView storage;
         @BindView(R.id.wavehouse)

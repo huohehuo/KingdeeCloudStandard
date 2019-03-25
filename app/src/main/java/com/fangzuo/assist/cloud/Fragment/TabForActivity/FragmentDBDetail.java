@@ -89,12 +89,12 @@ public class FragmentDBDetail extends BaseFragment {
 //    RelativeLayout searchSupplier;
     @BindView(R.id.sp_which_storage_out)
 SpinnerStorage spWhichStorageOut;
-    @BindView(R.id.sp_wavehouse_out)
-    MyWaveHouseSpinner spWavehouseOut;
+//    @BindView(R.id.sp_wavehouse_out)
+//    MyWaveHouseSpinner spWavehouseOut;
     @BindView(R.id.sp_which_storage_in)
     SpinnerStorageDlg spWhichStorageIn;
-    @BindView(R.id.sp_wavehouse_in)
-    MyWaveHouseSpinner spWavehouseIn;
+//    @BindView(R.id.sp_wavehouse_in)
+//    MyWaveHouseSpinner spWavehouseIn;
 //    @BindView(R.id.cb_scaning)
 //    CheckBox cbScaning;
 //    @BindView(R.id.scanbyCamera)
@@ -138,8 +138,8 @@ SpinnerStorage spWhichStorageOut;
     private Product product;
     private Storage storageOut;
     private Storage storageIn;
-    private WaveHouse waveHouseOut;
-    private WaveHouse waveHouseIn;
+    private WaveHouse waveHouseOut;//已隐藏去掉
+    private WaveHouse waveHouseIn;//已隐藏去掉
     private Unit unit;
     private CodeCheckBackDataBean codeCheckBackDataBean;
     protected boolean isOpenBatch = false;
@@ -367,37 +367,37 @@ SpinnerStorage spWhichStorageOut;
                 storageOut = (Storage) spWhichStorageOut.getAdapter().getItem(i);
                 spWhichStorageOut.setTitleText(storageOut.FName);
                 Lg.e("选中调出仓库：", storageOut);
-                waveHouseOut = null;
-                spWavehouseOut.setAuto(mContext, storageOut, "");
+//                waveHouseOut = null;
+//                spWavehouseOut.setAuto(mContext, storageOut, "");
                 DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getHuozhuOut());
 
             }
         });
-        spWavehouseOut.setOnItemSelectedListener(new ItemListener() {
-            @Override
-            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
-                waveHouseOut = (WaveHouse) spWavehouseOut.getAdapter().getItem(i);
-                Lg.e("选中调出仓位：", waveHouseOut);
-            }
-        });
+//        spWavehouseOut.setOnItemSelectedListener(new ItemListener() {
+//            @Override
+//            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
+//                waveHouseOut = (WaveHouse) spWavehouseOut.getAdapter().getItem(i);
+//                Lg.e("选中调出仓位：", waveHouseOut);
+//            }
+//        });
         spWhichStorageIn.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 storageIn = (Storage) spWhichStorageIn.getAdapter().getItem(i);
                 spWhichStorageIn.setTitleText(storageIn.FName);
                 Lg.e("选中调入仓库：", storageIn);
-                waveHouseIn = null;
-                spWavehouseIn.setAuto(mContext, storageIn, "");
+//                waveHouseIn = null;
+//                spWavehouseIn.setAuto(mContext, storageIn, "");
 
             }
         });
-        spWavehouseIn.setOnItemSelectedListener(new ItemListener() {
-            @Override
-            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
-                waveHouseIn = (WaveHouse) spWavehouseIn.getAdapter().getItem(i);
-                Lg.e("选中调入仓位：", spWavehouseIn);
-            }
-        });
+//        spWavehouseIn.setOnItemSelectedListener(new ItemListener() {
+//            @Override
+//            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
+//                waveHouseIn = (WaveHouse) spWavehouseIn.getAdapter().getItem(i);
+//                Lg.e("选中调入仓位：", spWavehouseIn);
+//            }
+//        });
 
         spUnit.setOnItemSelectedListener(new ItemListener() {
             @Override

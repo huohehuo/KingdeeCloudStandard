@@ -37,10 +37,12 @@ import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.DataModel;
+import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.MediaPlayer;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
@@ -92,8 +94,8 @@ public class FragmentPrGetDetail extends BaseFragment {
     TextView tvGoodName;
     @BindView(R.id.tv_model)
     TextView tvModel;
-    @BindView(R.id.sp_unit)
-    SpinnerUnit spUnit;
+//    @BindView(R.id.sp_unit)
+//    SpinnerUnit spUnit;
     @BindView(R.id.ed_pihao)
     TextView edPihao;
     @BindView(R.id.ed_num)
@@ -247,7 +249,7 @@ public class FragmentPrGetDetail extends BaseFragment {
                 break;
             case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
                 if (null != activityPager) {
-                    spUnit.setAuto("",  SpinnerUnit.Id);
+//                    spUnit.setAuto("",  SpinnerUnit.Id);
                     spWhichStorage.setAuto("", activityPager.getOrgOut());
                 }
                 break;
@@ -354,12 +356,12 @@ public class FragmentPrGetDetail extends BaseFragment {
                 Lg.e("选中仓位：", waveHouse);
             }
         });
-        spUnit.setOnItemSelectedListener(new ItemListener() {
-            @Override
-            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
-                unit = (Unit) spUnit.getAdapter().getItem(i);
-            }
-        });
+//        spUnit.setOnItemSelectedListener(new ItemListener() {
+//            @Override
+//            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
+//                unit = (Unit) spUnit.getAdapter().getItem(i);
+//            }
+//        });
 
     }
 
@@ -370,7 +372,8 @@ public class FragmentPrGetDetail extends BaseFragment {
         }
         tvGoodName.setText(product.FName);tvModel.setText(product.FModel);tvCode.setText(product.FNumber);
         //带出物料的默认值
-        spUnit.setAuto(product.FPurchaseUnitID,SpinnerUnit.Id);
+        unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
+//        spUnit.setAuto(product.FPurchaseUnitID,SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
             spWhichStorage.setAuto(autoStorage, activityPager.getOrgOut());
@@ -437,6 +440,12 @@ public class FragmentPrGetDetail extends BaseFragment {
         }
         if (activityPager.getHuozhuOut(0).equals("")) {
             Toast.showText(mContext, "货主不能为空");
+            MediaPlayer.getInstance(mContext).error();
+            return false;
+        }
+        if (unit==null ||unit.FMeasureUnitID.equals("")) {
+            Toast.showText(mContext, "物料单位未带出，请重试...");
+            unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
             MediaPlayer.getInstance(mContext).error();
             return false;
         }

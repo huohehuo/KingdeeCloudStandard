@@ -46,7 +46,17 @@
                 android:autoLink="all"
                 android:text="全部清空"
                 android:textColor="@color/white" />
-
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_check_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dp"
+                android:layout_toLeftOf="@id/btn_delete"
+                android:autoLink="all"
+                android:text="查看表头"
+                android:textColor="@color/white" />
             <RelativeLayout
                 android:id="@+id/btn_delete"
                 android:layout_width="wrap_content"

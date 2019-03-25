@@ -156,8 +156,10 @@ public class FragmentDBMain extends BaseFragment {
         spOrgHuozhuIn.setAutoSelection(getString(R.string.spOrgHuozhuIn_db),activityPager.getOrgIn(), Hawk.get(getString(R.string.spOrgHuozhuIn_db), ""));
 
         spStoreman.setAuto(getString(R.string.spStoreman_db), Hawk.get(getString(R.string.spStoreman_db),""), activityPager.getOrgOut());
-        spDbType.setAutoSelection(getString(R.string.spDbType_db),Hawk.get(getString(R.string.spDbType_db),""));
-        spDbDirection.setAutoSelection(getString(R.string.spDbDirection_db),Hawk.get(getString(R.string.spDbDirection_db),""));
+//        spDbType.setAutoSelection(getString(R.string.spDbType_db),Hawk.get(getString(R.string.spDbType_db),""));
+//        spDbDirection.setAutoSelection(getString(R.string.spDbDirection_db),Hawk.get(getString(R.string.spDbDirection_db),""));
+        spDbType.setAutoSelection(getString(R.string.spDbType_db),"组织内调拨");
+        spDbDirection.setAutoSelection(getString(R.string.spDbDirection_db),"普通");
 //        binding.spOrgIn.setEnable(false);
 //        binding.spOrgCreate.setEnable(false);
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));

@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import com.fangzuo.assist.cloud.ABase.BaseActivity;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.ReViewPDAdapter;
+import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.PurchaseInStoreUploadBean;
 import com.fangzuo.assist.cloud.Dao.PushDownSub;
@@ -40,7 +41,9 @@ import butterknife.OnClick;
 public class ReViewPDActivity extends BaseActivity {
     ActivityReViewPdBinding binding;
     private int activity;
+//    private T_main main;
     private List<T_Detail> list;
+    private List<T_main> list_main;
     private ReViewPDAdapter adapter;
     private List<Boolean> isCheck;
 
@@ -62,6 +65,7 @@ public class ReViewPDActivity extends BaseActivity {
         double num = 0;
         isCheck = new ArrayList<>();
         list = new ArrayList<>();
+        list_main = new ArrayList<>();
         list = t_detailDao.queryBuilder().where(
                 T_DetailDao.Properties.Activity.eq(activity)
         ).build().list();
@@ -80,6 +84,8 @@ public class ReViewPDActivity extends BaseActivity {
         List<String> products = new ArrayList<>();
         products.clear();
         if (list.size() > 0) {
+            binding.tvCheckMain.setVisibility(View.GONE);
+            list_main = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
             if (products.size() == 0) {
                 products.add(list.get(0).FBarcode);
             }
@@ -92,6 +98,7 @@ public class ReViewPDActivity extends BaseActivity {
             binding.productcategory.setText("已添加数量:" + products.size() + "个");
             binding.productnum.setText("物料总数为:" + num + "");
         } else {
+            binding.tvCheckMain.setVisibility(View.GONE);
             binding.productcategory.setText("已添加数量:" + 0 + "个");
             binding.productnum.setText("物料总数为:" + 0 + "");
         }
@@ -109,6 +116,20 @@ public class ReViewPDActivity extends BaseActivity {
                     isCheck.set(i, true);
                 }
                 adapter.notifyDataSetChanged();
+            }
+        });
+        binding.tvCheckMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StringBuilder builder = new StringBuilder();
+                    builder.append("客户名称:"+list_main.get(0).FCustomer + "\n");
+                    builder.append("客户ID:"+list_main.get(0).FCustomerID + "\n");
+                    builder.append("销售员ID:"+list_main.get(0).FPurchaserId + "\n");
+                    builder.append("销售组织ID:"+list_main.get(0).FStockOrgId + "\n");
+                    builder.append("发货组织ID:"+list_main.get(0).FPurchaseOrgId + "\n");
+                    builder.append("备注:"+list_main.get(0).FNot + "\n");
+                    builder.append("入库时间:"+list_main.get(0).FDate + "\n");
+                    LoadingUtil.showAlter(mContext,"表头数据:",builder.toString(),false);
             }
         });
     }
@@ -214,8 +235,8 @@ public class ReViewPDActivity extends BaseActivity {
                             public void onNext(CommonResponse commonResponse) {
                                 super.onNext(commonResponse);
                                 if (!commonResponse.state) return;
+                                Lg.e("删除请求成功");
                                 deleteMain(t_detailList);
-                                initList();
 //                                t_detailDao.deleteInTx(t_detailList);
 //                                t_mainDao.deleteInTx(t_mainsList);
 //                                Toast.showText(mContext, "删除成功");
@@ -272,8 +293,8 @@ public class ReViewPDActivity extends BaseActivity {
         }
     }
     //删除相应的表头信息
-    private void deleteMain(List<T_Detail> list){
-        for (int j = 0; j < list.size(); j++) {
+    private void deleteMain(List<T_Detail> listsss){
+        for (int j = 0; j < list.size(); j++) {//这里要以列表数据为基础，不能以过滤出来的数据
             if (isCheck.get(j)) {
                 PushDownSubDao pushDownSubDao = daoSession.getPushDownSubDao();
                 List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
@@ -281,9 +302,11 @@ public class ReViewPDActivity extends BaseActivity {
                 ).build().list();
                 Lg.e(pushDownSubs.size() + "多少个");
                 if (pushDownSubs.size() > 0) {
+                    Lg.e("存在明细：-数量："+list.get(j).FRealQty);
                     //删除后，更新数据里面的已验收数
                     double result = MathUtil.toD(list.get(j).FRealQty);
                     pushDownSubs.get(0).FQtying = MathUtil.doubleSub(MathUtil.toD(pushDownSubs.get(0).FQtying), result) + "";
+                    Lg.e("减掉得到：", pushDownSubs.get(0).FQtying);
                     pushDownSubDao.update(pushDownSubs.get(0));
                 }
             }
@@ -291,8 +314,8 @@ public class ReViewPDActivity extends BaseActivity {
 
 
         TreeSet<String> treeSet = new TreeSet<>();
-        for (int i = 0; i < list.size(); i++) {
-            treeSet.add(list.get(i).FOrderId+"");
+        for (int i = 0; i < listsss.size(); i++) {
+            treeSet.add(listsss.get(i).FOrderId+"");
         }
         for (String string:treeSet) {
             List<T_Detail> list1=t_detailDao.queryBuilder().where(
@@ -304,7 +327,8 @@ public class ReViewPDActivity extends BaseActivity {
                         T_mainDao.Properties.FOrderId.eq(string)).build().list());
             }
         }
-        t_detailDao.deleteInTx(list);
+        t_detailDao.deleteInTx(listsss);
+        initList();
 
     }
 
