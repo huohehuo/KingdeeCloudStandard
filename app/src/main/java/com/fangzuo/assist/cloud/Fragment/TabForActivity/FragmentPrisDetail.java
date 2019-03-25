@@ -519,6 +519,7 @@ public class FragmentPrisDetail extends BaseFragment {
         Lg.e("添加时单位：",unit);
         if (unit==null ||unit.FMeasureUnitID.equals("")) {
             Toast.showText(mContext, "物料单位未带出，请重试...");
+            unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
             MediaPlayer.getInstance(mContext).error();
             return false;
         }

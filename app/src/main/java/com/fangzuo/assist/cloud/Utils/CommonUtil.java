@@ -53,7 +53,7 @@ public class CommonUtil {
             zpSDK.drawText(10, 400, "数量2：", size, 0, 0, false, false);
             zpSDK.drawText(160, 404, bean.FNum2==null?"":bean.FNum2,size2, 0, 0, false, false);
             zpSDK.drawText(450, 404, bean.FUnitAux==null?"":bean.FUnitAux,size2, 0, 0, false, false);
-            zpSDK.drawText(10, 460, "备注：", size, 0, 0, false, false);
+            zpSDK.drawText(10, 460, "辅助标示：", size, 0, 0, false, false);
             zpSDK.drawText(160, 464, bean.FNot==null?"":bean.FNot,size2, 0, 0, false, false);
             zpSDK.drawText(10, 500, "______________________________________________", 2, 0, 0, false, false);
             zpSDK.drawQrCode(10, 560, bean.FBarCode, 0, 11, 0);

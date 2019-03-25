@@ -310,7 +310,7 @@ public class DataModel {
                     if (!MathUtil.isNumeric(commonResponse.returnJson)){
                         textView.setText("0");
                     }else{
-                        textView.setText(commonResponse.returnJson);
+                        textView.setText(DoubleUtil.Cut0(commonResponse.returnJson)+"");
                     }
                 }
 

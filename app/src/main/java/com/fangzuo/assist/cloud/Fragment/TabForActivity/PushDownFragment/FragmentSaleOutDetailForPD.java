@@ -338,15 +338,19 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             pushDownMain = pushDownMains.get(0);
             mainSaleDept = LocDataUtil.getDept(pushDownMain.FSaleDeptID).FNumber;
             mainSaleMan = LocDataUtil.getSaleMan(pushDownMain.FSaleManID).FNumber;
-            mainSaleOrg = LocDataUtil.getOrg(pushDownMain.FSaleDeptID).FNumber;
+            mainSaleOrg = LocDataUtil.getOrg(pushDownMain.FSaleOrgID).FNumber;
 //            fwanglaiUnit = list1.get(0).FSupplyID;
 //            employeeId = list1.get(0).FEmpID;
 //            departmentId = list1.get(0).FDeptID;
 //            Log.e("employeeId", employeeId == null ? "" : employeeId);
 //            Log.e("departmentId", departmentId == null ? "" : departmentId);
 //            billNo = list1.get(0).FBillNo;
+            if ("".equals(pushDownMain.FSupplyID==null?"":pushDownMain.FSupplyID)){
+                LoadingUtil.showAlter(mContext,"注意","表头明细的客户数据带出失败，请重试...",false);
+            }
         } else {
-            Toast.showText(mContext, "表头数据获取失败");
+            LoadingUtil.showAlter(mContext,"注意","表头数据获取失败，请重新下载单据...",false);
+//            Toast.showText(mContext, "表头数据获取失败");
         }
 
     }
@@ -388,7 +392,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                 Lg.e("选中仓库：", storage);
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, storage, "");
-                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum);
+                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut());
 
             }
         });
@@ -559,7 +563,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             edPihao.setText("");
             isOpenBatch = false;
         }
-        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum);
+        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut());
 
 
         spAuxsign.getData(product.FMASTERID, autoAuxSing);
@@ -708,8 +712,8 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                         (MathUtil.toD(edNum.getText().toString()))) + "";
                 pushDownSubDao.update(pushDownSub);
                 pushDownSubListAdapter.notifyDataSetChanged();
-                Lg.e("成功添加：" + main.toString());
-                Lg.e("成功添加：" + detail.toString());
+                Lg.e("成功添加表头：" ,main);
+                Lg.e("成功添加明细：" ,detail);
                 MediaPlayer.getInstance(mContext).ok();
                 Toast.showText(mContext, "添加成功");
                 resetAll();

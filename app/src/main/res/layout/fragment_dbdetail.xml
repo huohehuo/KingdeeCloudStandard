@@ -208,45 +208,45 @@
                         app:Uspinner_title="请选择调入仓库"/>
                 </LinearLayout>
                 <include layout="@layout/line_heng"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <com.fangzuo.assist.cloud.widget.TextViewTitle
-                        android:layout_width="0dp"
-                        android:layout_weight="4"
-                        android:layout_height="wrap_content"
-                        app:TextView_Title_justone="true"
-                        app:TextView_Title_one="调出仓位"
-                        app:TextView_Title_size="@dimen/size_detail" />
-                    <com.fangzuo.assist.cloud.widget.MyWaveHouseSpinner
-                        android:id="@+id/sp_wavehouse_out"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:singleLine="true"
-                        app:Uspinner_title="请选择调出仓位"/>
-                </LinearLayout>
-                <include layout="@layout/line_heng"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <com.fangzuo.assist.cloud.widget.TextViewTitle
-                        android:layout_width="0dp"
-                        android:layout_weight="4"
-                        android:layout_height="wrap_content"
-                        app:TextView_Title_justone="true"
-                        app:TextView_Title_one="调入仓位"
-                        app:TextView_Title_size="@dimen/size_detail" />
-                    <com.fangzuo.assist.cloud.widget.MyWaveHouseSpinner
-                        android:id="@+id/sp_wavehouse_in"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:singleLine="true"
-                        app:Uspinner_title="请选择调入仓位"/>
-                </LinearLayout>
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal">-->
+                    <!--<com.fangzuo.assist.cloud.widget.TextViewTitle-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_weight="4"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--app:TextView_Title_justone="true"-->
+                        <!--app:TextView_Title_one="调出仓位"-->
+                        <!--app:TextView_Title_size="@dimen/size_detail" />-->
+                    <!--<com.fangzuo.assist.cloud.widget.MyWaveHouseSpinner-->
+                        <!--android:id="@+id/sp_wavehouse_out"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="6"-->
+                        <!--android:singleLine="true"-->
+                        <!--app:Uspinner_title="请选择调出仓位"/>-->
+                <!--</LinearLayout>-->
+                <!--<include layout="@layout/line_heng"/>-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal">-->
+                    <!--<com.fangzuo.assist.cloud.widget.TextViewTitle-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_weight="4"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--app:TextView_Title_justone="true"-->
+                        <!--app:TextView_Title_one="调入仓位"-->
+                        <!--app:TextView_Title_size="@dimen/size_detail" />-->
+                    <!--<com.fangzuo.assist.cloud.widget.MyWaveHouseSpinner-->
+                        <!--android:id="@+id/sp_wavehouse_in"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="6"-->
+                        <!--android:singleLine="true"-->
+                        <!--app:Uspinner_title="请选择调入仓位"/>-->
+                <!--</LinearLayout>-->
                 <include layout="@layout/line_heng"/>
                 <LinearLayout
                     android:layout_width="match_parent"

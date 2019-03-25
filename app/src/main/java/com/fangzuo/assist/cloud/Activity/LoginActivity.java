@@ -34,6 +34,7 @@ import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.JsonDealUtils;
@@ -370,7 +371,8 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                         LoadingUtil.dismiss();
                     } else {
                         LoadingUtil.dismiss();
-                        Toast.showText(App.getContext(), bean.getMessage());
+                        LoadingUtil.showAlter(mContext,"登陆失败",bean.getMessage(),false);
+//                        Toast.showText(App.getContext(), bean.getMessage());
                         Lg.e("登录错误2：" + bean.toString());
                     }
                 }catch (Exception e){
