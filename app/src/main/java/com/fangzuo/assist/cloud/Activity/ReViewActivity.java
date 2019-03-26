@@ -24,6 +24,7 @@ import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Lg;
@@ -114,6 +115,7 @@ public class ReViewActivity extends BaseActivity {
 
     private void initList() {
         double num = 0;
+        double storenum = 0;
         isCheck = new ArrayList<>();
         list = new ArrayList<>();
         list = t_detailDao.queryBuilder().where(
@@ -142,14 +144,17 @@ public class ReViewActivity extends BaseActivity {
                 if (!products.contains(list.get(i).FBarcode)) {
                     products.add(list.get(i).FBarcode);
                 }
-                num += MathUtil.toD(list.get(i).FRealQty);
+                num += MathUtil.toD(list.get(i).FBaseNum);
+                storenum += MathUtil.toD(list.get(i).FStoreNum);
             }
 
             binding.productcategory.setText("已添加数量:" + products.size() + "个");
-            binding.productnum.setText("物料总数为:" + num + "");
+            binding.productnum.setText("基本数量:" + num +list.get(0).FBaseUnit);
+            binding.tvStorenum.setText("库存数量:" + DoubleUtil.Cut4(storenum+"") + list.get(0).FStoreUnit);
         } else {
             binding.productcategory.setText("已添加数量:" + 0 + "个");
-            binding.productnum.setText("物料总数为:" + 0 + "");
+            binding.productnum.setText("基本数量:" + 0 + "");
+            binding.tvStorenum.setText("库存数量:" + 0 + "");
         }
 
         mainsList = new ArrayList<>();

@@ -11,7 +11,10 @@ import android.widget.TextView;
 import com.fangzuo.assist.cloud.Dao.PushDownSub;
 import com.fangzuo.assist.cloud.Dao.Unit;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.LocDataUtil;
+import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.ProductDao;
 import com.fangzuo.greendao.gen.UnitDao;
@@ -60,16 +63,10 @@ public class PushDownSubListAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        String unit;
-        DaoSession daoSession = GreenDaoManager.getmInstance(context).getDaoSession();
-        ProductDao productDao = daoSession.getProductDao();
-        UnitDao unitDao = daoSession.getUnitDao();
-        List<Unit> units = unitDao.queryBuilder().where(UnitDao.Properties.FMeasureUnitID.eq(items.get(i).FUnitID == null ? "" : items.get(i).FUnitID)).build().list();
-        if(units.size()>0){
-            unit = units.get(0).FName;
-        }else{
-            unit = "";
-        }
+//        DaoSession daoSession = GreenDaoManager.getmInstance(context).getDaoSession();
+//        ProductDao productDao = daoSession.getProductDao();
+
+        Unit unit = LocDataUtil.getUnit(items.get(i).FUnitID);
 
 //        List<Product> list = productDao.queryBuilder().where(ProductDao.Properties.FMaterialid.eq(items.get(i).FMaterialID)).build().list();
 //        String productName;
@@ -88,7 +85,8 @@ public class PushDownSubListAdapter extends BaseAdapter {
         viewHolder.numyanshou.setText("订单数量:"+items.get(i).FQty);
         viewHolder.productId.setText("物料名称:"+ items.get(i).FName);
         viewHolder.numyanshouing.setText("已验数量:"+items.get(i).FQtying);
-        viewHolder.unit.setText("单位:"+unit);
+        viewHolder.tvLastnum.setText("未验数量:"+ DoubleUtil.Cut4((MathUtil.toD(items.get(i).FQty)-MathUtil.toD(items.get(i).FQtying))+""));
+        viewHolder.unit.setText("单位:"+unit.FName);
 
         viewHolder.pg.setProgress((int) (Double.parseDouble(items.get(i).FQtying)/Double.parseDouble(items.get(i).FQty)*100));
         return view;
@@ -102,6 +100,8 @@ public class PushDownSubListAdapter extends BaseAdapter {
         TextView productId;
         @BindView(R.id.numyanshou)
         TextView numyanshou;
+        @BindView(R.id.tv_lastnum)
+        TextView tvLastnum;
         @BindView(R.id.numyanshouing)
         TextView numyanshouing;
         @BindView(R.id.unit)

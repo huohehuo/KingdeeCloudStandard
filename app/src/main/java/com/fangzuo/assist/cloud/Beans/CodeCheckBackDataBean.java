@@ -5,6 +5,8 @@ public class CodeCheckBackDataBean {
     public String FBillNo;
     public String FItemID;
     public String FUnitID;
+    public String FBaseUnitName;
+    public String FStoreUnitName;
     public String FQty;
     public String FBaseQty;
     public String FStoreQty;

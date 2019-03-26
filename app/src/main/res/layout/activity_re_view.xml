@@ -28,22 +28,23 @@
             </RelativeLayout>
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:layout_toEndOf="@+id/btn_back"
                 android:layout_toRightOf="@+id/btn_back"
                 android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
                 android:text="查单"
                 android:textColor="@color/white"
                 android:textSize="28sp" />
+
             <RelativeLayout
                 android:id="@+id/tv_print"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@id/btn_delete"
-                android:layout_centerVertical="true">
+                android:layout_toLeftOf="@id/btn_delete">
 
                 <ImageView
                     android:id="@+id/iv_print"
@@ -53,6 +54,7 @@
                     android:src="@mipmap/print" />
 
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/delete_all"
                 android:layout_width="wrap_content"
@@ -85,7 +87,7 @@
         <LinearLayout
             android:id="@+id/rl11"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:background="@color/cpb_grey"
             android:gravity="center"
@@ -95,15 +97,28 @@
                 android:id="@+id/productcategory"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="4"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/productnum"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="18sp" />
+                android:layout_weight="6"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_storenum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/productnum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <ListView

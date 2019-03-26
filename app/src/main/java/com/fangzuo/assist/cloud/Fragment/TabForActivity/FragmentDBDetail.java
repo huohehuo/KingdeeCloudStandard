@@ -23,7 +23,9 @@ import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.CodeCheckBackDataBean;
 import com.fangzuo.assist.cloud.Beans.CodeCheckBean;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
+import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
+import com.fangzuo.assist.cloud.Beans.GetQtyMsg;
 import com.fangzuo.assist.cloud.Dao.Product;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
@@ -141,6 +143,7 @@ SpinnerStorage spWhichStorageOut;
     private WaveHouse waveHouseOut;//已隐藏去掉
     private WaveHouse waveHouseIn;//已隐藏去掉
     private Unit unit;
+    private GetQtyMsg getQtyMsg;
     private CodeCheckBackDataBean codeCheckBackDataBean;
     protected boolean isOpenBatch = false;
     private List<String> listOrder;
@@ -349,7 +352,7 @@ SpinnerStorage spWhichStorageOut;
         LoadingUtil.showDialog(mContext, "正在检测条码...");
         //查询条码唯一表
         CodeCheckBean bean = new CodeCheckBean(code);
-        DataModel.codeCheck(WebApi.CodeCheckForOut, gson.toJson(bean));
+        DataModel.codeCheck(WebApi.CodeCheckForOutForDB, gson.toJson(bean));
     }
 
 
@@ -531,10 +534,27 @@ SpinnerStorage spWhichStorageOut;
         }
         LoadingUtil.showDialog(mContext,"正在添加...");
 
-        //插入条码唯一临时表
-        CodeCheckBean bean = new CodeCheckBean(barcode, ordercode + "", storageIn.FItemID,waveHouseIn==null?"0":waveHouseIn.FSPID, BasicShareUtil.getInstance(mContext).getIMIE());
-        DataModel.codeOnlyInsert(WebApi.CodeCheckInsertForOutDB, gson.toJson(bean));
-//        Addorder();
+        App.getRService().doIOAction(WebApi.GetQtyForOut, gson.toJson(new GetQtyMsg(product.FMaterialid,unit.FMeasureUnitID,edNum.getText().toString())), new MySubscribe<CommonResponse>() {
+            @Override
+            public void onNext(CommonResponse commonResponse) {
+                super.onNext(commonResponse);
+                LoadingUtil.dismiss();
+                if (!commonResponse.state)return;
+                getQtyMsg = new Gson().fromJson(commonResponse.returnJson, GetQtyMsg.class);
+                //插入条码唯一临时表
+                CodeCheckBean bean = new CodeCheckBean(barcode, ordercode + "", storageIn.FItemID,waveHouseIn==null?"0":waveHouseIn.FSPID, BasicShareUtil.getInstance(mContext).getIMIE());
+                DataModel.codeOnlyInsert(WebApi.CodeCheckInsertForOutDB, gson.toJson(bean));
+                //        Addorder();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+//                super.onError(e);
+                Toast.showText(mContext,"获取基本数量失败");
+                LoadingUtil.dismiss();
+            }
+        });
+
         return true;
     }
 
@@ -600,8 +620,8 @@ SpinnerStorage spWhichStorageOut;
             detail.FIndex = timesecond;
             detail.FRemainInStockQty = num;
             detail.FRealQty = num;
-            detail.FStoreNum = tvStorenum.getText().toString();
-            detail.FBaseNum = num;
+            detail.FStoreNum = getQtyMsg==null?"":getQtyMsg.FStoreQty;
+            detail.FBaseNum = getQtyMsg==null?"":getQtyMsg.FBaseQty;
             detail.FProductNo = edPurchaseNo.getText().toString();
             detail.FBatch = edPihao.getText().toString();
             detail.AuxSign = spAuxsign.getDataNumber();
@@ -612,6 +632,8 @@ SpinnerStorage spWhichStorageOut;
             detail.setStorageIn(storageIn);
             detail.setWaveHouseIn(waveHouseIn);
             detail.setUnit(unit);
+            detail.setBaseUnitName(getQtyMsg==null?"":getQtyMsg.FBaseUnitName);
+            detail.setStoreUnitName(getQtyMsg==null?"":getQtyMsg.FStoreUnitName);
             long insert2 = t_detailDao.insert(detail);
 
             if (insert1 > 0 && insert2 > 0) {

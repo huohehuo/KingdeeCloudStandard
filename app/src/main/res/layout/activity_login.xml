@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3de1ad"
-    android:orientation="vertical"
-    tools:context="com.fangzuo.assist.Activity.LoginActivity">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/aaa"
@@ -143,7 +142,6 @@
                 android:background="@drawable/et_phone_number_bg"
                 android:gravity="center"
                 android:hint="@string/password_hint"
-                android:text="888888"
                 android:inputType="textPassword"
                 android:textColorHint="@color/divider_color" />
 

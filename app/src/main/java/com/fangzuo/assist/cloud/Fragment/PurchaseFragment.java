@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
+import com.fangzuo.assist.cloud.Activity.CheckStoreActivity;
 import com.fangzuo.assist.cloud.Activity.OtherInStoreActivity;
 import com.fangzuo.assist.cloud.Activity.OtherOutStoreActivity;
 import com.fangzuo.assist.cloud.Activity.PDActivity;
@@ -106,7 +107,9 @@ public class PurchaseFragment extends BaseFragment {
                     case "期初物料补打":
                         startNewActivity(PrintBeforeDataActivity.class, null);
                         break;
-
+                    case "库存查询":
+                        startNewActivity(CheckStoreActivity.class, null);
+                        break;
                     case "其他入库":
                         startNewActivity(OtherInStoreActivity.class, null);
                         break;

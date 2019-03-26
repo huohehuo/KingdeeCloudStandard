@@ -265,6 +265,19 @@ public class T_Detail {
     }
 
     //设置单位基础信息
+    public void setBaseUnitName(String unit){
+        if (null==unit){
+            return;
+        }
+        this.FBaseUnit=unit;
+    }
+    //设置单位基础信息
+    public void setStoreUnitName(String unit){
+        if (null==unit){
+            return;
+        }
+        this.FStoreUnit=unit;
+    }
     public void setBaseUnit(Unit unit){
         if (null==unit){
             return;

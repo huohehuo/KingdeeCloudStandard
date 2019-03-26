@@ -82,7 +82,7 @@ public class HomeActivity extends BaseActivity {
         binding.ivUpdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UpdataLocData.getInstance(mContext).alertToChoose();
+//                UpdataLocData.getInstance(mContext).alertToChoose();
             }
         });
         //viewPage选项卡

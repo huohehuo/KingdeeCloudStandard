@@ -103,13 +103,13 @@ public class ReViewAdapter extends BaseAdapter implements View.OnClickListener {
         viewHolder.tvBarCode.setText("条码:" + detail.get(i).FBarcode);
         viewHolder.tvBatchNo.setText("批次:" + detail.get(i).FBatch);
         viewHolder.tvModel.setText("规格:" + detail.get(i).model);
-        if (detail.get(i).activity==Config.ProductInStoreActivity||detail.get(i).activity==Config.TbInActivity
-                ||detail.get(i).activity==Config.DgInActivity||detail.get(i).activity==Config.SimpleInActivity){
+//        if (detail.get(i).activity==Config.ProductInStoreActivity||detail.get(i).activity==Config.TbInActivity
+//                ||detail.get(i).activity==Config.DgInActivity||detail.get(i).activity==Config.SimpleInActivity){
             viewHolder.tvStorenum.setText("库存数量:" + detail.get(i).FStoreNum+" "+detail.get(i).FStoreUnit);
             viewHolder.tvBasenum.setText("基本数量:" + detail.get(i).FBaseNum+" "+detail.get(i).FBaseUnit);
-        }else{
-            viewHolder.tvStorenum.setText("添加数量:" + detail.get(i).FRemainInStockQty + detail.get(i).FUnit);
-        }
+//        }else{
+//            viewHolder.tvStorenum.setText("添加数量:" + detail.get(i).FRemainInStockQty + detail.get(i).FUnit);
+//        }
 
         if (mains.size()>0){
             viewHolder.date.setText("入库日期:" + mains.get(0).FDate);

@@ -76,9 +76,9 @@ public class FragmentDBMain extends BaseFragment {
                 String lock = (String) event.postEvent;
                 if (Config.Lock.equals(lock)){
                     activityPager.setHasLock(true);
-                    spDbType.setEnable(false);
+//                    spDbType.setEnable(false);
 //                    spDbType.setFocusable(false);
-                    spDbDirection.setEnable(false);
+//                    spDbDirection.setEnable(false);
                     spOrgIn.setEnable(false);
                     spOrgOut.setEnable(false);
                     spOrgHuozhuIn.setEnable(false);
@@ -90,8 +90,8 @@ public class FragmentDBMain extends BaseFragment {
                 }else{
                     forKzz=false;
                     activityPager.setHasLock(false);
-                    spDbType.setEnable(true);
-                    spDbDirection.setEnable(true);
+//                    spDbType.setEnable(true);
+//                    spDbDirection.setEnable(true);
                     spOrgOut.setEnable(true);
                     spOrgHuozhuOut.setEnable(true);
                     spStoreman.setEnable(true);
@@ -148,6 +148,8 @@ public class FragmentDBMain extends BaseFragment {
         tvDate.setText(CommonUtil.getTime(true));
         spDbType.setData(Info.Type_DB_type);
         spDbDirection.setData(Info.Type_DB_direction);
+        spDbType.setEnable(false);
+        spDbDirection.setEnable(false);
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
         spOrgOut.setAutoSelection(getString(R.string.spOrgOut_db), Hawk.get(getString(R.string.spOrgOut_db), ""));
         spOrgHuozhuOut.setAutoSelection(getString(R.string.spOrgHuozhuOut_db),activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhuOut_db), ""));

@@ -1,4 +1,4 @@
-package Bean;
+package com.fangzuo.assist.cloud.Beans;
 
 public class GetQtyMsg {
     public String FMATERIALID;
@@ -9,4 +9,10 @@ public class GetQtyMsg {
     public String FStoreUnitName;
     public String FBaseQty;
     public String FStoreQty;
+
+    public GetQtyMsg(String FMATERIALID, String FUnitID, String FQty) {
+        this.FMATERIALID = FMATERIALID;
+        this.FUnitID = FUnitID;
+        this.FQty = FQty;
+    }
 }

@@ -61,9 +61,11 @@ public class WebApi {
     public static final String DetailTableDeleteAll = "DetailTableDeleteAll";
     public static final String CodeCheckForIn = "CodeCheckForIn";
     public static final String CodeCheckForOut = "CodeCheckForOut";
+    public static final String CodeCheckForOutForDB = "CodeCheckForOutForDB";
     public static final String CodeCheckInsertForIn = "CodeCheckInsertForIn";
     public static final String CodeCheckInsertForOut = "CodeCheckInsertForOut";
     public static final String CodeCheckInsertForOutDB = "CodeCheckInsertForOutDB";
+    public static final String GetQtyForOut = "GetQtyForOut";
 
     public static final String PrISUpload = "PrISUpload";
     public static final String PGUpload = "PGUpload";

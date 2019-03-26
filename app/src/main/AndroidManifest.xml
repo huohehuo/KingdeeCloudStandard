@@ -42,7 +42,7 @@
         </receiver>
 
         <activity
-            android:name="com.fangzuo.assist.cloud.Activity.SplashActivity"
+            android:name=".Activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -226,37 +226,53 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustUnspecified" />
-        <!--<activity android:name=".Activity.IOTestActivity" />-->
-        <activity android:name=".Activity.PdSaleOrder2SaleOutActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activity.PdSaleOrder2SaleBackActivity"
+        <!-- <activity android:name=".Activity.IOTestActivity" /> -->
+        <activity
+            android:name=".Activity.PdSaleOrder2SaleOutActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.PdSaleOut2SaleBackActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activity.PdSendMsg2SaleOutActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activity.PdBackMsg2SaleBackActivity"
+        <activity
+            android:name=".Activity.PdSaleOrder2SaleBackActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.Db2FDinActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activity.Db2FDoutActivity"
+        <activity
+            android:name=".Activity.PdSaleOut2SaleBackActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.ReViewPDActivity"
+        <activity
+            android:name=".Activity.PdSendMsg2SaleOutActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.PDActivity"
+        <activity
+            android:name=".Activity.PdBackMsg2SaleBackActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.ProductGettingActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activity.PrintOutTestActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activity.PrintHistoryActivity"
+        <activity
+            android:name=".Activity.Db2FDinActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.PagerForActivity"
+        <activity
+            android:name=".Activity.Db2FDoutActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.ProductCheckActivity"
+        <activity
+            android:name=".Activity.ReViewPDActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.PrintBeforeDataActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity.PDActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ProductGettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.PrintOutTestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.PrintHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.PagerForActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ProductCheckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.PrintBeforeDataActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activity.CheckStoreActivity"></activity>
     </application>
 
 </manifest>

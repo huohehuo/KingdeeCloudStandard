@@ -31,6 +31,7 @@ public class GetSettingList {
         items.add(new SettingList("标签补打",R.mipmap.printmain));
         items.add(new SettingList("期初物料补打",R.mipmap.printmain));
         items.add(new SettingList("销售出库",R.mipmap.sellinout));
+//        items.add(new SettingList("库存查询",R.mipmap.sellinout));
 //        items.add(new SettingList("采购入库",R.mipmap.purchaseorder));
 //        items.add(new SettingList("其他入库",R.mipmap.ruku));
 //        items.add(new SettingList("其他出库",R.mipmap.chuku));
