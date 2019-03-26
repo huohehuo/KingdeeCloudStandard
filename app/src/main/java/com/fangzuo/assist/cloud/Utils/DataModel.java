@@ -248,7 +248,7 @@ public class DataModel {
                 "FWAVE_HOUSE_ID," +
                 "FBATCH," +
                 "FMATERIAL_ID," +
-                "FUNIT_ID", new String[]{orderID+"", Activity+""});
+                "FUNIT_ID ORDER BY FENTRY_ID", new String[]{orderID+"", Activity+""});
         while (cursor.moveToNext()){
             T_Detail t_detail = new T_Detail();
             t_detail.activity = cursor.getInt(cursor.getColumnIndex("ACTIVITY"));

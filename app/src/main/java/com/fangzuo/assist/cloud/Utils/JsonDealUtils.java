@@ -362,7 +362,11 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
                     jsonAr.put("FRealQty",beans.get(j).FRealQty);
                     addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
-                    jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
+                    if (j > 0 && beans.get(j).FEntryID.equals(beans.get(j-1).FEntryID)) {
+                        jsonAr.put("FMustQty","0");
+                    }else{
+                        jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
+                    }
                     jsonAr.put("FBaseMustQty",beans.get(j).FRemainInStockQty);
                     jsonAr.put("FARNOTJOINQTY",beans.get(j).FRealQty);
 
