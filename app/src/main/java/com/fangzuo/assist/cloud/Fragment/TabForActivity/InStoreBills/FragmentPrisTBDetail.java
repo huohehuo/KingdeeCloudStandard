@@ -556,7 +556,7 @@ public class FragmentPrisTBDetail extends BaseFragment {
                     PrintHistory printHistory = new PrintHistory();
                     printHistory.setData(product, spUnitStore.getDataObject(), spUnitJiben.getDataObject(), storeNum,
                             baseNum, spWavehouse.getWaveHouseId(), activityPager.getNote(),
-                            activityPager.getOrgIn().FNumber, barcode, batch, CommonUtil.getTime(true), "");
+                            activityPager.getOrgIn().FNumber, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
                         CommonUtil.doPrint(zpSDK, printHistory);

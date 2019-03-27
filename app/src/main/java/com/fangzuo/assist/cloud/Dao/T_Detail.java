@@ -34,6 +34,10 @@ public class T_Detail {
     public String FSupplier;
     public String FQuantity;            //
 
+    public String FTaxPrice;            //含税单价
+    public String FHuoZhuNumber;            //含税单价
+    public String FHuoZhu;            //含税单价
+
     public String FBackDate;            //退货日期
     public String FBackType;            //退货类型
 
@@ -92,27 +96,28 @@ public class T_Detail {
 
 
 
-    @Generated(hash = 31596488)
+    @Generated(hash = 1256060190)
     public T_Detail(String FIndex, String FBarcode, String IMIE, String FBillerID,
             long FOrderId, int activity, String FEntryID, String FID,
             String FProductName, String model, String FStorageId,
             String FStoragePDId, String FStorage, String FWaveHouse,
             String FWaveHouseId, String FWaveHousePDId, String FUnit,
-            String FSupplier, String FQuantity, String FBackDate, String FBackType,
-            String FSOEntryId, String FB2CORDERDETAILID, String FStorageOutId,
-            String FStorageOut, String FStorageInId, String FStorageIn,
-            String FWaveHouseOutId, String FWaveHouseOut, String FWaveHouseInId,
-            String FWaveHouseIn, String FBatch, boolean FIsFree,
-            String FWorkShopId1, String FRemainInStockQty, String FRealQty,
-            String FRemainInStockUnitId, String FPriceUnitID, String FMaterialId,
-            String FMaterialIdForPD, String FUnitID, String FUnitIDForPD,
-            String AuxSign, String ActualModel, String FProductNo, String FStoreNum,
-            String FBaseNum, String FStoreUnit, String FStoreUnitID,
-            String FBaseUnit, String FBaseUnitID, String FBillNo,
-            String FAllowAddMaterial, String FZeroStockInCount, String FBillTypeID,
-            String FCheckQtyDefault, String FNotIncludeForbidMat,
-            String FStockOrgId, String FDocumentStatus, String FCloseStatus,
-            String FNote, String FOWnerTypeID, String FOwnerId,
+            String FSupplier, String FQuantity, String FTaxPrice,
+            String FHuoZhuNumber, String FHuoZhu, String FBackDate,
+            String FBackType, String FSOEntryId, String FB2CORDERDETAILID,
+            String FStorageOutId, String FStorageOut, String FStorageInId,
+            String FStorageIn, String FWaveHouseOutId, String FWaveHouseOut,
+            String FWaveHouseInId, String FWaveHouseIn, String FBatch,
+            boolean FIsFree, String FWorkShopId1, String FRemainInStockQty,
+            String FRealQty, String FRemainInStockUnitId, String FPriceUnitID,
+            String FMaterialId, String FMaterialIdForPD, String FUnitID,
+            String FUnitIDForPD, String AuxSign, String ActualModel,
+            String FProductNo, String FStoreNum, String FBaseNum, String FStoreUnit,
+            String FStoreUnitID, String FBaseUnit, String FBaseUnitID,
+            String FBillNo, String FAllowAddMaterial, String FZeroStockInCount,
+            String FBillTypeID, String FCheckQtyDefault,
+            String FNotIncludeForbidMat, String FStockOrgId, String FDocumentStatus,
+            String FCloseStatus, String FNote, String FOWnerTypeID, String FOwnerId,
             String FKeeperTypeId, String FKeeperId) {
         this.FIndex = FIndex;
         this.FBarcode = FBarcode;
@@ -133,6 +138,9 @@ public class T_Detail {
         this.FUnit = FUnit;
         this.FSupplier = FSupplier;
         this.FQuantity = FQuantity;
+        this.FTaxPrice = FTaxPrice;
+        this.FHuoZhuNumber = FHuoZhuNumber;
+        this.FHuoZhu = FHuoZhu;
         this.FBackDate = FBackDate;
         this.FBackType = FBackType;
         this.FSOEntryId = FSOEntryId;
@@ -682,6 +690,24 @@ public class T_Detail {
     }
     public void setFBaseUnitID(String FBaseUnitID) {
         this.FBaseUnitID = FBaseUnitID;
+    }
+    public String getFTaxPrice() {
+        return this.FTaxPrice;
+    }
+    public void setFTaxPrice(String FTaxPrice) {
+        this.FTaxPrice = FTaxPrice;
+    }
+    public String getFHuoZhuNumber() {
+        return this.FHuoZhuNumber;
+    }
+    public void setFHuoZhuNumber(String FHuoZhuNumber) {
+        this.FHuoZhuNumber = FHuoZhuNumber;
+    }
+    public String getFHuoZhu() {
+        return this.FHuoZhu;
+    }
+    public void setFHuoZhu(String FHuoZhu) {
+        this.FHuoZhu = FHuoZhu;
     }
 
 

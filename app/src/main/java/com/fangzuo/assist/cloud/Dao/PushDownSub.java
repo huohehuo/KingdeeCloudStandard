@@ -27,12 +27,13 @@ public class PushDownSub {
     public String FStockID;
     public String FBatchNo;
     public String FBaseCanreturnQty;
-    @Generated(hash = 1567506561)
+    public String FHuoZhuNumber;
+    @Generated(hash = 947756660)
     public PushDownSub(Long id, String FSEQ, String FID, String FMaterialID,
             String FEntryID, String FUnitID, String FNumber, String FName,
             String FModel, String FBillNo, String FQty, String FQtying,
             String FTaxPrice, String FStockID, String FBatchNo,
-            String FBaseCanreturnQty) {
+            String FBaseCanreturnQty, String FHuoZhuNumber) {
         this.id = id;
         this.FSEQ = FSEQ;
         this.FID = FID;
@@ -49,6 +50,7 @@ public class PushDownSub {
         this.FStockID = FStockID;
         this.FBatchNo = FBatchNo;
         this.FBaseCanreturnQty = FBaseCanreturnQty;
+        this.FHuoZhuNumber = FHuoZhuNumber;
     }
     @Generated(hash = 2008125598)
     public PushDownSub() {
@@ -148,6 +150,12 @@ public class PushDownSub {
     }
     public void setFBaseCanreturnQty(String FBaseCanreturnQty) {
         this.FBaseCanreturnQty = FBaseCanreturnQty;
+    }
+    public String getFHuoZhuNumber() {
+        return this.FHuoZhuNumber;
+    }
+    public void setFHuoZhuNumber(String FHuoZhuNumber) {
+        this.FHuoZhuNumber = FHuoZhuNumber;
     }
 
 }

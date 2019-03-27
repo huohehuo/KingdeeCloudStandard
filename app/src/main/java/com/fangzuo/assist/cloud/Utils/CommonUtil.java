@@ -53,8 +53,8 @@ public class CommonUtil {
             zpSDK.drawText(10, 400, "数量2：", size, 0, 0, false, false);
             zpSDK.drawText(160, 404, bean.FNum2==null?"":bean.FNum2,size2, 0, 0, false, false);
             zpSDK.drawText(450, 404, bean.FUnitAux==null?"":bean.FUnitAux,size2, 0, 0, false, false);
-            zpSDK.drawText(10, 460, "辅助标示：", size, 0, 0, false, false);
-            zpSDK.drawText(160, 464, bean.FNot==null?"":bean.FNot,size2, 0, 0, false, false);
+            zpSDK.drawText(10, 460, "辅助标识：", size, 0, 0, false, false);
+            zpSDK.drawText(160, 464, bean.FAuxSign==null?"":bean.FAuxSign,size2, 0, 0, false, false);
             zpSDK.drawText(10, 500, "______________________________________________", 2, 0, 0, false, false);
             zpSDK.drawQrCode(10, 560, bean.FBarCode, 0, 11, 0);
             zpSDK.drawText(300, 560, "仓位：",size2, 0, 0, false, false);
@@ -184,6 +184,25 @@ public class CommonUtil {
     }
     //生成单据编号（生成的单据编号只用作查找，不具备时间效应）
     public static long createOrderCode(int activity) {
+        Long ordercode = 0l;
+        ShareUtil share = ShareUtil.getInstance(App.getContext());
+        if (share.getOrderCode(activity) == 0) {
+            ordercode = Long.parseLong(getTimeLong(false) + "001");
+            share.setOrderCode(activity, ordercode);
+        } else {
+            //当不是当天时，生成新的单据，重新计算
+//            if (String.valueOf(share.getOrderCode(activity)).contains(getTime(false))) {
+            ordercode = share.getOrderCode(activity);
+//            } else {
+//                ordercode = Long.parseLong(getTimeLong(false) + "001");
+//                share.setOrderCode(activity, ordercode);
+//            }
+        }
+//        Log.e("生成新的单据:", ordercode + "");
+        return ordercode;
+    }
+    //生成单据编号（生成的单据编号只用作查找，不具备时间效应）下推单时使用
+    public static long createOrderCode(String activity) {
         Long ordercode = 0l;
         ShareUtil share = ShareUtil.getInstance(App.getContext());
         if (share.getOrderCode(activity) == 0) {

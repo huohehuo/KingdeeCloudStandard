@@ -40,6 +40,7 @@ public class PushDownSubDao extends AbstractDao<PushDownSub, Long> {
         public final static Property FStockID = new Property(13, String.class, "FStockID", false, "FSTOCK_ID");
         public final static Property FBatchNo = new Property(14, String.class, "FBatchNo", false, "FBATCH_NO");
         public final static Property FBaseCanreturnQty = new Property(15, String.class, "FBaseCanreturnQty", false, "FBASE_CANRETURN_QTY");
+        public final static Property FHuoZhuNumber = new Property(16, String.class, "FHuoZhuNumber", false, "FHUO_ZHU_NUMBER");
     }
 
 
@@ -70,7 +71,8 @@ public class PushDownSubDao extends AbstractDao<PushDownSub, Long> {
                 "\"FTAX_PRICE\" TEXT," + // 12: FTaxPrice
                 "\"FSTOCK_ID\" TEXT," + // 13: FStockID
                 "\"FBATCH_NO\" TEXT," + // 14: FBatchNo
-                "\"FBASE_CANRETURN_QTY\" TEXT);"); // 15: FBaseCanreturnQty
+                "\"FBASE_CANRETURN_QTY\" TEXT," + // 15: FBaseCanreturnQty
+                "\"FHUO_ZHU_NUMBER\" TEXT);"); // 16: FHuoZhuNumber
     }
 
     /** Drops the underlying database table. */
@@ -162,6 +164,11 @@ public class PushDownSubDao extends AbstractDao<PushDownSub, Long> {
         if (FBaseCanreturnQty != null) {
             stmt.bindString(16, FBaseCanreturnQty);
         }
+ 
+        String FHuoZhuNumber = entity.getFHuoZhuNumber();
+        if (FHuoZhuNumber != null) {
+            stmt.bindString(17, FHuoZhuNumber);
+        }
     }
 
     @Override
@@ -247,6 +254,11 @@ public class PushDownSubDao extends AbstractDao<PushDownSub, Long> {
         if (FBaseCanreturnQty != null) {
             stmt.bindString(16, FBaseCanreturnQty);
         }
+ 
+        String FHuoZhuNumber = entity.getFHuoZhuNumber();
+        if (FHuoZhuNumber != null) {
+            stmt.bindString(17, FHuoZhuNumber);
+        }
     }
 
     @Override
@@ -272,7 +284,8 @@ public class PushDownSubDao extends AbstractDao<PushDownSub, Long> {
             cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // FTaxPrice
             cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // FStockID
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // FBatchNo
-            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15) // FBaseCanreturnQty
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // FBaseCanreturnQty
+            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16) // FHuoZhuNumber
         );
         return entity;
     }
@@ -295,6 +308,7 @@ public class PushDownSubDao extends AbstractDao<PushDownSub, Long> {
         entity.setFStockID(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
         entity.setFBatchNo(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
         entity.setFBaseCanreturnQty(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setFHuoZhuNumber(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
      }
     
     @Override

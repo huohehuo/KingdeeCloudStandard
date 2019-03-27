@@ -329,12 +329,14 @@ public class JsonDealUtils {
         return outOjbect.toString();
     }
     //销售订单下推销售出库的JSON拼接
-    public static String JSonSaleOrder2SaleOut(List<T_main> mains, Map<String,List<T_Detail>> map){
+    public static String JSonSaleOrder2SaleOut(List<T_main> mains, Map<String,List<T_Detail>> map,List<String> hzList){
+        Lg.e("进入json拼接");
         JSONObject outOjbect = new JSONObject();
         try {
             outOjbect.put("IsEntryBatchFill",true);
             JSONArray outOfModel = new JSONArray();//Model
             for (int i = 0; i < mains.size(); i++) {
+                Lg.e("jsonMain:",mains.get(i));
                 JSONObject inObject = new JSONObject();
                 inObject.put("FBillNo","");
                 addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
@@ -354,7 +356,8 @@ public class JsonDealUtils {
                 inObject.put("SubHeadEntity",stockObject);
 
                 JSONArray jsonArray = new JSONArray();
-                List<T_Detail> beans = map.get(mains.get(i).FOrderId+"");
+                List<T_Detail> beans = map.get(hzList.get(i));
+                Lg.e("jsonDetail:",beans);
                 for (int j = 0; j < beans.size(); j++) {
                     JSONObject jsonAr = new JSONObject();
                     addObject(jsonAr,"FMaterialID","FNumber",beans.get(j).FMaterialId);
@@ -370,6 +373,8 @@ public class JsonDealUtils {
                     jsonAr.put("FBaseMustQty",beans.get(j).FRemainInStockQty);
                     jsonAr.put("FARNOTJOINQTY",beans.get(j).FRealQty);
 
+                    jsonAr.put("FTaxPrice",beans.get(j).FTaxPrice);
+                    addObject(jsonAr,"FOwnerID","FNumber",beans.get(j).FHuoZhuNumber);
                     jsonAr.put("FSOEntryId",beans.get(j).FSOEntryId);
                     jsonAr.put("FSrcBillNo",mains.get(0).FSoorDerno);
                     jsonAr.put("FSoorDerno",mains.get(0).FSoorDerno);

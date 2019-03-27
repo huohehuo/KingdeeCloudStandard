@@ -189,7 +189,10 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     for (int i = 0; i < backData.getResult().getResponseStatus().getSuccessEntitys().size(); i++) {
                         listOrder.add(backData.getResult().getResponseStatus().getSuccessEntitys().get(i).getNumber());
                     }
-                    final List<T_main> mains = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
+                    final List<T_main> mains = t_mainDao.queryBuilder().where(
+                            T_mainDao.Properties.Activity.eq(activity),
+                            T_mainDao.Properties.FID.eq(pushDownMain.FID)
+                    ).build().list();
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
                         String reString = mains.get(i).FBillerID + "|" + listOrder.get(i) + "|" + mains.get(i).FOrderId + "|" + mains.get(i).IMIE;
@@ -217,10 +220,11 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                             }
                         });
                     }
+                    t_mainDao.deleteInTx(mains);
                     LoadingUtil.dismiss();
                     ordercode++;
                     Log.e("ordercode", ordercode + "");
-                    share.setOrderCode(activityPager.getActivity(), ordercode);
+                    share.setOrderCode(activityPager.getActivity()+fidcontainer.get(0), ordercode);
                     MediaPlayer.getInstance(mContext).ok();
                     Toast.showText(mContext, "上传成功");
 //                btnBackorder.setClickable(true);
@@ -324,12 +328,12 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
     protected void initData() {
         s2Product = new SearchBean.S2Product();
         listOrder = new ArrayList<>();
-        ordercode = CommonUtil.createOrderCode(activityPager.getActivity());//单据编号
         spAuxsign.setEnabled(false);
         spActualmodel.setEnabled(false);
 
         container = new ArrayList<>();
         fidcontainer = activityPager.getIntent().getExtras().getStringArrayList("fid");
+        ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+fidcontainer.get(0));//单据编号
         getList();
         List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
                 PushDownMainDao.Properties.FBillNo.eq(fidcontainer.get(0))).build().list();
@@ -637,26 +641,29 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
         try {
 
             String num = edNum.getText().toString();
-            if (true) {
-                Lg.e("合并");
-                List<T_Detail> detailhebing = t_detailDao.queryBuilder().where(
-                        T_DetailDao.Properties.Activity.eq(activity),
-                        T_DetailDao.Properties.FOrderId.eq(ordercode),
-                        T_DetailDao.Properties.FMaterialId.eq(product.FMaterialid),
-                        T_DetailDao.Properties.FUnitID.eq(unit.FNumber),
-                        T_DetailDao.Properties.FBarcode.eq(barcode),
-                        T_DetailDao.Properties.FStorageId.eq(storage.FNumber),
-                        T_DetailDao.Properties.FWaveHouseId.eq(spWavehouse.getwaveHouseNumber()),
-                        T_DetailDao.Properties.FBatch.eq(edPihao.getText().toString())
-                ).build().list();
-                if (detailhebing.size() > 0) {
-                    Lg.e("合并：" + detailhebing.size() + "--" + detailhebing.get(0).toString());
-                    for (int i = 0; i < detailhebing.size(); i++) {
-                        num = (MathUtil.toD(num) + MathUtil.toD(detailhebing.get(i).FRemainInStockQty)) + "";
-                        t_detailDao.delete(detailhebing.get(i));
-                    }
-                }
-            }
+//            if (true) {
+//                Lg.e("合并");
+//                List<T_Detail> detailhebing = t_detailDao.queryBuilder().where(
+//                        T_DetailDao.Properties.Activity.eq(activity),
+//                        T_DetailDao.Properties.FOrderId.eq(ordercode),
+//                        T_DetailDao.Properties.FMaterialId.eq(product.FMaterialid),
+//                        T_DetailDao.Properties.FUnitID.eq(unit.FNumber),
+//                        T_DetailDao.Properties.FBarcode.eq(barcode),
+//                        T_DetailDao.Properties.FStorageId.eq(storage.FNumber),
+//                        T_DetailDao.Properties.FWaveHouseId.eq(spWavehouse.getwaveHouseNumber()),
+//                        T_DetailDao.Properties.FBatch.eq(edPihao.getText().toString())
+//                ).build().list();
+//                if (detailhebing.size() > 0) {
+//                    Lg.e("合并：" + detailhebing.size() + "--" + detailhebing.get(0).toString());
+//                    for (int i = 0; i < detailhebing.size(); i++) {
+//                        num = (MathUtil.toD(num) + MathUtil.toD(detailhebing.get(i).FRemainInStockQty)) + "";
+//                        t_detailDao.delete(detailhebing.get(i));
+//                    }
+//                }
+//            }
+
+//            ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+fidcontainer.get(0));//单据编号
+
             t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
                     T_mainDao.Properties.FOrderId.eq(ordercode)
             ).build().list());
@@ -667,6 +674,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             main.FBarcode = barcode;
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
             main.FOrderId = ordercode;
+            main.FID = pushDownSub.FID;
             main.FIndex = timesecond;
             main.FBillNo = pushDownMain.FBillNo;
             main.setData(Info.getType(activity), mainSaleOrg, activityPager.getOrgOut(0), activityPager.getOrgOut(0));
@@ -693,8 +701,10 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             detail.FIndex = timesecond;
             detail.FEntryID = pushDownSub.FEntryID;
             detail.FID = pushDownSub.FID;
+            detail.FHuoZhuNumber = pushDownSub.FHuoZhuNumber;
             detail.FSOEntryId = pushDownSub.FEntryID;
             detail.FRemainInStockQty = pushDownSub.FQty;
+            detail.FTaxPrice = pushDownSub.FTaxPrice;
             detail.FRealQty = num;
             detail.FIsFree = false;
             detail.FProductNo = edPurchaseNo.getText().toString();
@@ -749,7 +759,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 ordercode++;
                 Log.e("ordercode", ordercode + "");
-                share.setOrderCode(activityPager.getActivity(), ordercode);
+                share.setOrderCode(activityPager.getActivity()+fidcontainer.get(0), ordercode);
             }
         });
         ab.setNegativeButton("取消", null);
@@ -787,7 +797,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 LoadingUtil.showDialog(mContext, "正在上传...");
-                                UpLoadModel.action(mContext, activity);
+                                UpLoadModel.actionPushDown(mContext, activity,pushDownMain.FID);
                             }
                         })
                         .create().show();
@@ -797,6 +807,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                 break;
             case R.id.btn_checkorder:
                 Bundle bundle = new Bundle();
+                bundle.putString("fid", pushDownMain.FID);
                 bundle.putInt("activity", activity);
                 startNewActivity(activityPager, ReViewPDActivity.class,
                         R.anim.activity_fade_in, R.anim.activity_fade_out, false, bundle);

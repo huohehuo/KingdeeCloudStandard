@@ -42,22 +42,24 @@ public class T_mainDao extends AbstractDao<T_main, String> {
         public final static Property FOwnerIdHeadIn = new Property(15, String.class, "FOwnerIdHeadIn", false, "FOWNER_ID_HEAD_IN");
         public final static Property FDBType = new Property(16, String.class, "FDBType", false, "FDBTYPE");
         public final static Property FDBDirection = new Property(17, String.class, "FDBDirection", false, "FDBDIRECTION");
-        public final static Property FSettleOrgId = new Property(18, String.class, "FSettleOrgId", false, "FSETTLE_ORG_ID");
-        public final static Property FSettleCurrId = new Property(19, String.class, "FSettleCurrId", false, "FSETTLE_CURR_ID");
-        public final static Property FDate = new Property(20, String.class, "FDate", false, "FDATE");
-        public final static Property FSupplierId = new Property(21, String.class, "FSupplierId", false, "FSUPPLIER_ID");
-        public final static Property FDepartmentNumber = new Property(22, String.class, "FDepartmentNumber", false, "FDEPARTMENT_NUMBER");
-        public final static Property FDepartment = new Property(23, String.class, "FDepartment", false, "FDEPARTMENT");
-        public final static Property FPurchaseDeptId = new Property(24, String.class, "FPurchaseDeptId", false, "FPURCHASE_DEPT_ID");
-        public final static Property FPurchaseDept = new Property(25, String.class, "FPurchaseDept", false, "FPURCHASE_DEPT");
-        public final static Property FPurchaserId = new Property(26, String.class, "FPurchaserId", false, "FPURCHASER_ID");
-        public final static Property FPurchaser = new Property(27, String.class, "FPurchaser", false, "FPURCHASER");
-        public final static Property FStockerNumber = new Property(28, String.class, "FStockerNumber", false, "FSTOCKER_NUMBER");
-        public final static Property FStocker = new Property(29, String.class, "FStocker", false, "FSTOCKER");
-        public final static Property FCustomerID = new Property(30, String.class, "FCustomerID", false, "FCUSTOMER_ID");
-        public final static Property FCustomer = new Property(31, String.class, "FCustomer", false, "FCUSTOMER");
-        public final static Property FNot = new Property(32, String.class, "FNot", false, "FNOT");
-        public final static Property F_FFF_Text = new Property(33, String.class, "F_FFF_Text", false, "F__FFF__TEXT");
+        public final static Property FID = new Property(18, String.class, "FID", false, "FID");
+        public final static Property FEntryID = new Property(19, String.class, "FEntryID", false, "FENTRY_ID");
+        public final static Property FSettleOrgId = new Property(20, String.class, "FSettleOrgId", false, "FSETTLE_ORG_ID");
+        public final static Property FSettleCurrId = new Property(21, String.class, "FSettleCurrId", false, "FSETTLE_CURR_ID");
+        public final static Property FDate = new Property(22, String.class, "FDate", false, "FDATE");
+        public final static Property FSupplierId = new Property(23, String.class, "FSupplierId", false, "FSUPPLIER_ID");
+        public final static Property FDepartmentNumber = new Property(24, String.class, "FDepartmentNumber", false, "FDEPARTMENT_NUMBER");
+        public final static Property FDepartment = new Property(25, String.class, "FDepartment", false, "FDEPARTMENT");
+        public final static Property FPurchaseDeptId = new Property(26, String.class, "FPurchaseDeptId", false, "FPURCHASE_DEPT_ID");
+        public final static Property FPurchaseDept = new Property(27, String.class, "FPurchaseDept", false, "FPURCHASE_DEPT");
+        public final static Property FPurchaserId = new Property(28, String.class, "FPurchaserId", false, "FPURCHASER_ID");
+        public final static Property FPurchaser = new Property(29, String.class, "FPurchaser", false, "FPURCHASER");
+        public final static Property FStockerNumber = new Property(30, String.class, "FStockerNumber", false, "FSTOCKER_NUMBER");
+        public final static Property FStocker = new Property(31, String.class, "FStocker", false, "FSTOCKER");
+        public final static Property FCustomerID = new Property(32, String.class, "FCustomerID", false, "FCUSTOMER_ID");
+        public final static Property FCustomer = new Property(33, String.class, "FCustomer", false, "FCUSTOMER");
+        public final static Property FNot = new Property(34, String.class, "FNot", false, "FNOT");
+        public final static Property F_FFF_Text = new Property(35, String.class, "F_FFF_Text", false, "F__FFF__TEXT");
     }
 
 
@@ -91,22 +93,24 @@ public class T_mainDao extends AbstractDao<T_main, String> {
                 "\"FOWNER_ID_HEAD_IN\" TEXT," + // 15: FOwnerIdHeadIn
                 "\"FDBTYPE\" TEXT," + // 16: FDBType
                 "\"FDBDIRECTION\" TEXT," + // 17: FDBDirection
-                "\"FSETTLE_ORG_ID\" TEXT," + // 18: FSettleOrgId
-                "\"FSETTLE_CURR_ID\" TEXT," + // 19: FSettleCurrId
-                "\"FDATE\" TEXT," + // 20: FDate
-                "\"FSUPPLIER_ID\" TEXT," + // 21: FSupplierId
-                "\"FDEPARTMENT_NUMBER\" TEXT," + // 22: FDepartmentNumber
-                "\"FDEPARTMENT\" TEXT," + // 23: FDepartment
-                "\"FPURCHASE_DEPT_ID\" TEXT," + // 24: FPurchaseDeptId
-                "\"FPURCHASE_DEPT\" TEXT," + // 25: FPurchaseDept
-                "\"FPURCHASER_ID\" TEXT," + // 26: FPurchaserId
-                "\"FPURCHASER\" TEXT," + // 27: FPurchaser
-                "\"FSTOCKER_NUMBER\" TEXT," + // 28: FStockerNumber
-                "\"FSTOCKER\" TEXT," + // 29: FStocker
-                "\"FCUSTOMER_ID\" TEXT," + // 30: FCustomerID
-                "\"FCUSTOMER\" TEXT," + // 31: FCustomer
-                "\"FNOT\" TEXT," + // 32: FNot
-                "\"F__FFF__TEXT\" TEXT);"); // 33: F_FFF_Text
+                "\"FID\" TEXT," + // 18: FID
+                "\"FENTRY_ID\" TEXT," + // 19: FEntryID
+                "\"FSETTLE_ORG_ID\" TEXT," + // 20: FSettleOrgId
+                "\"FSETTLE_CURR_ID\" TEXT," + // 21: FSettleCurrId
+                "\"FDATE\" TEXT," + // 22: FDate
+                "\"FSUPPLIER_ID\" TEXT," + // 23: FSupplierId
+                "\"FDEPARTMENT_NUMBER\" TEXT," + // 24: FDepartmentNumber
+                "\"FDEPARTMENT\" TEXT," + // 25: FDepartment
+                "\"FPURCHASE_DEPT_ID\" TEXT," + // 26: FPurchaseDeptId
+                "\"FPURCHASE_DEPT\" TEXT," + // 27: FPurchaseDept
+                "\"FPURCHASER_ID\" TEXT," + // 28: FPurchaserId
+                "\"FPURCHASER\" TEXT," + // 29: FPurchaser
+                "\"FSTOCKER_NUMBER\" TEXT," + // 30: FStockerNumber
+                "\"FSTOCKER\" TEXT," + // 31: FStocker
+                "\"FCUSTOMER_ID\" TEXT," + // 32: FCustomerID
+                "\"FCUSTOMER\" TEXT," + // 33: FCustomer
+                "\"FNOT\" TEXT," + // 34: FNot
+                "\"F__FFF__TEXT\" TEXT);"); // 35: F_FFF_Text
     }
 
     /** Drops the underlying database table. */
@@ -201,84 +205,94 @@ public class T_mainDao extends AbstractDao<T_main, String> {
             stmt.bindString(18, FDBDirection);
         }
  
+        String FID = entity.getFID();
+        if (FID != null) {
+            stmt.bindString(19, FID);
+        }
+ 
+        String FEntryID = entity.getFEntryID();
+        if (FEntryID != null) {
+            stmt.bindString(20, FEntryID);
+        }
+ 
         String FSettleOrgId = entity.getFSettleOrgId();
         if (FSettleOrgId != null) {
-            stmt.bindString(19, FSettleOrgId);
+            stmt.bindString(21, FSettleOrgId);
         }
  
         String FSettleCurrId = entity.getFSettleCurrId();
         if (FSettleCurrId != null) {
-            stmt.bindString(20, FSettleCurrId);
+            stmt.bindString(22, FSettleCurrId);
         }
  
         String FDate = entity.getFDate();
         if (FDate != null) {
-            stmt.bindString(21, FDate);
+            stmt.bindString(23, FDate);
         }
  
         String FSupplierId = entity.getFSupplierId();
         if (FSupplierId != null) {
-            stmt.bindString(22, FSupplierId);
+            stmt.bindString(24, FSupplierId);
         }
  
         String FDepartmentNumber = entity.getFDepartmentNumber();
         if (FDepartmentNumber != null) {
-            stmt.bindString(23, FDepartmentNumber);
+            stmt.bindString(25, FDepartmentNumber);
         }
  
         String FDepartment = entity.getFDepartment();
         if (FDepartment != null) {
-            stmt.bindString(24, FDepartment);
+            stmt.bindString(26, FDepartment);
         }
  
         String FPurchaseDeptId = entity.getFPurchaseDeptId();
         if (FPurchaseDeptId != null) {
-            stmt.bindString(25, FPurchaseDeptId);
+            stmt.bindString(27, FPurchaseDeptId);
         }
  
         String FPurchaseDept = entity.getFPurchaseDept();
         if (FPurchaseDept != null) {
-            stmt.bindString(26, FPurchaseDept);
+            stmt.bindString(28, FPurchaseDept);
         }
  
         String FPurchaserId = entity.getFPurchaserId();
         if (FPurchaserId != null) {
-            stmt.bindString(27, FPurchaserId);
+            stmt.bindString(29, FPurchaserId);
         }
  
         String FPurchaser = entity.getFPurchaser();
         if (FPurchaser != null) {
-            stmt.bindString(28, FPurchaser);
+            stmt.bindString(30, FPurchaser);
         }
  
         String FStockerNumber = entity.getFStockerNumber();
         if (FStockerNumber != null) {
-            stmt.bindString(29, FStockerNumber);
+            stmt.bindString(31, FStockerNumber);
         }
  
         String FStocker = entity.getFStocker();
         if (FStocker != null) {
-            stmt.bindString(30, FStocker);
+            stmt.bindString(32, FStocker);
         }
  
         String FCustomerID = entity.getFCustomerID();
         if (FCustomerID != null) {
-            stmt.bindString(31, FCustomerID);
+            stmt.bindString(33, FCustomerID);
         }
  
         String FCustomer = entity.getFCustomer();
         if (FCustomer != null) {
-            stmt.bindString(32, FCustomer);
+            stmt.bindString(34, FCustomer);
         }
  
         String FNot = entity.getFNot();
         if (FNot != null) {
-            stmt.bindString(33, FNot);
+            stmt.bindString(35, FNot);
         }
  
         String F_FFF_Text = entity.getF_FFF_Text();
         if (F_FFF_Text != null) {
-            stmt.bindString(34, F_FFF_Text);
+            stmt.bindString(36, F_FFF_Text);
         }
     }
 
@@ -368,84 +382,94 @@ public class T_mainDao extends AbstractDao<T_main, String> {
             stmt.bindString(18, FDBDirection);
         }
  
+        String FID = entity.getFID();
+        if (FID != null) {
+            stmt.bindString(19, FID);
+        }
+ 
+        String FEntryID = entity.getFEntryID();
+        if (FEntryID != null) {
+            stmt.bindString(20, FEntryID);
+        }
+ 
         String FSettleOrgId = entity.getFSettleOrgId();
         if (FSettleOrgId != null) {
-            stmt.bindString(19, FSettleOrgId);
+            stmt.bindString(21, FSettleOrgId);
         }
  
         String FSettleCurrId = entity.getFSettleCurrId();
         if (FSettleCurrId != null) {
-            stmt.bindString(20, FSettleCurrId);
+            stmt.bindString(22, FSettleCurrId);
         }
  
         String FDate = entity.getFDate();
         if (FDate != null) {
-            stmt.bindString(21, FDate);
+            stmt.bindString(23, FDate);
         }
  
         String FSupplierId = entity.getFSupplierId();
         if (FSupplierId != null) {
-            stmt.bindString(22, FSupplierId);
+            stmt.bindString(24, FSupplierId);
         }
  
         String FDepartmentNumber = entity.getFDepartmentNumber();
         if (FDepartmentNumber != null) {
-            stmt.bindString(23, FDepartmentNumber);
+            stmt.bindString(25, FDepartmentNumber);
         }
  
         String FDepartment = entity.getFDepartment();
         if (FDepartment != null) {
-            stmt.bindString(24, FDepartment);
+            stmt.bindString(26, FDepartment);
         }
  
         String FPurchaseDeptId = entity.getFPurchaseDeptId();
         if (FPurchaseDeptId != null) {
-            stmt.bindString(25, FPurchaseDeptId);
+            stmt.bindString(27, FPurchaseDeptId);
         }
  
         String FPurchaseDept = entity.getFPurchaseDept();
         if (FPurchaseDept != null) {
-            stmt.bindString(26, FPurchaseDept);
+            stmt.bindString(28, FPurchaseDept);
         }
  
         String FPurchaserId = entity.getFPurchaserId();
         if (FPurchaserId != null) {
-            stmt.bindString(27, FPurchaserId);
+            stmt.bindString(29, FPurchaserId);
         }
  
         String FPurchaser = entity.getFPurchaser();
         if (FPurchaser != null) {
-            stmt.bindString(28, FPurchaser);
+            stmt.bindString(30, FPurchaser);
         }
  
         String FStockerNumber = entity.getFStockerNumber();
         if (FStockerNumber != null) {
-            stmt.bindString(29, FStockerNumber);
+            stmt.bindString(31, FStockerNumber);
         }
  
         String FStocker = entity.getFStocker();
         if (FStocker != null) {
-            stmt.bindString(30, FStocker);
+            stmt.bindString(32, FStocker);
         }
  
         String FCustomerID = entity.getFCustomerID();
         if (FCustomerID != null) {
-            stmt.bindString(31, FCustomerID);
+            stmt.bindString(33, FCustomerID);
         }
  
         String FCustomer = entity.getFCustomer();
         if (FCustomer != null) {
-            stmt.bindString(32, FCustomer);
+            stmt.bindString(34, FCustomer);
         }
  
         String FNot = entity.getFNot();
         if (FNot != null) {
-            stmt.bindString(33, FNot);
+            stmt.bindString(35, FNot);
         }
  
         String F_FFF_Text = entity.getF_FFF_Text();
         if (F_FFF_Text != null) {
-            stmt.bindString(34, F_FFF_Text);
+            stmt.bindString(36, F_FFF_Text);
         }
     }
 
@@ -475,22 +499,24 @@ public class T_mainDao extends AbstractDao<T_main, String> {
             cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // FOwnerIdHeadIn
             cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // FDBType
             cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // FDBDirection
-            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // FSettleOrgId
-            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // FSettleCurrId
-            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // FDate
-            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // FSupplierId
-            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // FDepartmentNumber
-            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // FDepartment
-            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // FPurchaseDeptId
-            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // FPurchaseDept
-            cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26), // FPurchaserId
-            cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27), // FPurchaser
-            cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28), // FStockerNumber
-            cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29), // FStocker
-            cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30), // FCustomerID
-            cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31), // FCustomer
-            cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32), // FNot
-            cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33) // F_FFF_Text
+            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // FID
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // FEntryID
+            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // FSettleOrgId
+            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // FSettleCurrId
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // FDate
+            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // FSupplierId
+            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // FDepartmentNumber
+            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // FDepartment
+            cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26), // FPurchaseDeptId
+            cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27), // FPurchaseDept
+            cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28), // FPurchaserId
+            cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29), // FPurchaser
+            cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30), // FStockerNumber
+            cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31), // FStocker
+            cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32), // FCustomerID
+            cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33), // FCustomer
+            cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34), // FNot
+            cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35) // F_FFF_Text
         );
         return entity;
     }
@@ -515,22 +541,24 @@ public class T_mainDao extends AbstractDao<T_main, String> {
         entity.setFOwnerIdHeadIn(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
         entity.setFDBType(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
         entity.setFDBDirection(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
-        entity.setFSettleOrgId(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setFSettleCurrId(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
-        entity.setFDate(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
-        entity.setFSupplierId(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
-        entity.setFDepartmentNumber(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
-        entity.setFDepartment(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
-        entity.setFPurchaseDeptId(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
-        entity.setFPurchaseDept(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
-        entity.setFPurchaserId(cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26));
-        entity.setFPurchaser(cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27));
-        entity.setFStockerNumber(cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28));
-        entity.setFStocker(cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29));
-        entity.setFCustomerID(cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30));
-        entity.setFCustomer(cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31));
-        entity.setFNot(cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32));
-        entity.setF_FFF_Text(cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33));
+        entity.setFID(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
+        entity.setFEntryID(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setFSettleOrgId(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
+        entity.setFSettleCurrId(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
+        entity.setFDate(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
+        entity.setFSupplierId(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
+        entity.setFDepartmentNumber(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
+        entity.setFDepartment(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
+        entity.setFPurchaseDeptId(cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26));
+        entity.setFPurchaseDept(cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27));
+        entity.setFPurchaserId(cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28));
+        entity.setFPurchaser(cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29));
+        entity.setFStockerNumber(cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30));
+        entity.setFStocker(cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31));
+        entity.setFCustomerID(cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32));
+        entity.setFCustomer(cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33));
+        entity.setFNot(cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34));
+        entity.setF_FFF_Text(cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35));
      }
     
     @Override

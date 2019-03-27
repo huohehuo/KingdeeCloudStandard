@@ -35,6 +35,9 @@ public class T_main {
 
 
 
+    public String FID;//结算组织
+    public String FEntryID;//结算组织
+
     public String FSettleOrgId;//结算组织
     public String FSettleCurrId;//结算币别
     public String FDate;//入库日期
@@ -51,14 +54,14 @@ public class T_main {
     public String FCustomer;            //客户
     public String FNot;            //备注
     public String F_FFF_Text;            //业务单号
-    @Generated(hash = 1152772511)
+    @Generated(hash = 2038100397)
     public T_main(String FIndex, long FOrderId, String FBarcode, String IMIE, String FBillNo, String FBillerID,
             int activity, String FSoorDerno, String FPriceTimePoint, String FStockOrgId, String FPurchaseOrgId,
             String FBillTypeID, String FOwnerTypeIdHead, String FOwnerIdHead, String FOwnerTypeIdHeadIn,
-            String FOwnerIdHeadIn, String FDBType, String FDBDirection, String FSettleOrgId, String FSettleCurrId,
-            String FDate, String FSupplierId, String FDepartmentNumber, String FDepartment, String FPurchaseDeptId,
-            String FPurchaseDept, String FPurchaserId, String FPurchaser, String FStockerNumber, String FStocker,
-            String FCustomerID, String FCustomer, String FNot, String F_FFF_Text) {
+            String FOwnerIdHeadIn, String FDBType, String FDBDirection, String FID, String FEntryID, String FSettleOrgId,
+            String FSettleCurrId, String FDate, String FSupplierId, String FDepartmentNumber, String FDepartment,
+            String FPurchaseDeptId, String FPurchaseDept, String FPurchaserId, String FPurchaser, String FStockerNumber,
+            String FStocker, String FCustomerID, String FCustomer, String FNot, String F_FFF_Text) {
         this.FIndex = FIndex;
         this.FOrderId = FOrderId;
         this.FBarcode = FBarcode;
@@ -77,6 +80,8 @@ public class T_main {
         this.FOwnerIdHeadIn = FOwnerIdHeadIn;
         this.FDBType = FDBType;
         this.FDBDirection = FDBDirection;
+        this.FID = FID;
+        this.FEntryID = FEntryID;
         this.FSettleOrgId = FSettleOrgId;
         this.FSettleCurrId = FSettleCurrId;
         this.FDate = FDate;
@@ -353,5 +358,17 @@ public class T_main {
     }
     public void setFDBDirection(String FDBDirection) {
         this.FDBDirection = FDBDirection;
+    }
+    public String getFID() {
+        return this.FID;
+    }
+    public void setFID(String FID) {
+        this.FID = FID;
+    }
+    public String getFEntryID() {
+        return this.FEntryID;
+    }
+    public void setFEntryID(String FEntryID) {
+        this.FEntryID = FEntryID;
     }
 }

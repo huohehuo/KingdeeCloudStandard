@@ -43,52 +43,55 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
         public final static Property FUnit = new Property(16, String.class, "FUnit", false, "FUNIT");
         public final static Property FSupplier = new Property(17, String.class, "FSupplier", false, "FSUPPLIER");
         public final static Property FQuantity = new Property(18, String.class, "FQuantity", false, "FQUANTITY");
-        public final static Property FBackDate = new Property(19, String.class, "FBackDate", false, "FBACK_DATE");
-        public final static Property FBackType = new Property(20, String.class, "FBackType", false, "FBACK_TYPE");
-        public final static Property FSOEntryId = new Property(21, String.class, "FSOEntryId", false, "FSOENTRY_ID");
-        public final static Property FB2CORDERDETAILID = new Property(22, String.class, "FB2CORDERDETAILID", false, "FB2_CORDERDETAILID");
-        public final static Property FStorageOutId = new Property(23, String.class, "FStorageOutId", false, "FSTORAGE_OUT_ID");
-        public final static Property FStorageOut = new Property(24, String.class, "FStorageOut", false, "FSTORAGE_OUT");
-        public final static Property FStorageInId = new Property(25, String.class, "FStorageInId", false, "FSTORAGE_IN_ID");
-        public final static Property FStorageIn = new Property(26, String.class, "FStorageIn", false, "FSTORAGE_IN");
-        public final static Property FWaveHouseOutId = new Property(27, String.class, "FWaveHouseOutId", false, "FWAVE_HOUSE_OUT_ID");
-        public final static Property FWaveHouseOut = new Property(28, String.class, "FWaveHouseOut", false, "FWAVE_HOUSE_OUT");
-        public final static Property FWaveHouseInId = new Property(29, String.class, "FWaveHouseInId", false, "FWAVE_HOUSE_IN_ID");
-        public final static Property FWaveHouseIn = new Property(30, String.class, "FWaveHouseIn", false, "FWAVE_HOUSE_IN");
-        public final static Property FBatch = new Property(31, String.class, "FBatch", false, "FBATCH");
-        public final static Property FIsFree = new Property(32, boolean.class, "FIsFree", false, "FIS_FREE");
-        public final static Property FWorkShopId1 = new Property(33, String.class, "FWorkShopId1", false, "FWORK_SHOP_ID1");
-        public final static Property FRemainInStockQty = new Property(34, String.class, "FRemainInStockQty", false, "FREMAIN_IN_STOCK_QTY");
-        public final static Property FRealQty = new Property(35, String.class, "FRealQty", false, "FREAL_QTY");
-        public final static Property FRemainInStockUnitId = new Property(36, String.class, "FRemainInStockUnitId", false, "FREMAIN_IN_STOCK_UNIT_ID");
-        public final static Property FPriceUnitID = new Property(37, String.class, "FPriceUnitID", false, "FPRICE_UNIT_ID");
-        public final static Property FMaterialId = new Property(38, String.class, "FMaterialId", false, "FMATERIAL_ID");
-        public final static Property FMaterialIdForPD = new Property(39, String.class, "FMaterialIdForPD", false, "FMATERIAL_ID_FOR_PD");
-        public final static Property FUnitID = new Property(40, String.class, "FUnitID", false, "FUNIT_ID");
-        public final static Property FUnitIDForPD = new Property(41, String.class, "FUnitIDForPD", false, "FUNIT_IDFOR_PD");
-        public final static Property AuxSign = new Property(42, String.class, "AuxSign", false, "AUX_SIGN");
-        public final static Property ActualModel = new Property(43, String.class, "ActualModel", false, "ACTUAL_MODEL");
-        public final static Property FProductNo = new Property(44, String.class, "FProductNo", false, "FPRODUCT_NO");
-        public final static Property FStoreNum = new Property(45, String.class, "FStoreNum", false, "FSTORE_NUM");
-        public final static Property FBaseNum = new Property(46, String.class, "FBaseNum", false, "FBASE_NUM");
-        public final static Property FStoreUnit = new Property(47, String.class, "FStoreUnit", false, "FSTORE_UNIT");
-        public final static Property FStoreUnitID = new Property(48, String.class, "FStoreUnitID", false, "FSTORE_UNIT_ID");
-        public final static Property FBaseUnit = new Property(49, String.class, "FBaseUnit", false, "FBASE_UNIT");
-        public final static Property FBaseUnitID = new Property(50, String.class, "FBaseUnitID", false, "FBASE_UNIT_ID");
-        public final static Property FBillNo = new Property(51, String.class, "FBillNo", false, "FBILL_NO");
-        public final static Property FAllowAddMaterial = new Property(52, String.class, "FAllowAddMaterial", false, "FALLOW_ADD_MATERIAL");
-        public final static Property FZeroStockInCount = new Property(53, String.class, "FZeroStockInCount", false, "FZERO_STOCK_IN_COUNT");
-        public final static Property FBillTypeID = new Property(54, String.class, "FBillTypeID", false, "FBILL_TYPE_ID");
-        public final static Property FCheckQtyDefault = new Property(55, String.class, "FCheckQtyDefault", false, "FCHECK_QTY_DEFAULT");
-        public final static Property FNotIncludeForbidMat = new Property(56, String.class, "FNotIncludeForbidMat", false, "FNOT_INCLUDE_FORBID_MAT");
-        public final static Property FStockOrgId = new Property(57, String.class, "FStockOrgId", false, "FSTOCK_ORG_ID");
-        public final static Property FDocumentStatus = new Property(58, String.class, "FDocumentStatus", false, "FDOCUMENT_STATUS");
-        public final static Property FCloseStatus = new Property(59, String.class, "FCloseStatus", false, "FCLOSE_STATUS");
-        public final static Property FNote = new Property(60, String.class, "FNote", false, "FNOTE");
-        public final static Property FOWnerTypeID = new Property(61, String.class, "FOWnerTypeID", false, "FOWNER_TYPE_ID");
-        public final static Property FOwnerId = new Property(62, String.class, "FOwnerId", false, "FOWNER_ID");
-        public final static Property FKeeperTypeId = new Property(63, String.class, "FKeeperTypeId", false, "FKEEPER_TYPE_ID");
-        public final static Property FKeeperId = new Property(64, String.class, "FKeeperId", false, "FKEEPER_ID");
+        public final static Property FTaxPrice = new Property(19, String.class, "FTaxPrice", false, "FTAX_PRICE");
+        public final static Property FHuoZhuNumber = new Property(20, String.class, "FHuoZhuNumber", false, "FHUO_ZHU_NUMBER");
+        public final static Property FHuoZhu = new Property(21, String.class, "FHuoZhu", false, "FHUO_ZHU");
+        public final static Property FBackDate = new Property(22, String.class, "FBackDate", false, "FBACK_DATE");
+        public final static Property FBackType = new Property(23, String.class, "FBackType", false, "FBACK_TYPE");
+        public final static Property FSOEntryId = new Property(24, String.class, "FSOEntryId", false, "FSOENTRY_ID");
+        public final static Property FB2CORDERDETAILID = new Property(25, String.class, "FB2CORDERDETAILID", false, "FB2_CORDERDETAILID");
+        public final static Property FStorageOutId = new Property(26, String.class, "FStorageOutId", false, "FSTORAGE_OUT_ID");
+        public final static Property FStorageOut = new Property(27, String.class, "FStorageOut", false, "FSTORAGE_OUT");
+        public final static Property FStorageInId = new Property(28, String.class, "FStorageInId", false, "FSTORAGE_IN_ID");
+        public final static Property FStorageIn = new Property(29, String.class, "FStorageIn", false, "FSTORAGE_IN");
+        public final static Property FWaveHouseOutId = new Property(30, String.class, "FWaveHouseOutId", false, "FWAVE_HOUSE_OUT_ID");
+        public final static Property FWaveHouseOut = new Property(31, String.class, "FWaveHouseOut", false, "FWAVE_HOUSE_OUT");
+        public final static Property FWaveHouseInId = new Property(32, String.class, "FWaveHouseInId", false, "FWAVE_HOUSE_IN_ID");
+        public final static Property FWaveHouseIn = new Property(33, String.class, "FWaveHouseIn", false, "FWAVE_HOUSE_IN");
+        public final static Property FBatch = new Property(34, String.class, "FBatch", false, "FBATCH");
+        public final static Property FIsFree = new Property(35, boolean.class, "FIsFree", false, "FIS_FREE");
+        public final static Property FWorkShopId1 = new Property(36, String.class, "FWorkShopId1", false, "FWORK_SHOP_ID1");
+        public final static Property FRemainInStockQty = new Property(37, String.class, "FRemainInStockQty", false, "FREMAIN_IN_STOCK_QTY");
+        public final static Property FRealQty = new Property(38, String.class, "FRealQty", false, "FREAL_QTY");
+        public final static Property FRemainInStockUnitId = new Property(39, String.class, "FRemainInStockUnitId", false, "FREMAIN_IN_STOCK_UNIT_ID");
+        public final static Property FPriceUnitID = new Property(40, String.class, "FPriceUnitID", false, "FPRICE_UNIT_ID");
+        public final static Property FMaterialId = new Property(41, String.class, "FMaterialId", false, "FMATERIAL_ID");
+        public final static Property FMaterialIdForPD = new Property(42, String.class, "FMaterialIdForPD", false, "FMATERIAL_ID_FOR_PD");
+        public final static Property FUnitID = new Property(43, String.class, "FUnitID", false, "FUNIT_ID");
+        public final static Property FUnitIDForPD = new Property(44, String.class, "FUnitIDForPD", false, "FUNIT_IDFOR_PD");
+        public final static Property AuxSign = new Property(45, String.class, "AuxSign", false, "AUX_SIGN");
+        public final static Property ActualModel = new Property(46, String.class, "ActualModel", false, "ACTUAL_MODEL");
+        public final static Property FProductNo = new Property(47, String.class, "FProductNo", false, "FPRODUCT_NO");
+        public final static Property FStoreNum = new Property(48, String.class, "FStoreNum", false, "FSTORE_NUM");
+        public final static Property FBaseNum = new Property(49, String.class, "FBaseNum", false, "FBASE_NUM");
+        public final static Property FStoreUnit = new Property(50, String.class, "FStoreUnit", false, "FSTORE_UNIT");
+        public final static Property FStoreUnitID = new Property(51, String.class, "FStoreUnitID", false, "FSTORE_UNIT_ID");
+        public final static Property FBaseUnit = new Property(52, String.class, "FBaseUnit", false, "FBASE_UNIT");
+        public final static Property FBaseUnitID = new Property(53, String.class, "FBaseUnitID", false, "FBASE_UNIT_ID");
+        public final static Property FBillNo = new Property(54, String.class, "FBillNo", false, "FBILL_NO");
+        public final static Property FAllowAddMaterial = new Property(55, String.class, "FAllowAddMaterial", false, "FALLOW_ADD_MATERIAL");
+        public final static Property FZeroStockInCount = new Property(56, String.class, "FZeroStockInCount", false, "FZERO_STOCK_IN_COUNT");
+        public final static Property FBillTypeID = new Property(57, String.class, "FBillTypeID", false, "FBILL_TYPE_ID");
+        public final static Property FCheckQtyDefault = new Property(58, String.class, "FCheckQtyDefault", false, "FCHECK_QTY_DEFAULT");
+        public final static Property FNotIncludeForbidMat = new Property(59, String.class, "FNotIncludeForbidMat", false, "FNOT_INCLUDE_FORBID_MAT");
+        public final static Property FStockOrgId = new Property(60, String.class, "FStockOrgId", false, "FSTOCK_ORG_ID");
+        public final static Property FDocumentStatus = new Property(61, String.class, "FDocumentStatus", false, "FDOCUMENT_STATUS");
+        public final static Property FCloseStatus = new Property(62, String.class, "FCloseStatus", false, "FCLOSE_STATUS");
+        public final static Property FNote = new Property(63, String.class, "FNote", false, "FNOTE");
+        public final static Property FOWnerTypeID = new Property(64, String.class, "FOWnerTypeID", false, "FOWNER_TYPE_ID");
+        public final static Property FOwnerId = new Property(65, String.class, "FOwnerId", false, "FOWNER_ID");
+        public final static Property FKeeperTypeId = new Property(66, String.class, "FKeeperTypeId", false, "FKEEPER_TYPE_ID");
+        public final static Property FKeeperId = new Property(67, String.class, "FKeeperId", false, "FKEEPER_ID");
     }
 
 
@@ -123,52 +126,55 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
                 "\"FUNIT\" TEXT," + // 16: FUnit
                 "\"FSUPPLIER\" TEXT," + // 17: FSupplier
                 "\"FQUANTITY\" TEXT," + // 18: FQuantity
-                "\"FBACK_DATE\" TEXT," + // 19: FBackDate
-                "\"FBACK_TYPE\" TEXT," + // 20: FBackType
-                "\"FSOENTRY_ID\" TEXT," + // 21: FSOEntryId
-                "\"FB2_CORDERDETAILID\" TEXT," + // 22: FB2CORDERDETAILID
-                "\"FSTORAGE_OUT_ID\" TEXT," + // 23: FStorageOutId
-                "\"FSTORAGE_OUT\" TEXT," + // 24: FStorageOut
-                "\"FSTORAGE_IN_ID\" TEXT," + // 25: FStorageInId
-                "\"FSTORAGE_IN\" TEXT," + // 26: FStorageIn
-                "\"FWAVE_HOUSE_OUT_ID\" TEXT," + // 27: FWaveHouseOutId
-                "\"FWAVE_HOUSE_OUT\" TEXT," + // 28: FWaveHouseOut
-                "\"FWAVE_HOUSE_IN_ID\" TEXT," + // 29: FWaveHouseInId
-                "\"FWAVE_HOUSE_IN\" TEXT," + // 30: FWaveHouseIn
-                "\"FBATCH\" TEXT," + // 31: FBatch
-                "\"FIS_FREE\" INTEGER NOT NULL ," + // 32: FIsFree
-                "\"FWORK_SHOP_ID1\" TEXT," + // 33: FWorkShopId1
-                "\"FREMAIN_IN_STOCK_QTY\" TEXT," + // 34: FRemainInStockQty
-                "\"FREAL_QTY\" TEXT," + // 35: FRealQty
-                "\"FREMAIN_IN_STOCK_UNIT_ID\" TEXT," + // 36: FRemainInStockUnitId
-                "\"FPRICE_UNIT_ID\" TEXT," + // 37: FPriceUnitID
-                "\"FMATERIAL_ID\" TEXT," + // 38: FMaterialId
-                "\"FMATERIAL_ID_FOR_PD\" TEXT," + // 39: FMaterialIdForPD
-                "\"FUNIT_ID\" TEXT," + // 40: FUnitID
-                "\"FUNIT_IDFOR_PD\" TEXT," + // 41: FUnitIDForPD
-                "\"AUX_SIGN\" TEXT," + // 42: AuxSign
-                "\"ACTUAL_MODEL\" TEXT," + // 43: ActualModel
-                "\"FPRODUCT_NO\" TEXT," + // 44: FProductNo
-                "\"FSTORE_NUM\" TEXT," + // 45: FStoreNum
-                "\"FBASE_NUM\" TEXT," + // 46: FBaseNum
-                "\"FSTORE_UNIT\" TEXT," + // 47: FStoreUnit
-                "\"FSTORE_UNIT_ID\" TEXT," + // 48: FStoreUnitID
-                "\"FBASE_UNIT\" TEXT," + // 49: FBaseUnit
-                "\"FBASE_UNIT_ID\" TEXT," + // 50: FBaseUnitID
-                "\"FBILL_NO\" TEXT," + // 51: FBillNo
-                "\"FALLOW_ADD_MATERIAL\" TEXT," + // 52: FAllowAddMaterial
-                "\"FZERO_STOCK_IN_COUNT\" TEXT," + // 53: FZeroStockInCount
-                "\"FBILL_TYPE_ID\" TEXT," + // 54: FBillTypeID
-                "\"FCHECK_QTY_DEFAULT\" TEXT," + // 55: FCheckQtyDefault
-                "\"FNOT_INCLUDE_FORBID_MAT\" TEXT," + // 56: FNotIncludeForbidMat
-                "\"FSTOCK_ORG_ID\" TEXT," + // 57: FStockOrgId
-                "\"FDOCUMENT_STATUS\" TEXT," + // 58: FDocumentStatus
-                "\"FCLOSE_STATUS\" TEXT," + // 59: FCloseStatus
-                "\"FNOTE\" TEXT," + // 60: FNote
-                "\"FOWNER_TYPE_ID\" TEXT," + // 61: FOWnerTypeID
-                "\"FOWNER_ID\" TEXT," + // 62: FOwnerId
-                "\"FKEEPER_TYPE_ID\" TEXT," + // 63: FKeeperTypeId
-                "\"FKEEPER_ID\" TEXT);"); // 64: FKeeperId
+                "\"FTAX_PRICE\" TEXT," + // 19: FTaxPrice
+                "\"FHUO_ZHU_NUMBER\" TEXT," + // 20: FHuoZhuNumber
+                "\"FHUO_ZHU\" TEXT," + // 21: FHuoZhu
+                "\"FBACK_DATE\" TEXT," + // 22: FBackDate
+                "\"FBACK_TYPE\" TEXT," + // 23: FBackType
+                "\"FSOENTRY_ID\" TEXT," + // 24: FSOEntryId
+                "\"FB2_CORDERDETAILID\" TEXT," + // 25: FB2CORDERDETAILID
+                "\"FSTORAGE_OUT_ID\" TEXT," + // 26: FStorageOutId
+                "\"FSTORAGE_OUT\" TEXT," + // 27: FStorageOut
+                "\"FSTORAGE_IN_ID\" TEXT," + // 28: FStorageInId
+                "\"FSTORAGE_IN\" TEXT," + // 29: FStorageIn
+                "\"FWAVE_HOUSE_OUT_ID\" TEXT," + // 30: FWaveHouseOutId
+                "\"FWAVE_HOUSE_OUT\" TEXT," + // 31: FWaveHouseOut
+                "\"FWAVE_HOUSE_IN_ID\" TEXT," + // 32: FWaveHouseInId
+                "\"FWAVE_HOUSE_IN\" TEXT," + // 33: FWaveHouseIn
+                "\"FBATCH\" TEXT," + // 34: FBatch
+                "\"FIS_FREE\" INTEGER NOT NULL ," + // 35: FIsFree
+                "\"FWORK_SHOP_ID1\" TEXT," + // 36: FWorkShopId1
+                "\"FREMAIN_IN_STOCK_QTY\" TEXT," + // 37: FRemainInStockQty
+                "\"FREAL_QTY\" TEXT," + // 38: FRealQty
+                "\"FREMAIN_IN_STOCK_UNIT_ID\" TEXT," + // 39: FRemainInStockUnitId
+                "\"FPRICE_UNIT_ID\" TEXT," + // 40: FPriceUnitID
+                "\"FMATERIAL_ID\" TEXT," + // 41: FMaterialId
+                "\"FMATERIAL_ID_FOR_PD\" TEXT," + // 42: FMaterialIdForPD
+                "\"FUNIT_ID\" TEXT," + // 43: FUnitID
+                "\"FUNIT_IDFOR_PD\" TEXT," + // 44: FUnitIDForPD
+                "\"AUX_SIGN\" TEXT," + // 45: AuxSign
+                "\"ACTUAL_MODEL\" TEXT," + // 46: ActualModel
+                "\"FPRODUCT_NO\" TEXT," + // 47: FProductNo
+                "\"FSTORE_NUM\" TEXT," + // 48: FStoreNum
+                "\"FBASE_NUM\" TEXT," + // 49: FBaseNum
+                "\"FSTORE_UNIT\" TEXT," + // 50: FStoreUnit
+                "\"FSTORE_UNIT_ID\" TEXT," + // 51: FStoreUnitID
+                "\"FBASE_UNIT\" TEXT," + // 52: FBaseUnit
+                "\"FBASE_UNIT_ID\" TEXT," + // 53: FBaseUnitID
+                "\"FBILL_NO\" TEXT," + // 54: FBillNo
+                "\"FALLOW_ADD_MATERIAL\" TEXT," + // 55: FAllowAddMaterial
+                "\"FZERO_STOCK_IN_COUNT\" TEXT," + // 56: FZeroStockInCount
+                "\"FBILL_TYPE_ID\" TEXT," + // 57: FBillTypeID
+                "\"FCHECK_QTY_DEFAULT\" TEXT," + // 58: FCheckQtyDefault
+                "\"FNOT_INCLUDE_FORBID_MAT\" TEXT," + // 59: FNotIncludeForbidMat
+                "\"FSTOCK_ORG_ID\" TEXT," + // 60: FStockOrgId
+                "\"FDOCUMENT_STATUS\" TEXT," + // 61: FDocumentStatus
+                "\"FCLOSE_STATUS\" TEXT," + // 62: FCloseStatus
+                "\"FNOTE\" TEXT," + // 63: FNote
+                "\"FOWNER_TYPE_ID\" TEXT," + // 64: FOWnerTypeID
+                "\"FOWNER_ID\" TEXT," + // 65: FOwnerId
+                "\"FKEEPER_TYPE_ID\" TEXT," + // 66: FKeeperTypeId
+                "\"FKEEPER_ID\" TEXT);"); // 67: FKeeperId
     }
 
     /** Drops the underlying database table. */
@@ -268,230 +274,245 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
             stmt.bindString(19, FQuantity);
         }
  
+        String FTaxPrice = entity.getFTaxPrice();
+        if (FTaxPrice != null) {
+            stmt.bindString(20, FTaxPrice);
+        }
+ 
+        String FHuoZhuNumber = entity.getFHuoZhuNumber();
+        if (FHuoZhuNumber != null) {
+            stmt.bindString(21, FHuoZhuNumber);
+        }
+ 
+        String FHuoZhu = entity.getFHuoZhu();
+        if (FHuoZhu != null) {
+            stmt.bindString(22, FHuoZhu);
+        }
+ 
         String FBackDate = entity.getFBackDate();
         if (FBackDate != null) {
-            stmt.bindString(20, FBackDate);
+            stmt.bindString(23, FBackDate);
         }
  
         String FBackType = entity.getFBackType();
         if (FBackType != null) {
-            stmt.bindString(21, FBackType);
+            stmt.bindString(24, FBackType);
         }
  
         String FSOEntryId = entity.getFSOEntryId();
         if (FSOEntryId != null) {
-            stmt.bindString(22, FSOEntryId);
+            stmt.bindString(25, FSOEntryId);
         }
  
         String FB2CORDERDETAILID = entity.getFB2CORDERDETAILID();
         if (FB2CORDERDETAILID != null) {
-            stmt.bindString(23, FB2CORDERDETAILID);
+            stmt.bindString(26, FB2CORDERDETAILID);
         }
  
         String FStorageOutId = entity.getFStorageOutId();
         if (FStorageOutId != null) {
-            stmt.bindString(24, FStorageOutId);
+            stmt.bindString(27, FStorageOutId);
         }
  
         String FStorageOut = entity.getFStorageOut();
         if (FStorageOut != null) {
-            stmt.bindString(25, FStorageOut);
+            stmt.bindString(28, FStorageOut);
         }
  
         String FStorageInId = entity.getFStorageInId();
         if (FStorageInId != null) {
-            stmt.bindString(26, FStorageInId);
+            stmt.bindString(29, FStorageInId);
         }
  
         String FStorageIn = entity.getFStorageIn();
         if (FStorageIn != null) {
-            stmt.bindString(27, FStorageIn);
+            stmt.bindString(30, FStorageIn);
         }
  
         String FWaveHouseOutId = entity.getFWaveHouseOutId();
         if (FWaveHouseOutId != null) {
-            stmt.bindString(28, FWaveHouseOutId);
+            stmt.bindString(31, FWaveHouseOutId);
         }
  
         String FWaveHouseOut = entity.getFWaveHouseOut();
         if (FWaveHouseOut != null) {
-            stmt.bindString(29, FWaveHouseOut);
+            stmt.bindString(32, FWaveHouseOut);
         }
  
         String FWaveHouseInId = entity.getFWaveHouseInId();
         if (FWaveHouseInId != null) {
-            stmt.bindString(30, FWaveHouseInId);
+            stmt.bindString(33, FWaveHouseInId);
         }
  
         String FWaveHouseIn = entity.getFWaveHouseIn();
         if (FWaveHouseIn != null) {
-            stmt.bindString(31, FWaveHouseIn);
+            stmt.bindString(34, FWaveHouseIn);
         }
  
         String FBatch = entity.getFBatch();
         if (FBatch != null) {
-            stmt.bindString(32, FBatch);
+            stmt.bindString(35, FBatch);
         }
-        stmt.bindLong(33, entity.getFIsFree() ? 1L: 0L);
+        stmt.bindLong(36, entity.getFIsFree() ? 1L: 0L);
  
         String FWorkShopId1 = entity.getFWorkShopId1();
         if (FWorkShopId1 != null) {
-            stmt.bindString(34, FWorkShopId1);
+            stmt.bindString(37, FWorkShopId1);
         }
  
         String FRemainInStockQty = entity.getFRemainInStockQty();
         if (FRemainInStockQty != null) {
-            stmt.bindString(35, FRemainInStockQty);
+            stmt.bindString(38, FRemainInStockQty);
         }
  
         String FRealQty = entity.getFRealQty();
         if (FRealQty != null) {
-            stmt.bindString(36, FRealQty);
+            stmt.bindString(39, FRealQty);
         }
  
         String FRemainInStockUnitId = entity.getFRemainInStockUnitId();
         if (FRemainInStockUnitId != null) {
-            stmt.bindString(37, FRemainInStockUnitId);
+            stmt.bindString(40, FRemainInStockUnitId);
         }
  
         String FPriceUnitID = entity.getFPriceUnitID();
         if (FPriceUnitID != null) {
-            stmt.bindString(38, FPriceUnitID);
+            stmt.bindString(41, FPriceUnitID);
         }
  
         String FMaterialId = entity.getFMaterialId();
         if (FMaterialId != null) {
-            stmt.bindString(39, FMaterialId);
+            stmt.bindString(42, FMaterialId);
         }
  
         String FMaterialIdForPD = entity.getFMaterialIdForPD();
         if (FMaterialIdForPD != null) {
-            stmt.bindString(40, FMaterialIdForPD);
+            stmt.bindString(43, FMaterialIdForPD);
         }
  
         String FUnitID = entity.getFUnitID();
         if (FUnitID != null) {
-            stmt.bindString(41, FUnitID);
+            stmt.bindString(44, FUnitID);
         }
  
         String FUnitIDForPD = entity.getFUnitIDForPD();
         if (FUnitIDForPD != null) {
-            stmt.bindString(42, FUnitIDForPD);
+            stmt.bindString(45, FUnitIDForPD);
         }
  
         String AuxSign = entity.getAuxSign();
         if (AuxSign != null) {
-            stmt.bindString(43, AuxSign);
+            stmt.bindString(46, AuxSign);
         }
  
         String ActualModel = entity.getActualModel();
         if (ActualModel != null) {
-            stmt.bindString(44, ActualModel);
+            stmt.bindString(47, ActualModel);
         }
  
         String FProductNo = entity.getFProductNo();
         if (FProductNo != null) {
-            stmt.bindString(45, FProductNo);
+            stmt.bindString(48, FProductNo);
         }
  
         String FStoreNum = entity.getFStoreNum();
         if (FStoreNum != null) {
-            stmt.bindString(46, FStoreNum);
+            stmt.bindString(49, FStoreNum);
         }
  
         String FBaseNum = entity.getFBaseNum();
         if (FBaseNum != null) {
-            stmt.bindString(47, FBaseNum);
+            stmt.bindString(50, FBaseNum);
         }
  
         String FStoreUnit = entity.getFStoreUnit();
         if (FStoreUnit != null) {
-            stmt.bindString(48, FStoreUnit);
+            stmt.bindString(51, FStoreUnit);
         }
  
         String FStoreUnitID = entity.getFStoreUnitID();
         if (FStoreUnitID != null) {
-            stmt.bindString(49, FStoreUnitID);
+            stmt.bindString(52, FStoreUnitID);
         }
  
         String FBaseUnit = entity.getFBaseUnit();
         if (FBaseUnit != null) {
-            stmt.bindString(50, FBaseUnit);
+            stmt.bindString(53, FBaseUnit);
         }
  
         String FBaseUnitID = entity.getFBaseUnitID();
         if (FBaseUnitID != null) {
-            stmt.bindString(51, FBaseUnitID);
+            stmt.bindString(54, FBaseUnitID);
         }
  
         String FBillNo = entity.getFBillNo();
         if (FBillNo != null) {
-            stmt.bindString(52, FBillNo);
+            stmt.bindString(55, FBillNo);
         }
  
         String FAllowAddMaterial = entity.getFAllowAddMaterial();
         if (FAllowAddMaterial != null) {
-            stmt.bindString(53, FAllowAddMaterial);
+            stmt.bindString(56, FAllowAddMaterial);
         }
  
         String FZeroStockInCount = entity.getFZeroStockInCount();
         if (FZeroStockInCount != null) {
-            stmt.bindString(54, FZeroStockInCount);
+            stmt.bindString(57, FZeroStockInCount);
         }
  
         String FBillTypeID = entity.getFBillTypeID();
         if (FBillTypeID != null) {
-            stmt.bindString(55, FBillTypeID);
+            stmt.bindString(58, FBillTypeID);
         }
  
         String FCheckQtyDefault = entity.getFCheckQtyDefault();
         if (FCheckQtyDefault != null) {
-            stmt.bindString(56, FCheckQtyDefault);
+            stmt.bindString(59, FCheckQtyDefault);
         }
  
         String FNotIncludeForbidMat = entity.getFNotIncludeForbidMat();
         if (FNotIncludeForbidMat != null) {
-            stmt.bindString(57, FNotIncludeForbidMat);
+            stmt.bindString(60, FNotIncludeForbidMat);
         }
  
         String FStockOrgId = entity.getFStockOrgId();
         if (FStockOrgId != null) {
-            stmt.bindString(58, FStockOrgId);
+            stmt.bindString(61, FStockOrgId);
         }
  
         String FDocumentStatus = entity.getFDocumentStatus();
         if (FDocumentStatus != null) {
-            stmt.bindString(59, FDocumentStatus);
+            stmt.bindString(62, FDocumentStatus);
         }
  
         String FCloseStatus = entity.getFCloseStatus();
         if (FCloseStatus != null) {
-            stmt.bindString(60, FCloseStatus);
+            stmt.bindString(63, FCloseStatus);
         }
  
         String FNote = entity.getFNote();
         if (FNote != null) {
-            stmt.bindString(61, FNote);
+            stmt.bindString(64, FNote);
         }
  
         String FOWnerTypeID = entity.getFOWnerTypeID();
         if (FOWnerTypeID != null) {
-            stmt.bindString(62, FOWnerTypeID);
+            stmt.bindString(65, FOWnerTypeID);
         }
  
         String FOwnerId = entity.getFOwnerId();
         if (FOwnerId != null) {
-            stmt.bindString(63, FOwnerId);
+            stmt.bindString(66, FOwnerId);
         }
  
         String FKeeperTypeId = entity.getFKeeperTypeId();
         if (FKeeperTypeId != null) {
-            stmt.bindString(64, FKeeperTypeId);
+            stmt.bindString(67, FKeeperTypeId);
         }
  
         String FKeeperId = entity.getFKeeperId();
         if (FKeeperId != null) {
-            stmt.bindString(65, FKeeperId);
+            stmt.bindString(68, FKeeperId);
         }
     }
 
@@ -586,230 +607,245 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
             stmt.bindString(19, FQuantity);
         }
  
+        String FTaxPrice = entity.getFTaxPrice();
+        if (FTaxPrice != null) {
+            stmt.bindString(20, FTaxPrice);
+        }
+ 
+        String FHuoZhuNumber = entity.getFHuoZhuNumber();
+        if (FHuoZhuNumber != null) {
+            stmt.bindString(21, FHuoZhuNumber);
+        }
+ 
+        String FHuoZhu = entity.getFHuoZhu();
+        if (FHuoZhu != null) {
+            stmt.bindString(22, FHuoZhu);
+        }
+ 
         String FBackDate = entity.getFBackDate();
         if (FBackDate != null) {
-            stmt.bindString(20, FBackDate);
+            stmt.bindString(23, FBackDate);
         }
  
         String FBackType = entity.getFBackType();
         if (FBackType != null) {
-            stmt.bindString(21, FBackType);
+            stmt.bindString(24, FBackType);
         }
  
         String FSOEntryId = entity.getFSOEntryId();
         if (FSOEntryId != null) {
-            stmt.bindString(22, FSOEntryId);
+            stmt.bindString(25, FSOEntryId);
         }
  
         String FB2CORDERDETAILID = entity.getFB2CORDERDETAILID();
         if (FB2CORDERDETAILID != null) {
-            stmt.bindString(23, FB2CORDERDETAILID);
+            stmt.bindString(26, FB2CORDERDETAILID);
         }
  
         String FStorageOutId = entity.getFStorageOutId();
         if (FStorageOutId != null) {
-            stmt.bindString(24, FStorageOutId);
+            stmt.bindString(27, FStorageOutId);
         }
  
         String FStorageOut = entity.getFStorageOut();
         if (FStorageOut != null) {
-            stmt.bindString(25, FStorageOut);
+            stmt.bindString(28, FStorageOut);
         }
  
         String FStorageInId = entity.getFStorageInId();
         if (FStorageInId != null) {
-            stmt.bindString(26, FStorageInId);
+            stmt.bindString(29, FStorageInId);
         }
  
         String FStorageIn = entity.getFStorageIn();
         if (FStorageIn != null) {
-            stmt.bindString(27, FStorageIn);
+            stmt.bindString(30, FStorageIn);
         }
  
         String FWaveHouseOutId = entity.getFWaveHouseOutId();
         if (FWaveHouseOutId != null) {
-            stmt.bindString(28, FWaveHouseOutId);
+            stmt.bindString(31, FWaveHouseOutId);
         }
  
         String FWaveHouseOut = entity.getFWaveHouseOut();
         if (FWaveHouseOut != null) {
-            stmt.bindString(29, FWaveHouseOut);
+            stmt.bindString(32, FWaveHouseOut);
         }
  
         String FWaveHouseInId = entity.getFWaveHouseInId();
         if (FWaveHouseInId != null) {
-            stmt.bindString(30, FWaveHouseInId);
+            stmt.bindString(33, FWaveHouseInId);
         }
  
         String FWaveHouseIn = entity.getFWaveHouseIn();
         if (FWaveHouseIn != null) {
-            stmt.bindString(31, FWaveHouseIn);
+            stmt.bindString(34, FWaveHouseIn);
         }
  
         String FBatch = entity.getFBatch();
         if (FBatch != null) {
-            stmt.bindString(32, FBatch);
+            stmt.bindString(35, FBatch);
         }
-        stmt.bindLong(33, entity.getFIsFree() ? 1L: 0L);
+        stmt.bindLong(36, entity.getFIsFree() ? 1L: 0L);
  
         String FWorkShopId1 = entity.getFWorkShopId1();
         if (FWorkShopId1 != null) {
-            stmt.bindString(34, FWorkShopId1);
+            stmt.bindString(37, FWorkShopId1);
         }
  
         String FRemainInStockQty = entity.getFRemainInStockQty();
         if (FRemainInStockQty != null) {
-            stmt.bindString(35, FRemainInStockQty);
+            stmt.bindString(38, FRemainInStockQty);
         }
  
         String FRealQty = entity.getFRealQty();
         if (FRealQty != null) {
-            stmt.bindString(36, FRealQty);
+            stmt.bindString(39, FRealQty);
         }
  
         String FRemainInStockUnitId = entity.getFRemainInStockUnitId();
         if (FRemainInStockUnitId != null) {
-            stmt.bindString(37, FRemainInStockUnitId);
+            stmt.bindString(40, FRemainInStockUnitId);
         }
  
         String FPriceUnitID = entity.getFPriceUnitID();
         if (FPriceUnitID != null) {
-            stmt.bindString(38, FPriceUnitID);
+            stmt.bindString(41, FPriceUnitID);
         }
  
         String FMaterialId = entity.getFMaterialId();
         if (FMaterialId != null) {
-            stmt.bindString(39, FMaterialId);
+            stmt.bindString(42, FMaterialId);
         }
  
         String FMaterialIdForPD = entity.getFMaterialIdForPD();
         if (FMaterialIdForPD != null) {
-            stmt.bindString(40, FMaterialIdForPD);
+            stmt.bindString(43, FMaterialIdForPD);
         }
  
         String FUnitID = entity.getFUnitID();
         if (FUnitID != null) {
-            stmt.bindString(41, FUnitID);
+            stmt.bindString(44, FUnitID);
         }
  
         String FUnitIDForPD = entity.getFUnitIDForPD();
         if (FUnitIDForPD != null) {
-            stmt.bindString(42, FUnitIDForPD);
+            stmt.bindString(45, FUnitIDForPD);
         }
  
         String AuxSign = entity.getAuxSign();
         if (AuxSign != null) {
-            stmt.bindString(43, AuxSign);
+            stmt.bindString(46, AuxSign);
         }
  
         String ActualModel = entity.getActualModel();
         if (ActualModel != null) {
-            stmt.bindString(44, ActualModel);
+            stmt.bindString(47, ActualModel);
         }
  
         String FProductNo = entity.getFProductNo();
         if (FProductNo != null) {
-            stmt.bindString(45, FProductNo);
+            stmt.bindString(48, FProductNo);
         }
  
         String FStoreNum = entity.getFStoreNum();
         if (FStoreNum != null) {
-            stmt.bindString(46, FStoreNum);
+            stmt.bindString(49, FStoreNum);
         }
  
         String FBaseNum = entity.getFBaseNum();
         if (FBaseNum != null) {
-            stmt.bindString(47, FBaseNum);
+            stmt.bindString(50, FBaseNum);
         }
  
         String FStoreUnit = entity.getFStoreUnit();
         if (FStoreUnit != null) {
-            stmt.bindString(48, FStoreUnit);
+            stmt.bindString(51, FStoreUnit);
         }
  
         String FStoreUnitID = entity.getFStoreUnitID();
         if (FStoreUnitID != null) {
-            stmt.bindString(49, FStoreUnitID);
+            stmt.bindString(52, FStoreUnitID);
         }
  
         String FBaseUnit = entity.getFBaseUnit();
         if (FBaseUnit != null) {
-            stmt.bindString(50, FBaseUnit);
+            stmt.bindString(53, FBaseUnit);
         }
  
         String FBaseUnitID = entity.getFBaseUnitID();
         if (FBaseUnitID != null) {
-            stmt.bindString(51, FBaseUnitID);
+            stmt.bindString(54, FBaseUnitID);
         }
  
         String FBillNo = entity.getFBillNo();
         if (FBillNo != null) {
-            stmt.bindString(52, FBillNo);
+            stmt.bindString(55, FBillNo);
         }
  
         String FAllowAddMaterial = entity.getFAllowAddMaterial();
         if (FAllowAddMaterial != null) {
-            stmt.bindString(53, FAllowAddMaterial);
+            stmt.bindString(56, FAllowAddMaterial);
         }
  
         String FZeroStockInCount = entity.getFZeroStockInCount();
         if (FZeroStockInCount != null) {
-            stmt.bindString(54, FZeroStockInCount);
+            stmt.bindString(57, FZeroStockInCount);
         }
  
         String FBillTypeID = entity.getFBillTypeID();
         if (FBillTypeID != null) {
-            stmt.bindString(55, FBillTypeID);
+            stmt.bindString(58, FBillTypeID);
         }
  
         String FCheckQtyDefault = entity.getFCheckQtyDefault();
         if (FCheckQtyDefault != null) {
-            stmt.bindString(56, FCheckQtyDefault);
+            stmt.bindString(59, FCheckQtyDefault);
         }
  
         String FNotIncludeForbidMat = entity.getFNotIncludeForbidMat();
         if (FNotIncludeForbidMat != null) {
-            stmt.bindString(57, FNotIncludeForbidMat);
+            stmt.bindString(60, FNotIncludeForbidMat);
         }
  
         String FStockOrgId = entity.getFStockOrgId();
         if (FStockOrgId != null) {
-            stmt.bindString(58, FStockOrgId);
+            stmt.bindString(61, FStockOrgId);
         }
  
         String FDocumentStatus = entity.getFDocumentStatus();
         if (FDocumentStatus != null) {
-            stmt.bindString(59, FDocumentStatus);
+            stmt.bindString(62, FDocumentStatus);
         }
  
         String FCloseStatus = entity.getFCloseStatus();
         if (FCloseStatus != null) {
-            stmt.bindString(60, FCloseStatus);
+            stmt.bindString(63, FCloseStatus);
         }
  
         String FNote = entity.getFNote();
         if (FNote != null) {
-            stmt.bindString(61, FNote);
+            stmt.bindString(64, FNote);
         }
  
         String FOWnerTypeID = entity.getFOWnerTypeID();
         if (FOWnerTypeID != null) {
-            stmt.bindString(62, FOWnerTypeID);
+            stmt.bindString(65, FOWnerTypeID);
         }
  
         String FOwnerId = entity.getFOwnerId();
         if (FOwnerId != null) {
-            stmt.bindString(63, FOwnerId);
+            stmt.bindString(66, FOwnerId);
         }
  
         String FKeeperTypeId = entity.getFKeeperTypeId();
         if (FKeeperTypeId != null) {
-            stmt.bindString(64, FKeeperTypeId);
+            stmt.bindString(67, FKeeperTypeId);
         }
  
         String FKeeperId = entity.getFKeeperId();
         if (FKeeperId != null) {
-            stmt.bindString(65, FKeeperId);
+            stmt.bindString(68, FKeeperId);
         }
     }
 
@@ -840,52 +876,55 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
             cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // FUnit
             cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // FSupplier
             cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // FQuantity
-            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // FBackDate
-            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // FBackType
-            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // FSOEntryId
-            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // FB2CORDERDETAILID
-            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // FStorageOutId
-            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // FStorageOut
-            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // FStorageInId
-            cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26), // FStorageIn
-            cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27), // FWaveHouseOutId
-            cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28), // FWaveHouseOut
-            cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29), // FWaveHouseInId
-            cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30), // FWaveHouseIn
-            cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31), // FBatch
-            cursor.getShort(offset + 32) != 0, // FIsFree
-            cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33), // FWorkShopId1
-            cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34), // FRemainInStockQty
-            cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35), // FRealQty
-            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36), // FRemainInStockUnitId
-            cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37), // FPriceUnitID
-            cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38), // FMaterialId
-            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39), // FMaterialIdForPD
-            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40), // FUnitID
-            cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41), // FUnitIDForPD
-            cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42), // AuxSign
-            cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43), // ActualModel
-            cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44), // FProductNo
-            cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45), // FStoreNum
-            cursor.isNull(offset + 46) ? null : cursor.getString(offset + 46), // FBaseNum
-            cursor.isNull(offset + 47) ? null : cursor.getString(offset + 47), // FStoreUnit
-            cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48), // FStoreUnitID
-            cursor.isNull(offset + 49) ? null : cursor.getString(offset + 49), // FBaseUnit
-            cursor.isNull(offset + 50) ? null : cursor.getString(offset + 50), // FBaseUnitID
-            cursor.isNull(offset + 51) ? null : cursor.getString(offset + 51), // FBillNo
-            cursor.isNull(offset + 52) ? null : cursor.getString(offset + 52), // FAllowAddMaterial
-            cursor.isNull(offset + 53) ? null : cursor.getString(offset + 53), // FZeroStockInCount
-            cursor.isNull(offset + 54) ? null : cursor.getString(offset + 54), // FBillTypeID
-            cursor.isNull(offset + 55) ? null : cursor.getString(offset + 55), // FCheckQtyDefault
-            cursor.isNull(offset + 56) ? null : cursor.getString(offset + 56), // FNotIncludeForbidMat
-            cursor.isNull(offset + 57) ? null : cursor.getString(offset + 57), // FStockOrgId
-            cursor.isNull(offset + 58) ? null : cursor.getString(offset + 58), // FDocumentStatus
-            cursor.isNull(offset + 59) ? null : cursor.getString(offset + 59), // FCloseStatus
-            cursor.isNull(offset + 60) ? null : cursor.getString(offset + 60), // FNote
-            cursor.isNull(offset + 61) ? null : cursor.getString(offset + 61), // FOWnerTypeID
-            cursor.isNull(offset + 62) ? null : cursor.getString(offset + 62), // FOwnerId
-            cursor.isNull(offset + 63) ? null : cursor.getString(offset + 63), // FKeeperTypeId
-            cursor.isNull(offset + 64) ? null : cursor.getString(offset + 64) // FKeeperId
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // FTaxPrice
+            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // FHuoZhuNumber
+            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // FHuoZhu
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // FBackDate
+            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // FBackType
+            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // FSOEntryId
+            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // FB2CORDERDETAILID
+            cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26), // FStorageOutId
+            cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27), // FStorageOut
+            cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28), // FStorageInId
+            cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29), // FStorageIn
+            cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30), // FWaveHouseOutId
+            cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31), // FWaveHouseOut
+            cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32), // FWaveHouseInId
+            cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33), // FWaveHouseIn
+            cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34), // FBatch
+            cursor.getShort(offset + 35) != 0, // FIsFree
+            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36), // FWorkShopId1
+            cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37), // FRemainInStockQty
+            cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38), // FRealQty
+            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39), // FRemainInStockUnitId
+            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40), // FPriceUnitID
+            cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41), // FMaterialId
+            cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42), // FMaterialIdForPD
+            cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43), // FUnitID
+            cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44), // FUnitIDForPD
+            cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45), // AuxSign
+            cursor.isNull(offset + 46) ? null : cursor.getString(offset + 46), // ActualModel
+            cursor.isNull(offset + 47) ? null : cursor.getString(offset + 47), // FProductNo
+            cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48), // FStoreNum
+            cursor.isNull(offset + 49) ? null : cursor.getString(offset + 49), // FBaseNum
+            cursor.isNull(offset + 50) ? null : cursor.getString(offset + 50), // FStoreUnit
+            cursor.isNull(offset + 51) ? null : cursor.getString(offset + 51), // FStoreUnitID
+            cursor.isNull(offset + 52) ? null : cursor.getString(offset + 52), // FBaseUnit
+            cursor.isNull(offset + 53) ? null : cursor.getString(offset + 53), // FBaseUnitID
+            cursor.isNull(offset + 54) ? null : cursor.getString(offset + 54), // FBillNo
+            cursor.isNull(offset + 55) ? null : cursor.getString(offset + 55), // FAllowAddMaterial
+            cursor.isNull(offset + 56) ? null : cursor.getString(offset + 56), // FZeroStockInCount
+            cursor.isNull(offset + 57) ? null : cursor.getString(offset + 57), // FBillTypeID
+            cursor.isNull(offset + 58) ? null : cursor.getString(offset + 58), // FCheckQtyDefault
+            cursor.isNull(offset + 59) ? null : cursor.getString(offset + 59), // FNotIncludeForbidMat
+            cursor.isNull(offset + 60) ? null : cursor.getString(offset + 60), // FStockOrgId
+            cursor.isNull(offset + 61) ? null : cursor.getString(offset + 61), // FDocumentStatus
+            cursor.isNull(offset + 62) ? null : cursor.getString(offset + 62), // FCloseStatus
+            cursor.isNull(offset + 63) ? null : cursor.getString(offset + 63), // FNote
+            cursor.isNull(offset + 64) ? null : cursor.getString(offset + 64), // FOWnerTypeID
+            cursor.isNull(offset + 65) ? null : cursor.getString(offset + 65), // FOwnerId
+            cursor.isNull(offset + 66) ? null : cursor.getString(offset + 66), // FKeeperTypeId
+            cursor.isNull(offset + 67) ? null : cursor.getString(offset + 67) // FKeeperId
         );
         return entity;
     }
@@ -911,52 +950,55 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
         entity.setFUnit(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
         entity.setFSupplier(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
         entity.setFQuantity(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setFBackDate(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
-        entity.setFBackType(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
-        entity.setFSOEntryId(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
-        entity.setFB2CORDERDETAILID(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
-        entity.setFStorageOutId(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
-        entity.setFStorageOut(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
-        entity.setFStorageInId(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
-        entity.setFStorageIn(cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26));
-        entity.setFWaveHouseOutId(cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27));
-        entity.setFWaveHouseOut(cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28));
-        entity.setFWaveHouseInId(cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29));
-        entity.setFWaveHouseIn(cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30));
-        entity.setFBatch(cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31));
-        entity.setFIsFree(cursor.getShort(offset + 32) != 0);
-        entity.setFWorkShopId1(cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33));
-        entity.setFRemainInStockQty(cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34));
-        entity.setFRealQty(cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35));
-        entity.setFRemainInStockUnitId(cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36));
-        entity.setFPriceUnitID(cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37));
-        entity.setFMaterialId(cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38));
-        entity.setFMaterialIdForPD(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
-        entity.setFUnitID(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
-        entity.setFUnitIDForPD(cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41));
-        entity.setAuxSign(cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42));
-        entity.setActualModel(cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43));
-        entity.setFProductNo(cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44));
-        entity.setFStoreNum(cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45));
-        entity.setFBaseNum(cursor.isNull(offset + 46) ? null : cursor.getString(offset + 46));
-        entity.setFStoreUnit(cursor.isNull(offset + 47) ? null : cursor.getString(offset + 47));
-        entity.setFStoreUnitID(cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48));
-        entity.setFBaseUnit(cursor.isNull(offset + 49) ? null : cursor.getString(offset + 49));
-        entity.setFBaseUnitID(cursor.isNull(offset + 50) ? null : cursor.getString(offset + 50));
-        entity.setFBillNo(cursor.isNull(offset + 51) ? null : cursor.getString(offset + 51));
-        entity.setFAllowAddMaterial(cursor.isNull(offset + 52) ? null : cursor.getString(offset + 52));
-        entity.setFZeroStockInCount(cursor.isNull(offset + 53) ? null : cursor.getString(offset + 53));
-        entity.setFBillTypeID(cursor.isNull(offset + 54) ? null : cursor.getString(offset + 54));
-        entity.setFCheckQtyDefault(cursor.isNull(offset + 55) ? null : cursor.getString(offset + 55));
-        entity.setFNotIncludeForbidMat(cursor.isNull(offset + 56) ? null : cursor.getString(offset + 56));
-        entity.setFStockOrgId(cursor.isNull(offset + 57) ? null : cursor.getString(offset + 57));
-        entity.setFDocumentStatus(cursor.isNull(offset + 58) ? null : cursor.getString(offset + 58));
-        entity.setFCloseStatus(cursor.isNull(offset + 59) ? null : cursor.getString(offset + 59));
-        entity.setFNote(cursor.isNull(offset + 60) ? null : cursor.getString(offset + 60));
-        entity.setFOWnerTypeID(cursor.isNull(offset + 61) ? null : cursor.getString(offset + 61));
-        entity.setFOwnerId(cursor.isNull(offset + 62) ? null : cursor.getString(offset + 62));
-        entity.setFKeeperTypeId(cursor.isNull(offset + 63) ? null : cursor.getString(offset + 63));
-        entity.setFKeeperId(cursor.isNull(offset + 64) ? null : cursor.getString(offset + 64));
+        entity.setFTaxPrice(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setFHuoZhuNumber(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
+        entity.setFHuoZhu(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
+        entity.setFBackDate(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
+        entity.setFBackType(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
+        entity.setFSOEntryId(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
+        entity.setFB2CORDERDETAILID(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
+        entity.setFStorageOutId(cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26));
+        entity.setFStorageOut(cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27));
+        entity.setFStorageInId(cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28));
+        entity.setFStorageIn(cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29));
+        entity.setFWaveHouseOutId(cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30));
+        entity.setFWaveHouseOut(cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31));
+        entity.setFWaveHouseInId(cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32));
+        entity.setFWaveHouseIn(cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33));
+        entity.setFBatch(cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34));
+        entity.setFIsFree(cursor.getShort(offset + 35) != 0);
+        entity.setFWorkShopId1(cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36));
+        entity.setFRemainInStockQty(cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37));
+        entity.setFRealQty(cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38));
+        entity.setFRemainInStockUnitId(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
+        entity.setFPriceUnitID(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
+        entity.setFMaterialId(cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41));
+        entity.setFMaterialIdForPD(cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42));
+        entity.setFUnitID(cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43));
+        entity.setFUnitIDForPD(cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44));
+        entity.setAuxSign(cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45));
+        entity.setActualModel(cursor.isNull(offset + 46) ? null : cursor.getString(offset + 46));
+        entity.setFProductNo(cursor.isNull(offset + 47) ? null : cursor.getString(offset + 47));
+        entity.setFStoreNum(cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48));
+        entity.setFBaseNum(cursor.isNull(offset + 49) ? null : cursor.getString(offset + 49));
+        entity.setFStoreUnit(cursor.isNull(offset + 50) ? null : cursor.getString(offset + 50));
+        entity.setFStoreUnitID(cursor.isNull(offset + 51) ? null : cursor.getString(offset + 51));
+        entity.setFBaseUnit(cursor.isNull(offset + 52) ? null : cursor.getString(offset + 52));
+        entity.setFBaseUnitID(cursor.isNull(offset + 53) ? null : cursor.getString(offset + 53));
+        entity.setFBillNo(cursor.isNull(offset + 54) ? null : cursor.getString(offset + 54));
+        entity.setFAllowAddMaterial(cursor.isNull(offset + 55) ? null : cursor.getString(offset + 55));
+        entity.setFZeroStockInCount(cursor.isNull(offset + 56) ? null : cursor.getString(offset + 56));
+        entity.setFBillTypeID(cursor.isNull(offset + 57) ? null : cursor.getString(offset + 57));
+        entity.setFCheckQtyDefault(cursor.isNull(offset + 58) ? null : cursor.getString(offset + 58));
+        entity.setFNotIncludeForbidMat(cursor.isNull(offset + 59) ? null : cursor.getString(offset + 59));
+        entity.setFStockOrgId(cursor.isNull(offset + 60) ? null : cursor.getString(offset + 60));
+        entity.setFDocumentStatus(cursor.isNull(offset + 61) ? null : cursor.getString(offset + 61));
+        entity.setFCloseStatus(cursor.isNull(offset + 62) ? null : cursor.getString(offset + 62));
+        entity.setFNote(cursor.isNull(offset + 63) ? null : cursor.getString(offset + 63));
+        entity.setFOWnerTypeID(cursor.isNull(offset + 64) ? null : cursor.getString(offset + 64));
+        entity.setFOwnerId(cursor.isNull(offset + 65) ? null : cursor.getString(offset + 65));
+        entity.setFKeeperTypeId(cursor.isNull(offset + 66) ? null : cursor.getString(offset + 66));
+        entity.setFKeeperId(cursor.isNull(offset + 67) ? null : cursor.getString(offset + 67));
      }
     
     @Override

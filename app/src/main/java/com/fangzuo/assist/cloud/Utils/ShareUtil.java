@@ -42,8 +42,15 @@ public class ShareUtil {
     public void setOrderCode(int activity, long orderCode){
         editor.putLong(activity+"",orderCode).apply();
     }
+    //根据activity的tag，获取单据编号
+    public void setOrderCode(String activity, long orderCode){
+        editor.putLong(activity,orderCode).apply();
+    }
     public long getOrderCode(int activity){
         return shared.getLong(activity+"",0);
+    }
+    public long getOrderCode(String activity){
+        return shared.getLong(activity,0);
     }
     public void setBooleam(String key,boolean val){
         editor.putBoolean(key,val);

@@ -41,6 +41,7 @@ import butterknife.OnClick;
 public class ReViewPDActivity extends BaseActivity {
     ActivityReViewPdBinding binding;
     private int activity;
+    private String  fid;
 //    private T_main main;
     private List<T_Detail> list;
     private List<T_main> list_main;
@@ -58,6 +59,9 @@ public class ReViewPDActivity extends BaseActivity {
         Intent in = getIntent();
         Bundle extras = in.getExtras();
         activity = extras.getInt("activity");
+        fid = extras.getString("fid");
+        Lg.e("得到数据："+activity);
+        Lg.e("得到数据："+fid);
         initList();
     }
 
@@ -67,14 +71,18 @@ public class ReViewPDActivity extends BaseActivity {
         list = new ArrayList<>();
         list_main = new ArrayList<>();
         list = t_detailDao.queryBuilder().where(
-                T_DetailDao.Properties.Activity.eq(activity)
+                T_DetailDao.Properties.Activity.eq(activity),
+                T_DetailDao.Properties.FID.eq(fid)
         ).build().list();
         if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 isCheck.add(false);
             }
         }else{//若列表为空，删除所有该activity的表头信息
-            t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list());
+            t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
+                    T_mainDao.Properties.Activity.eq(activity),
+                    T_mainDao.Properties.FID.eq(fid)
+            ).build().list());
         }
         Lg.e("列表数据：" + gson.toJson(list));
         adapter = new ReViewPDAdapter(mContext, list, isCheck);

@@ -36,7 +36,7 @@ public class PrintHistory {
         this.FModel = product.FModel;
     }
     public void setData(Product product, Unit unit, Unit unitAux, String num, String num2, String wave,
-                        String not, String huoquan, String barcode, String batch, String date, String title){
+                        String not, String huoquan, String barcode, String batch, String date, String title,String auxSign){
         this.FTitle = title;
         this.FName = product.FName;
         this.FModel = product.FModel;
@@ -50,6 +50,7 @@ public class PrintHistory {
         this.FBarCode=barcode;
         this.FBatch = batch;
         this.FDate = date;
+        this.FAuxSign = auxSign;
     }
 
 

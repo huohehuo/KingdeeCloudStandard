@@ -294,6 +294,126 @@ public class DataModel {
         return list;
     }
 
+    //遍历所有的货主信息
+    public static List<String> getHuoZhuForPushDown(Context context,String orderID,int Activity,String fid){
+        List<String> list = new ArrayList<>();
+        DaoSession daoSession = GreenDaoManager.getmInstance(context).getDaoSession();
+        Cursor cursor = daoSession.getDatabase().rawQuery("SELECT " +
+                "ACTIVITY," +
+                "FORDER_ID," +
+                "FID," +
+                "FHUO_ZHU_NUMBER " +
+                "FROM T__DETAIL " +
+                "WHERE " +
+                "FORDER_ID = ? AND ACTIVITY = ? AND FID = ? " +
+                "GROUP BY " +
+                "FHUO_ZHU_NUMBER ORDER BY FHUO_ZHU_NUMBER", new String[]{orderID+"", Activity+"",fid});
+        while (cursor.moveToNext()){
+            list.add(cursor.getString(cursor.getColumnIndex("FHUO_ZHU_NUMBER")));
+        }
+        return list;
+    }
+
+
+    //回单时，合并相同条件的物料
+    public static List<T_Detail> mergeDetailForPushDown(Context context,String orderID,int Activity,String fid,String huozhu){
+        List<T_Detail> list = new ArrayList<>();
+        DaoSession daoSession = GreenDaoManager.getmInstance(context).getDaoSession();
+        Cursor cursor = daoSession.getDatabase().rawQuery("SELECT " +
+                "ACTIVITY," +
+                "FORDER_ID," +
+                "FSTORAGE_ID," +
+                "FID," +
+                "FENTRY_ID," +
+                "FTAX_PRICE," +
+                "FHUO_ZHU_NUMBER," +
+                "FPRODUCT_NO," +
+                "FSTORAGE_OUT_ID," +
+                "FSTORAGE_OUT," +
+                "FSTORAGE_IN_ID," +
+                "FSTORAGE_IN," +
+                "FWAVE_HOUSE_OUT_ID," +
+                "FWAVE_HOUSE_OUT," +
+                "FWAVE_HOUSE_IN_ID," +
+                "FWAVE_HOUSE_IN," +
+                "AUX_SIGN," +
+                "ACTUAL_MODEL," +
+                "FWORK_SHOP_ID1," +
+                "FSTORAGE_PDID," +
+                "FWAVE_HOUSE_ID," +
+                "FWAVE_HOUSE_PDID," +
+                "FSOENTRY_ID," +
+                "FBATCH," +
+                "FIS_FREE," +
+                "FREMAIN_IN_STOCK_UNIT_ID," +
+                "FPRICE_UNIT_ID," +
+                "FMATERIAL_ID," +
+                "FMATERIAL_ID_FOR_PD," +
+                "FUNIT_ID," +
+                "FUNIT_IDFOR_PD," +
+                "FBILL_NO," +
+                "FBILL_TYPE_ID," +
+                "FSTOCK_ORG_ID," +
+                "SUM(FREMAIN_IN_STOCK_QTY) AS FREMAIN_IN_STOCK_QTYALL," +
+                "SUM(FREAL_QTY) AS FREAL_QTYALL " +
+                "FROM T__DETAIL " +
+                "WHERE " +
+                "FORDER_ID = ? AND ACTIVITY = ? AND FID = ?  AND FHUO_ZHU_NUMBER = ? " +
+                "GROUP BY " +
+                "FORDER_ID," +
+                "FWORK_SHOP_ID1," +
+                "FSTORAGE_ID," +
+                "FWAVE_HOUSE_ID," +
+                "FBATCH," +
+                "FMATERIAL_ID," +
+                "FUNIT_ID ORDER BY FENTRY_ID", new String[]{orderID+"", Activity+"",fid,huozhu});
+        while (cursor.moveToNext()){
+            T_Detail t_detail = new T_Detail();
+            t_detail.activity = cursor.getInt(cursor.getColumnIndex("ACTIVITY"));
+            t_detail.FOrderId = cursor.getLong(cursor.getColumnIndex("FORDER_ID"));
+            t_detail.FStorageId = cursor.getString(cursor.getColumnIndex("FSTORAGE_ID"));
+            t_detail.FWorkShopId1 = cursor.getString(cursor.getColumnIndex("FWORK_SHOP_ID1"));
+            t_detail.FStoragePDId = cursor.getString(cursor.getColumnIndex("FSTORAGE_PDID"));
+            t_detail.FWaveHouseId = cursor.getString(cursor.getColumnIndex("FWAVE_HOUSE_ID"));
+            t_detail.FWaveHousePDId = cursor.getString(cursor.getColumnIndex("FWAVE_HOUSE_PDID"));
+            t_detail.FSOEntryId = cursor.getString(cursor.getColumnIndex("FSOENTRY_ID"));
+            t_detail.FBatch = cursor.getString(cursor.getColumnIndex("FBATCH"));
+            t_detail.FIsFree = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("FIS_FREE")));
+            t_detail.FRemainInStockQty = cursor.getString(cursor.getColumnIndex("FREMAIN_IN_STOCK_QTYALL"));
+            t_detail.FRealQty = cursor.getString(cursor.getColumnIndex("FREAL_QTYALL"));
+            t_detail.FRemainInStockUnitId = cursor.getString(cursor.getColumnIndex("FREMAIN_IN_STOCK_UNIT_ID"));
+            t_detail.FPriceUnitID = cursor.getString(cursor.getColumnIndex("FPRICE_UNIT_ID"));
+            t_detail.FMaterialId = cursor.getString(cursor.getColumnIndex("FMATERIAL_ID"));
+            t_detail.FMaterialIdForPD = cursor.getString(cursor.getColumnIndex("FMATERIAL_ID_FOR_PD"));
+            t_detail.FUnitID = cursor.getString(cursor.getColumnIndex("FUNIT_ID"));
+            t_detail.FUnitIDForPD = cursor.getString(cursor.getColumnIndex("FUNIT_IDFOR_PD"));
+            t_detail.FBillNo = cursor.getString(cursor.getColumnIndex("FBILL_NO"));
+            t_detail.FBillTypeID = cursor.getString(cursor.getColumnIndex("FBILL_TYPE_ID"));
+            t_detail.FStockOrgId = cursor.getString(cursor.getColumnIndex("FSTOCK_ORG_ID"));
+            t_detail.AuxSign = cursor.getString(cursor.getColumnIndex("AUX_SIGN"));
+            t_detail.ActualModel = cursor.getString(cursor.getColumnIndex("ACTUAL_MODEL"));
+            t_detail.FProductNo = cursor.getString(cursor.getColumnIndex("FPRODUCT_NO"));
+            t_detail.FTaxPrice = cursor.getString(cursor.getColumnIndex("FTAX_PRICE"));
+            t_detail.FHuoZhuNumber = cursor.getString(cursor.getColumnIndex("FHUO_ZHU_NUMBER"));
+
+            t_detail.FStorageOutId = cursor.getString(cursor.getColumnIndex("FSTORAGE_OUT_ID"));
+            t_detail.FStorageOut = cursor.getString(cursor.getColumnIndex("FSTORAGE_OUT"));
+            t_detail.FStorageInId = cursor.getString(cursor.getColumnIndex("FSTORAGE_IN_ID"));
+            t_detail.FStorageIn = cursor.getString(cursor.getColumnIndex("FSTORAGE_IN"));
+            t_detail.FWaveHouseOutId = cursor.getString(cursor.getColumnIndex("FWAVE_HOUSE_OUT_ID"));
+            t_detail.FWaveHouseOut = cursor.getString(cursor.getColumnIndex("FWAVE_HOUSE_OUT"));
+            t_detail.FWaveHouseInId = cursor.getString(cursor.getColumnIndex("FWAVE_HOUSE_IN_ID"));
+            t_detail.FWaveHouseIn = cursor.getString(cursor.getColumnIndex("FWAVE_HOUSE_IN"));
+            t_detail.FEntryID = cursor.getString(cursor.getColumnIndex("FENTRY_ID"));
+            t_detail.FID = cursor.getString(cursor.getColumnIndex("FID"));
+
+
+            list.add(t_detail);
+        }
+
+        return list;
+    }
+
     //获取库存
     public static void getStoreNum(Product product, Storage storage, String batch, Context mContext, final TextView textView,Org org){
         if (product == null || storage == null){
