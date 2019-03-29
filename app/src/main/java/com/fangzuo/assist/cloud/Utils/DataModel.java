@@ -325,6 +325,8 @@ public class DataModel {
                 "FSTORAGE_ID," +
                 "FID," +
                 "FENTRY_ID," +
+                "FBACK_DATE," +
+                "FBACK_TYPE," +
                 "FTAX_PRICE," +
                 "FHUO_ZHU_NUMBER," +
                 "FPRODUCT_NO," +
@@ -395,6 +397,8 @@ public class DataModel {
             t_detail.FProductNo = cursor.getString(cursor.getColumnIndex("FPRODUCT_NO"));
             t_detail.FTaxPrice = cursor.getString(cursor.getColumnIndex("FTAX_PRICE"));
             t_detail.FHuoZhuNumber = cursor.getString(cursor.getColumnIndex("FHUO_ZHU_NUMBER"));
+            t_detail.FBackDate = cursor.getString(cursor.getColumnIndex("FBACK_DATE"));
+            t_detail.FBackType = cursor.getString(cursor.getColumnIndex("FBACK_TYPE"));
 
             t_detail.FStorageOutId = cursor.getString(cursor.getColumnIndex("FSTORAGE_OUT_ID"));
             t_detail.FStorageOut = cursor.getString(cursor.getColumnIndex("FSTORAGE_OUT"));

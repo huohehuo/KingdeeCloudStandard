@@ -788,17 +788,17 @@ public class JsonDealUtils {
             for (int i = 0; i < mains.size(); i++) {
                 JSONObject inObject = new JSONObject();
                 inObject.put("FBillNo","");
-                inObject.put("FOrderNo",mains.get(i).FSoorDerno);
-                addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
-                addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FStockOrgId);
-                addObject(inObject,"FSaleOrgId","FNUMBER",mains.get(i).FStockOrgId);
                 inObject.put("FDate",mains.get(i).FDate);
+//                inObject.put("FOrderNo",mains.get(i).FSoorDerno);
+                addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
+                addObject(inObject,"FSaleOrgId","FNUMBER",mains.get(i).FPurchaseOrgId);
+                addObject(inObject,"FRetcustId","FNUMBER",mains.get(i).FCustomerID);
                 addObject(inObject,"FSaledeptid","FNUMBER",mains.get(i).FPurchaseDeptId);
+                addObject(inObject,"FSalesManId","FNUMBER",mains.get(i).FPurchaserId);
+                addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FStockOrgId);
                 addObject(inObject,"FStockDeptId","FNUMBER",mains.get(i).FDepartmentNumber);
                 addObject(inObject,"FStockerId","FNUMBER",mains.get(i).FStockerNumber);
-                addObject(inObject,"FSalesManId","FNUMBER",mains.get(i).FPurchaserId);
-                addObject(inObject,"FRetcustId","FNUMBER",mains.get(i).FCustomerID);
-                addObject(inObject,"FSupplierId","FNUMBER",mains.get(i).FSupplierId);
+//                addObject(inObject,"FSupplierId","FNUMBER",mains.get(i).FSupplierId);
                 JSONObject stockObject = new JSONObject();
                 addObject(stockObject,"FExchangeTypeId","FNUMBER","HLTX01_SYS");
                 stockObject.put("FExchangeRate","1");
@@ -812,15 +812,17 @@ public class JsonDealUtils {
                     JSONObject jsonAr = new JSONObject();
                     addObject(jsonAr,"FMaterialId","FNumber",beans.get(j).FMaterialId);
                     addObject(jsonAr,"FStockId","FNumber",beans.get(j).FStorageId);
+//                    addObject(jsonAr,"FStockstatusId","FNumber",beans.get(j).FStorageId);
                     addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
                     jsonAr.put("FRealQty",beans.get(j).FRealQty);
                     addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
                     jsonAr.put("FIsFree",beans.get(j).FIsFree);
                     jsonAr.put("FSOEntryId",beans.get(j).FSOEntryId);
-                    addObject(jsonAr,"FReturnType","FNumber",beans.get(j).FBackType);
+                    addObject(jsonAr,"FReturnType","FNumber",beans.get(j).FBackType);//THLX01_SYS
                     jsonAr.put("FDeliveryDate",beans.get(j).FBackDate);
-                    jsonAr.put("FOwnerTypeId","BD_OwnerOrg");
-                    addObject(jsonAr,"FOwnerId","FNumber","100");
+                    jsonAr.put("FTaxPrice",beans.get(j).FTaxPrice);
+//                    jsonAr.put("FOwnerTypeId","BD_OwnerOrg");
+                    addObject(jsonAr,"FOwnerId","FNumber",mains.get(i).FStockOrgId);
                     jsonArray.put(jsonAr);
                     JSONArray jsonA2 = new JSONArray();
                     for (int k = 0; k < 1; k++) {

@@ -294,6 +294,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
 //                break;
             case EventBusInfoCode.Code_Only_Insert://写入条码唯一临时表
                 codeCheckBackDataBean = (CodeCheckBackDataBean) event.postEvent;
+                LoadingUtil.dismiss();
                 if (codeCheckBackDataBean.FTip.equals("OK")) {
                     Addorder();
                 } else {
@@ -404,6 +405,9 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             mainSaleOrg = LocDataUtil.getOrg(pushDownMain.FSaleOrgID,"id").FNumber;
             if ("".equals(pushDownMain.FSupplyID==null?"":pushDownMain.FSupplyID)){
                 LoadingUtil.showAlter(mContext,"注意","表头明细的客户数据带出失败，请重试...",false);
+            }
+            if ("".equals(mainSaleDept)){
+                mainSaleDept = LocDataUtil.getDept(LocDataUtil.getSaleMan(pushDownMain.FSaleManID).FDeptID).FNumber;
             }
         } else {
             LoadingUtil.showAlter(mContext,"注意","表头数据获取失败，请重新下载单据...",false);
@@ -637,9 +641,9 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             MediaPlayer.getInstance(mContext).error();
             return false;
         }
+        unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
         if (unit==null ||unit.FMeasureUnitID.equals("")) {
             Toast.showText(mContext, "物料单位未带出，请重试...");
-            unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
             MediaPlayer.getInstance(mContext).error();
             return false;
         }
@@ -699,7 +703,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                     PrintHistory printHistory = new PrintHistory();
                     printHistory.setData(product, spUnitStore.getDataObject(), spUnitJiben.getDataObject(), storeNum,
                             baseNum, spWavehouse.getWaveHouseId(), activityPager.getNote(),
-                            activityPager.getOrgIn().FNumber, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber());
+                            activityPager.getOrgOut().FNumber, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
                         CommonUtil.doPrint(zpSDK, printHistory);
@@ -795,6 +799,8 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             detail.FRealQty = num;
             detail.FStoreNum = edStorenum.getText().toString();
             detail.FBaseNum = edBasenum.getText().toString();
+            detail.FBackType = "THLX01_SYS";
+            detail.FBackDate = CommonUtil.getTime(true);
             detail.FIsFree = false;
             detail.FProductNo = edPurchaseNo.getText().toString();
             detail.FBatch = batch;

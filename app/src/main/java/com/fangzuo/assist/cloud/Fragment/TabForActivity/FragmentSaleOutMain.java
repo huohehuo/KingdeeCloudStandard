@@ -175,7 +175,7 @@ public class FragmentSaleOutMain extends BaseFragment {
         }
         setfocus(tvDate);
         //当为下推单时隐藏
-        if (activityPager.getActivity() == Config.PdSaleOrder2SaleOutActivity) {
+        if (activityPager.getActivity() == Config.PdSaleOrder2SaleOutActivity||activityPager.getActivity() == Config.PdBackMsg2SaleBackActivity) {
             llClient.setVisibility(View.GONE);
         }
     }

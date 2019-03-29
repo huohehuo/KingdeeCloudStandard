@@ -84,7 +84,7 @@ public class ReViewPDActivity extends BaseActivity {
                     T_mainDao.Properties.FID.eq(fid)
             ).build().list());
         }
-        Lg.e("列表数据：" + gson.toJson(list));
+        Lg.e("列表数据：" ,list);
         adapter = new ReViewPDAdapter(mContext, list, isCheck);
         binding.lvResult.setAdapter(adapter);
 //        adapter.setInnerListener(this);
