@@ -43,6 +43,7 @@ import com.fangzuo.assist.cloud.Utils.ShareUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
+import com.fangzuo.assist.cloud.widget.SpinnerUser;
 import com.fangzuo.greendao.gen.SaleManDao;
 import com.fangzuo.greendao.gen.UserDao;
 import com.google.gson.Gson;
@@ -81,10 +82,10 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     private Button mBtnSetting;
     private LoginActivity mContext;
     @BindView(R.id.sp_login)
-    Spinner spinner;
+    SpinnerUser spinner;
     private String userName = "";
     private String userID = "";
-    private List<User> users;
+//    private List<User> users;
     private BasicShareUtil share;
     private boolean isOL;
     private String userPass;
@@ -118,7 +119,8 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     @Override
     protected void onResume() {
         super.onResume();
-        getListUser();
+        //获取用户数据，并且设置默认值
+        spinner.setAutoSelection(Info.AutoLogin,Hawk.get(Info.AutoLogin, ""));
         DataService.updateTime(mContext);
         DownLoadUseTime();
     }
@@ -204,65 +206,8 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     }
 
 
-
-    //获取用户数据
-    private void getListUser() {
-        Lg.e("getListUser");
-        final Gson gson = new Gson();
-        ArrayList<Integer> chooseAll = new ArrayList<>();
-        chooseAll.add(12);
-        LoadingUtil.show(mContext, "正在预加载...请稍后...", true);
-        String json = JsonCreater.DownLoadData(share.getDatabaseIp(),
-                share.getDatabasePort(), share.getDataBaseUser(), share.getDataBasePass(),
-                share.getDataBase(), share.getVersion(), chooseAll);
-        App.getRService().doIOAction(WebApi.DOWNLOADDATA, json, new MySubscribe<CommonResponse>() {
-            @Override
-            public void onNext(CommonResponse commonResponse) {
-                super.onNext(commonResponse);
-                if (!commonResponse.state)return;
-                Log.e(TAG, "获取用户数据：" + commonResponse.returnJson);
-                DownloadReturnBean dBean = gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
-                userDao.deleteAll();
-                userDao.detachAll();
-                userDao.insertInTx(dBean.User);
-                LoadingUtil.dismiss();
-                getUserInfo();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-//                super.onError(e);
-                LoadingUtil.dismiss();
-            }
-        });
-    }
-
-
     @Override
     public void initData() {
-        getUserInfo();
-//        mCbisOL.setChecked(BasicShareUtil.getInstance(mContext).getIsOL());
-
-    }
-
-    private void getUserInfo() {
-        users = userDao.loadAll();
-        LoginSpAdapter ada = new LoginSpAdapter(mContext, users);
-        spinner.setAdapter(ada);
-        ada.notifyDataSetChanged();
-        if (users.size() > 0) {
-            userName = users.get(0).FName;
-            userID = users.get(0).FUserID;
-            ShareUtil.getInstance(mContext).setUserName(userName);
-            ShareUtil.getInstance(mContext).setUserID(userID);
-        }
-        //自动设置上次的用户
-        for (int i = 0; i < ada.getCount(); i++) {
-            if (((User) ada.getItem(i)).FName.equals(Hawk.get(Info.AutoLogin, ""))) {
-                spinner.setSelection(i);
-            }
-        }
-
     }
 
     @Override
@@ -284,13 +229,16 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 //                ada.notifyDataSetChanged();
 //            }
 //        });
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Lg.e("选中用户：" + users.get(i).toString());
-                userName = users.get(i).FName;
-                userID = users.get(i).FUserID;
-                userPass = users.get(i).FPassWord;
+                User user = (User) spinner.getAdapter().getItem(i);
+                userName = user.FName;
+                userID = user.FUserID;
+                userPass = user.FPassWord;
+                ShareUtil.getInstance(mContext).setUserName(userName);
+                ShareUtil.getInstance(mContext).setUserID(userID);
                 //设置下次默认选择的用户
                 Hawk.put(Info.AutoLogin, userName);
                 //设置该用户密码
@@ -388,47 +336,6 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 super.onError(e);
             }
         });
-
-
-//        if (!userID.equals("") && !userName.equals("")) {
-//            if (mEtPassword.getText().toString().equals(userPass)) {
-//                //组装登录数据
-//                JSONArray jParas = new JSONArray();
-//                jParas.put("5beb8db650b4cf");// 帐套Id
-//                jParas.put("Administrator");// 用户名
-//                jParas.put("888888");// 密码
-//                jParas.put(2052);// 语言T
-//                App.getRService().doIOActionLogin(Config.C_Login, jParas.toString(), new ToSubscribe<BackDataLogin>() {
-//                            @Override
-//                            public void onNext(BackDataLogin backDataLogin) {
-//                                if (backDataLogin.getLoginResultType()==1){
-//                                    ShareUtil.getInstance(mContext).setUserName(userName);
-//                                    ShareUtil.getInstance(mContext).setUserID(userID);
-//                                    if (isRemPass.isChecked()){
-//                                        //保存该用户的密码
-//                                        Hawk.put(userName,mEtPassword.getText().toString());
-//                                    }else{
-//                                        Hawk.put(userName,"");
-//                                    }
-//                                    startNewActivity(MenuActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
-//                                }else{
-//                                    Lg.e("登录错误："+backDataLogin.toString());
-//                                }
-//
-//                            }
-//
-//                            @Override
-//                            public void onError(Throwable e) {
-//                                super.onError(e);
-//                            }
-//                        });
-//            } else {
-//                Toast.showText(mContext, "请输入正确的登录信息");
-//            }
-//
-//        } else {
-//            Toast.showText(mContext, "请下载用户配置信息");
-//        }
     }
 
 
