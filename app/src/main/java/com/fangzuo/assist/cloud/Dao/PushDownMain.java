@@ -23,9 +23,11 @@ public class PushDownMain {
     public String FSaleDeptID;
     public String FNot;
     public int tag;
-    @Generated(hash = 891791430)
+    public String FBillTypeName;
+    @Generated(hash = 1192757836)
     public PushDownMain(Long id, String FID, String FBillNo, String FDate, String FSupplyID, String FSupply,
-            String FSaleOrgID, String FSaleManID, String FSaleDeptID, String FNot, int tag) {
+            String FSaleOrgID, String FSaleManID, String FSaleDeptID, String FNot, int tag,
+            String FBillTypeName) {
         this.id = id;
         this.FID = FID;
         this.FBillNo = FBillNo;
@@ -37,6 +39,7 @@ public class PushDownMain {
         this.FSaleDeptID = FSaleDeptID;
         this.FNot = FNot;
         this.tag = tag;
+        this.FBillTypeName = FBillTypeName;
     }
     @Generated(hash = 92092905)
     public PushDownMain() {
@@ -116,6 +119,12 @@ public class PushDownMain {
     }
     public void setFNot(String FNot) {
         this.FNot = FNot;
+    }
+    public String getFBillTypeName() {
+        return this.FBillTypeName;
+    }
+    public void setFBillTypeName(String FBillTypeName) {
+        this.FBillTypeName = FBillTypeName;
     }
 
 //    public String FName;

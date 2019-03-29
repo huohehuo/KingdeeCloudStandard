@@ -42,6 +42,7 @@ import com.fangzuo.assist.cloud.widget.SpinnerSupplier;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.PushDownMainDao;
 import com.fangzuo.greendao.gen.PushDownSubDao;
+import com.fangzuo.greendao.gen.T_DetailDao;
 import com.fangzuo.greendao.gen.T_mainDao;
 
 import java.text.SimpleDateFormat;
@@ -188,7 +189,8 @@ public class ChooseFragment extends BaseFragment {
                     intent = new Intent(mContext, PdSendMsg2SaleOutActivity.class);
                     break;
                 case 6://退货通知单下推销售退货单
-                    intent = new Intent(mContext, PdBackMsg2SaleBackActivity.class);
+                    PagerForActivity.start(mContext, Config.PdBackMsg2SaleBackActivity,container);
+//                    intent = new Intent(mContext, PdBackMsg2SaleBackActivity.class);
                     break;
                 case 7://调拨申请单下推分布式调入单
                     intent = new Intent(mContext, Db2FDinActivity.class);
@@ -337,8 +339,8 @@ public class ChooseFragment extends BaseFragment {
                 pushDownSubDao.delete(pushDownSubs.get(j));
             }
             //删掉与该单据相关的明细
-//            daosession.getT_DetailDao().deleteInTx(daosession.getT_DetailDao().queryBuilder().where(
-//                    T_DetailDao.Properties.FInterID.eq(downloadIDs.get(i).FInterID)).build().list());
+            daosession.getT_DetailDao().deleteInTx(daosession.getT_DetailDao().queryBuilder().where(
+                    T_DetailDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list());
             daosession.getT_mainDao().deleteInTx(daosession.getT_mainDao().queryBuilder().where(
                     T_mainDao.Properties.FIndex.eq(downloadIDs.get(i).FID)).build().list());
             pushDownMainDao.delete(downloadIDs.get(i));

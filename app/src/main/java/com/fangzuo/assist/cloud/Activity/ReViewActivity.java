@@ -84,7 +84,7 @@ public class ReViewActivity extends BaseActivity {
                     CommonUtil.doPrint(zpSDK,data);
                 } catch (Exception e) {
 //                    e.printStackTrace();
-                    LoadingUtil.showAlter(mContext,"打印错误","请检查打印机是否已连接");
+                    LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
                 }
                 break;
         }

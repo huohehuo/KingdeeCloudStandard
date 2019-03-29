@@ -329,7 +329,7 @@ public class JsonDealUtils {
         return outOjbect.toString();
     }
     //销售订单下推销售出库的JSON拼接
-    public static String JSonSaleOrder2SaleOut(List<T_main> mains, Map<String,List<T_Detail>> map,List<String> hzList){
+    public static String JSonSaleOrder2SaleOut(List<T_main> mains, Map<String,List<T_Detail>> map){
         Lg.e("进入json拼接");
         JSONObject outOjbect = new JSONObject();
         try {
@@ -342,6 +342,11 @@ public class JsonDealUtils {
                 addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
                 addObject(inObject,"FSaleOrgId","FNumber",mains.get(i).FStockOrgId);
                 addObject(inObject,"FOwnerIdHead","FNumber",mains.get(i).FStockOrgId);
+                if ("XSCKD05_SYS".equals(mains.get(i).FBillTypeID)){
+                    addObject(inObject,"FSettleOrgID","FNumber",mains.get(i).FPurchaseOrgId);
+                }else{
+                    addObject(inObject,"FSettleOrgID","FNumber",mains.get(i).FOwnerIdHead);
+                }
                 addObject(inObject,"FStockOrgId","FNumber",mains.get(i).FPurchaseOrgId);
                 addObject(inObject,"FCustomerID","FNumber",mains.get(i).FCustomerID);
                 addObject(inObject,"FSaleDeptID","FNumber",mains.get(i).FPurchaseDeptId);
@@ -356,7 +361,7 @@ public class JsonDealUtils {
                 inObject.put("SubHeadEntity",stockObject);
 
                 JSONArray jsonArray = new JSONArray();
-                List<T_Detail> beans = map.get(hzList.get(i));
+                List<T_Detail> beans = map.get(mains.get(i).FOrderId+"");
                 Lg.e("jsonDetail:",beans);
                 for (int j = 0; j < beans.size(); j++) {
                     JSONObject jsonAr = new JSONObject();

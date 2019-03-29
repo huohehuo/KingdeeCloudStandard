@@ -132,7 +132,8 @@ public class PurchaseFragment extends BaseFragment {
                         break;
                     case "销售出库":
                         // 创建数据
-                        final String[] items = new String[]{"原单", "下推单"};
+//                        final String[] items = new String[]{"原单", "销售订单下推销售出库单"};
+                        final String[] items = new String[]{"原单", "销售订单下推销售出库单","退货通知单下推销售退货单"};
                         // 创建对话框构建器
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
@@ -154,6 +155,9 @@ public class PurchaseFragment extends BaseFragment {
 //                                                b.putInt("123", 2);
 ////                                                startNewActivity(PushDownPagerActivity.class, R.anim.activity_fade_in, R.anim.activity_fade_out, false, b);
 //                                                startNewActivity(PushDownPagerActivity.class, b);
+                                                break;
+                                            case 2:
+                                                PushDownPagerActivity.start(getActivity(),6);
                                                 break;
                                         }
                                     }

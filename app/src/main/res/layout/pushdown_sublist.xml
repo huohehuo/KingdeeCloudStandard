@@ -29,6 +29,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="规格型号:"
+                android:singleLine="true"
+                android:id="@+id/tv_model"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="单位:"
                 android:singleLine="true"
                 android:id="@+id/unit"/>

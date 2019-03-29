@@ -35,8 +35,8 @@ public class T_Detail {
     public String FQuantity;            //
 
     public String FTaxPrice;            //含税单价
-    public String FHuoZhuNumber;            //含税单价
-    public String FHuoZhu;            //含税单价
+    public String FHuoZhuNumber;
+    public String FHuoZhu;
 
     public String FBackDate;            //退货日期
     public String FBackType;            //退货类型

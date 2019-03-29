@@ -95,17 +95,17 @@ public class UpLoadModel {
                 }
                 Lg.e("得到表头："+mains.size(),mains);
                 List<T_main> t_mainList =new ArrayList<>();
-//                t_mainList.addAll(mains);
-                List<String> hzList=DataModel.getHuoZhuForPushDown(mContext,mains.get(0).FOrderId+"",activity,fid);
-                Lg.e("得到货主："+hzList.size(),hzList);
-            for (String str:hzList) {
-                t_mainList.add(mains.get(0));
-            }
-                for (String huozhu:hzList) {
-                Lg.e("遍历货主:"+huozhu);
+                t_mainList.addAll(mains);
+//                List<String> hzList=DataModel.getHuoZhuForPushDown(mContext,mains.get(0).FOrderId+"",activity,fid);
+//                Lg.e("得到货主："+hzList.size(),hzList);
+//            for (String str:hzList) {
+//                t_mainList.add(mains.get(0));
+//            }
+                for (T_main main:t_mainList) {
+//                Lg.e("遍历货主:"+huozhu);
                     //遍历出不同的货主信息
                     //合并回单
-                    List<T_Detail> details = DataModel.mergeDetailForPushDown(mContext,mains.get(0).FOrderId+"",activity,fid,huozhu);
+                    List<T_Detail> details = DataModel.mergeDetailForPushDown(mContext,main.FOrderId+"",activity,fid);
 //                    List<T_Detail> details = t_detailDao.queryBuilder().where(
 //                            T_DetailDao.Properties.Activity.eq(activity),
 //                            T_DetailDao.Properties.FOrderId.eq(main.FOrderId)
@@ -113,19 +113,19 @@ public class UpLoadModel {
                     Lg.e("detail:"+details.size());
                     Lg.e("detail:",details);
                     if (details.size()>0){
-                        listMap.put(huozhu,details);
+                        listMap.put(main.FOrderId+"",details);
 //                    dealResult(activity,main,details);
                     } else{
                         //当表头找不到相应的明细时，删除表头
 //                    Lg.e("???删除"+main.toString());
-                        mains.remove(mains.get(0));
-                        t_mainDao.delete(mains.get(0));
+                        mains.remove(main);
+                        t_mainDao.delete(main);
 //                    Lg.e("单据 "+main.FOrderId+" 不存在明细数据");
 //                    Toast.showText(mContext,"单据 "+main.FOrderId+" 不存在明细数据");
                     }
                 }
                 //执行回单拼接
-                dealResultForPushDown(activity,t_mainList,listMap,hzList);
+                dealResult(activity,t_mainList,listMap);
         }catch (Exception e){
             Toast.showText(mContext,"回单错误");
             LoadingUtil.dismiss();
@@ -157,72 +157,8 @@ public class UpLoadModel {
             case Config.SaleOutActivity://销售出库
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOut(mains,details)));
                 break;
-//            case Config.PdSaleOrder2SaleOutActivity://销售订单下推销售出库
-//                DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOrder2SaleOut(mains,details)));
-//                break;
-            case Config.PdSendMsg2SaleOutActivity://发货通知单下推销售出库单
-                DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSendMsg2SaleOut(mains,details)));
-                break;
-            case Config.OtherInStoreActivity://其他入库
-                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonOIS(mains,details)));
-                break;
-            case Config.OtherOutStoreActivity://其他出库
-                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonOOS(mains,details)));
-                break;
-            case Config.SaleOrderActivity://销售订单
-                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonSaleOrder(mains,details)));
-                break;
-            case Config.PdSaleOrder2SaleBackActivity://销售订单下推销售退货单
-                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonSaleOrder2SaleOutBack(mains,details)));
-                break;
-            case Config.PdSaleOut2SaleBackActivity://销售出库单下推销售退货单
-                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonSaleOut2SaleOutBack(mains,details)));
-                break;
-            case Config.PdBackMsg2SaleBackActivity://退货通知单下推销售退货单
-                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonBackMsg2SaleOutBack(mains,details)));
-                break;
-            case Config.Db2FDinActivity:
-                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonFDin(mains,details)));
-                break;
-            case Config.Db2FDoutActivity:
-                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonFDout(mains,details)));
-                break;
-            case Config.PDActivity:
-                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonPD(mains,details)));
-                break;
-            case Config.DBActivity:
-                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonDB(mains,details)));
-                break;
-
-
-        }
-    }
-    //处理回单数据并组合成json回单
-    public static void dealResultForPushDown(int activity,List<T_main> mains,Map<String,List<T_Detail>> details,List<String> hzList){
-        switch (activity){
-            case Config.PurchaseInStoreActivity://采购入库
-                DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPIS(mains,details)));
-                break;
-            case Config.PdCgOrder2WgrkActivity://采购订单下推外购入库单
-                DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonCgOrder2Wgrk(mains,details)));
-                break;
-            case Config.PurchaseOrderActivity://采购订单
-                DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPuO(mains,details)));
-                break;
-            case Config.ProductInStoreActivity://产品入库
-            case Config.TbInActivity://产品入库
-            case Config.DgInActivity://产品入库
-            case Config.SimpleInActivity://产品入库
-                DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPrIS(mains,details)));
-                break;
-            case Config.ProductGetActivity://生产领料
-                DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPrG(mains,details)));
-                break;
-            case Config.SaleOutActivity://销售出库
-                DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOut(mains,details)));
-                break;
             case Config.PdSaleOrder2SaleOutActivity://销售订单下推销售出库
-                DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOrder2SaleOut(mains,details,hzList)));
+                DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOrder2SaleOut(mains,details)));
                 break;
             case Config.PdSendMsg2SaleOutActivity://发货通知单下推销售出库单
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSendMsg2SaleOut(mains,details)));
@@ -261,5 +197,4 @@ public class UpLoadModel {
 
         }
     }
-
 }

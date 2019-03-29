@@ -267,7 +267,7 @@ public class PdSaleOrder2SaleOutActivity extends BaseActivity {
             pushDownMain = pushDownMains.get(0);
             mainSaleDept=LocDataUtil.getDept(pushDownMain.FSaleDeptID).FNumber;
             mainSaleMan=LocDataUtil.getSaleMan(pushDownMain.FSaleManID).FNumber;
-            mainSaleOrg=LocDataUtil.getOrg(pushDownMain.FSaleDeptID).FNumber;
+            mainSaleOrg=LocDataUtil.getOrg(pushDownMain.FSaleDeptID,"id").FNumber;
 
 //            fwanglaiUnit = list1.get(0).FSupplyID;
 //            employeeId = list1.get(0).FEmpID;

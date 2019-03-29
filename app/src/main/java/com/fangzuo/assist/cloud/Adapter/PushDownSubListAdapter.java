@@ -84,6 +84,7 @@ public class PushDownSubListAdapter extends BaseAdapter {
         viewHolder.billNo.setText("订单号:"+items.get(i).FBillNo);
         viewHolder.numyanshou.setText("订单数量:"+items.get(i).FQty);
         viewHolder.productId.setText("物料名称:"+ items.get(i).FName);
+        viewHolder.tvModel.setText("规格型号:"+ items.get(i).FModel);
         viewHolder.numyanshouing.setText("已验数量:"+items.get(i).FQtying);
         viewHolder.tvLastnum.setText("未验数量:"+ DoubleUtil.Cut4((MathUtil.toD(items.get(i).FQty)-MathUtil.toD(items.get(i).FQtying))+""));
         viewHolder.unit.setText("单位:"+unit.FName);
@@ -100,6 +101,8 @@ public class PushDownSubListAdapter extends BaseAdapter {
         TextView productId;
         @BindView(R.id.numyanshou)
         TextView numyanshou;
+        @BindView(R.id.tv_model)
+        TextView tvModel;
         @BindView(R.id.tv_lastnum)
         TextView tvLastnum;
         @BindView(R.id.numyanshouing)

@@ -20,6 +20,7 @@ public class CodeCheckBackDataBean {
     public String FPurchaseNo;
 
     public String FBarCode;
+    public String FHuoZhuNumber;
 
 
 
@@ -27,19 +28,4 @@ public class CodeCheckBackDataBean {
         this.FTip=FTip;
     }
 
-    @Override
-    public String toString() {
-        return "CodeCheckBackDataBean{" +
-                "FTip='" + FTip + '\'' +
-                "FBillNo='" + FBillNo + '\'' +
-                ", FItemID='" + FItemID + '\'' +
-                ", FUnitID='" + FUnitID + '\'' +
-                ", FQty='" + FQty + '\'' +
-                ", FStockID='" + FStockID + '\'' +
-                ", FStockPlaceID='" + FStockPlaceID + '\'' +
-                ", FBatchNo='" + FBatchNo + '\'' +
-                ", FKFPeriod='" + FKFPeriod + '\'' +
-                ", FKFDate='" + FKFDate + '\'' +
-                '}';
-    }
 }

@@ -330,5 +330,8 @@
     <string name="tomcat_test">测试Tomcat服务器</string>
     <string name="db_test">测试数据库链接</string>
     <string name="test_hint">说明: 如果结果为网络错误，则连不上tomcat服务器r 如果结果为其他，就为可以连接</string>
+    <string name="error_print">打印错误</string>
+    <string name="check_print">请检查打印机是否已连接</string>
+    <string name="msg_print">打印信息：</string>
 
 </resources>

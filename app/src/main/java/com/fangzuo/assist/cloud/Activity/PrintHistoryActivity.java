@@ -192,7 +192,7 @@ public class PrintHistoryActivity extends BaseActivity {
         }
         Lg.e("打印信息：",data);
         AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
-        ab.setTitle("打印信息：");
+        ab.setTitle(R.string.msg_print);
         View v = LayoutInflater.from(mContext).inflate(R.layout.show_print_history, null);
         TextView huoquan     = v.findViewById(R.id.tv_huoquan);
         TextView batch       = v.findViewById(R.id.tv_batch);
@@ -210,7 +210,7 @@ public class PrintHistoryActivity extends BaseActivity {
         model.setText(data.getFModel());
         num.setText(data.getFNum()+"  "+data.getFUnit());
         num2.setText(data.getFNum2()+"  "+data.getFUnitAux());
-        note.setText(data.getFNot());
+        note.setText(data.getFAuxSign());
         wavehouse.setText(data.getFWaveHouse());
         date.setText(data.getFDate());
         ab.setView(v);
@@ -224,7 +224,7 @@ public class PrintHistoryActivity extends BaseActivity {
                     CommonUtil.doPrint(zpSDK,data);
                 } catch (Exception e) {
 //                    e.printStackTrace();
-                    LoadingUtil.showAlter(mContext,"打印错误","请检查打印机是否已连接");
+                    LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
                 }
                 alertDialog.dismiss();
             }

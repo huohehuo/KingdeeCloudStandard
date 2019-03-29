@@ -81,7 +81,7 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
                  num2.setVisibility(View.VISIBLE);
                  num2.setText(data.getFNum2()+"  "+data.getFUnitAux());//基本数量
              }
-             note.setText(data.getFNot());
+             note.setText(data.getFAuxSign());
              wavehouse.setText(data.getFWaveHouse());
              date.setText(data.getFDate());
 //            name.setTextColor(App.getInstance().getColor(R.color.black));

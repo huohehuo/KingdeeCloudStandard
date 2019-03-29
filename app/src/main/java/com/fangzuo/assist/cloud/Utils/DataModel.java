@@ -315,8 +315,8 @@ public class DataModel {
     }
 
 
-    //回单时，合并相同条件的物料
-    public static List<T_Detail> mergeDetailForPushDown(Context context,String orderID,int Activity,String fid,String huozhu){
+    //回单时，合并相同条件的物料：：：下推单专用
+    public static List<T_Detail> mergeDetailForPushDown(Context context,String orderID,int Activity,String fid){
         List<T_Detail> list = new ArrayList<>();
         DaoSession daoSession = GreenDaoManager.getmInstance(context).getDaoSession();
         Cursor cursor = daoSession.getDatabase().rawQuery("SELECT " +
@@ -358,7 +358,7 @@ public class DataModel {
                 "SUM(FREAL_QTY) AS FREAL_QTYALL " +
                 "FROM T__DETAIL " +
                 "WHERE " +
-                "FORDER_ID = ? AND ACTIVITY = ? AND FID = ?  AND FHUO_ZHU_NUMBER = ? " +
+                "FORDER_ID = ? AND ACTIVITY = ? AND FID = ?" +
                 "GROUP BY " +
                 "FORDER_ID," +
                 "FWORK_SHOP_ID1," +
@@ -366,7 +366,7 @@ public class DataModel {
                 "FWAVE_HOUSE_ID," +
                 "FBATCH," +
                 "FMATERIAL_ID," +
-                "FUNIT_ID ORDER BY FENTRY_ID", new String[]{orderID+"", Activity+"",fid,huozhu});
+                "FUNIT_ID ORDER BY FENTRY_ID", new String[]{orderID+"", Activity+"",fid});
         while (cursor.moveToNext()){
             T_Detail t_detail = new T_Detail();
             t_detail.activity = cursor.getInt(cursor.getColumnIndex("ACTIVITY"));

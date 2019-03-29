@@ -132,21 +132,35 @@ public class LocDataUtil {
         }
     }
     //获取组织数据
-    public static Org getOrg(String id){
+    public static Org getOrg(String id,String type){
         Lg.e("查找本地组织",id);
         if ("".equals(id)){
             return new Org("","","");
         }
         OrgDao employeeDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getOrgDao();
-        List<Org> employees = employeeDao.queryBuilder().where(
+        if ("id".equals(type)){
+            List<Org> employees = employeeDao.queryBuilder().where(
 //                DepartmentDao.Properties.FOrg.eq(org.FOrgID),
-                OrgDao.Properties.FOrgID.eq(id)
-        ).build().list();
-        if (employees.size()>0){
-            return employees.get(0);
+                    OrgDao.Properties.FOrgID.eq(id)
+            ).build().list();
+            if (employees.size()>0){
+                return employees.get(0);
+            }else{
+                return new Org("","","");
+            }
         }else{
-            return new Org("","","");
+            List<Org> employees = employeeDao.queryBuilder().where(
+//                DepartmentDao.Properties.FOrg.eq(org.FOrgID),
+                    OrgDao.Properties.FNumber.eq(id)
+            ).build().list();
+            if (employees.size()>0){
+                return employees.get(0);
+            }else{
+                return new Org("","","");
+            }
         }
+
+
     }
 
 }

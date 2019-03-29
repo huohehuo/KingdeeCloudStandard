@@ -54,7 +54,7 @@ public class CommonUtil {
             zpSDK.drawText(160, 404, bean.FNum2==null?"":bean.FNum2,size2, 0, 0, false, false);
             zpSDK.drawText(450, 404, bean.FUnitAux==null?"":bean.FUnitAux,size2, 0, 0, false, false);
             zpSDK.drawText(10, 460, "辅助标识：", size, 0, 0, false, false);
-            zpSDK.drawText(160, 464, bean.FAuxSign==null?"":bean.FAuxSign,size2, 0, 0, false, false);
+            zpSDK.drawText(360, 464, bean.FAuxSign==null?"":bean.FAuxSign,size2, 0, 0, false, false);
             zpSDK.drawText(10, 500, "______________________________________________", 2, 0, 0, false, false);
             zpSDK.drawQrCode(10, 560, bean.FBarCode, 0, 11, 0);
             zpSDK.drawText(300, 560, "仓位：",size2, 0, 0, false, false);
@@ -323,6 +323,40 @@ public class CommonUtil {
         Date curDate = new Date();
         Long time = curDate.getTime();
         return time + "";
+    }
+
+//标准销售订单  对应 销售出库单的单据类型 XSCKD01_SYS
+//寄售销售订单  对应 销售出库单的单据类型 XSCKD02_SYS
+//分销购销订单  对应 销售出库单的单据类型 XSCKD04_SYS
+//VMI销售订单   对应 销售出库单的单据类型 XSCKD05_SYS
+//现销订单      对应 销售出库单的单据类型 XSCKD06_SYS
+    public static String getSaleOutBillType(String saleoder){
+        String backData="";
+//        if (null==saleoder||"".equals(saleoder)){
+//            backData="XSCKD01_SYS";
+//            return backData;
+//        }
+        switch (saleoder==null||"".equals(saleoder)?"":saleoder){
+            case "标准销售订单":
+                backData="XSCKD01_SYS";
+                break;
+            case "寄售销售订单":
+                backData="XSCKD02_SYS";
+                break;
+            case "分销购销订单":
+                backData="XSCKD04_SYS";
+                break;
+            case "VMI销售订单":
+                backData="XSCKD05_SYS";
+                break;
+            case "现销订单":
+                backData="XSCKD06_SYS";
+                break;
+            case "":
+                backData="XSCKD01_SYS";
+                break;
+        }
+        return backData;
     }
 }
 

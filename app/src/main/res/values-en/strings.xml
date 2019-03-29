@@ -330,5 +330,8 @@
     <string name="tomcat_test">Test the Tomcat Server</string>
     <string name="db_test">Test the DataBase</string>
     <string name="test_hint">Tip:If the result said the network connection error,that mean the Tomcat Server has something wrong, by the other way , connection Ok ~ XD</string>
+    <string name="error_print">Print error</string>
+    <string name="check_print">Please check out the Printer</string>
+    <string name="msg_print">The Message of Printer：</string>
 
 </resources>

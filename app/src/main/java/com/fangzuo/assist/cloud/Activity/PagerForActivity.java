@@ -30,6 +30,7 @@ import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPri
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisSimpleInMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisTBDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisTBMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentBackMsg2SaleBackDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentSaleOutDetailForPD;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.Config;
@@ -124,6 +125,11 @@ public class PagerForActivity extends BaseActivity {
                 binding.topActivity.tvTitle.setText("销售订单下推销售出库");
                 fragments.add(new FragmentSaleOutMain());
                 fragments.add(new FragmentSaleOutDetailForPD());
+                break;
+            case Config.PdBackMsg2SaleBackActivity:
+                binding.topActivity.tvTitle.setText("退货通知单下推销售退货单");
+                fragments.add(new FragmentSaleOutMain());
+                fragments.add(new FragmentBackMsg2SaleBackDetail());
                 break;
             case Config.TbInActivity:
                 binding.topActivity.tvTitle.setText("挑板入库");
