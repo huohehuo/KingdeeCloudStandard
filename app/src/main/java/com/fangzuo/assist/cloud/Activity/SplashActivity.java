@@ -24,12 +24,14 @@ import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.TimeBean;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.MD5;
+import com.fangzuo.assist.cloud.Utils.RegisterUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.databinding.ActivitySplashBinding;
@@ -83,10 +85,12 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
             }
         }
         //-----------------------------------
-        if (getNewMac() != null && !getNewMac().equals("")) {
-            binding.tvCode.setText("注册码：" + MD5.getMD5(getNewMac()));
-            Lg.e("注册码:"+MD5.getMD5(getNewMac()));
-            register_code = MD5.getMD5(getNewMac()) + "fzkj601";
+        //Mac地址第一次MD5为注册码
+        String mac = RegisterUtil.getNewMac();
+        if (!"".equals(mac)) {
+            binding.tvCode.setText("注册码：" + MD5.getMD5(mac));
+            Lg.e("注册码:"+MD5.getMD5(mac));
+            register_code = MD5.getMD5(mac) + "fzkj601";
             newRegister = MD5.getMD5(register_code);
             lastRegister = MD5.getMD5(newRegister);
         } else {
@@ -250,32 +254,6 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
         });
     }
 
-    private static String getNewMac() {
-        try {
-            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface nif : all) {
-                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
-
-                byte[] macBytes = nif.getHardwareAddress();
-                if (macBytes == null) {
-                    return "";
-                }
-
-                StringBuilder res1 = new StringBuilder();
-                for (byte b : macBytes) {
-                    res1.append(String.format("%02X:", b));
-                }
-
-                if (res1.length() > 0) {
-                    res1.deleteCharAt(res1.length() - 1);
-                }
-                return res1.toString();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return "";
-    }
 
     private void CheckServer() {
         if ((instance.getIP()).equals("") || (instance.getPort()).equals("")) {
@@ -316,7 +294,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
         }
     }
 
-
+    //点使用时，首次在本地生成一个文件，若卸载重装，则会提示只能试用一次
     private void writeSdCard(String person) {
         File file = new File(Environment.getExternalStorageDirectory() + File.separator + "json"
                 + File.separator + "0x8b69a33.txt");

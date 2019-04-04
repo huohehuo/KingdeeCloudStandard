@@ -63,7 +63,7 @@ public class LocDataUtil {
     //获取客户数据
     public static Client getClient(String name){
         Lg.e("查找本地客户",name);
-        if ("".equals(name)){
+        if ("".equals(name)||null==name){
             return new Client("","","","");
         }
         ClientDao unitDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getClientDao();
@@ -93,7 +93,7 @@ public class LocDataUtil {
     //获取销售员数据
     public static SaleMan getSaleMan(String id){
         Lg.e("查找本地销售员",id);
-        if ("".equals(id)){
+        if ("".equals(id)||null==id){
             return new SaleMan("","","","","");
         }
 //        if (null==org){
@@ -114,7 +114,7 @@ public class LocDataUtil {
     //获取部门数据
     public static Department getDept(String id){
         Lg.e("查找本地部门",id);
-        if ("".equals(id)){
+        if ("".equals(id)||null==id){
             return new Department("","","","","");
         }
 //        if (null==org){
@@ -134,7 +134,7 @@ public class LocDataUtil {
     //获取组织数据
     public static Org getOrg(String id,String type){
         Lg.e("查找本地组织",id);
-        if ("".equals(id)){
+        if ("".equals(id)||null==id){
             return new Org("","","");
         }
         OrgDao employeeDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getOrgDao();

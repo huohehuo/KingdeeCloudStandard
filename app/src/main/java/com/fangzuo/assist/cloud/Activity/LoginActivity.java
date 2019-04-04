@@ -2,7 +2,9 @@ package com.fangzuo.assist.cloud.Activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
@@ -23,6 +25,8 @@ import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.BackDataLogin;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
+import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
+import com.fangzuo.assist.cloud.Beans.RegisterBean;
 import com.fangzuo.assist.cloud.Beans.UseTimeBean;
 import com.fangzuo.assist.cloud.Dao.User;
 import com.fangzuo.assist.cloud.R;
@@ -34,11 +38,15 @@ import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.DataModel;
 import com.fangzuo.assist.cloud.Utils.DoubleUtil;
+import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
+import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.JsonDealUtils;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.RegisterUtil;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
@@ -50,6 +58,8 @@ import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.orhanobut.hawk.Hawk;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
@@ -91,8 +101,52 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     private String userPass;
     private UserDao userDao;
 
-    RService rService;
+    @Override
+    protected boolean isRegisterEventBus() {
+        return true;
+    }
 
+    RService rService;
+    @Override
+    protected void receiveEvent(ClassEvent event) {
+        switch (event.Msg) {
+            case EventBusInfoCode.Register_Result://注册信息反馈
+                String result = (String) event.postEvent;
+                if ("OK".equals(result)){
+                    btnLogin.setClickable(true);
+                    Lg.e("成功注册");
+//                    BasicShareUtil.getInstance(App.getContext()).setRegisterState(true);
+//                    startNewActivity(LoginActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, true, null);
+                }
+                else{
+                    Lg.e("生成dlg000000");
+                    btnLogin.setClickable(false);
+                    btnLogin.setText("未注册");
+                    AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+                    ab.setTitle("提示");
+                    ab.setMessage(result);
+                    ab.setPositiveButton("注册", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            RegisterUtil.doRegisterCheck(Hawk.get(Config.PDA_IMIE,""));
+
+                        }
+                    });
+                    ab.setNegativeButton("取消",null);
+                    ab.setNeutralButton("关闭程序", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.exit(0);
+                        }
+                    });
+                    final AlertDialog alertDialog = ab.create();
+                    alertDialog.setCanceledOnTouchOutside(false);
+                    alertDialog.show();
+//                    LoadingUtil.showAlter(LoginActivity.this, "提示", result);
+                }
+                break;
+        }
+    }
     @Override
     public void initView() {
         setContentView(R.layout.activity_login);
@@ -119,10 +173,13 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     @Override
     protected void onResume() {
         super.onResume();
+        Lg.e("Login___onResume");
         //获取用户数据，并且设置默认值
         spinner.setAutoSelection(Info.AutoLogin,Hawk.get(Info.AutoLogin, ""));
         DataService.updateTime(mContext);
         DownLoadUseTime();
+        //检查是否存在注册码
+       RegisterUtil.checkHasRegister();
     }
     //获取配置文件中的时间数据
     private void DownLoadUseTime(){
@@ -205,9 +262,9 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         }
     }
 
-
     @Override
     public void initData() {
+        DataService.UpdateData(this);
     }
 
     @Override
@@ -244,6 +301,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 //设置该用户密码
                 mEtPassword.setText(Hawk.get(userName, ""));
             }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -337,7 +395,6 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
             }
         });
     }
-
 
     //权限获取-------------------------------------------------------------
     private void getPermisssion() {

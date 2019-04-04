@@ -333,5 +333,6 @@
     <string name="error_print">Print error</string>
     <string name="check_print">Please check out the Printer</string>
     <string name="msg_print">The Message of Printer：</string>
+    <string name="lgout">Login Out</string>
 
 </resources>

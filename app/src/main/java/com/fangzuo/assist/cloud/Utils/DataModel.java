@@ -5,12 +5,15 @@ import android.database.Cursor;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
+import com.fangzuo.assist.cloud.Activity.LoginActivity;
+import com.fangzuo.assist.cloud.Activity.WelcomeActivity;
 import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.CodeCheckBackDataBean;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Beans.InStoreNumBean;
+import com.fangzuo.assist.cloud.Beans.RegisterBean;
 import com.fangzuo.assist.cloud.Beans.SearchBean;
 import com.fangzuo.assist.cloud.Dao.InStorageNum;
 import com.fangzuo.assist.cloud.Dao.Org;
@@ -18,6 +21,7 @@ import com.fangzuo.assist.cloud.Dao.Product;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
 import com.fangzuo.assist.cloud.Dao.T_main;
+import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.RxSerivce.ToSubscribe;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
@@ -26,6 +30,7 @@ import com.fangzuo.greendao.gen.T_DetailDao;
 import com.fangzuo.greendao.gen.T_mainDao;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +79,7 @@ public class DataModel {
         });
     }
 
+    //条码检测
     public static void codeCheck(String io,String json){
         Lg.e("回单数据："+json);
         App.getRService().doIOAction(io, json, new MySubscribe<CommonResponse>() {

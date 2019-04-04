@@ -42,7 +42,7 @@
         </receiver>
 
         <activity
-            android:name=".Activity.SplashActivity"
+            android:name=".Activity.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -272,7 +272,8 @@
         <activity
             android:name=".Activity.PrintBeforeDataActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.CheckStoreActivity"></activity>
+        <activity android:name=".Activity.CheckStoreActivity" />
+        <!--<activity android:name=".Activity.WelcomeActivity"></activity>-->
     </application>
 
 </manifest>

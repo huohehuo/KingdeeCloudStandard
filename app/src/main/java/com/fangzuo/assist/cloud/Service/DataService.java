@@ -17,6 +17,7 @@ import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.greendao.gen.ClientDao;
 import com.fangzuo.greendao.gen.DaoSession;
+import com.fangzuo.greendao.gen.OrgDao;
 import com.fangzuo.greendao.gen.SaleManDao;
 import com.fangzuo.greendao.gen.UnitDao;
 import com.loopj.android.http.AsyncHttpClient;
@@ -185,7 +186,7 @@ public class DataService extends IntentService {
         ArrayList<Integer> choose = new ArrayList<>();
         choose.add(7);//单位
         choose.add(10);//销售员
-//        choose.add(13);//销售员
+        choose.add(14);//组织
         String json = JsonCreater.DownLoadData(
                 BasicShareUtil.getInstance(App.getContext()).getDatabaseIp(),
                 BasicShareUtil.getInstance(App.getContext()).getDatabasePort(),
@@ -213,12 +214,13 @@ public class DataService extends IntentService {
                     saleManDao.detachAll();
                     Lg.e("OK销售员");
                 }
-//                if (dBean.clients != null && dBean.clients.size() > 0) {
-//                    ClientDao clientDao = session.getClientDao();
-//                    clientDao.deleteAll();
-//                    clientDao.insertOrReplaceInTx(dBean.clients);
-//                    clientDao.detachAll();
-//                }
+                if (dBean.orgs != null && dBean.orgs.size() > 0) {
+                    OrgDao clientDao = session.getOrgDao();
+                    clientDao.deleteAll();
+                    clientDao.insertOrReplaceInTx(dBean.orgs);
+                    clientDao.detachAll();
+                    Lg.e("OK组织");
+                }
             }
 
             @Override

@@ -10,7 +10,10 @@ import org.greenrobot.eventbus.EventBus;
 
 public class EventBusUtil {
     public static void register(Object subscriber) {
-        EventBus.getDefault().register(subscriber);
+        if (!EventBus.getDefault().isRegistered(subscriber)) {
+            EventBus.getDefault().register(subscriber);
+        }
+//        EventBus.getDefault().register(subscriber);
     }
 
     public static void unregister(Object subscriber) {

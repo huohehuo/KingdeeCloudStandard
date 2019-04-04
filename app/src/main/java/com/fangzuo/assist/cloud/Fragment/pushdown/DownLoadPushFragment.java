@@ -445,6 +445,7 @@ public class DownLoadPushFragment extends BaseFragment {
                 }
                 container.addAll(puBean.list);
                 pushDownListAdapter = new PushDownListAdapter(mContext, container, isCheck);
+                downloadIDs.clear();
                 if (lvPushdownDownload!=null){//可防止还没刷新出数据就退出页面后的崩溃问题
                     lvPushdownDownload.setAdapter(pushDownListAdapter);
                     pushDownListAdapter.notifyDataSetChanged();

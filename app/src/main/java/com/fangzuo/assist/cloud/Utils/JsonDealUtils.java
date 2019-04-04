@@ -348,11 +348,11 @@ public class JsonDealUtils {
                     addObject(inObject,"FSettleOrgID","FNumber",mains.get(i).FOwnerIdHead);
                 }
                 addObject(inObject,"FStockOrgId","FNumber",mains.get(i).FPurchaseOrgId);
+                addObject(inObject,"FDeliveryDeptID","FNumber",mains.get(i).FDepartmentNumber);
+                addObject(inObject,"FStockerID","FNumber",mains.get(i).FStockerNumber);
                 addObject(inObject,"FCustomerID","FNumber",mains.get(i).FCustomerID);
                 addObject(inObject,"FSaleDeptID","FNumber",mains.get(i).FPurchaseDeptId);
                 addObject(inObject,"FSalesManID","FNumber",mains.get(i).FPurchaserId);
-                addObject(inObject,"FDeliveryDeptID","FNumber",mains.get(i).FDepartmentNumber);
-                addObject(inObject,"FStockerID","FNumber",mains.get(i).FStockerNumber);
                 inObject.put("FDate",mains.get(i).FDate);
 //                inObject.put("FNote",mains.get(i).FDate);
                 JSONObject stockObject = new JSONObject();
@@ -791,18 +791,18 @@ public class JsonDealUtils {
                 inObject.put("FDate",mains.get(i).FDate);
 //                inObject.put("FOrderNo",mains.get(i).FSoorDerno);
                 addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
-                addObject(inObject,"FSaleOrgId","FNUMBER",mains.get(i).FPurchaseOrgId);
+                addObject(inObject,"FSaleOrgId","FNUMBER",mains.get(i).FStockOrgId);
                 addObject(inObject,"FRetcustId","FNUMBER",mains.get(i).FCustomerID);
                 addObject(inObject,"FSaledeptid","FNUMBER",mains.get(i).FPurchaseDeptId);
                 addObject(inObject,"FSalesManId","FNUMBER",mains.get(i).FPurchaserId);
-                addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FStockOrgId);
+                addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FPurchaseOrgId);
                 addObject(inObject,"FStockDeptId","FNUMBER",mains.get(i).FDepartmentNumber);
                 addObject(inObject,"FStockerId","FNUMBER",mains.get(i).FStockerNumber);
 //                addObject(inObject,"FSupplierId","FNUMBER",mains.get(i).FSupplierId);
                 JSONObject stockObject = new JSONObject();
-                addObject(stockObject,"FExchangeTypeId","FNUMBER","HLTX01_SYS");
-                stockObject.put("FExchangeRate","1");
-                addObject(stockObject,"FSettleOrgId","FNUMBER",mains.get(i).FSettleOrgId);
+//                addObject(stockObject,"FExchangeTypeId","FNUMBER","HLTX01_SYS");//汇率类型
+//                stockObject.put("FExchangeRate","1");//汇率
+//                addObject(stockObject,"FSettleOrgId","FNUMBER",mains.get(i).FSettleOrgId);
                 addObject(stockObject,"FSettleCurrId","FNUMBER",mains.get(i).FSettleCurrId);
                 inObject.put("SubHeadEntity",stockObject);
 
@@ -812,26 +812,42 @@ public class JsonDealUtils {
                     JSONObject jsonAr = new JSONObject();
                     addObject(jsonAr,"FMaterialId","FNumber",beans.get(j).FMaterialId);
                     addObject(jsonAr,"FStockId","FNumber",beans.get(j).FStorageId);
-//                    addObject(jsonAr,"FStockstatusId","FNumber",beans.get(j).FStorageId);
+                    addObject(jsonAr,"FStockstatusId","FNumber",beans.get(j).FStorageId);
                     addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
                     jsonAr.put("FRealQty",beans.get(j).FRealQty);
+                    if (j > 0 && beans.get(j).FEntryID.equals(beans.get(j-1).FEntryID)) {
+//                        jsonAr.put("FMustQty","0");
+//                        jsonAr.put("FSalBaseNum","0");
+//                        jsonAr.put("FStockBaseDen","0");
+                    }else{
+                        jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
+                        jsonAr.put("FSalBaseNum",beans.get(j).FRemainInStockQty);
+                        jsonAr.put("FStockBaseDen",beans.get(j).FRemainInStockQty);
+                    }
                     addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
                     jsonAr.put("FIsFree",beans.get(j).FIsFree);
                     jsonAr.put("FSOEntryId",beans.get(j).FSOEntryId);
+                    jsonAr.put("FSrcBillTypeID","SAL_RETURNNOTICE");
+                    jsonAr.put("FSrcBillNo",mains.get(0).FSoorDerno);
+
                     addObject(jsonAr,"FReturnType","FNumber",beans.get(j).FBackType);//THLX01_SYS
                     jsonAr.put("FDeliveryDate",beans.get(j).FBackDate);
                     jsonAr.put("FTaxPrice",beans.get(j).FTaxPrice);
 //                    jsonAr.put("FOwnerTypeId","BD_OwnerOrg");
-                    addObject(jsonAr,"FOwnerId","FNumber",mains.get(i).FStockOrgId);
+                    addObject(jsonAr,"FOwnerId","FNumber",beans.get(j).FHuoZhuNumber);
                     jsonArray.put(jsonAr);
                     JSONArray jsonA2 = new JSONArray();
                     for (int k = 0; k < 1; k++) {
                         JSONObject jsonAr2 = new JSONObject();
                         jsonAr2.put("FEntity_Link_FRuleId","SalReturnNotice-SalReturnStock");
                         jsonAr2.put("FEntity_Link_FSTableId","0");
-                        jsonAr2.put("FEntity_Link_FSTableName","T_SAL_RETURNNOTICEENTRY");
+                        jsonAr2.put("FEntity_Link_FSTableName","T_SAL_RETURNNOTICEENTRY");//return_notice_entry
                         jsonAr2.put("FEntity_Link_FSBillId",beans.get(j).FID);
                         jsonAr2.put("FEntity_Link_FSId",beans.get(j).FEntryID);
+//                        jsonAr2.put("FEntity_Link_FBaseunitQtyOld",beans.get(j).FRemainInStockQty);
+//                        jsonAr2.put("FEntity_Link_FBaseunitQty",beans.get(j).FRealQty);
+//                        jsonAr2.put("FEntity_Link_FSalBaseQtyOld",beans.get(j).FRemainInStockQty);
+//                        jsonAr2.put("FEntity_Link_FSalBaseQty",beans.get(j).FRealQty);
                         jsonA2.put(jsonAr2);
                     }
                     jsonAr.put("FEntity_Link",jsonA2);

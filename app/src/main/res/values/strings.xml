@@ -65,6 +65,7 @@
     <string name="spOrgHuozhu_pg">spOrgHuozhu_pg</string>
     <string name="spDepartmentCreate_pg">spDepartmentCreate_pg</string>
 
+    <!--//销售出库-->
     <string name="spDepartmentSend_so">spDepartmentSend_so</string>
     <string name="spDepartmentSale_so">spDepartmentSale_so</string>
     <string name="spOrgSend_so">spOrgSend_so</string>
@@ -133,6 +134,11 @@
     <string name="spWanglaikemu_pis">spWanglaikemu_pis</string>
     <string name="spSignPerson_pis">spSignPerson_pis</string>
     <string name="spCapturePerson_pis">spCapturePerson_pis</string>
+
+    <!--退货通知单2销售退货单-->
+    <string name="spStoreman_bmsg2sb">spStoreman_bmsg2sb</string>
+    <string name="spHuozhu_bmsg2sb">spHuozhu_bmsg2sb</string>
+
 
     <!--简单生产入库-->
     <string name="spStoreman_pris">spStoreman_pris</string>
@@ -333,5 +339,6 @@
     <string name="error_print">打印错误</string>
     <string name="check_print">请检查打印机是否已连接</string>
     <string name="msg_print">打印信息：</string>
+    <string name="lgout">登出</string>
 
 </resources>

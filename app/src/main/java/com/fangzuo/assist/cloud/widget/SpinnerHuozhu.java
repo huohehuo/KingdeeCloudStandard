@@ -45,6 +45,7 @@ public class SpinnerHuozhu extends RelativeLayout {
     private String employeeId="";
     private String employeeName="";
     private String employeeNumber="";
+    private Org org;
     private String T="组织：";     //3
 
 
@@ -85,6 +86,7 @@ public class SpinnerHuozhu extends RelativeLayout {
                 employeeName = employee.FName;
                 employeeNumber = employee.FNumber;
                 Lg.e("选中"+T+employee.toString());
+                org = employee;
                 Hawk.put(saveKeyString,employee.FName);
             }
 
@@ -123,6 +125,9 @@ public class SpinnerHuozhu extends RelativeLayout {
     }
     public String getDataNumber() {
         return employeeNumber == null ? "" : employeeNumber;
+    }
+    public Org getDataObject() {
+        return org == null ? new Org("","","") : org;
     }
     /**
      *
@@ -164,6 +169,7 @@ public class SpinnerHuozhu extends RelativeLayout {
         employeeId =        "";
         employeeName =      "";
         employeeNumber =    "";
+        org=null;
         container.addAll(listData);
         mSp.setAdapter(adapter);
         adapter.notifyDataSetChanged();

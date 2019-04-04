@@ -44,6 +44,7 @@ public class WebApi {
     public static final String GETINSTORENUM = "GetInStoreNum";
     public static final String GETNEWVERSION = "NewVersion";
     public static final String REGISTER = "Register";
+    public static final String RegisterCode = "RegisterCode";
     public static final String SETTIMEUSE = "SetLastUseDate";
     public static final String GETPICI = "GetPici";
     public static final String TESTSERVLET = "TestServlet";
@@ -73,6 +74,7 @@ public class WebApi {
     public static final String OtherOutUpload = "OtherOutUpload";
     public static final String DBUpload = "DBUpload";
     public static final String SaleOutUpload = "SaleOutUpload";
+    public static final String BackMsg2SaleBackUpload = "BackMsg2SaleBackUpload";
 
     public static final String AuxSignFirstCheck = "AuxSignFirstCheck";
     public static final String AuxSignSecCheck = "AuxSignSecCheck";
@@ -85,5 +87,9 @@ public class WebApi {
     public static final String PrintOutCheck = "PrintOutCheck";
     public static final String PrintBeforeData = "PrintBeforeData";
     public static final String PrintBeforeDataForCreateCode = "PrintBeforeDataForCreateCode";
+
+    public static final String RegisterCheck = "RegisterCheck";
+    public static final String RegisterNumber = "RegisterNumber";
+    public static final String RegisterDelete = "RegisterDelete";
 
 }

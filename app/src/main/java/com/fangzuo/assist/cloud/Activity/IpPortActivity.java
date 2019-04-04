@@ -1,5 +1,7 @@
 package com.fangzuo.assist.cloud.Activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -13,12 +15,18 @@ import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.ABase.BaseActivity;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
+import com.fangzuo.assist.cloud.Beans.CommonResponse;
+import com.fangzuo.assist.cloud.Beans.RegisterBean;
 import com.fangzuo.assist.cloud.Beans.UseTimeBean;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.Info;
+import com.fangzuo.assist.cloud.Utils.RegisterUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
+import com.fangzuo.assist.cloud.Utils.WebApi;
+import com.google.gson.Gson;
 import com.orhanobut.hawk.Hawk;
 
 import butterknife.BindView;
@@ -75,7 +83,7 @@ public class IpPortActivity extends BaseActivity {
                 edPort.setText("8082");
             }
         }
-        edPrintnum.setText(Hawk.get(Config.PrintNum,"2"));
+        edPrintnum.setText(Hawk.get(Config.PrintNum, "2"));
     }
 
     @Override
@@ -91,9 +99,9 @@ public class IpPortActivity extends BaseActivity {
 
         if (null != Hawk.get(Config.SaveTime, null)) {
             UseTimeBean bean = Hawk.get(Config.SaveTime);
-            tvEndtime.setText("有效期：" + dealTime(bean.endTime));
+            tvEndtime.setText("有效期：" + dealTime(bean.endTime) + "   用户码：" + Hawk.get(Config.PDA_IMIE, "获取失败"));
         } else {
-            tvEndtime.setText("获取时间失效");
+            tvEndtime.setText("获取时间失效" + "   用户码：" + Hawk.get(Config.PDA_IMIE, "获取失败"));
         }
     }
 
@@ -144,13 +152,41 @@ public class IpPortActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    @OnClick({R.id.btn_save, R.id.btn_back, R.id.tv_title})
+    @OnClick({R.id.btn_save, R.id.btn_back, R.id.tv_title, R.id.btn_loginout})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
                 finish();
                 break;
             case R.id.tv_title:
+                break;
+            case R.id.btn_loginout:
+                AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+                ab.setTitle("是否登出");
+                ab.setMessage("登出后，需重新注册才能使用");
+                ab.setPositiveButton("登出", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        App.getRService().doIOAction(WebApi.RegisterDelete, Hawk.get(Config.PDA_IMIE,""), new MySubscribe<CommonResponse>() {
+                            @Override
+                            public void onNext(CommonResponse commonResponse) {
+                                super.onNext(commonResponse);
+                                if (!commonResponse.state)return;
+                                Toast.showText(mContext,"用户已登出");
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+//                        super.onError(e);
+                                Toast.showText(mContext,"用户登出失败");
+                            }
+                        });
+                    }
+                });
+                ab.setNegativeButton("取消", null);
+                final AlertDialog alertDialog = ab.create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
                 break;
             case R.id.btn_save:
                 if (!edPort.getText().toString().equals("") && !edIp.getText().toString().equals("")) {
@@ -162,10 +198,4 @@ public class IpPortActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

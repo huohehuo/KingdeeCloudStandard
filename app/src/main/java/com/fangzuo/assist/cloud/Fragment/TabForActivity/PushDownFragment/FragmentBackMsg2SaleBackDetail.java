@@ -32,6 +32,7 @@ import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Beans.PrintHistory;
 import com.fangzuo.assist.cloud.Beans.SearchBean;
+import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.Product;
 import com.fangzuo.assist.cloud.Dao.PushDownMain;
 import com.fangzuo.assist.cloud.Dao.PushDownSub;
@@ -175,6 +176,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
     private String mainSaleDept = "";//表头带出
     private String mainSaleMan = "";//表头带出
     private String mainSaleOrg = "";//表头带出
+    private Org mainStoreOrg;//表头带出
     private zpBluetoothPrinter zpSDK;
     private BlueToothBean bean;
 
@@ -215,7 +217,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
                         String reString = mains.get(i).FBillerID + "|" + listOrder.get(i) + "|" + mains.get(i).FOrderId + "|" + mains.get(i).IMIE;
-                        App.getRService().doIOAction(WebApi.SaleOutUpload, reString, new MySubscribe<CommonResponse>() {
+                        App.getRService().doIOAction(WebApi.BackMsg2SaleBackUpload, reString, new MySubscribe<CommonResponse>() {
                             @Override
                             public void onNext(CommonResponse commonResponse) {
                                 super.onNext(commonResponse);
@@ -301,12 +303,12 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                     Toast.showText(mContext, codeCheckBackDataBean.FTip);
                 }
                 break;
-            case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
-                if (null != activityPager) {
-//                    spUnit.setAuto("", SpinnerUnit.Id);
-                    spWhichStorage.setAuto("", activityPager.getOrgOut());
-                }
-                break;
+//            case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
+//                if (null != activityPager) {
+////                    spUnit.setAuto("", SpinnerUnit.Id);
+//                    spWhichStorage.setAuto("", mainStoreOrg);
+//                }
+//                break;
             case EventBusInfoCode.Print_Check://检测打印机连接状态
                 String msg = (String) event.postEvent;
                 LoadingUtil.dismiss();
@@ -403,6 +405,14 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             mainSaleDept = LocDataUtil.getDept(pushDownMain.FSaleDeptID).FNumber;
             mainSaleMan = LocDataUtil.getSaleMan(pushDownMain.FSaleManID).FNumber;
             mainSaleOrg = LocDataUtil.getOrg(pushDownMain.FSaleOrgID,"id").FNumber;
+            mainStoreOrg = LocDataUtil.getOrg(pushDownMain.FStoreOrgID,"id");
+            Lg.e("得到表头解析数据:"+mainSaleDept);
+            Lg.e("得到表头解析数据:"+mainSaleMan);
+            Lg.e("得到表头解析数据:"+mainSaleOrg);
+            Lg.e("得到表头解析数据:",mainStoreOrg);
+            activityPager.setOrgOut(mainStoreOrg);
+            spWhichStorage.setAuto("",mainStoreOrg);
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
             if ("".equals(pushDownMain.FSupplyID==null?"":pushDownMain.FSupplyID)){
                 LoadingUtil.showAlter(mContext,"注意","表头明细的客户数据带出失败，请重试...",false);
             }
@@ -478,7 +488,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                 Lg.e("点击明细:", pushDownSub);
                 if (BasicShareUtil.getInstance(mContext).getIsOL()) {
                     s2Product.likeOr = pushDownSub.FNumber;
-                    s2Product.FOrg = activityPager.getOrgOut() == null ? "" : activityPager.getOrgOut().FOrgID;
+                    s2Product.FOrg = mainStoreOrg == null ? "" : mainStoreOrg.FOrgID;
                     App.getRService().doIOAction(WebApi.S2Product, gson.toJson(new SearchBean(SearchBean.product_for_number, gson.toJson(s2Product))), new MySubscribe<CommonResponse>() {
                         @Override
                         public void onNext(CommonResponse commonResponse) {
@@ -597,7 +607,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
         spUnitStore.setAuto(product.FStoreUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
-        spWhichStorage.setAuto(autoStorage, activityPager.getOrgOut());
+        spWhichStorage.setAuto(autoStorage, mainStoreOrg);
         unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
 //        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
@@ -636,7 +646,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             MediaPlayer.getInstance(mContext).error();
             return false;
         }
-        if (activityPager.getOrgOut(0).equals("")) {
+        if (mainStoreOrg.FNumber.equals("")) {
             Toast.showText(mContext, "发货组织不能为空");
             MediaPlayer.getInstance(mContext).error();
             return false;
@@ -675,7 +685,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             MediaPlayer.getInstance(mContext).error();
             return false;
         }//--------------------------------------------------
-//        ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+pushDownMain.FID+scanOfHuozhuNumber);//单据编号
+        ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+pushDownMain.FID+mainStoreOrg.FNumber);//单据编号
 
         //插入条码唯一临时表
 //        CodeCheckBean bean = new CodeCheckBean(barcode, ordercode + "", edNum.getText().toString(), BasicShareUtil.getInstance(mContext).getIMIE());
@@ -703,7 +713,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                     PrintHistory printHistory = new PrintHistory();
                     printHistory.setData(product, spUnitStore.getDataObject(), spUnitJiben.getDataObject(), storeNum,
                             baseNum, spWavehouse.getWaveHouseId(), activityPager.getNote(),
-                            activityPager.getOrgOut().FNumber, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber());
+                            mainStoreOrg.FNumber, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
                         CommonUtil.doPrint(zpSDK, printHistory);
@@ -765,10 +775,11 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             main.FBarcode = barcode;
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
             main.FOrderId = ordercode;
+            main.FSoorDerno = pushDownMain.FBillNo;
             main.FID = pushDownSub.FID;
             main.FIndex = timesecond;
             main.FBillNo = pushDownMain.FBillNo;
-            main.setData(Info.getType(activity), mainSaleOrg, activityPager.getOrgOut(0), activityPager.getOrgOut(0));
+            main.setData(Info.getType(activity), mainSaleOrg, mainStoreOrg.FNumber, mainStoreOrg.FNumber);
             main.FDepartmentNumber = activityPager.getDepartMent();
 //            main.FPurchaseDeptId = activityPager.getDepartMentBuy();
 //            main.FPurchaserId = activityPager.getManSale();
@@ -793,6 +804,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             detail.FEntryID = pushDownSub.FEntryID;
             detail.FID = pushDownSub.FID;
 //            detail.FHuoZhuNumber = scanOfHuozhuNumber;
+            detail.FHuoZhuNumber = activityPager.getHuozhuOut(0);
             detail.FSOEntryId = pushDownSub.FEntryID;
             detail.FRemainInStockQty = pushDownSub.FQty;
             detail.FTaxPrice = pushDownSub.FTaxPrice;

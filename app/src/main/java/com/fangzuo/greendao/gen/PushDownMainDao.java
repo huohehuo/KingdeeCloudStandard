@@ -31,11 +31,12 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
         public final static Property FSupplyID = new Property(4, String.class, "FSupplyID", false, "FSUPPLY_ID");
         public final static Property FSupply = new Property(5, String.class, "FSupply", false, "FSUPPLY");
         public final static Property FSaleOrgID = new Property(6, String.class, "FSaleOrgID", false, "FSALE_ORG_ID");
-        public final static Property FSaleManID = new Property(7, String.class, "FSaleManID", false, "FSALE_MAN_ID");
-        public final static Property FSaleDeptID = new Property(8, String.class, "FSaleDeptID", false, "FSALE_DEPT_ID");
-        public final static Property FNot = new Property(9, String.class, "FNot", false, "FNOT");
-        public final static Property Tag = new Property(10, int.class, "tag", false, "TAG");
-        public final static Property FBillTypeName = new Property(11, String.class, "FBillTypeName", false, "FBILL_TYPE_NAME");
+        public final static Property FStoreOrgID = new Property(7, String.class, "FStoreOrgID", false, "FSTORE_ORG_ID");
+        public final static Property FSaleManID = new Property(8, String.class, "FSaleManID", false, "FSALE_MAN_ID");
+        public final static Property FSaleDeptID = new Property(9, String.class, "FSaleDeptID", false, "FSALE_DEPT_ID");
+        public final static Property FNot = new Property(10, String.class, "FNot", false, "FNOT");
+        public final static Property Tag = new Property(11, int.class, "tag", false, "TAG");
+        public final static Property FBillTypeName = new Property(12, String.class, "FBillTypeName", false, "FBILL_TYPE_NAME");
     }
 
 
@@ -58,11 +59,12 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
                 "\"FSUPPLY_ID\" TEXT," + // 4: FSupplyID
                 "\"FSUPPLY\" TEXT," + // 5: FSupply
                 "\"FSALE_ORG_ID\" TEXT," + // 6: FSaleOrgID
-                "\"FSALE_MAN_ID\" TEXT," + // 7: FSaleManID
-                "\"FSALE_DEPT_ID\" TEXT," + // 8: FSaleDeptID
-                "\"FNOT\" TEXT," + // 9: FNot
-                "\"TAG\" INTEGER NOT NULL ," + // 10: tag
-                "\"FBILL_TYPE_NAME\" TEXT);"); // 11: FBillTypeName
+                "\"FSTORE_ORG_ID\" TEXT," + // 7: FStoreOrgID
+                "\"FSALE_MAN_ID\" TEXT," + // 8: FSaleManID
+                "\"FSALE_DEPT_ID\" TEXT," + // 9: FSaleDeptID
+                "\"FNOT\" TEXT," + // 10: FNot
+                "\"TAG\" INTEGER NOT NULL ," + // 11: tag
+                "\"FBILL_TYPE_NAME\" TEXT);"); // 12: FBillTypeName
     }
 
     /** Drops the underlying database table. */
@@ -110,25 +112,30 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
             stmt.bindString(7, FSaleOrgID);
         }
  
+        String FStoreOrgID = entity.getFStoreOrgID();
+        if (FStoreOrgID != null) {
+            stmt.bindString(8, FStoreOrgID);
+        }
+ 
         String FSaleManID = entity.getFSaleManID();
         if (FSaleManID != null) {
-            stmt.bindString(8, FSaleManID);
+            stmt.bindString(9, FSaleManID);
         }
  
         String FSaleDeptID = entity.getFSaleDeptID();
         if (FSaleDeptID != null) {
-            stmt.bindString(9, FSaleDeptID);
+            stmt.bindString(10, FSaleDeptID);
         }
  
         String FNot = entity.getFNot();
         if (FNot != null) {
-            stmt.bindString(10, FNot);
+            stmt.bindString(11, FNot);
         }
-        stmt.bindLong(11, entity.getTag());
+        stmt.bindLong(12, entity.getTag());
  
         String FBillTypeName = entity.getFBillTypeName();
         if (FBillTypeName != null) {
-            stmt.bindString(12, FBillTypeName);
+            stmt.bindString(13, FBillTypeName);
         }
     }
 
@@ -171,25 +178,30 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
             stmt.bindString(7, FSaleOrgID);
         }
  
+        String FStoreOrgID = entity.getFStoreOrgID();
+        if (FStoreOrgID != null) {
+            stmt.bindString(8, FStoreOrgID);
+        }
+ 
         String FSaleManID = entity.getFSaleManID();
         if (FSaleManID != null) {
-            stmt.bindString(8, FSaleManID);
+            stmt.bindString(9, FSaleManID);
         }
  
         String FSaleDeptID = entity.getFSaleDeptID();
         if (FSaleDeptID != null) {
-            stmt.bindString(9, FSaleDeptID);
+            stmt.bindString(10, FSaleDeptID);
         }
  
         String FNot = entity.getFNot();
         if (FNot != null) {
-            stmt.bindString(10, FNot);
+            stmt.bindString(11, FNot);
         }
-        stmt.bindLong(11, entity.getTag());
+        stmt.bindLong(12, entity.getTag());
  
         String FBillTypeName = entity.getFBillTypeName();
         if (FBillTypeName != null) {
-            stmt.bindString(12, FBillTypeName);
+            stmt.bindString(13, FBillTypeName);
         }
     }
 
@@ -208,11 +220,12 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // FSupplyID
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // FSupply
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // FSaleOrgID
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // FSaleManID
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // FSaleDeptID
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // FNot
-            cursor.getInt(offset + 10), // tag
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // FBillTypeName
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // FStoreOrgID
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // FSaleManID
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // FSaleDeptID
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // FNot
+            cursor.getInt(offset + 11), // tag
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // FBillTypeName
         );
         return entity;
     }
@@ -226,11 +239,12 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
         entity.setFSupplyID(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setFSupply(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setFSaleOrgID(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setFSaleManID(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setFSaleDeptID(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setFNot(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setTag(cursor.getInt(offset + 10));
-        entity.setFBillTypeName(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setFStoreOrgID(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setFSaleManID(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setFSaleDeptID(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setFNot(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setTag(cursor.getInt(offset + 11));
+        entity.setFBillTypeName(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
      }
     
     @Override
