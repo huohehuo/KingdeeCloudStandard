@@ -88,7 +88,7 @@ public class UpLoadModel {
                         T_mainDao.Properties.FID.eq(fid)
                         ).build().list();//一个FID只会对应着一个表头
                 if (mains.size()<=0){
-                    Toast.showText(mContext,"本地不存在单据数据");
+                    Toast.showText(mContext,"本地不存在单据数据:"+fid);
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));//本地不存在单据，解锁该单据的表头
                     LoadingUtil.dismiss();
                     return;

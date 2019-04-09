@@ -114,6 +114,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 String result = (String) event.postEvent;
                 if ("OK".equals(result)){
                     btnLogin.setClickable(true);
+                    btnLogin.setText("登陆");
                     Lg.e("成功注册");
 //                    BasicShareUtil.getInstance(App.getContext()).setRegisterState(true);
 //                    startNewActivity(LoginActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, true, null);
@@ -177,6 +178,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         //获取用户数据，并且设置默认值
         spinner.setAutoSelection(Info.AutoLogin,Hawk.get(Info.AutoLogin, ""));
         DataService.updateTime(mContext);
+        DataService.updateRegisterMaxNum(mContext);
         DownLoadUseTime();
         //检查是否存在注册码
        RegisterUtil.checkHasRegister();

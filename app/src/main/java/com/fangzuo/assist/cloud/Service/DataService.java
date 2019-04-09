@@ -7,13 +7,17 @@ import android.content.Intent;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
+import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
+import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.greendao.gen.ClientDao;
 import com.fangzuo.greendao.gen.DaoSession;
@@ -21,6 +25,7 @@ import com.fangzuo.greendao.gen.OrgDao;
 import com.fangzuo.greendao.gen.SaleManDao;
 import com.fangzuo.greendao.gen.UnitDao;
 import com.loopj.android.http.AsyncHttpClient;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 
@@ -38,6 +43,7 @@ public class DataService extends IntentService {
     private static final String ACTION_BAZ = "com.fangzuo.assist.Service.action.BAZ";
     private static final String UpdateTime = "com.fangzuo.assist.Service.action.UpdateTime";
     private static final String UpdateData = "com.fangzuo.assist.Service.action.UpdateData";
+    private static final String UpdateRegisterMaxNum = "com.fangzuo.assist.Service.action.UpdateRegisterMaxNum";
 
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "com.fangzuo.assist.Service.extra.PARAM1";
@@ -81,6 +87,12 @@ public class DataService extends IntentService {
         intent.setAction(UpdateData);
         context.startService(intent);
     }
+    ////获取服务器最大注册数
+    public static void updateRegisterMaxNum(Context context) {
+        Intent intent = new Intent(context, DataService.class);
+        intent.setAction(UpdateRegisterMaxNum);
+        context.startService(intent);
+    }
 
     /**
      * 处理报错数据
@@ -117,6 +129,8 @@ public class DataService extends IntentService {
                 handleActionUpdateTime();
             } else if (UpdateData.equals(action)) {
                 handleActionUpdateData();
+            } else if (UpdateRegisterMaxNum.equals(action)) {
+                handleActionUpdateRegisterMaxNum();
             }
 
         }
@@ -229,5 +243,25 @@ public class DataService extends IntentService {
 //                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Updata_Error,e.toString()));
             }
         });
+    }
+
+    //获取服务器最大注册数
+    private void handleActionUpdateRegisterMaxNum(){
+            App.getRService().doIOAction(WebApi.RegisterGetNum, "", new MySubscribe<CommonResponse>() {
+                @Override
+                public void onNext(CommonResponse commonResponse) {
+                    super.onNext(commonResponse);
+                    if (!commonResponse.state)return;
+                    Lg.e("最大用户数Max:"+commonResponse.returnJson);
+                    Hawk.put(Config.PDA_RegisterMaxNum,commonResponse.returnJson);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    Toast.showText(App.getContext(),"获取软件使用数上限失败");
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"获取软件使用数量失败"));
+                }
+            });
     }
 }

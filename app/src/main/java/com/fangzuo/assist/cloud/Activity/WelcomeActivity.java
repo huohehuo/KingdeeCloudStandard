@@ -102,6 +102,7 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
                 String newRegister = MD5.getMD5(register_code);
                 lastRegister = MD5.getMD5(newRegister);
                 Hawk.put(Config.PDA_IMIE, lastRegister);
+                Hawk.put(Config.PDA_RegisterCode, MD5.getMD5(mac));
                 checkDlg();
             } else {
                 Toast.showText(App.getContext(), "请链接WIFI");
@@ -127,11 +128,12 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
         final EditText mEdIp = v.findViewById(R.id.ed_ip);
         final EditText mEdPort = v.findViewById(R.id.ed_port);
         if (Info.DATABASESETTING.equals("K3DBConfigerRY")) {
-            mEdIp.setText("47.106.179.214");
-            mEdPort.setText("8080");
+            mEdIp.setText(BasicShareUtil.getInstance(App.getContext()).getIP().equals("120.77.206.67")?"":BasicShareUtil.getInstance(App.getContext()).getIP());
+            mEdPort.setText(BasicShareUtil.getInstance(App.getContext()).getPort().equals("8080")?"":BasicShareUtil.getInstance(App.getContext()).getPort());
         } else {
-            mEdIp.setText("192.168.0.19");
-            mEdPort.setText("8080");
+            mEdIp.setText(BasicShareUtil.getInstance(App.getContext()).getIP().equals("192.168.0.136")?"":BasicShareUtil.getInstance(App.getContext()).getIP());
+            mEdPort.setText(BasicShareUtil.getInstance(App.getContext()).getPort().equals("8082")?"":BasicShareUtil.getInstance(App.getContext()).getPort());
+
         }
 
         ab.setView(v);
@@ -141,7 +143,7 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
                 if (!(mEdIp.getText().toString()).equals("") && !(mEdPort.getText().toString()).equals("")) {
                     BasicShareUtil.getInstance(App.getContext()).setIP(mEdIp.getText().toString());
                     BasicShareUtil.getInstance(App.getContext()).setPort(mEdPort.getText().toString());
-                    RegisterUtil.doRegisterCheck(lastRegister);
+                    RegisterUtil.getRegiterMaxNum(lastRegister);
 //                        checkRegister();
                 } else {
                     System.exit(0);

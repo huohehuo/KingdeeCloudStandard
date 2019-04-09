@@ -9,6 +9,8 @@ public class Config {
     public static String SaveTime="SaveTime";//用于保存使用截止日期
     public static String Key="01235679";//用于保存使用截止日期（需要web端的key与之相同,并且不能倒序，只能递增的数字）
     public static String PDA_IMIE="PDA_IMIE";//用于保存注册码
+    public static String PDA_RegisterCode="PDA_RegisterCode";//用于保存注册码
+    public static String PDA_RegisterMaxNum="PDA_RegisterMaxNum";//用于保存注册码
 
 
     public static final String Cloud_Url = "http://47.106.179.214/K3Cloud/";
@@ -110,8 +112,14 @@ public class Config {
     public static final int Db2FDoutActivity                        =10040;//调拨申请单下推分布式调出单
     public static final int PDActivity                              =10041;//盘点单
     public static final int DBActivity                              =10042;//调拨单
-    public static final int TbInActivity                            =10043;//调拨单
-    public static final int DgInActivity                            =10044;//调拨单
-    public static final int SimpleInActivity                        =10045;//调拨单
+    public static final int DgInActivity                            =10044;//到柜入库
+    public static final int SimpleInActivity                        =10045;//简单生产入库
+    public static final int TbGetActivity                           =10046;//挑板领料
+    public static final int TbInActivity                            =10047;//挑板入库
+    public static final int GbGetActivity                           =10048;//改板领料
+    public static final int GbInActivity                            =10049;//改板入库
+    public static final int DcOutActivity                           =10050;//代存出库
+    public static final int DcInActivity                            =10051;//代存入库
+    public static final int DhInActivity                            =10052;//到货入库
 
 }

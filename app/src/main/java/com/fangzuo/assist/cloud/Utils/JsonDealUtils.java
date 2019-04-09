@@ -196,8 +196,9 @@ public class JsonDealUtils {
                 addObject(inObject,"FDEPTID","FNUMBER",mains.get(i).FDepartmentNumber);
                 addObject(inObject,"FSTOCKERID","FNUMBER",mains.get(i).FStockerNumber);
                 addObject(inObject,"FACCEPTANCE","FNUMBER",mains.get(i).FPurchaserId);
-                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
+//                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
                 addObject(inObject,"FOwnerIdHead","FNUMBER",mains.get(i).FOwnerIdHead);
+                inObject.put("F_FFF_Text",mains.get(i).F_FFF_Text);
                 JSONArray jsonArray = new JSONArray();
                 List<T_Detail> beans = new ArrayList<>();
                 beans.addAll(map.get(mains.get(i).FOrderId+""));
@@ -205,16 +206,15 @@ public class JsonDealUtils {
                     JSONObject jsonAr = new JSONObject();
                     addObject(jsonAr,"FMATERIALID","FNUMBER",beans.get(j).FMaterialId);
                     addObject(jsonAr,"FStockId","FNUMBER",beans.get(j).FStorageId);
-                    addObject(jsonAr,"FOWNERID","FNUMBER","100");
+                    addObject(jsonAr,"FOWNERID","FNUMBER",mains.get(i).FOwnerIdHead);
                     jsonAr.put("FEntryNote",beans.get(j).FNote);
-                    jsonAr.put("FKEEPERTYPEID","BD_KeeperOrg");
+//                    jsonAr.put("FKEEPERTYPEID","BD_KeeperOrg");
                     jsonAr.put("FQty",beans.get(j).FRealQty);
-                    addObject(jsonAr,"FKEEPERID","FNUMBER","100");
+                    addObject(jsonAr,"FKEEPERID","FNUMBER",mains.get(i).FStockOrgId);
                     addObject(jsonAr,"FLOT","FNUMBER",beans.get(j).FBatch);
                     addObject(jsonAr,"FUnitID","FNUMBER",beans.get(j).FUnitID);
                     addObject(jsonAr,"FSTOCKSTATUSID","FNUMBER","KCZT01_SYS");
-                    jsonAr.put("FOWNERTYPEID","BD_OwnerOrg");
-                    addObject(jsonAr,"FOWNERID","FNUMBER","100");
+//                    jsonAr.put("FOWNERTYPEID","BD_OwnerOrg");
                     jsonArray.put(jsonAr);
                 }
                 inObject.put("FEntity",jsonArray);

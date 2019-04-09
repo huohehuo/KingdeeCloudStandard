@@ -1,0 +1,178 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragment.pushdown.ChooseFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:visibility="gone"
+                    android:id="@+id/cb_isStorage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="是否带出默认仓库"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/holo_red_light"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="入库日期:"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp" />
+
+
+                <TextView
+                    android:text="业务单号:"
+                    android:textSize="22sp"
+                    android:textColor="#1e1e1e"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/ed_ff_order"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="8dp"
+                    android:hint="请输入业务单号"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:background="@drawable/bg_edittext_selector"
+                    android:singleLine="true"
+                    android:textSize="20sp" />
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="6">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:gravity="center"
+                        android:text="供应商:"
+                        android:textColor="@android:color/black"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/ed_supplier"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="3.5"
+                        android:background="@android:drawable/edit_text"
+                        android:gravity="center"
+                        android:selectAllOnFocus="true"
+                        android:singleLine="true" />
+
+                    <RelativeLayout
+                        android:id="@+id/search_supplier"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/search" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+                <include
+                    layout="@layout/line_heng"/>
+                <TextView
+                    android:text="生产车间:"
+                    android:textSize="22sp"
+                    android:textColor="#1e1e1e"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <com.fangzuo.assist.cloud.widget.SpinnerDepartMent
+                    android:id="@+id/sp_department_get"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    app:Uspinner_title="请选择生产车间"/>
+                <TextView
+                    android:text="仓库:"
+                    android:textSize="22sp"
+                    android:textColor="#1e1e1e"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <com.fangzuo.assist.cloud.widget.SpinnerStorage
+                    android:id="@+id/sp_which_storage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    app:Uspinner_title="请选择仓库"/>
+                <com.fangzuo.assist.cloud.widget.SpinnerOrg
+                    android:id="@+id/sp_org_in"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:manspinner_name="入库组织:"
+                    app:manspinner_title="请选择入库组织"
+                    app:manspinner_size="@dimen/sp_title_size" />
+                <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
+                    android:id="@+id/sp_org_create"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:manspinner_name="货主:"
+                    app:manspinner_title="请选择生产组织"
+                    app:manspinner_size="@dimen/sp_title_size" />
+                <com.fangzuo.assist.cloud.widget.SpinnerOrg
+                    android:visibility="gone"
+                    android:id="@+id/sp_org_huozhu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:manspinner_name="货主:"
+                    app:manspinner_title="请选择货主"
+                    app:manspinner_size="@dimen/sp_title_size" />
+
+                <com.fangzuo.assist.cloud.widget.SpinnerStoreMan
+                    android:visibility="gone"
+                    android:id="@+id/sp_storeman"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:manspinner_name="仓管员:"
+                    app:manspinner_title="请选择仓管员"
+                    app:manspinner_size="@dimen/sp_people_title_size" />
+                <TextView
+                    android:text="备注："
+                    android:textSize="@dimen/sp_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/ed_not"
+                    android:paddingLeft="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@drawable/bg_edittext_selector"
+                    android:textSize="21sp" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </ScrollView>
+
+
+</RelativeLayout>

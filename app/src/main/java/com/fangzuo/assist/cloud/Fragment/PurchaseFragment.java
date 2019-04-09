@@ -80,6 +80,11 @@ public class PurchaseFragment extends BaseFragment {
         ada.notifyDataSetChanged();
     }
 
+    private AlertDialog.Builder builder;
+    String[] items_sout = new String[]{"原单", "销售订单下推销售出库单","退货通知单下推销售退货单"};
+    String[] items_tb = new String[]{"挑板领料", "挑板入库"};
+    String[] items_gb = new String[]{"改板领料", "改板入库"};
+    String[] items_dc = new String[]{"代存出库", "代存入库"};
     @Override
     protected void initListener() {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -107,39 +112,16 @@ public class PurchaseFragment extends BaseFragment {
                     case "期初物料补打":
                         startNewActivity(PrintBeforeDataActivity.class, null);
                         break;
-                    case "库存查询":
-                        startNewActivity(CheckStoreActivity.class, null);
-                        break;
-                    case "其他入库":
-                        startNewActivity(OtherInStoreActivity.class, null);
-                        break;
-
-                    case "其他出库":
-                        startNewActivity(OtherOutStoreActivity.class, null);
-                        break;
-                    case "盘点":
-                        startNewActivity(PDActivity.class, null);
-                        break;
-                    case "单据下推":
-                        startNewActivity(PushDownActivity.class, null);
-                        break;
-                    case "采购入库":
-                        PagerForActivity.start(mContext, Config.PurchaseInStoreActivity);
-//                        startNewActivity(PurchaseInStoreActivity.class, null);
-                        break;
-                    case "采购订单":
-                        startNewActivity(PurchaseOrderActivity.class, null);
+                    case "到货入库":
+                        PagerForActivity.start(mContext, Config.DhInActivity);
                         break;
                     case "销售出库":
-                        // 创建数据
-//                        final String[] items = new String[]{"原单", "销售订单下推销售出库单"};
-                        final String[] items = new String[]{"原单", "销售订单下推销售出库单","退货通知单下推销售退货单"};
                         // 创建对话框构建器
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
                         builder.setAdapter(
                                 new ArrayAdapter<String>(getActivity(),
-                                        R.layout.item_choose, R.id.textView, items),
+                                        R.layout.item_choose, R.id.textView, items_sout),
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog,
@@ -180,6 +162,98 @@ public class PurchaseFragment extends BaseFragment {
 //                                });
 //                        builder.create().show();
                         break;
+                    case "挑板业务":
+                        builder = new AlertDialog.Builder(getActivity());
+                        // 设置参数
+                        builder.setAdapter(
+                                new ArrayAdapter<String>(getActivity(),
+                                        R.layout.item_choose, R.id.textView, items_tb),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        switch (which) {
+                                            case 0:
+                                                PagerForActivity.start(mContext, Config.TbGetActivity);
+                                                break;
+                                            case 1:
+                                                PagerForActivity.start(mContext, Config.TbInActivity);
+                                                break;
+                                        }
+                                    }
+                                });
+                        builder.create().show();
+                        break;
+                    case "改板业务":
+                        builder = new AlertDialog.Builder(getActivity());
+                        // 设置参数
+                        builder.setAdapter(
+                                new ArrayAdapter<String>(getActivity(),
+                                        R.layout.item_choose, R.id.textView, items_gb),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        switch (which) {
+                                            case 0:
+                                                PagerForActivity.start(mContext, Config.GbGetActivity);
+                                                break;
+                                            case 1:
+                                                PagerForActivity.start(mContext, Config.GbInActivity);
+                                                break;
+                                        }
+                                    }
+                                });
+                        builder.create().show();
+                        break;
+                    case "代存业务":
+                        builder = new AlertDialog.Builder(getActivity());
+                        // 设置参数
+                        builder.setAdapter(
+                                new ArrayAdapter<String>(getActivity(),
+                                        R.layout.item_choose, R.id.textView, items_dc),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        switch (which) {
+                                            case 0:
+                                                PagerForActivity.start(mContext, Config.DcOutActivity);
+                                                break;
+                                            case 1:
+                                                PagerForActivity.start(mContext, Config.DcInActivity);
+                                                break;
+                                        }
+                                    }
+                                });
+                        builder.create().show();
+                        break;
+                    case "其他出库":
+//                        startNewActivity(OtherOutStoreActivity.class, null);
+                        PagerForActivity.start(mContext, Config.OtherOutStoreActivity);
+                        break;
+
+                    case "其他入库":
+//                        startNewActivity(OtherInStoreActivity.class, null);
+                        PagerForActivity.start(mContext, Config.OtherInStoreActivity);
+                        break;
+                    case "库存查询":
+                        startNewActivity(CheckStoreActivity.class, null);
+                        break;
+                    case "盘点":
+                        startNewActivity(PDActivity.class, null);
+                        break;
+                    case "单据下推":
+                        startNewActivity(PushDownActivity.class, null);
+                        break;
+                    case "采购入库":
+                        PagerForActivity.start(mContext, Config.PurchaseInStoreActivity);
+//                        startNewActivity(PurchaseInStoreActivity.class, null);
+                        break;
+                    case "采购订单":
+                        startNewActivity(PurchaseOrderActivity.class, null);
+                        break;
+
                     case "销售订单":
                         startNewActivity(SaleOrderActivity.class, null);
                         break;
