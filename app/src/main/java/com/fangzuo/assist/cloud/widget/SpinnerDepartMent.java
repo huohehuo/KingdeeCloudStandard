@@ -334,7 +334,8 @@ public class SpinnerDepartMent extends RelativeLayout {
     private void dealAuto(List<Department> listData, boolean check) {
         container.clear();
         if (check) {
-            if (activityTag== Config.ProductInStoreActivity||activityTag==Config.TbInActivity||activityTag==Config.DgInActivity||activityTag==Config.SimpleInActivity || activityTag== Config.ProductGetActivity) {
+            if (activityTag== Config.ProductInStoreActivity||activityTag==Config.TbInActivity|| activityTag==Config.DgInActivity||activityTag==Config.SimpleInActivity ||activityTag==Config.GbInActivity||activityTag==Config.DhInActivity  ||
+                    activityTag== Config.ProductGetActivity||activityTag==Config.TbGetActivity||activityTag==Config.GbGetActivity  ) {
                 for (int i = 0; i < listData.size(); i++) {
                     if (listData.get(i).FOrg.equals(autoOrg)) {
                         if (listData.get(i).FISSTOCK.equals("1")){

@@ -378,7 +378,7 @@ public class ProductInStoreActivity extends BaseActivity {
                 bundle1.putInt("where", Info.SEARCHPRODUCT);
                 bundle1.putString("org", org==null?"":org.FOrgID);
                 bundle1.putInt("activity", activity);
-                startNewActivityForResult(ProductGettingActivity.class, R.anim.activity_open, 0, Info.SEARCHFORRESULT, bundle1);
+//                startNewActivityForResult(ProductGettingActivity.class, R.anim.activity_open, 0, Info.SEARCHFORRESULT, bundle1);
                 break;
             case R.id.ll_show:
                 if (binding.llContent.getVisibility() == View.GONE) {

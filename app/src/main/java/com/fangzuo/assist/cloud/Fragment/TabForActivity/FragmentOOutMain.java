@@ -193,7 +193,7 @@ public class FragmentOOutMain extends BaseFragment {
             if (null != activityPager) {
                 activityPager.setDate(tvDate == null ? "" : tvDate.getText().toString());
                 activityPager.setNote(edNot == null ? "" : edNot.getText().toString());
-//                activityPager.setFOrderNo(edFfOrder == null ? "" : edFfOrder.getText().toString());
+                activityPager.setFOrderNo(edFfOrder == null ? "" : edFfOrder.getText().toString());
                 activityPager.setManStore(spStoreman.getDataNumber());
 //                activityPager.setManSale(spSaleman.getDataNumber());
                 activityPager.setDepartMent(spDepartmentSend.getDataNumber());

@@ -146,12 +146,15 @@ public class UpLoadModel {
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPuO(mains,details)));
                 break;
             case Config.ProductInStoreActivity://产品入库
-            case Config.TbInActivity://产品入库
-            case Config.DgInActivity://产品入库
+            case Config.TbInActivity://挑板入库
+            case Config.GbInActivity://改板入库
+            case Config.DhInActivity://到货入库
             case Config.SimpleInActivity://产品入库
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPrIS(mains,details)));
                 break;
             case Config.ProductGetActivity://生产领料
+            case Config.TbGetActivity://挑板领料
+            case Config.GbGetActivity://改板领料
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPrG(mains,details)));
                 break;
             case Config.SaleOutActivity://销售出库

@@ -12,7 +12,7 @@ import org.json.JSONArray;
 public class Info {
     public static final String DATABASESETTING = "K3DBConfiger201811123395555";//数据库名称
 //    public static final String DATABASESETTING = "K3DBConfigerRY";
-    public static final String TestNo = "4.0";
+    public static final String TestNo = "4.1";
     public static final int RegisterNo = 155;
     public static final int SEARCHFORRESULT = 9998;
     public static final int SEARCHFORRESULTPRODUCT = 9997;
@@ -87,12 +87,15 @@ public class Info {
                 backString=FormID_PIS;
                 break;
             case Config.ProductInStoreActivity://产品入库
-            case Config.TbInActivity://产品入库
-            case Config.DgInActivity://产品入库
+            case Config.TbInActivity://挑板入库
+            case Config.GbInActivity://改版入库
+            case Config.DhInActivity://到货入库
             case Config.SimpleInActivity://产品入库
                 backString=FormID_ProductIS;
                 break;
             case Config.ProductGetActivity://生产领料
+            case Config.TbGetActivity://挑板领料
+            case Config.GbGetActivity://改板领料
                 backString=FormID_productGet;
                 break;
             case Config.SaleOutActivity://销售出库
@@ -142,13 +145,16 @@ public class Info {
             case Config.PurchaseInStoreActivity:
                 backString=BT_PIS;
                 break;
-            case Config.ProductInStoreActivity:
-            case Config.TbInActivity://产品入库
-            case Config.DgInActivity://产品入库
+            case Config.ProductInStoreActivity://产品入库
+            case Config.TbInActivity://挑板入库
+            case Config.GbInActivity://改版入库
+            case Config.DhInActivity://到货入库
             case Config.SimpleInActivity://产品入库
                 backString=BT_ProductIS;
                 break;
-            case Config.ProductGetActivity:
+            case Config.ProductGetActivity://生产领料
+            case Config.TbGetActivity://挑板领料
+            case Config.GbGetActivity://改板领料
                 backString=BT_ProductGet;
                 break;
             case Config.SaleOutActivity:

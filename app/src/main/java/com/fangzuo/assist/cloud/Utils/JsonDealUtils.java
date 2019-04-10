@@ -245,9 +245,10 @@ public class JsonDealUtils {
                 addObject(inObject,"FPickerId","FNUMBER",mains.get(i).FPurchaserId);
                 inObject.put("FDate",mains.get(i).FDate);
 //                inObject.put("FStockDirect","GENERAL");
-                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
+//                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
                 addObject(inObject,"FOwnerIdHead","FNUMBER",mains.get(i).FOwnerIdHead);
                 addObject(inObject,"FCustId","FNUMBER",mains.get(i).FCustomerID);
+                inObject.put("F_FFF_Text",mains.get(i).F_FFF_Text);
                 JSONArray jsonArray = new JSONArray();
                 List<T_Detail> beans = map.get(mains.get(i).FOrderId+"");
                 for (int j = 0; j < beans.size(); j++) {
@@ -258,8 +259,8 @@ public class JsonDealUtils {
                     jsonAr.put("FQty",beans.get(j).FRealQty);
                     addObject(jsonAr,"FUnitID","FNUMBER",beans.get(j).FUnitID);
                     addObject(jsonAr,"FStockStatusId","FNUMBER","KCZT01_SYS");
-                    jsonAr.put("FOwnerTypeId","BD_OwnerOrg");
-                    addObject(jsonAr,"FOwnerId","FNUMBER","100");
+//                    jsonAr.put("FOwnerTypeId","BD_OwnerOrg");
+                    addObject(jsonAr,"FOwnerId","FNUMBER",mains.get(i).FStockOrgId);
                     jsonArray.put(jsonAr);
                 }
                 inObject.put("FEntity",jsonArray);

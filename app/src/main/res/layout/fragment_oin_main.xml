@@ -104,7 +104,7 @@
                 <include
                     layout="@layout/line_heng"/>
                 <TextView
-                    android:text="生产车间:"
+                    android:text="部门:"
                     android:textSize="22sp"
                     android:textColor="#1e1e1e"
                     android:layout_width="match_parent"
@@ -114,7 +114,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    app:Uspinner_title="请选择生产车间"/>
+                    app:Uspinner_title="请选择部门"/>
                 <TextView
                     android:text="仓库:"
                     android:textSize="22sp"
@@ -131,8 +131,8 @@
                     android:id="@+id/sp_org_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="入库组织:"
-                    app:manspinner_title="请选择入库组织"
+                    app:manspinner_name="库存组织:"
+                    app:manspinner_title="请选择库存组织"
                     app:manspinner_size="@dimen/sp_title_size" />
                 <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
                     android:id="@+id/sp_org_create"
