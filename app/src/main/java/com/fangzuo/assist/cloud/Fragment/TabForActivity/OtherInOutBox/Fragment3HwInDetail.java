@@ -1,4 +1,4 @@
-package com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills;
+package com.fangzuo.assist.cloud.Fragment.TabForActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -80,7 +80,7 @@ import zpSDK.zpSDK.zpBluetoothPrinter;
 
 
 //选择单据信息Fragment（所属：PushDownPagerActivity);
-public class FragmentPrisTBDetail extends BaseFragment {
+public class FragmentOInDetail extends BaseFragment {
 
     //    @BindView(R.id.sp_which_storage)
 //    SpinnerStorage spWhichStorage;
@@ -182,7 +182,8 @@ public class FragmentPrisTBDetail extends BaseFragment {
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
                         String reString = mains.get(i).FBillerID + "|" + listOrder.get(i) + "|" + mains.get(i).FOrderId + "|" + mains.get(i).IMIE;
-                        App.getRService().doIOAction(WebApi.PrISUpload, reString, new MySubscribe<CommonResponse>() {
+                        Lg.e("回单拼接",reString);
+                        App.getRService().doIOAction(WebApi.OtherInUpload, reString, new MySubscribe<CommonResponse>() {
                             @Override
                             public void onNext(CommonResponse commonResponse) {
                                 super.onNext(commonResponse);
@@ -305,7 +306,7 @@ public class FragmentPrisTBDetail extends BaseFragment {
         }
     }
 
-    public FragmentPrisTBDetail() {
+    public FragmentOInDetail() {
         // Required empty public constructor
     }
 
@@ -320,7 +321,7 @@ public class FragmentPrisTBDetail extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_prisdetail, container, false);
+        View view = inflater.inflate(R.layout.fragment_oin_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getActivity();
         EventBusUtil.register(this);
@@ -516,9 +517,15 @@ public class FragmentPrisTBDetail extends BaseFragment {
             MediaPlayer.getInstance(mContext).error();
             return false;
         }
+        if (activityPager.getSuppliers().FName.equals("")) {
+            Toast.showText(mContext, "供应商不能为空");
+            MediaPlayer.getInstance(mContext).error();
+            return false;
+        }
         Lg.e("添加时单位：",unit);
         if (unit==null ||unit.FMeasureUnitID.equals("")) {
             Toast.showText(mContext, "物料单位未带出，请重试...");
+            unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
             MediaPlayer.getInstance(mContext).error();
             return false;
         }
@@ -627,6 +634,7 @@ public class FragmentPrisTBDetail extends BaseFragment {
             main.FDate = activityPager.getDate();
             main.FNot = activityPager.getNote();
             main.F_FFF_Text = activityPager.getFOrderNo();
+            main.setSupplier(activityPager.getSuppliers());
             long insert1 = t_mainDao.insert(main);
 
 
