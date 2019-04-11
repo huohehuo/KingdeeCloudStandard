@@ -1,4 +1,4 @@
-package com.fangzuo.assist.cloud.Fragment.TabForActivity;
+package com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -80,7 +80,7 @@ import zpSDK.zpSDK.zpBluetoothPrinter;
 
 
 //选择单据信息Fragment（所属：PushDownPagerActivity);
-public class FragmentOInDetail extends BaseFragment {
+public class Fragment3HwInDetail extends BaseFragment {
 
     //    @BindView(R.id.sp_which_storage)
 //    SpinnerStorage spWhichStorage;
@@ -306,7 +306,7 @@ public class FragmentOInDetail extends BaseFragment {
         }
     }
 
-    public FragmentOInDetail() {
+    public Fragment3HwInDetail() {
         // Required empty public constructor
     }
 

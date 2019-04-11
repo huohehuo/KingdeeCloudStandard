@@ -27,6 +27,7 @@ import com.fangzuo.assist.cloud.Activity.PushDownActivity;
 import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
 import com.fangzuo.assist.cloud.Activity.SaleOrderActivity;
 import com.fangzuo.assist.cloud.Activity.SaleOutActivity;
+import com.fangzuo.assist.cloud.Activity.ScanProductActivity;
 import com.fangzuo.assist.cloud.Adapter.GridViewAdapter;
 import com.fangzuo.assist.cloud.Beans.SettingList;
 import com.fangzuo.assist.cloud.R;
@@ -85,6 +86,7 @@ public class PurchaseFragment extends BaseFragment {
     String[] items_tb = new String[]{"挑板领料", "挑板入库"};
     String[] items_gb = new String[]{"改板领料", "改板入库"};
     String[] items_dc = new String[]{"代存出库", "代存入库"};
+    String[] items_in_out = new String[]{"样板出库", "第三方货物入库","第三方货物出库"};
     @Override
     protected void initListener() {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -93,14 +95,8 @@ public class PurchaseFragment extends BaseFragment {
                 SettingList tv = (SettingList) ada.getItem(i);
                 Log.e("listitem", tv.tv);
                 switch (tv.tv) {
-
-                    case "简单产品入库":
-                        PagerForActivity.start(mContext, Config.ProductInStoreActivity);
-//                        startNewActivity(ProductInStoreActivity.class, null);
-                        break;
-                    case "简单生产领料":
-                        PagerForActivity.start(mContext, Config.ProductGetActivity);
-//                        startNewActivity(ProductGetActivity.class, null);
+                    case "扫一扫":
+                        ScanProductActivity.start(mContext);
                         break;
                     case "调拨单":
                         PagerForActivity.start(mContext, Config.DBActivity);
@@ -237,6 +233,35 @@ public class PurchaseFragment extends BaseFragment {
 //                        startNewActivity(OtherInStoreActivity.class, null);
                         PagerForActivity.start(mContext, Config.OtherInStoreActivity);
                         break;
+
+                    case "其他出入库业务":
+                        builder = new AlertDialog.Builder(getActivity());
+                        // 设置参数
+                        builder.setAdapter(
+                                new ArrayAdapter<String>(getActivity(),
+                                        R.layout.item_choose, R.id.textView, items_in_out),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        switch (which) {
+                                            case 0:
+                                                PagerForActivity.start(mContext, Config.YbOutActivity);
+                                                break;
+                                            case 1:
+                                                PagerForActivity.start(mContext, Config.HwIn3Activity);
+                                                break;
+                                            case 2:
+                                                PagerForActivity.start(mContext, Config.HwOut3Activity);
+                                                break;
+                                        }
+                                    }
+                                });
+                        builder.create().show();
+                        break;
+
+
+
                     case "库存查询":
                         startNewActivity(CheckStoreActivity.class, null);
                         break;

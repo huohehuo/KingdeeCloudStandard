@@ -240,6 +240,7 @@ public class JsonDealUtils {
                 inObject.put("FBillNo","");
                 addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
                 addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FStockOrgId);
+                addObject(inObject,"FPickOrgId","FNUMBER",mains.get(i).FPurchaseOrgId);
                 addObject(inObject,"FDeptId","FNUMBER",mains.get(i).FDepartmentNumber);
                 addObject(inObject,"FStockerId","FNUMBER",mains.get(i).FStockerNumber);
                 addObject(inObject,"FPickerId","FNUMBER",mains.get(i).FPurchaserId);

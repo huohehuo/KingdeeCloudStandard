@@ -1,4 +1,4 @@
-package com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills;
+package com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox;
 
 import android.app.Activity;
 import android.app.AlertDialog;

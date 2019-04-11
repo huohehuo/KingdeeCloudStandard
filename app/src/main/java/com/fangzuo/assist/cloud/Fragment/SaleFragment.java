@@ -62,20 +62,28 @@ public class SaleFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
-                    case 0://挑板入库
-                        PagerForActivity.start(mContext, Config.TbInActivity);
-//                        startNewActivity(SaleOrderActivity.class,null);
+                    case 0://简单生产领料
+                        PagerForActivity.start(mContext, Config.ProductGetActivity);
+//                        startNewActivity(ProductInStoreActivity.class, null);
                         break;
-                    case 1://到柜入库
-                        PagerForActivity.start(mContext, Config.DgInActivity);
-//                        startNewActivity(SoldOutActivity.class,null);
+                    case 1://简单生产入库
+                        PagerForActivity.start(mContext, Config.ProductInStoreActivity);
+//                        startNewActivity(ProductGetActivity.class, null);
                         break;
-                    case 2://简单生产入库
-                        PagerForActivity.start(mContext, Config.SimpleInActivity);
-//                        startNewActivity(PushDownActivity.class,null);
-                        break;
-                    case 3://生产领料
-//                        startNewActivity(ProduceAndGetActivity.class,null);
+//                    case 0://挑板入库
+//                        PagerForActivity.start(mContext, Config.TbInActivity);
+////                        startNewActivity(SaleOrderActivity.class,null);
+//                        break;
+//                    case 1://到柜入库
+//                        PagerForActivity.start(mContext, Config.DgInActivity);
+////                        startNewActivity(SoldOutActivity.class,null);
+//                        break;
+//                    case 2://简单生产入库
+//                        PagerForActivity.start(mContext, Config.SimpleInActivity);
+////                        startNewActivity(PushDownActivity.class,null);
+//                        break;
+//                    case 3://生产领料
+////                        startNewActivity(ProduceAndGetActivity.class,null);
                 }
             }
         });

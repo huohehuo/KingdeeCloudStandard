@@ -254,9 +254,9 @@
         <activity
             android:name=".Activity.PDActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.ProductGettingActivity"
-            android:screenOrientation="portrait" />
+        <!--<activity-->
+            <!--android:name=".Activity.ProductGettingActivity"-->
+            <!--android:screenOrientation="portrait" />-->
         <activity
             android:name=".Activity.PrintOutTestActivity"
             android:screenOrientation="portrait" />
@@ -272,8 +272,11 @@
         <activity
             android:name=".Activity.PrintBeforeDataActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.CheckStoreActivity" />
-        <!--<activity android:name=".Activity.WelcomeActivity"></activity>-->
+        <activity android:name=".Activity.CheckStoreActivity"
+            android:screenOrientation="portrait" />
+        <!-- <activity android:name=".Activity.WelcomeActivity"></activity> -->
+        <activity android:name=".Activity.ScanProductActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

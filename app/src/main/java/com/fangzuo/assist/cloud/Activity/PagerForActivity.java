@@ -18,8 +18,8 @@ import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.Suppliers;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentDBDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentDBMain;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentGbGetMain;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentGbInMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.GbManagerBox.FragmentGbGetMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.GbManagerBox.FragmentGbInMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentOInDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentOInMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentOOutDetail;
@@ -33,10 +33,17 @@ import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrisDhMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrisMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOutDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOutMain;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentTbGetMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentTbGetMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisDGMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisSimpleInMain;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisTBMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentPrisTBDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentPrisTBMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.Fragment3HwInDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.Fragment3HwInMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.Fragment3HwOutDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.Fragment3HwOutMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.FragmentYbOutDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.FragmentYbOutMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentBackMsg2SaleBackDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentBackMsg2SaleBackMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentSaleOutDetailForPD;
@@ -147,7 +154,7 @@ public class PagerForActivity extends BaseActivity {
             case Config.TbInActivity:
                 binding.topActivity.tvTitle.setText("挑板入库");
                 fragments.add(new FragmentPrisTBMain());
-                fragments.add(new FragmentPrisDetail());
+                fragments.add(new FragmentPrisTBDetail());
                 break;
             case Config.GbGetActivity:
                 binding.topActivity.tvTitle.setText("改板领料");
@@ -159,19 +166,9 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentGbInMain());
                 fragments.add(new FragmentPrisDetail());
                 break;
-            case Config.DcInActivity:
-                binding.topActivity.tvTitle.setText("代存入库");
-                fragments.add(new FragmentGbInMain());
-                fragments.add(new FragmentPrisDetail());
-                break;
             case Config.DhInActivity:
                 binding.topActivity.tvTitle.setText("到货入库");
                 fragments.add(new FragmentPrisDhMain());
-                fragments.add(new FragmentPrisDetail());
-                break;
-            case Config.DgInActivity:
-                binding.topActivity.tvTitle.setText("到柜入库");
-                fragments.add(new FragmentPrisDGMain());
                 fragments.add(new FragmentPrisDetail());
                 break;
             case Config.SimpleInActivity:
@@ -179,14 +176,35 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentPrisSimpleInMain());
                 fragments.add(new FragmentPrisDetail());
                 break;
+            case Config.YbOutActivity:
+                binding.topActivity.tvTitle.setText("样板出库");
+                fragments.add(new FragmentYbOutMain());
+                fragments.add(new FragmentYbOutDetail());
+                break;
+            case Config.HwOut3Activity:
+                binding.topActivity.tvTitle.setText("第三方货物出库");
+                fragments.add(new Fragment3HwOutMain());
+                fragments.add(new Fragment3HwOutDetail());
+                break;
+            case Config.HwIn3Activity:
+                binding.topActivity.tvTitle.setText("第三方货物入库");
+                fragments.add(new Fragment3HwInMain());
+                fragments.add(new Fragment3HwInDetail());
+                break;
 
 
 
 
-
-
-
-
+//            case Config.DgInActivity:
+//                binding.topActivity.tvTitle.setText("到柜入库");
+//                fragments.add(new FragmentPrisDGMain());
+//                fragments.add(new FragmentPrisDetail());
+//                break;
+//            case Config.DcInActivity:
+//                binding.topActivity.tvTitle.setText("代存入库");
+//                fragments.add(new FragmentGbInMain());
+//                fragments.add(new FragmentPrisDetail());
+//                break;
             case Config.OtherInStoreActivity:
                 binding.topActivity.tvTitle.setText("其他入库");
                 fragments.add(new FragmentOInMain());

@@ -38,13 +38,16 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
         public final static Property FStoreUnit = new Property(11, String.class, "FStoreUnit", false, "FSTORE_UNIT");
         public final static Property FUnitAux = new Property(12, String.class, "FUnitAux", false, "FUNIT_AUX");
         public final static Property FNot = new Property(13, String.class, "FNot", false, "FNOT");
-        public final static Property FWaveHouse = new Property(14, String.class, "FWaveHouse", false, "FWAVE_HOUSE");
-        public final static Property FSaveIn = new Property(15, String.class, "FSaveIn", false, "FSAVE_IN");
-        public final static Property FCheck = new Property(16, String.class, "FCheck", false, "FCHECK");
-        public final static Property FDate = new Property(17, String.class, "FDate", false, "FDATE");
-        public final static Property FMaterialid = new Property(18, String.class, "FMaterialid", false, "FMATERIALID");
-        public final static Property FAuxSign = new Property(19, String.class, "FAuxSign", false, "FAUX_SIGN");
-        public final static Property FActualModel = new Property(20, String.class, "FActualModel", false, "FACTUAL_MODEL");
+        public final static Property FPrintMan = new Property(14, String.class, "FPrintMan", false, "FPRINT_MAN");
+        public final static Property FNumber = new Property(15, String.class, "FNumber", false, "FNUMBER");
+        public final static Property FStorage = new Property(16, String.class, "FStorage", false, "FSTORAGE");
+        public final static Property FWaveHouse = new Property(17, String.class, "FWaveHouse", false, "FWAVE_HOUSE");
+        public final static Property FSaveIn = new Property(18, String.class, "FSaveIn", false, "FSAVE_IN");
+        public final static Property FCheck = new Property(19, String.class, "FCheck", false, "FCHECK");
+        public final static Property FDate = new Property(20, String.class, "FDate", false, "FDATE");
+        public final static Property FMaterialid = new Property(21, String.class, "FMaterialid", false, "FMATERIALID");
+        public final static Property FAuxSign = new Property(22, String.class, "FAuxSign", false, "FAUX_SIGN");
+        public final static Property FActualModel = new Property(23, String.class, "FActualModel", false, "FACTUAL_MODEL");
     }
 
 
@@ -74,13 +77,16 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
                 "\"FSTORE_UNIT\" TEXT," + // 11: FStoreUnit
                 "\"FUNIT_AUX\" TEXT," + // 12: FUnitAux
                 "\"FNOT\" TEXT," + // 13: FNot
-                "\"FWAVE_HOUSE\" TEXT," + // 14: FWaveHouse
-                "\"FSAVE_IN\" TEXT," + // 15: FSaveIn
-                "\"FCHECK\" TEXT," + // 16: FCheck
-                "\"FDATE\" TEXT," + // 17: FDate
-                "\"FMATERIALID\" TEXT," + // 18: FMaterialid
-                "\"FAUX_SIGN\" TEXT," + // 19: FAuxSign
-                "\"FACTUAL_MODEL\" TEXT);"); // 20: FActualModel
+                "\"FPRINT_MAN\" TEXT," + // 14: FPrintMan
+                "\"FNUMBER\" TEXT," + // 15: FNumber
+                "\"FSTORAGE\" TEXT," + // 16: FStorage
+                "\"FWAVE_HOUSE\" TEXT," + // 17: FWaveHouse
+                "\"FSAVE_IN\" TEXT," + // 18: FSaveIn
+                "\"FCHECK\" TEXT," + // 19: FCheck
+                "\"FDATE\" TEXT," + // 20: FDate
+                "\"FMATERIALID\" TEXT," + // 21: FMaterialid
+                "\"FAUX_SIGN\" TEXT," + // 22: FAuxSign
+                "\"FACTUAL_MODEL\" TEXT);"); // 23: FActualModel
     }
 
     /** Drops the underlying database table. */
@@ -163,39 +169,54 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
             stmt.bindString(14, FNot);
         }
  
+        String FPrintMan = entity.getFPrintMan();
+        if (FPrintMan != null) {
+            stmt.bindString(15, FPrintMan);
+        }
+ 
+        String FNumber = entity.getFNumber();
+        if (FNumber != null) {
+            stmt.bindString(16, FNumber);
+        }
+ 
+        String FStorage = entity.getFStorage();
+        if (FStorage != null) {
+            stmt.bindString(17, FStorage);
+        }
+ 
         String FWaveHouse = entity.getFWaveHouse();
         if (FWaveHouse != null) {
-            stmt.bindString(15, FWaveHouse);
+            stmt.bindString(18, FWaveHouse);
         }
  
         String FSaveIn = entity.getFSaveIn();
         if (FSaveIn != null) {
-            stmt.bindString(16, FSaveIn);
+            stmt.bindString(19, FSaveIn);
         }
  
         String FCheck = entity.getFCheck();
         if (FCheck != null) {
-            stmt.bindString(17, FCheck);
+            stmt.bindString(20, FCheck);
         }
  
         String FDate = entity.getFDate();
         if (FDate != null) {
-            stmt.bindString(18, FDate);
+            stmt.bindString(21, FDate);
         }
  
         String FMaterialid = entity.getFMaterialid();
         if (FMaterialid != null) {
-            stmt.bindString(19, FMaterialid);
+            stmt.bindString(22, FMaterialid);
         }
  
         String FAuxSign = entity.getFAuxSign();
         if (FAuxSign != null) {
-            stmt.bindString(20, FAuxSign);
+            stmt.bindString(23, FAuxSign);
         }
  
         String FActualModel = entity.getFActualModel();
         if (FActualModel != null) {
-            stmt.bindString(21, FActualModel);
+            stmt.bindString(24, FActualModel);
         }
     }
 
@@ -273,39 +294,54 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
             stmt.bindString(14, FNot);
         }
  
+        String FPrintMan = entity.getFPrintMan();
+        if (FPrintMan != null) {
+            stmt.bindString(15, FPrintMan);
+        }
+ 
+        String FNumber = entity.getFNumber();
+        if (FNumber != null) {
+            stmt.bindString(16, FNumber);
+        }
+ 
+        String FStorage = entity.getFStorage();
+        if (FStorage != null) {
+            stmt.bindString(17, FStorage);
+        }
+ 
         String FWaveHouse = entity.getFWaveHouse();
         if (FWaveHouse != null) {
-            stmt.bindString(15, FWaveHouse);
+            stmt.bindString(18, FWaveHouse);
         }
  
         String FSaveIn = entity.getFSaveIn();
         if (FSaveIn != null) {
-            stmt.bindString(16, FSaveIn);
+            stmt.bindString(19, FSaveIn);
         }
  
         String FCheck = entity.getFCheck();
         if (FCheck != null) {
-            stmt.bindString(17, FCheck);
+            stmt.bindString(20, FCheck);
         }
  
         String FDate = entity.getFDate();
         if (FDate != null) {
-            stmt.bindString(18, FDate);
+            stmt.bindString(21, FDate);
         }
  
         String FMaterialid = entity.getFMaterialid();
         if (FMaterialid != null) {
-            stmt.bindString(19, FMaterialid);
+            stmt.bindString(22, FMaterialid);
         }
  
         String FAuxSign = entity.getFAuxSign();
         if (FAuxSign != null) {
-            stmt.bindString(20, FAuxSign);
+            stmt.bindString(23, FAuxSign);
         }
  
         String FActualModel = entity.getFActualModel();
         if (FActualModel != null) {
-            stmt.bindString(21, FActualModel);
+            stmt.bindString(24, FActualModel);
         }
     }
 
@@ -331,13 +367,16 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // FStoreUnit
             cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // FUnitAux
             cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // FNot
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // FWaveHouse
-            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // FSaveIn
-            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // FCheck
-            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // FDate
-            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // FMaterialid
-            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // FAuxSign
-            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20) // FActualModel
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // FPrintMan
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // FNumber
+            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // FStorage
+            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // FWaveHouse
+            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // FSaveIn
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // FCheck
+            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // FDate
+            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // FMaterialid
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // FAuxSign
+            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23) // FActualModel
         );
         return entity;
     }
@@ -358,13 +397,16 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
         entity.setFStoreUnit(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
         entity.setFUnitAux(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
         entity.setFNot(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setFWaveHouse(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setFSaveIn(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
-        entity.setFCheck(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
-        entity.setFDate(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
-        entity.setFMaterialid(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setFAuxSign(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
-        entity.setFActualModel(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
+        entity.setFPrintMan(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setFNumber(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setFStorage(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
+        entity.setFWaveHouse(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
+        entity.setFSaveIn(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
+        entity.setFCheck(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setFDate(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
+        entity.setFMaterialid(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
+        entity.setFAuxSign(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
+        entity.setFActualModel(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
      }
     
     @Override

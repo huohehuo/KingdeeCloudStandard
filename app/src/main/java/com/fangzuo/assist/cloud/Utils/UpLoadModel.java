@@ -167,9 +167,12 @@ public class UpLoadModel {
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSendMsg2SaleOut(mains,details)));
                 break;
             case Config.OtherInStoreActivity://其他入库
+            case Config.HwIn3Activity://第三方货物入库
                 DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonOIS(mains,details)));
                 break;
             case Config.OtherOutStoreActivity://其他出库
+            case Config.YbOutActivity://样板出库
+            case Config.HwOut3Activity://第三方货物出库
                 DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonOOS(mains,details)));
                 break;
             case Config.SaleOrderActivity://销售订单

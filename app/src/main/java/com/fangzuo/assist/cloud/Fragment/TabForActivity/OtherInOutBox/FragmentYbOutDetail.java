@@ -1,4 +1,4 @@
-package com.fangzuo.assist.cloud.Fragment.TabForActivity;
+package com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -75,7 +75,7 @@ import butterknife.Unbinder;
 
 
 //选择单据信息Fragment（所属：PushDownPagerActivity);
-public class FragmentOOutDetail extends BaseFragment {
+public class FragmentYbOutDetail extends BaseFragment {
 
 
     @BindView(R.id.zxing_barcode_scanner)
@@ -253,7 +253,7 @@ public class FragmentOOutDetail extends BaseFragment {
         }
     }
 
-    public FragmentOOutDetail() {
+    public FragmentYbOutDetail() {
         // Required empty public constructor
     }
 
@@ -267,7 +267,7 @@ public class FragmentOOutDetail extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_saleoutdetail, container, false);
+        View view = inflater.inflate(R.layout.fragment_oout_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getActivity();
         EventBusUtil.register(this);
@@ -528,7 +528,7 @@ public class FragmentOOutDetail extends BaseFragment {
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
             main.FOrderId = ordercode;
             main.FIndex = timesecond;
-            main.setData(Info.getType(activity), activityPager.getOrgOut(0), activityPager.getOrgOut(0), activityPager.getHuozhuOut(0));
+            main.setData(Info.getType(activity), activityPager.getOrgOut(0), activityPager.getHuozhuOut(0), activityPager.getHuozhuOut(0));
             main.FDepartmentNumber = activityPager.getDepartMent();
 //            main.FPurchaseDeptId = activityPager.getDepartMentBuy();
 //            main.FPurchaserId = activityPager.getManSale();

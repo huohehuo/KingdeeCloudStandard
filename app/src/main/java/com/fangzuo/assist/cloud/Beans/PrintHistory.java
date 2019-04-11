@@ -23,6 +23,9 @@ public class PrintHistory {
     public String FStoreUnit;
     public String FUnitAux;
     public String FNot;
+    public String FPrintMan;
+    public String FNumber;
+    public String FStorage;
     public String FWaveHouse;
     public String FSaveIn;
     public String FCheck;
@@ -66,11 +69,11 @@ public class PrintHistory {
 
 
 
-    @Generated(hash = 1210314488)
-    public PrintHistory(String FTitle, String FHuoquan, String FBarCode, String FBatch, String FName,
-            String FModel, String FNum, String FNum2, String FUnit, String FBaseUnit, String FBaseUnitID,
-            String FStoreUnit, String FUnitAux, String FNot, String FWaveHouse, String FSaveIn, String FCheck,
-            String FDate, String FMaterialid, String FAuxSign, String FActualModel) {
+    @Generated(hash = 1316777742)
+    public PrintHistory(String FTitle, String FHuoquan, String FBarCode, String FBatch, String FName, String FModel,
+            String FNum, String FNum2, String FUnit, String FBaseUnit, String FBaseUnitID, String FStoreUnit,
+            String FUnitAux, String FNot, String FPrintMan, String FNumber, String FStorage, String FWaveHouse,
+            String FSaveIn, String FCheck, String FDate, String FMaterialid, String FAuxSign, String FActualModel) {
         this.FTitle = FTitle;
         this.FHuoquan = FHuoquan;
         this.FBarCode = FBarCode;
@@ -85,6 +88,9 @@ public class PrintHistory {
         this.FStoreUnit = FStoreUnit;
         this.FUnitAux = FUnitAux;
         this.FNot = FNot;
+        this.FPrintMan = FPrintMan;
+        this.FNumber = FNumber;
+        this.FStorage = FStorage;
         this.FWaveHouse = FWaveHouse;
         this.FSaveIn = FSaveIn;
         this.FCheck = FCheck;
@@ -221,5 +227,23 @@ public class PrintHistory {
     }
     public void setFStoreUnit(String FStoreUnit) {
         this.FStoreUnit = FStoreUnit;
+    }
+    public String getFPrintMan() {
+        return this.FPrintMan;
+    }
+    public void setFPrintMan(String FPrintMan) {
+        this.FPrintMan = FPrintMan;
+    }
+    public String getFNumber() {
+        return this.FNumber;
+    }
+    public void setFNumber(String FNumber) {
+        this.FNumber = FNumber;
+    }
+    public String getFStorage() {
+        return this.FStorage;
+    }
+    public void setFStorage(String FStorage) {
+        this.FStorage = FStorage;
     }
 }

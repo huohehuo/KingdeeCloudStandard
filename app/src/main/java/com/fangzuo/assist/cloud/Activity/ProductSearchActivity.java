@@ -424,10 +424,13 @@ public class ProductSearchActivity extends BaseActivity {
                 FIsSale="1";
                 break;
             case Config.OtherInStoreActivity://其他入库
+            case Config.HwIn3Activity://第三方货物入库
                 s2Product.FIsInventory="1";
                 FIsInventory="1";
                 break;
             case Config.OtherOutStoreActivity://其他出库
+            case Config.YbOutActivity://样板出库
+            case Config.HwOut3Activity://第三方货物出库
                 s2Product.FIsInventory="1";
                 FIsInventory="1";
                 break;

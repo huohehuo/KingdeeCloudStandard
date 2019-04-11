@@ -128,11 +128,11 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
         final EditText mEdIp = v.findViewById(R.id.ed_ip);
         final EditText mEdPort = v.findViewById(R.id.ed_port);
         if (Info.DATABASESETTING.equals("K3DBConfigerRY")) {
-            mEdIp.setText(BasicShareUtil.getInstance(App.getContext()).getIP().equals("120.77.206.67")?"":BasicShareUtil.getInstance(App.getContext()).getIP());
-            mEdPort.setText(BasicShareUtil.getInstance(App.getContext()).getPort().equals("8080")?"":BasicShareUtil.getInstance(App.getContext()).getPort());
+            mEdIp.setText(BasicShareUtil.getInstance(App.getContext()).getIP().equals("")?"120.77.206.67":BasicShareUtil.getInstance(App.getContext()).getIP());
+            mEdPort.setText(BasicShareUtil.getInstance(App.getContext()).getPort().equals("")?"8080":BasicShareUtil.getInstance(App.getContext()).getPort());
         } else {
-            mEdIp.setText(BasicShareUtil.getInstance(App.getContext()).getIP().equals("192.168.0.136")?"":BasicShareUtil.getInstance(App.getContext()).getIP());
-            mEdPort.setText(BasicShareUtil.getInstance(App.getContext()).getPort().equals("8082")?"":BasicShareUtil.getInstance(App.getContext()).getPort());
+            mEdIp.setText(BasicShareUtil.getInstance(App.getContext()).getIP().equals("")?"192.168.0.136":BasicShareUtil.getInstance(App.getContext()).getIP());
+            mEdPort.setText(BasicShareUtil.getInstance(App.getContext()).getPort().equals("")?"8082":BasicShareUtil.getInstance(App.getContext()).getPort());
 
         }
 

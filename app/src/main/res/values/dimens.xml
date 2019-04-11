@@ -469,7 +469,9 @@
 
     <dimen name="size_heng_line">0.5dp</dimen><!--横的线-->
 
-    <dimen name="size_product_check">15sp</dimen><!--横的线-->
+    <dimen name="size_product_check">15sp</dimen>
+    <dimen name="height_scan_product">38dp</dimen><!--横的线-->
+    <dimen name="height_scan_product_size">22sp</dimen><!--横的线-->
 
 
 </resources>

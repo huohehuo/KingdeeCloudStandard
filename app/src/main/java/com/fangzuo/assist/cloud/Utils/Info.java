@@ -12,7 +12,7 @@ import org.json.JSONArray;
 public class Info {
     public static final String DATABASESETTING = "K3DBConfiger201811123395555";//数据库名称
 //    public static final String DATABASESETTING = "K3DBConfigerRY";
-    public static final String TestNo = "4.1";
+    public static final String TestNo = "4.4";
     public static final int RegisterNo = 155;
     public static final int SEARCHFORRESULT = 9998;
     public static final int SEARCHFORRESULTPRODUCT = 9997;
@@ -104,9 +104,12 @@ public class Info {
                 backString=FormID_SaleOut;
                 break;
             case Config.OtherInStoreActivity://其他入库
+            case Config.HwIn3Activity://第三方货物入库
                 backString=FormID_OtherIn;
                 break;
             case Config.OtherOutStoreActivity://其他出库
+            case Config.YbOutActivity://样板出库
+            case Config.HwOut3Activity://第三方货物出库
                 backString=FormID_OtherOut;
                 break;
             case Config.SaleOrderActivity://销售订单
@@ -162,10 +165,13 @@ public class Info {
             case Config.PdSendMsg2SaleOutActivity:
                 backString=BT_SaleOut;
                 break;
-            case Config.OtherInStoreActivity:
+            case Config.OtherInStoreActivity://其他入库
+            case Config.HwIn3Activity://第三方货物入库
                 backString=BT_OIS;
                 break;
-            case Config.OtherOutStoreActivity:
+            case Config.OtherOutStoreActivity://其他出库
+            case Config.YbOutActivity://样板出库
+            case Config.HwOut3Activity://第三方货物出库
                 backString=BT_OOS;
                 break;
             case Config.SaleOrderActivity:

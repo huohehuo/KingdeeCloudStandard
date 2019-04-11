@@ -29,6 +29,7 @@ import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.fangzuo.assist.cloud.widget.SpinnerDepartMent;
+import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
 import com.fangzuo.assist.cloud.widget.SpinnerOrg;
 import com.fangzuo.assist.cloud.widget.SpinnerStoreMan;
 import com.orhanobut.hawk.Hawk;
@@ -56,7 +57,7 @@ public class FragmentOOutMain extends BaseFragment {
     SpinnerOrg spOrgSend;
     @BindView(R.id.sp_department_send)
     SpinnerDepartMent spDepartmentSend;
-//        @BindView(R.id.sp_saleman)
+    //        @BindView(R.id.sp_saleman)
 //        SpinnerSaleMan spSaleman;
     @BindView(R.id.sp_storeman)
     SpinnerStoreMan spStoreman;
@@ -68,6 +69,8 @@ public class FragmentOOutMain extends BaseFragment {
     LinearLayout llClient;
     @BindView(R.id.search_client)
     RelativeLayout searchClient;
+    @BindView(R.id.sp_org_huozhu)
+    SpinnerHuozhu spOrgHuozhu;
     //    @BindView(R.id.sp_department_sale)
 //    SpinnerDepartMent spDepartmentSale;
     private FragmentActivity mContext;
@@ -79,7 +82,7 @@ public class FragmentOOutMain extends BaseFragment {
         switch (event.Msg) {
             case EventBusInfoCode.Client:
                 Client client = (Client) event.postEvent;
-                Lg.e("获得供应商：" ,client);
+                Lg.e("获得供应商：", client);
                 edClient.setText(client.FName);
                 activityPager.setClient(client);
                 Hawk.put(Config.OrderNo + activityPager.getActivity(), client.FName);
@@ -89,6 +92,7 @@ public class FragmentOOutMain extends BaseFragment {
                 if (Config.Lock.equals(lock)) {
                     activityPager.setHasLock(true);
                     spOrgSend.setEnable(false);
+                    spOrgHuozhu.setEnable(false);
                     spDepartmentSend.setEnable(false);
                     spStoreman.setEnable(false);
                     searchClient.setClickable(false);
@@ -104,6 +108,7 @@ public class FragmentOOutMain extends BaseFragment {
                 } else {
                     activityPager.setHasLock(false);
                     spOrgSend.setEnable(true);
+                    spOrgHuozhu.setEnable(true);
                     spDepartmentSend.setEnable(true);
                     spStoreman.setEnable(true);
                     searchClient.setClickable(true);
@@ -161,6 +166,7 @@ public class FragmentOOutMain extends BaseFragment {
         activityPager.setDate(tvDate.getText().toString());
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
         spOrgSend.setAutoSelection(getString(R.string.spOrgSend_oout), Hawk.get(getString(R.string.spOrgSend_oout), ""));//仓库，仓管员，部门都以组织id来过滤
+        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout), ""));
         spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout), Hawk.get(getString(R.string.spDepartmentSend_oout), ""), activityPager.getOrgOut(), activityPager.getActivity());
 //        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout), "", activityPager.getOrgOut(), activityPager.getActivity());
         spStoreman.setAuto(getString(R.string.spStoreman_oout), Hawk.get(getString(R.string.spStoreman_oout), ""), activityPager.getOrgOut());
@@ -174,7 +180,7 @@ public class FragmentOOutMain extends BaseFragment {
         }
         setfocus(tvDate);
         //当为下推单时隐藏
-        if (activityPager.getActivity() == Config.PdSaleOrder2SaleOutActivity||activityPager.getActivity() == Config.PdBackMsg2SaleBackActivity) {
+        if (activityPager.getActivity() == Config.PdSaleOrder2SaleOutActivity || activityPager.getActivity() == Config.PdBackMsg2SaleBackActivity) {
             llClient.setVisibility(View.GONE);
         }
     }
@@ -222,12 +228,20 @@ public class FragmentOOutMain extends BaseFragment {
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgOut((Org) spOrgSend.getAdapter().getItem(i));
                 Hawk.put(getString(R.string.spOrgSend_oout), activityPager.getOrgOut().FName);
+                spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout), activityPager.getOrgOut(), "");
                 spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout), Hawk.get(getString(R.string.spDepartmentSend_oout), ""), activityPager.getOrgOut(), activityPager.getActivity());
                 spStoreman.setAuto(getString(R.string.spStoreman_oout), Hawk.get(getString(R.string.spStoreman_oout), ""), activityPager.getOrgOut());
 //        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout), "", activityPager.getOrgOut(), activityPager.getActivity());
 //        spSaleman.setAuto(getString(R.string.spSaleman_oout), "", activityPager.getOrgOut());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
 
+            }
+        });
+        spOrgHuozhu.setOnItemSelectedListener(new ItemListener() {
+            @Override
+            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
+                activityPager.setHuozhuOut((Org) spOrgHuozhu.getAdapter().getItem(i));
+                Hawk.put(getString(R.string.spOrgHuozhu_oout), activityPager.getHuozhuOut().FName);
             }
         });
         cbIsStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

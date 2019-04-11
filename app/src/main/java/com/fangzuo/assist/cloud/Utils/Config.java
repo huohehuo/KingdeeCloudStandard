@@ -121,5 +121,8 @@ public class Config {
     public static final int DcOutActivity                           =10050;//代存出库
     public static final int DcInActivity                            =10051;//代存入库
     public static final int DhInActivity                            =10052;//到货入库
+    public static final int YbOutActivity                           =10053;//样板出库
+    public static final int HwIn3Activity                           =10054;//第三方货物入库
+    public static final int HwOut3Activity                          =10055;//第三方货物出库
 
 }

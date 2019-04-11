@@ -81,6 +81,12 @@
         <attr name="TextView_Title_size" format="dimension" />
         <attr name="TextView_Title_justone" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="Style_TextView_Show">
+        <attr name="TextView_Show_one" format="string" />
+        <attr name="TextView_Show_two" format="string" />
+        <attr name="TextView_Show_one_size" format="dimension" />
+        <attr name="TextView_Show_two_size" format="dimension" />
+    </declare-styleable>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

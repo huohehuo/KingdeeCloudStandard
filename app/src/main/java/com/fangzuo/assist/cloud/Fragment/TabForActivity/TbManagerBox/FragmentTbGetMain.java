@@ -1,4 +1,4 @@
-package com.fangzuo.assist.cloud.Fragment.TabForActivity;
+package com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox;
 
 import android.app.Activity;
 import android.os.Bundle;

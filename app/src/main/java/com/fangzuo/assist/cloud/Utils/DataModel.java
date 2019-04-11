@@ -427,6 +427,7 @@ public class DataModel {
     //获取库存
     public static void getStoreNum(Product product, Storage storage, String batch, Context mContext, final TextView textView,Org org){
         if (product == null || storage == null){
+            textView.setText("0");
             return;
         }
         Lg.e("库存查找条件：",product.FMASTERID+"-"+storage.FItemID+"-"+batch);

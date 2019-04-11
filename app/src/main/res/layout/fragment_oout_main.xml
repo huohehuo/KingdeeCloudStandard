@@ -129,7 +129,13 @@
                     android:layout_height="wrap_content"
                     app:manspinner_name="库存组织:"
                     app:manspinner_size="9sp" />
-
+                <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
+                    android:id="@+id/sp_org_huozhu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:manspinner_name="货主:"
+                    app:manspinner_title="请选择生产组织"
+                    app:manspinner_size="@dimen/sp_title_size" />
                 <!--<com.fangzuo.assist.cloud.widget.SpinnerSaleMan-->
                 <!--android:id="@+id/sp_saleman"-->
                 <!--android:layout_width="match_parent"-->

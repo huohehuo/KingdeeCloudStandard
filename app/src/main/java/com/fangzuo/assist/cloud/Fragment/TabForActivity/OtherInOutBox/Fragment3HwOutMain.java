@@ -44,7 +44,7 @@ import butterknife.Unbinder;
 
 
 //选择单据信息Fragment（所属：PushDownPagerActivity);
-public class Fragment3HwInMain extends BaseFragment {
+public class Fragment3HwOutMain extends BaseFragment {
 
 
     @BindView(R.id.cb_isStorage)
@@ -126,7 +126,7 @@ public class Fragment3HwInMain extends BaseFragment {
         }
     }
 
-    public Fragment3HwInMain() {
+    public Fragment3HwOutMain() {
         // Required empty public constructor
     }
 

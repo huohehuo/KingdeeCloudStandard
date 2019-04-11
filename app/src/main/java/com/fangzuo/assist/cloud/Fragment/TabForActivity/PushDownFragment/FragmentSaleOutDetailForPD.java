@@ -626,6 +626,11 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
 //            Toast.showText(mContext, "大兄弟,您的数量超过我的想象");
 //            return false;
 //        }
+        if (MathUtil.toD(edNum.getText().toString())>MathUtil.toD(tvStorenum.getText().toString())){
+            MediaPlayer.getInstance(mContext).error();
+            Toast.showText(mContext, "添加数不能超过库存数");
+            return false;
+        }
         if (edNum.getText().toString().trim().equals("") || "0".equals(edNum.getText().toString())) {
             Toast.showText(mContext, "请输入数量");
             MediaPlayer.getInstance(mContext).error();

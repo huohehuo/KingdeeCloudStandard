@@ -210,6 +210,7 @@
     <string name="spDepartmentSend_oout">spDepartmentSend_oout</string>
     <string name="spDepartmentSale_oout">spDepartmentSale_oout</string>
     <string name="spOrgSend_oout">spOrgSend_oout</string>
+    <string name="spOrgHuozhu_oout">spOrgHuozhu_oout</string>
     <string name="spStoreman_oout">spStoreman_oout</string>
     <string name="spSaleman_oout">spSaleman_oout</string>
 

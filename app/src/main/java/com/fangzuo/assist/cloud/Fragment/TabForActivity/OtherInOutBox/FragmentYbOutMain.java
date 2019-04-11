@@ -1,4 +1,4 @@
-package com.fangzuo.assist.cloud.Fragment.TabForActivity;
+package com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -44,7 +44,7 @@ import butterknife.Unbinder;
 
 
 //选择单据信息Fragment（所属：PushDownPagerActivity);
-public class FragmentOOutMain extends BaseFragment {
+public class FragmentYbOutMain extends BaseFragment {
 
 
     @BindView(R.id.cb_isStorage)
@@ -126,7 +126,7 @@ public class FragmentOOutMain extends BaseFragment {
         }
     }
 
-    public FragmentOOutMain() {
+    public FragmentYbOutMain() {
         // Required empty public constructor
     }
 
