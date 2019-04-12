@@ -133,7 +133,7 @@ public class RegisterUtil {
                     });
 
                 } else {
-                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"软件使用数量已达上限"));
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"软件使用数量已达上限："+Hawk.get(Config.PDA_RegisterMaxNum,"5")));
 //                    LoadingUtil.showAlter(WelcomeActivity.this, "提示", "软件使用数量已达上限");
                 }
             }

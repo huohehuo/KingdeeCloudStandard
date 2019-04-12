@@ -101,8 +101,8 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
                 String register_code = MD5.getMD5(mac) + "fzkj601";
                 String newRegister = MD5.getMD5(register_code);
                 lastRegister = MD5.getMD5(newRegister);
-                Hawk.put(Config.PDA_IMIE, lastRegister);
-                Hawk.put(Config.PDA_RegisterCode, MD5.getMD5(mac));
+                Hawk.put(Config.PDA_IMIE, lastRegister);//用户码
+                Hawk.put(Config.PDA_RegisterCode, MD5.getMD5(mac));//注册码
                 checkDlg();
             } else {
                 Toast.showText(App.getContext(), "请链接WIFI");
