@@ -75,6 +75,7 @@ public class WebApi {
     public static final String DBUpload = "DBUpload";
     public static final String SaleOutUpload = "SaleOutUpload";
     public static final String BackMsg2SaleBackUpload = "BackMsg2SaleBackUpload";
+    public static final String CgOrder2WgrkUpload = "CgOrder2WgrkUpload";
 
     public static final String AuxSignFirstCheck = "AuxSignFirstCheck";
     public static final String AuxSignSecCheck = "AuxSignSecCheck";

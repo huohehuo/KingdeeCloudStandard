@@ -1,20 +1,29 @@
 package com.fangzuo.assist.cloud.Activity.Crash;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 
+import com.fangzuo.assist.cloud.Activity.WelcomeActivity;
+import com.fangzuo.assist.cloud.MainActivity;
 import com.fangzuo.assist.cloud.RxSerivce.CloudService;
 import com.fangzuo.assist.cloud.RxSerivce.RService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.LanguageUtil;
+import com.fangzuo.assist.cloud.Utils.Lg;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -71,6 +80,7 @@ public class App extends MultiDexApplication {
     private static CloudService mCloudService;//本地retrofit方法
 
     public static int PDA_Choose;//{" 1 G02A设备","2 8000设备","3 5000设备"4 M60,"5手机端};
+    public static String PDA_Language="CN";//{" 1 G02A设备","2 8000设备","3 5000设备"4 M60,"5手机端};
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -167,6 +177,8 @@ public class App extends MultiDexApplication {
         mService = new RService();
         mCloudService = new CloudService();
         closeAndroidPDialog();
+        //更新语言
+        LanguageUtil.changeLanguage(getApplicationContext(),false);
 
     }
     private static String bodyToString(final RequestBody request) {

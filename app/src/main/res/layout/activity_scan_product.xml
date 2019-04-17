@@ -179,7 +179,7 @@
                                 android:layout_height="@dimen/height_scan_product"
                                 android:layout_weight="4"
                                 android:gravity="center_vertical"
-                                android:text="货主"
+                                android:text="货主描述"
                                 android:textSize="@dimen/height_scan_product_size" />
 
                             <include layout="@layout/line_shu" />

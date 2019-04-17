@@ -81,6 +81,7 @@ public class ReViewPDAdapter extends BaseAdapter implements View.OnClickListener
 
         viewHolder.productname.setText("物料名称:" + detail.get(i).FProductName);
         viewHolder.productNumber.setText("物料编码:" + detail.get(i).FMaterialId);
+        viewHolder.tvPihao.setText("批号:" + detail.get(i).FBatch);
 //                viewHolder.productxh.setText("物料名:" + detail.get(i).FProductName);
         viewHolder.num.setText("采购数量:" + detail.get(i).FRealQty + detail.get(i).FUnit);
         viewHolder.unit.setText("单位:" + detail.get(i).FUnit);
@@ -119,6 +120,8 @@ public class ReViewPDAdapter extends BaseAdapter implements View.OnClickListener
         CheckBox cbIscheck;
         @BindView(R.id.productname)
         TextView productname;
+        @BindView(R.id.tv_pihao)
+        TextView tvPihao;
         @BindView(R.id.productNumber)
         TextView productNumber;
         @BindView(R.id.storage)

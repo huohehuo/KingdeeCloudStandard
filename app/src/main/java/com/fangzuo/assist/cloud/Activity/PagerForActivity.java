@@ -33,8 +33,9 @@ import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrisDhMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrisMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOutDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOutMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentCgOrder2WgrkDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentCgOrder2WgrkMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentTbGetMain;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisDGMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisSimpleInMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentPrisTBDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentPrisTBMain;
@@ -78,6 +79,7 @@ public class PagerForActivity extends BaseActivity {
     private String FOrderNo;//业务单号
     private String ManStore;//仓管员
     private String ManSale;//销售员
+    private String ManBuyer;//销售员
     private String ManGet;//领料人
     private String DepartMent;//生产车间
     private String DepartMentBuy;//采购部门
@@ -191,7 +193,11 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new Fragment3HwInMain());
                 fragments.add(new Fragment3HwInDetail());
                 break;
-
+            case Config.PdCgOrder2WgrkActivity:
+                binding.topActivity.tvTitle.setText("采购订单下推外购入库");
+                fragments.add(new FragmentCgOrder2WgrkMain());
+                fragments.add(new FragmentCgOrder2WgrkDetail());
+                break;
 
 
 
@@ -322,7 +328,9 @@ public class PagerForActivity extends BaseActivity {
     public void setManSale(String manSale) {
         ManSale = manSale;
     }
-
+    public void setManBuyer(String manSale) {
+        ManBuyer = manSale;
+    }
     public void setManGet(String manGet) {
         ManGet = manGet;
     }
@@ -362,7 +370,9 @@ public class PagerForActivity extends BaseActivity {
     public String getManSale() {
         return ManSale==null?"":ManSale;
     }
-
+    public String getManBuyer() {
+        return ManBuyer==null?"":ManBuyer;
+    }
     public String getManGet() {
         return ManGet==null?"":ManGet;
     }

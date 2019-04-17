@@ -5,9 +5,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +29,7 @@ import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
+import com.fangzuo.assist.cloud.Utils.LanguageUtil;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.MD5;
 import com.fangzuo.assist.cloud.Utils.RegisterUtil;
@@ -36,6 +41,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,6 +83,8 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
+        //更新语言
+        LanguageUtil.changeLanguage(this,false);
         getPermisssion();
         // 避免从桌面启动程序后，会重新实例化入口类的activity----------------------------
         //也就是说Home键再点app图标时，不会重新从登陆界面进

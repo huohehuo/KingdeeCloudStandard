@@ -44,10 +44,14 @@
                 android:id="@+id/productNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lll"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
-
+            <TextView
+                android:id="@+id/tv_pihao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

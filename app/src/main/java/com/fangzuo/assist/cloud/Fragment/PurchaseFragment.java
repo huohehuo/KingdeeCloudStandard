@@ -95,6 +95,9 @@ public class PurchaseFragment extends BaseFragment {
                 SettingList tv = (SettingList) ada.getItem(i);
                 Log.e("listitem", tv.tv);
                 switch (tv.tv) {
+                    case "采购订单下推外购入库":
+                        PushDownPagerActivity.start(getActivity(),1);
+                        break;
                     case "扫一扫":
                         ScanProductActivity.start(mContext);
                         break;

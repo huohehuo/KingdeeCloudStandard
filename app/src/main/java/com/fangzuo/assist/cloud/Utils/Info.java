@@ -144,7 +144,7 @@ public class Info {
     public static String getType(int activity){
         String backString="";
         switch (activity){
-            case Config.PdCgOrder2WgrkActivity:
+            case Config.PdCgOrder2WgrkActivity://采购订单下推外购入库单
             case Config.PurchaseInStoreActivity:
                 backString=BT_PIS;
                 break;

@@ -24,6 +24,7 @@ import android.widget.ListView;
 
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Activity.IpPortActivity;
+import com.fangzuo.assist.cloud.Activity.LanguageActivity;
 import com.fangzuo.assist.cloud.Activity.PrintOutTestActivity;
 import com.fangzuo.assist.cloud.Activity.SettingActivity;
 import com.fangzuo.assist.cloud.Activity.TestingActivity;
@@ -143,6 +144,9 @@ public class SettingFragment extends BaseFragment {
                         break;
                     case 6:
                         startActivity(new Intent(mContext, TestingActivity.class));
+                        break;
+                    case 7:
+                        startActivity(new Intent(mContext, LanguageActivity.class));
                         break;
                 }
 

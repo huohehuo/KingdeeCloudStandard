@@ -173,12 +173,21 @@ public class ChooseFragment extends BaseFragment {
             Log.e("ChooseFragment", "跳转数据：" + container.toString());
             switch (tag) {
                 case 1://采购订单下推外购入库单
-                    intent = new Intent(mContext, PdCgOrder2WgrkActivity.class);
+                    PagerForActivity.start(mContext, Config.PdCgOrder2WgrkActivity,container);
+//                    intent = new Intent(mContext, PdCgOrder2WgrkActivity.class);
                     break;
                 case 2://销售订单下推销售出库单
                     PagerForActivity.start(mContext, Config.PdSaleOrder2SaleOutActivity,container);
 //                    intent = new Intent(mContext, PdSaleOrder2SaleOutActivity.class);
                     break;
+                case 6://退货通知单下推销售退货单
+                    PagerForActivity.start(mContext, Config.PdBackMsg2SaleBackActivity,container);
+//                    intent = new Intent(mContext, PdBackMsg2SaleBackActivity.class);
+                    break;
+
+
+
+
                 case 3://销售订单下推销售退货单
                     intent = new Intent(mContext, PdSaleOrder2SaleBackActivity.class);
                     break;
@@ -187,10 +196,6 @@ public class ChooseFragment extends BaseFragment {
                     break;
                 case 5://发货通知单下推销售出库单
                     intent = new Intent(mContext, PdSendMsg2SaleOutActivity.class);
-                    break;
-                case 6://退货通知单下推销售退货单
-                    PagerForActivity.start(mContext, Config.PdBackMsg2SaleBackActivity,container);
-//                    intent = new Intent(mContext, PdBackMsg2SaleBackActivity.class);
                     break;
                 case 7://调拨申请单下推分布式调入单
                     intent = new Intent(mContext, Db2FDinActivity.class);

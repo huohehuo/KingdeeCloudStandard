@@ -39,7 +39,7 @@ public class CommonUtil {
 
             zpSDK.drawText(105, 50, "荣源木业物料标签", size, 0, 1, false, false);
             zpSDK.drawText(0, 90, "______________________________________________", 2, 0, 0, false, false);
-            zpSDK.drawText(10, 120, "货权：", size, 0, 0, false, false);
+            zpSDK.drawText(10, 120, "货主描述：", size, 0, 0, false, false);
             zpSDK.drawText(160, 124, bean.FHuoquan==null?"":bean.FHuoquan,size2, 0, 0, false, false);
             zpSDK.drawText(10, 170, "批号：", size, 0, 0, false, false);
             zpSDK.drawText(160, 174, bean.FBatch,size2, 0, 0, false, false);

@@ -21,6 +21,7 @@ public class GetSettingList {
         items.add(new SettingList(App.getContext().getResources().getString(R.string.server_set),R.mipmap.tomcat));
         items.add(new SettingList(App.getContext().getResources().getString(R.string.print_set),R.mipmap.test));
         items.add(new SettingList(App.getContext().getResources().getString(R.string.net_set),R.mipmap.test));
+        items.add(new SettingList(App.getContext().getResources().getString(R.string.language_set),R.mipmap.test));
         return items;
     }
     public static ArrayList<SettingList> getPurchaseList() {
@@ -33,6 +34,7 @@ public class GetSettingList {
         items.add(new SettingList("到货入库",R.mipmap.sellinout));
         items.add(new SettingList("标签补打",R.mipmap.printmain));
         items.add(new SettingList("期初物料补打",R.mipmap.printmain));
+        items.add(new SettingList("采购订单下推外购入库",R.mipmap.printmain));
         items.add(new SettingList("扫一扫",R.mipmap.scan));
 
 //        items.add(new SettingList("简单生产领料",R.mipmap.chuku));

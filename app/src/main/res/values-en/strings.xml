@@ -58,6 +58,7 @@
     <string name="spOrgbuy_pis">spOrgbuy_pis</string>
     <string name="spOrgget_pis">spOrgget_pis</string>
 
+    <!--简单生产领料-->
     <string name="spBuyer_pg">spBuyer_pg</string>
     <string name="spStoreman_pg">spStoreman_pg</string>
     <string name="spOrgCreate_pg">spOrgCreate_pg</string>
@@ -65,6 +66,7 @@
     <string name="spOrgHuozhu_pg">spOrgHuozhu_pg</string>
     <string name="spDepartmentCreate_pg">spDepartmentCreate_pg</string>
 
+    <!--//销售出库-->
     <string name="spDepartmentSend_so">spDepartmentSend_so</string>
     <string name="spDepartmentSale_so">spDepartmentSale_so</string>
     <string name="spOrgSend_so">spOrgSend_so</string>
@@ -134,6 +136,14 @@
     <string name="spSignPerson_pis">spSignPerson_pis</string>
     <string name="spCapturePerson_pis">spCapturePerson_pis</string>
 
+    <!--退货通知单2销售退货单-->
+    <string name="spStoreman_bmsg2sb">spStoreman_bmsg2sb</string>
+    <string name="spHuozhu_bmsg2sb">spHuozhu_bmsg2sb</string>
+    <!--//采购订单下推外购入库-->
+    <string name="spDepartmentBuy_cg2wg">spDepartmentBuy_cg2wg</string>
+    <string name="spOrgBuy_cg2wg">spOrgBuy_cg2wg</string>
+    <string name="spBuyer_cg2wg">spBuyer_cg2wg</string>
+
     <!--简单生产入库-->
     <string name="spStoreman_pris">spStoreman_pris</string>
     <string name="spDepartmentGet_pris">spDepartmentGet_pris</string>
@@ -142,6 +152,13 @@
     <string name="spOrgCreate_pris">spOrgCreate_pris</string>
     <string name="spOrgHuozhu_pris">spOrgHuozhu_pris</string>
 
+    <!--挑板领料-->
+    <string name="spBuyer_tbget">spBuyer_tbget</string>
+    <string name="spStoreman_tbget">spStoreman_tbget</string>
+    <string name="spOrgCreate_tbget">spOrgCreate_tbget</string>
+    <string name="spOrgSend_tbget">spOrgSend_tbget</string>
+    <string name="spOrgHuozhu_tbget">spOrgHuozhu_tbget</string>
+    <string name="spDepartmentCreate_tbget">spDepartmentCreate_tbget</string>
     <!--挑板入库-->
     <string name="spStoreman_pris_tb">spStoreman_pris_tb</string>
     <string name="spDepartmentGet_pris_tb">spDepartmentGet_pris_tb</string>
@@ -149,6 +166,28 @@
     <string name="spOrgIn_pris_tb">spOrgIn_pris_tb</string>
     <string name="spOrgCreate_pris_tb">spOrgCreate_pris_tb</string>
     <string name="spOrgHuozhu_pris_tb">spOrgHuozhu_pris_tb</string>
+    <!--改板领料-->
+    <string name="spBuyer_gbget">spBuyer_gbget</string>
+    <string name="spStoreman_gbget">spStoreman_gbget</string>
+    <string name="spOrgCreate_gbget">spOrgCreate_gbget</string>
+    <string name="spOrgSend_gbget">spOrgSend_gbget</string>
+    <string name="spOrgHuozhu_gbget">spOrgHuozhu_gbget</string>
+    <string name="spDepartmentCreate_gbget">spDepartmentCreate_gbget</string>
+    <!--改板入库-->
+    <string name="spStoreman_pris_gbin">spStoreman_pris_gbin</string>
+    <string name="spDepartmentGet_pris_gbin">spDepartmentGet_pris_gbin</string>
+    <string name="spWhichStorage_pris_gbin">spWhichStorage_pris_gbin</string>
+    <string name="spOrgIn_pris_gbin">spOrgIn_pris_gbin</string>
+    <string name="spOrgCreate_pris_gbin">spOrgCreate_pris_gbin</string>
+    <string name="spOrgHuozhu_pris_gbin">spOrgHuozhu_pris_gbin</string>
+
+    <!--到货入库-->
+    <string name="spStoreman_pris_dh">spStoreman_pris_dh</string>
+    <string name="spDepartmentGet_pris_dh">spDepartmentGet_pris_dh</string>
+    <string name="spWhichStorage_pris_dh">spWhichStorage_pris_dh</string>
+    <string name="spOrgIn_pris_dh">spOrgIn_pris_dh</string>
+    <string name="spOrgCreate_pris_dh">spOrgCreate_pris_dh</string>
+    <string name="spOrgHuozhu_pris_dh">spOrgHuozhu_pris_dh</string>
     <!--到柜入库-->
     <string name="spStoreman_pris_dg">spStoreman_pris_dg</string>
     <string name="spDepartmentGet_pris_dg">spDepartmentGet_pris_dg</string>
@@ -163,6 +202,20 @@
     <string name="spOrgIn_pris_simplein">spOrgIn_pris_simplein</string>
     <string name="spOrgCreate_pris_simplein">spOrgCreate_pris_simplein</string>
     <string name="spOrgHuozhu_pris_simplein">spOrgHuozhu_pris_simplein</string>
+    <!--其他入库-->
+    <string name="spStoreman_oin">spStoreman_oin</string>
+    <string name="spDepartmentGet_oin">spDepartmentGet_oin</string>
+    <string name="spWhichStorage_oin">spWhichStorage_oin</string>
+    <string name="spOrgIn_oin">spOrgIn_oin</string>
+    <string name="spOrgCreate_oin">spOrgCreate_oin</string>
+    <string name="spOrgHuozhu_oin">spOrgHuozhu_oin</string>
+    <!--//其他出库-->
+    <string name="spDepartmentSend_oout">spDepartmentSend_oout</string>
+    <string name="spDepartmentSale_oout">spDepartmentSale_oout</string>
+    <string name="spOrgSend_oout">spOrgSend_oout</string>
+    <string name="spOrgHuozhu_oout">spOrgHuozhu_oout</string>
+    <string name="spStoreman_oout">spStoreman_oout</string>
+    <string name="spSaleman_oout">spSaleman_oout</string>
 
     <string name="spYuandan_so">spYuandan_so</string>
     <string name="spPayMethod_so">spPayMethod_so</string>
@@ -277,6 +330,7 @@
     <string name="spDbType_db">spDbType_db</string>
     <string name="spDbDirection_db">spDbDirection_db</string>
 
+
     <!--===========================================================================-->
 
 
@@ -307,7 +361,7 @@
     <string name="username">UserName:</string>
     <string name="password">PassWord:   </string>
     <string name="password_hint">Please write your password</string>
-    <string name="login">Login</string>
+    <string name="login_text">Login</string>
     <string name="set">Set</string>
     <string name="down_set">DownLoad Settings</string>
     <string name="Wifi_set">WIFI Connection</string>
@@ -316,6 +370,7 @@
     <string name="server_set">Server Settings</string>
     <string name="print_set">Printer Settings</string>
     <string name="net_set">Network Settings</string>
+    <string name="language_set">Language Settings</string>
     <string name="remaber">Remember the password</string>
     <string name="server">Server:</string>
     <string name="port">Port:</string>
@@ -334,5 +389,7 @@
     <string name="check_print">Please check out the Printer</string>
     <string name="msg_print">The Message of Printer：</string>
     <string name="lgout">Login Out</string>
+    <string name="language_cn">Chinese</string>
+    <string name="language_en">English</string>
 
 </resources>

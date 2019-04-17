@@ -5,9 +5,14 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,6 +34,7 @@ import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Beans.RegisterBean;
 import com.fangzuo.assist.cloud.Beans.UseTimeBean;
 import com.fangzuo.assist.cloud.Dao.User;
+import com.fangzuo.assist.cloud.MainActivity;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.RxSerivce.RService;
@@ -64,6 +70,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -114,7 +121,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 String result = (String) event.postEvent;
                 if ("OK".equals(result)){
                     btnLogin.setClickable(true);
-                    btnLogin.setText("登陆");
+                    btnLogin.setText(getString(R.string.login_text));
                     Lg.e("成功注册");
 //                    BasicShareUtil.getInstance(App.getContext()).setRegisterState(true);
 //                    startNewActivity(LoginActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, true, null);
@@ -167,7 +174,11 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         @SuppressLint({"HardwareIds", "MissingPermission"}) String deviceId = tm.getDeviceId();
         BasicShareUtil.getInstance(mContext).setIsOL(true);
         share.setIMIE(deviceId);
-
+        Resources res = mContext.getResources();
+        Configuration config = res.getConfiguration();
+        String phone_locale = config.locale.getCountry();
+        Lg.e("当前手机语言：",phone_locale);
+//        changeAppLanguage();
 
     }
 

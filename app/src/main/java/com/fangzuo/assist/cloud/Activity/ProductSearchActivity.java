@@ -401,6 +401,7 @@ public class ProductSearchActivity extends BaseActivity {
     //根据activity过滤是否物料（是否允许生产，是否允许采购等)
     private void toFilter(int activity){
         switch (activity){
+            case Config.PdCgOrder2WgrkActivity://采购订单下推外购入库单
             case Config.PurchaseInStoreActivity://采购入库
                 s2Product.FIsPurchase="1";
                 FIsPurchase="1";
