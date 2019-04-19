@@ -279,7 +279,9 @@
         <activity
             android:name=".Activity.ScanProductActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.LanguageActivity"></activity>
+        <activity android:name=".Activity.LanguageActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

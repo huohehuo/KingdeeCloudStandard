@@ -129,19 +129,19 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 else{
                     Lg.e("生成dlg000000");
                     btnLogin.setClickable(false);
-                    btnLogin.setText("未注册");
+                    btnLogin.setText(R.string.not_register);
                     AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
-                    ab.setTitle("提示");
+                    ab.setTitle(R.string.tip);
                     ab.setMessage(result);
-                    ab.setPositiveButton("注册", new DialogInterface.OnClickListener() {
+                    ab.setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             RegisterUtil.doRegisterCheck(Hawk.get(Config.PDA_IMIE,""));
 
                         }
                     });
-                    ab.setNegativeButton("取消",null);
-                    ab.setNeutralButton("关闭程序", new DialogInterface.OnClickListener() {
+                    ab.setNegativeButton(R.string.cancle,null);
+                    ab.setNeutralButton(R.string.close_app, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             System.exit(0);
@@ -204,12 +204,12 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 if (!commonResponse.state)return;
                 UseTimeBean bean = gson.fromJson(commonResponse.returnJson, UseTimeBean.class);
                 if (Integer.parseInt(getTime(false))<Integer.parseInt(bean.nowTime)){
-                    Toast.showText(mContext,"PDA本地时间与服务器时间有误，请调整好时间");
+                    Toast.showText(mContext,getString(R.string.error_time_getting));
                     Hawk.put(Config.SaveTime,bean);
                     return;
                 }else{
                     if (Integer.parseInt(getTime(false))>Integer.parseInt(dealTime(bean.endTime))){
-                        Toast.showText(mContext,"软件已过期，请联系供应商提供服务");
+                        Toast.showText(mContext,getString(R.string.error_app_past_time));
                         Hawk.put(Config.SaveTime,bean);
                         return;
                     }else{
@@ -256,17 +256,17 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     //检测是否符合时间要求
     private boolean checkTime (){
         if (null== Hawk.get(Config.SaveTime,null)){
-            LoadingUtil.showDialog(mContext,"正在获取配置信息...");
+            LoadingUtil.showDialog(mContext,getString(R.string.loading_getseting));
             DownLoadUseTime();
             return false;
         }else{
             UseTimeBean bean= Hawk.get(Config.SaveTime);
             if (Integer.parseInt(getTime(false))<Integer.parseInt(bean.nowTime)){
-                Toast.showText(mContext,"PDA本地时间与服务器时间有误，请调整好时间");
+                Toast.showText(mContext,getString(R.string.error_time_getting));
                 return false;
             }else{
                 if (Integer.parseInt(getTime(false))>Integer.parseInt(dealTime(bean.endTime))){
-                    Toast.showText(mContext,"软件已过期，请联系供应商提供服务");
+                    Toast.showText(mContext,getString(R.string.error_app_past_time));
                     return false;
                 }else{
                     return true;
@@ -277,6 +277,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 
     @Override
     public void initData() {
+        //下载基础表：//单位//销售员//组织
         DataService.UpdateData(this);
     }
 
@@ -348,21 +349,21 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     private void Login() {
         if (!checkTime()){
             DownLoadUseTime();
-            Toast.showText(mContext,"验证信息失败");
+            Toast.showText(mContext,getString(R.string.error_check_fail));
             return;
         }
 
         if (Hawk.get(Config.Cloud_ID,"").equals("")){
-            Toast.showText(mContext,"未确定账套，请于下载配置里面选择账套");
+            Toast.showText(mContext,getString(R.string.error_check_accout));
             return;
         }
         if ("".equals(userName)){
-            Toast.showText(mContext,"请选择用户");
+            Toast.showText(mContext,getString(R.string.error_choose_user));
             return;
         }
 //        startNewActivity(HomeActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
 
-        LoadingUtil.showDialog(mContext,"正在验证...");
+        LoadingUtil.showDialog(mContext,getString(R.string.loading_checking));
         //组装登录数据
         JSONArray jParas = new JSONArray();
         jParas.put(Hawk.get(Config.Cloud_ID,""));// 帐套Id
@@ -390,7 +391,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                         LoadingUtil.dismiss();
                     } else {
                         LoadingUtil.dismiss();
-                        LoadingUtil.showAlter(mContext,"登陆失败",bean.getMessage(),false);
+                        LoadingUtil.showAlter(mContext,getString(R.string.error_login_fail),bean.getMessage(),false);
 //                        Toast.showText(App.getContext(), bean.getMessage());
                         Lg.e("登录错误2：" + bean.toString());
                     }
@@ -417,7 +418,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (!EasyPermissions.hasPermissions(mContext, perm)) {
-            EasyPermissions.requestPermissions(this, "必要的权限", 0, perm);
+            EasyPermissions.requestPermissions(this, getString(R.string.get_permission), 0, perm);
         }
 
     }

@@ -131,7 +131,7 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
 //                String str = (String) event.postEvent;
 //                LoadingUtil.dismiss();
 //                Toast.showText(mContext, "连接错误:" + str);
-                LoadingUtil.showAlter(mContext,"连接错误",(String)event.postEvent);
+                LoadingUtil.showAlter(mContext,getString(R.string.connect_fail),(String)event.postEvent);
                 LoadingUtil.dismiss();
                 break;
             case EventBusInfoCode.Prop_OK:
@@ -143,9 +143,9 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
                         ShareUtil.getInstance(mContext).clear();
                     }
                     LoadingUtil.dismiss();
-                    ab.setTitle("配置结果");
-                    ab.setMessage("配置成功，请继续下一步操作");
-                    ab.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    ab.setTitle(R.string.set_result);
+                    ab.setMessage(R.string.set_successful);
+                    ab.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             startNewActivity(LoginActivity.class,
@@ -168,10 +168,10 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
                     share.setDataBase(chooseDatabase);
                 } else {
                     LoadingUtil.dismiss();
-                    ab.setTitle("配置结果");
+                    ab.setTitle(R.string.set_result);
                     ab.setMessage(prop.returnJson);
-                    ab.setPositiveButton("确认", null);
-                    ab.setNegativeButton("重试", new DialogInterface.OnClickListener() {
+                    ab.setPositiveButton(R.string.yes, null);
+                    ab.setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             prop();
@@ -185,10 +185,10 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
                 String str2 = (String) event.postEvent;
                 final AlertDialog.Builder ab2 = new AlertDialog.Builder(mContext);
                 LoadingUtil.dismiss();
-                ab2.setTitle("配置结果");
+                ab2.setTitle(R.string.set_result);
                 ab2.setMessage(str2);
-                ab2.setPositiveButton("确认", null);
-                ab2.setNegativeButton("重试", new DialogInterface.OnClickListener() {
+                ab2.setPositiveButton(R.string.yes, null);
+                ab2.setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         prop();
@@ -201,14 +201,14 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
                 String size = (String)event.Msg3;
                 long endTime = System.currentTimeMillis();
                 AlertDialog.Builder ab4 = new AlertDialog.Builder(mContext);
-                ab4.setTitle("下载完成");
+                ab4.setTitle(R.string.download_successful);
                 ab4.setMessage("耗时:" + (endTime - Long.parseLong(time)) + "ms" + ",共插入" + size + "条数据");
-                ab4.setPositiveButton("确认",null);
+                ab4.setPositiveButton(R.string.yes,null);
                 ab4.create().show();
                 break;
             case EventBusInfoCode.Updata_Error://回单失败
                 LoadingUtil.dismiss();
-                LoadingUtil.showAlter(mContext,"下载错误",(String)event.postEvent);
+                LoadingUtil.showAlter(mContext,getString(R.string.down_fail),(String)event.postEvent);
 //                Toast.showText(mContext,(String)event.postEvent);
                 break;
         }
@@ -299,21 +299,21 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
 
     private void prop() {
         AlertDialog.Builder ab1 = new AlertDialog.Builder(mContext);
-        ab1.setTitle("是否配置");
-        ab1.setMessage("配置将会清空所有数据（包括已做单据）");
-        ab1.setPositiveButton("清空", new DialogInterface.OnClickListener() {
+        ab1.setTitle(R.string.if_configuration);
+        ab1.setMessage(R.string.configuration_tips);
+        ab1.setPositiveButton(R.string.clear, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 setprop(true);
             }
         });
-        ab1.setNeutralButton("不清空", new DialogInterface.OnClickListener() {
+        ab1.setNeutralButton(R.string.unclear, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 setprop(false);
             }
         });
-        ab1.setNegativeButton("取消", null);
+        ab1.setNegativeButton(R.string.cancle, null);
         ab1.create().show();
     }
 
@@ -321,11 +321,11 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
 
     private void setprop(final boolean isClear) {
         if (null == chooseDatabase) {
-            Toast.showText(mContext, "请选择账套");
+            Toast.showText(mContext, getString(R.string.choose_accout));
             return;
         }
         isClearAll = isClear;
-        LoadingUtil.show(mContext, "正在配置...");
+        LoadingUtil.show(mContext, getString(R.string.configurationing));
         DataModel.SetProp(JsonCreater.ConnectSQL(
                 share.getDatabaseIp(),
                 share.getDatabasePort(),
@@ -335,7 +335,7 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
     }
 
     private void connectToSQL() {
-        LoadingUtil.showDialog(mContext, "正在连接...");
+        LoadingUtil.showDialog(mContext, getString(R.string.connection_going));
         DataModel.SetConnectSQL(JsonCreater.ConnectSQL(
                 edServerip.getText().toString(),
                 edPort.getText().toString(),

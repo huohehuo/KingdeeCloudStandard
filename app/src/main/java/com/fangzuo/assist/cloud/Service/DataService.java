@@ -8,6 +8,7 @@ import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
+import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
@@ -136,7 +137,7 @@ public class DataService extends IntentService {
         }
     }
 
-    //删除所有
+    //删除所有本地数据
     private void handleActionFoo() {
         session.getBibieDao().deleteAll();
         session.getBarCodeDao().deleteAll();
@@ -259,8 +260,8 @@ public class DataService extends IntentService {
                 @Override
                 public void onError(Throwable e) {
                     super.onError(e);
-                    Toast.showText(App.getContext(),"获取软件使用数上限失败");
-                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"获取软件使用数量失败"));
+                    Toast.showText(App.getContext(),App.getContext().getString(R.string.error_get_app_usernum));
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,App.getContext().getString(R.string.error_get_app_usernum)));
                 }
             });
     }

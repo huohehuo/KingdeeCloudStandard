@@ -25,6 +25,7 @@ import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.databinding.ActivityPrintHistoryBinding;
@@ -190,6 +191,9 @@ public class PrintHistoryActivity extends BaseActivity {
         if (null==data.FDate || "".equals(data.FDate)){
             data.FDate = getTime(true);
         }
+
+        String huozhuNote= LocDataUtil.getOrg(data.FHuoquan,"number").FNote;
+        data.FHuoquan=huozhuNote;
         Lg.e("打印信息：",data);
         AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
         ab.setTitle(R.string.msg_print);

@@ -11,11 +11,13 @@ public class Org {
     public String FOrgID;
     public String FNumber;
     public String FName;
-    @Generated(hash = 6131445)
-    public Org(String FOrgID, String FNumber, String FName) {
+    public String FNote;
+    @Generated(hash = 721915398)
+    public Org(String FOrgID, String FNumber, String FName, String FNote) {
         this.FOrgID = FOrgID;
         this.FNumber = FNumber;
         this.FName = FName;
+        this.FNote = FNote;
     }
     @Generated(hash = 708329430)
     public Org() {
@@ -47,4 +49,10 @@ public class Org {
                 ", FName='" + FName + '\'' +
                 '}';
     }
+        public String getFNote() {
+            return this.FNote;
+        }
+        public void setFNote(String FNote) {
+            this.FNote = FNote;
+        }
 }

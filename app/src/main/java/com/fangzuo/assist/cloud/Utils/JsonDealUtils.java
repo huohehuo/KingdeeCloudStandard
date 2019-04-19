@@ -81,13 +81,14 @@ public class JsonDealUtils {
                 addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FStockOrgId);
                 addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
                 addObject(inObject,"FPurchaseOrgId","FNUMBER",mains.get(i).FPurchaseOrgId);
-                addObject(inObject,"FStockDeptId","FNUMBER",mains.get(i).FDepartmentNumber);
+//                addObject(inObject,"FStockDeptId","FNUMBER","02.01.02");//mains.get(i).FDepartmentNumber
                 addObject(inObject,"FPurchaseDeptId","FNUMBER",mains.get(i).FPurchaseDeptId);
-                addObject(inObject,"FStockerId","FNUMBER",mains.get(i).FStockerNumber);
+//                addObject(inObject,"FStockerId","FNUMBER","024");//mains.get(i).FStockerNumber
                 addObject(inObject,"FPurchaserId","FNUMBER",mains.get(i).FPurchaserId);
                 inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
                 addObject(inObject,"FOwnerIdHead","FNUMBER",mains.get(i).FOwnerIdHead);
                 inObject.put("FDate",mains.get(i).FDate);
+                inObject.put("F_FFF_Remarks",mains.get(i).FNot);
 //                inObject.put("FStockDirect","GENERAL");
                 addObject(inObject,"FSupplierId","FNUMBER",mains.get(i).FSupplierId);
                 JSONObject stockObject = new JSONObject();
@@ -107,8 +108,13 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FPriceUnitID","FNumber",beans.get(j).FPriceUnitID);
                     addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
                     jsonAr.put("FRealQty",beans.get(j).FRealQty);
-                    jsonAr.put("FRemainInStockQty",beans.get(j).FRemainInStockQty);
+                    jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
+                    jsonAr.put("FTaxNetPrice",beans.get(j).FTaxPrice);
+//                    jsonAr.put("FRemainInStockQty",beans.get(j).FRemainInStockQty);
                     jsonAr.put("FGiveAway",beans.get(j).FIsFree);
+                    jsonAr.put("FSRCBillNo",mains.get(i).FSoorDerno);
+                    jsonAr.put("FSoorDerno",mains.get(i).FSoorDerno);
+                    jsonAr.put("FSRCBILLTYPEID","PUR_PurchaseOrder");
                     jsonArray.put(jsonAr);
                     JSONArray jsonA2 = new JSONArray();
                     for (int k = 0; k < 1; k++) {
@@ -261,7 +267,7 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FUnitID","FNUMBER",beans.get(j).FUnitID);
                     addObject(jsonAr,"FStockStatusId","FNUMBER","KCZT01_SYS");
 //                    jsonAr.put("FOwnerTypeId","BD_OwnerOrg");
-                    addObject(jsonAr,"FOwnerId","FNUMBER",mains.get(i).FStockOrgId);
+                    addObject(jsonAr,"FOwnerId","FNUMBER",mains.get(i).FOwnerIdHead);
                     jsonArray.put(jsonAr);
                 }
                 inObject.put("FEntity",jsonArray);
@@ -383,8 +389,8 @@ public class JsonDealUtils {
                     jsonAr.put("FTaxPrice",beans.get(j).FTaxPrice);
                     addObject(jsonAr,"FOwnerID","FNumber",beans.get(j).FHuoZhuNumber);
                     jsonAr.put("FSOEntryId",beans.get(j).FSOEntryId);
-                    jsonAr.put("FSrcBillNo",mains.get(0).FSoorDerno);
-                    jsonAr.put("FSoorDerno",mains.get(0).FSoorDerno);
+                    jsonAr.put("FSrcBillNo",mains.get(i).FSoorDerno);
+                    jsonAr.put("FSoorDerno",mains.get(i).FSoorDerno);
                     jsonAr.put("FSrcType","SAL_SaleOrder");
                     jsonAr.put("FIsFree",beans.get(j).FIsFree);
                     jsonArray.put(jsonAr);

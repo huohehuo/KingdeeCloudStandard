@@ -27,6 +27,7 @@ public class OrgDao extends AbstractDao<Org, Void> {
         public final static Property FOrgID = new Property(0, String.class, "FOrgID", false, "FORG_ID");
         public final static Property FNumber = new Property(1, String.class, "FNumber", false, "FNUMBER");
         public final static Property FName = new Property(2, String.class, "FName", false, "FNAME");
+        public final static Property FNote = new Property(3, String.class, "FNote", false, "FNOTE");
     }
 
 
@@ -44,7 +45,8 @@ public class OrgDao extends AbstractDao<Org, Void> {
         db.execSQL("CREATE TABLE " + constraint + "\"ORG\" (" + //
                 "\"FORG_ID\" TEXT," + // 0: FOrgID
                 "\"FNUMBER\" TEXT," + // 1: FNumber
-                "\"FNAME\" TEXT);"); // 2: FName
+                "\"FNAME\" TEXT," + // 2: FName
+                "\"FNOTE\" TEXT);"); // 3: FNote
     }
 
     /** Drops the underlying database table. */
@@ -71,6 +73,11 @@ public class OrgDao extends AbstractDao<Org, Void> {
         if (FName != null) {
             stmt.bindString(3, FName);
         }
+ 
+        String FNote = entity.getFNote();
+        if (FNote != null) {
+            stmt.bindString(4, FNote);
+        }
     }
 
     @Override
@@ -91,6 +98,11 @@ public class OrgDao extends AbstractDao<Org, Void> {
         if (FName != null) {
             stmt.bindString(3, FName);
         }
+ 
+        String FNote = entity.getFNote();
+        if (FNote != null) {
+            stmt.bindString(4, FNote);
+        }
     }
 
     @Override
@@ -103,7 +115,8 @@ public class OrgDao extends AbstractDao<Org, Void> {
         Org entity = new Org( //
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // FOrgID
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // FNumber
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // FName
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // FName
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // FNote
         );
         return entity;
     }
@@ -113,6 +126,7 @@ public class OrgDao extends AbstractDao<Org, Void> {
         entity.setFOrgID(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setFNumber(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setFName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setFNote(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
      }
     
     @Override

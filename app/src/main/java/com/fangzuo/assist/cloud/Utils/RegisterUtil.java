@@ -11,6 +11,7 @@ import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Beans.PrintHistory;
+import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.orhanobut.hawk.Hawk;
 
@@ -77,7 +78,7 @@ public class RegisterUtil {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"获取软件使用数量失败"));
+                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,App.getContext().getString(R.string.error_get_app_usernum)));
             }
         });
     }
@@ -118,7 +119,7 @@ public class RegisterUtil {
                                     @Override
                                     public void onError(Throwable e) {
                                         super.onError(e);
-                                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"注册失败"));
+                                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,App.getContext().getString(R.string.register_error)));
 //                                        LoadingUtil.showAlter(WelcomeActivity.this, "提示", "注册失败");
                                     }
                                 });
@@ -128,12 +129,12 @@ public class RegisterUtil {
                         @Override
                         public void onError(Throwable e) {
 //                            super.onError(e);
-                            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"查询用户错误"+e.getMessage()));
+                            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,App.getContext().getString(R.string.error_check_user)+e.getMessage()));
                         }
                     });
 
                 } else {
-                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"软件使用数量已达上限："+Hawk.get(Config.PDA_RegisterMaxNum,"5")));
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,App.getContext().getString(R.string.error_app_max_num)+Hawk.get(Config.PDA_RegisterMaxNum,"5")));
 //                    LoadingUtil.showAlter(WelcomeActivity.this, "提示", "软件使用数量已达上限");
                 }
             }
@@ -141,7 +142,7 @@ public class RegisterUtil {
             @Override
             public void onError(Throwable e) {
 //                super.onError(e);
-                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"查询用户数错误："+e.getMessage()));
+                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,App.getContext().getString(R.string.error_check_usernum)+e.getMessage()));
 //                Toast.showText(WelcomeActivity.this,"查询用户数错误："+e.getMessage());
             }
         });
@@ -160,14 +161,14 @@ public class RegisterUtil {
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"OK"));
                 }else{
                     Lg.e("不存在注册码");
-                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"软件未注册,是否重新注册"));
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,App.getContext().getString(R.string.app_not_register)));
                 }
             }
 
             @Override
             public void onError(Throwable e) {
 //                super.onError(e);
-                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"软件未注册,是否重新注册2"));
+                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,App.getContext().getString(R.string.error_check_register)));
 
             }
         });

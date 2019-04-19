@@ -354,10 +354,9 @@
     <string name="scanGo">连\n扫</string>
 
     <!--表头锁定的提示语-->
-    <string name="checkMainDlg_title">是否已确定表头数据无误</string>
-    <string name="checkMainDlg_msg">确定后表头将被锁定,直至上传之前</string>
-    <string name="checkMainDlg_ok">已确定,继续添加</string>
-    <string name="checkMainDlg_error">取消</string>
+    <string name="checkMainDlg_title">Whether the header data is confirmed to be correct</string>
+    <string name="checkMainDlg_msg">Make sure the rear header is locked until before uploading</string>
+    <string name="checkMainDlg_ok">Ok, continue adding</string>
     <string name="username">UserName:</string>
     <string name="password">PassWord:   </string>
     <string name="password_hint">Please write your password</string>
@@ -389,7 +388,47 @@
     <string name="check_print">Please check out the Printer</string>
     <string name="msg_print">The Message of Printer：</string>
     <string name="lgout">Login Out</string>
-    <string name="language_cn">Chinese</string>
+    <string name="language_cn">中文(简体)</string>
     <string name="language_en">English</string>
+    <string name="language_set_title">Language Setting</string>
+    <string name="if_change_language">Change this Language ?</string>
+    <string name="str_app_will_restart">The App will Restart</string>
+    <string name="yes">Yes</string>
+    <string name="cancle">Cancle</string>
+    <string name="connect_wifi">Please connect the WIFI</string>
+    <string name="write_ip_port">Please write the ip and port</string>
+    <string name="get_permission">Most get those Permission</string>
+    <string name="error_time_getting">The app\'s time has something wrong,please check out</string>
+    <string name="error_app_past_time">The software has expired, please contact the supplier for service</string>
+    <string name="loading_getseting">Getting configuration information...</string>
+    <string name="error_check_fail">Checking Error</string>
+    <string name="error_check_accout">Have not choose the Accout,Please setting the Accout frome the DownLoad Setting</string>
+    <string name="error_choose_user">Please choose the User</string>
+    <string name="loading_checking">Checking...</string>
+    <string name="error_login_fail">Login Error</string>
+    <string name="retry">Click and Retry</string>
+    <string name="tip">Tips</string>
+    <string name="not_register">unregistered</string>
+    <string name="register">Register</string>
+    <string name="close_app">Close the app</string>
+    <string name="app_not_register">The software is not registered. Do you want to register again</string>
+    <string name="error_check_register">Error checking registration information, please check network connection</string>
+    <string name="register_error">Registration failed</string>
+    <string name="error_check_user">Check user error</string>
+    <string name="error_app_max_num">The amount of software used has reached the upper limit：</string>
+    <string name="error_check_usernum">Error checking the number of users, please check the network connection：</string>
+    <string name="error_get_app_usernum">Failed to get the number of software USES</string>
+    <string name="set_result">The results of Configure</string>
+    <string name="set_successful">The configuration succeeded. Please proceed to the next step</string>
+    <string name="download_successful">Download successful</string>
+    <string name="down_fail">Download error</string>
+    <string name="if_configuration">Configuration?</string>
+    <string name="configuration_tips">Configuration will empty all the data</string>
+    <string name="clear">Empty</string>
+    <string name="unclear">Don\'t empty</string>
+    <string name="choose_accout">Please select account set</string>
+    <string name="configurationing">Configuration...</string>
+    <string name="connection_going">Connecting...</string>
+    <string name="connect_fail">Connection Error</string>
 
 </resources>

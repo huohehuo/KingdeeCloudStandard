@@ -30,7 +30,7 @@ public class LanguageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_language);
-        binding.toolbar.tvTitle.setText("语言设置");
+        binding.toolbar.tvTitle.setText(R.string.language_set_title);
 
         binding.cvCn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +41,14 @@ public class LanguageActivity extends AppCompatActivity {
         binding.cvEn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 changeAppLanguage(Locale.ENGLISH);
+            }
+        });
+        binding.toolbar.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -56,9 +63,9 @@ public class LanguageActivity extends AppCompatActivity {
      */
     private void changeAppLanguage(final Locale locale) {
         new AlertDialog.Builder(LanguageActivity.this)
-                .setTitle("确认转换语言?")
-                .setMessage("程序将重启")
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.if_change_language)
+                .setMessage(R.string.str_app_will_restart)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         DisplayMetrics metrics = App.getContext().getResources().getDisplayMetrics();
@@ -77,7 +84,7 @@ public class LanguageActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 })
-                .setNeutralButton("取消",null)
+                .setNeutralButton(R.string.cancle,null)
                 .create().show();
 
     }

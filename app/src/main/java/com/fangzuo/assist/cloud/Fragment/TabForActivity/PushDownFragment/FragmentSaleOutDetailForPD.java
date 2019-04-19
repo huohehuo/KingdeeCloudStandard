@@ -650,6 +650,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
         try {
 
             String num = edNum.getText().toString();
+            if ("".equals(num)||"0".equals(num))return;//避免多次点击，以上请求多次，导致第一次清空之后，再去添加一个空的数据
 //            if (true) {
 //                Lg.e("合并");
 //                List<T_Detail> detailhebing = t_detailDao.queryBuilder().where(

@@ -95,12 +95,13 @@ public class PurchaseFragment extends BaseFragment {
                 SettingList tv = (SettingList) ada.getItem(i);
                 Log.e("listitem", tv.tv);
                 switch (tv.tv) {
-                    case "采购订单下推外购入库":
+                    case "采购入库"://实际是采购订单下推外购入库
                         PushDownPagerActivity.start(getActivity(),1);
                         break;
-                    case "扫一扫":
-                        ScanProductActivity.start(mContext);
-                        break;
+//                    case "采购入库":
+//                        PagerForActivity.start(mContext, Config.PurchaseInStoreActivity);
+//                        startNewActivity(PurchaseInStoreActivity.class, null);
+//                        break;
                     case "调拨单":
                         PagerForActivity.start(mContext, Config.DBActivity);
 //                        startNewActivity(DBActivity.class, null);
@@ -237,7 +238,7 @@ public class PurchaseFragment extends BaseFragment {
                         PagerForActivity.start(mContext, Config.OtherInStoreActivity);
                         break;
 
-                    case "其他出入库业务":
+                    case "其他出入库":
                         builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
                         builder.setAdapter(
@@ -273,10 +274,6 @@ public class PurchaseFragment extends BaseFragment {
                         break;
                     case "单据下推":
                         startNewActivity(PushDownActivity.class, null);
-                        break;
-                    case "采购入库":
-                        PagerForActivity.start(mContext, Config.PurchaseInStoreActivity);
-//                        startNewActivity(PurchaseInStoreActivity.class, null);
                         break;
                     case "采购订单":
                         startNewActivity(PurchaseOrderActivity.class, null);

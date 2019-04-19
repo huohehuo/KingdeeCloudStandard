@@ -508,7 +508,7 @@ public class FragmentPISDetail extends BaseFragment {
                     PrintHistory printHistory = new PrintHistory();
                     printHistory.setData(product, spUnitStore.getDataObject(), spUnitJiben.getDataObject(), storeNum,
                             baseNum, spWavehouse.getWaveHouseId(), activityPager.getNote(),
-                            activityPager.getOrgOut().FNumber, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber());
+                            activityPager.getOrgOut().FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
                         CommonUtil.doPrint(zpSDK, printHistory);
@@ -538,6 +538,7 @@ public class FragmentPISDetail extends BaseFragment {
     private void Addorder() {
         try {
             String num = edNum.getText().toString();
+            if ("".equals(num)||"0".equals(num))return;//避免多次点击，以上请求多次，导致第一次清空之后，再去添加一个空的数据
 //            if (true) {
 //                Lg.e("合并");
 //                List<T_Detail> detailhebing = t_detailDao.queryBuilder().where(

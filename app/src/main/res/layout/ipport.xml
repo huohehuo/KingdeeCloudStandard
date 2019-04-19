@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:text="请输入IP:"
+        android:text="@string/ip_hint"
         android:textColor="@android:color/black"/>
     <EditText
         android:id="@+id/ed_ip"
@@ -19,12 +19,12 @@
         android:layout_height="50dp"
         android:background="@drawable/bg_edittext_selector"
         android:textColorHint="@color/dividerLine"
-        android:hint="输入IP"/>
+        android:hint="@string/ip_hint"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:text="请输入端口:"
+        android:text="@string/port_hint"
         android:textColor="@android:color/black"/>
     <EditText
         android:singleLine="true"
@@ -34,6 +34,6 @@
         android:textColorHint="@color/dividerLine"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="输入端口"/>
+        android:hint="@string/port_hint"/>
 
 </LinearLayout>

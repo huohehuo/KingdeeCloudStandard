@@ -21,21 +21,20 @@ public class GetSettingList {
         items.add(new SettingList(App.getContext().getResources().getString(R.string.server_set),R.mipmap.tomcat));
         items.add(new SettingList(App.getContext().getResources().getString(R.string.print_set),R.mipmap.test));
         items.add(new SettingList(App.getContext().getResources().getString(R.string.net_set),R.mipmap.test));
-        items.add(new SettingList(App.getContext().getResources().getString(R.string.language_set),R.mipmap.test));
+        items.add(new SettingList(App.getContext().getResources().getString(R.string.language_set),R.mipmap.coty));
         return items;
     }
     public static ArrayList<SettingList> getPurchaseList() {
         ArrayList<SettingList> items = new ArrayList<>();
         items.add(new SettingList("挑板业务",R.mipmap.sellinout));
         items.add(new SettingList("改板业务",R.mipmap.sellinout));
-        items.add(new SettingList("其他出入库业务",R.mipmap.chuku));
+        items.add(new SettingList("其他出入库",R.mipmap.chuku));
         items.add(new SettingList("销售出库",R.mipmap.sellinout));
         items.add(new SettingList("调拨单",R.mipmap.diaobo));
         items.add(new SettingList("到货入库",R.mipmap.sellinout));
         items.add(new SettingList("标签补打",R.mipmap.printmain));
         items.add(new SettingList("期初物料补打",R.mipmap.printmain));
-        items.add(new SettingList("采购订单下推外购入库",R.mipmap.printmain));
-        items.add(new SettingList("扫一扫",R.mipmap.scan));
+        items.add(new SettingList("采购入库",R.mipmap.printmain));//实际是：采购订单下推外购入库
 
 //        items.add(new SettingList("简单生产领料",R.mipmap.chuku));
 //        items.add(new SettingList("简单产品入库",R.mipmap.purchaseinstorage));
@@ -68,6 +67,7 @@ public class GetSettingList {
         ArrayList<SettingList> items = new ArrayList<>();
         items.add(new SettingList("简单生产领料",R.mipmap.chuku));
         items.add(new SettingList("简单产品入库",R.mipmap.purchaseinstorage));
+        items.add(new SettingList("扫一扫",R.mipmap.scan));
 //        items.add(new SettingList("挑板入库",R.mipmap.saleorder));
 //        items.add(new SettingList("到柜入库",R.mipmap.sellinout));
 //        items.add(new SettingList("简单生产入库",R.mipmap.sellout));

@@ -10,6 +10,7 @@ import android.widget.GridView;
 
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Activity.PagerForActivity;
+import com.fangzuo.assist.cloud.Activity.ScanProductActivity;
 import com.fangzuo.assist.cloud.Adapter.GridViewAdapter;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.Config;
@@ -69,6 +70,9 @@ public class SaleFragment extends BaseFragment {
                     case 1://简单生产入库
                         PagerForActivity.start(mContext, Config.ProductInStoreActivity);
 //                        startNewActivity(ProductGetActivity.class, null);
+                        break;
+                    case 2:
+                        ScanProductActivity.start(mContext);
                         break;
 //                    case 0://挑板入库
 //                        PagerForActivity.start(mContext, Config.TbInActivity);

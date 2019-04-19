@@ -25,6 +25,7 @@ import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.databinding.ActivityPrintBeforeDataBinding;
@@ -178,6 +179,8 @@ public class PrintBeforeDataActivity extends BaseActivity {
                     data.FNum2=dBean.codeCheckBackDataBeans.get(0).FBaseQty;
                     data.FBarCode = dBean.codeCheckBackDataBeans.get(0).FBarCode;
                     data.FDate = getTime(true);
+                    String huozhuNote= LocDataUtil.getOrg(data.FHuoquan,"number").FNote;
+                    data.FHuoquan=huozhuNote;
                     try {
                         CommonUtil.doPrint(zpSDK,data);
                     } catch (Exception e) {

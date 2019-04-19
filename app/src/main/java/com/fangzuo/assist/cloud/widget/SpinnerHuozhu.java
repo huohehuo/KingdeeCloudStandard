@@ -127,7 +127,7 @@ public class SpinnerHuozhu extends RelativeLayout {
         return employeeNumber == null ? "" : employeeNumber;
     }
     public Org getDataObject() {
-        return org == null ? new Org("","","") : org;
+        return org == null ? new Org("","","","") : org;
     }
     /**
      *

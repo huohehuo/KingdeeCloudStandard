@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.Beans.PrintHistory;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
@@ -70,7 +71,7 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
         @Override
         public void setData(PrintHistory data) {
             super.setData(data);
-             huoquan.setText(data.getFHuoquan());
+             huoquan.setText(LocDataUtil.getOrg(data.getFHuoquan(),"number").FNote);
              batch.setText(data.getFBatch());
              name.setText(data.getFName());
              model.setText(data.getFModel());

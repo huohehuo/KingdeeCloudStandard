@@ -135,7 +135,7 @@ public class LocDataUtil {
     public static Org getOrg(String id,String type){
         Lg.e("查找本地组织",id);
         if ("".equals(id)||null==id){
-            return new Org("","","");
+            return new Org("","","","");
         }
         OrgDao employeeDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getOrgDao();
         if ("id".equals(type)){
@@ -146,7 +146,7 @@ public class LocDataUtil {
             if (employees.size()>0){
                 return employees.get(0);
             }else{
-                return new Org("","","");
+                return new Org("","","","");
             }
         }else{
             List<Org> employees = employeeDao.queryBuilder().where(
@@ -156,7 +156,7 @@ public class LocDataUtil {
             if (employees.size()>0){
                 return employees.get(0);
             }else{
-                return new Org("","","");
+                return new Org("","","","");
             }
         }
 

@@ -22,8 +22,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
+import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
@@ -34,6 +36,7 @@ import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.MD5;
 import com.fangzuo.assist.cloud.Utils.RegisterUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
+import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
 import com.orhanobut.hawk.Hawk;
 
@@ -69,7 +72,7 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
                     startNewActivity(LoginActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, true, null);
                 } else {
                     tvTry.setVisibility(View.VISIBLE);
-                    LoadingUtil.showAlter(WelcomeActivity.this, "提示", result);
+                    LoadingUtil.showAlter(WelcomeActivity.this, getString(R.string.tip), result);
                 }
                 break;
         }
@@ -113,7 +116,7 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
                 Hawk.put(Config.PDA_RegisterCode, MD5.getMD5(mac));//注册码
                 checkDlg();
             } else {
-                Toast.showText(App.getContext(), "请链接WIFI");
+                Toast.showText(App.getContext(), getString(R.string.connect_wifi));
             }
         } else {
             startNewActivity(LoginActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, true, null);
@@ -131,7 +134,7 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
 
     private void checkDlg() {
         AlertDialog.Builder ab = new AlertDialog.Builder(WelcomeActivity.this);
-        ab.setTitle("请输入服务器地址");
+        ab.setTitle(R.string.write_ip_port);
         View v = LayoutInflater.from(WelcomeActivity.this).inflate(R.layout.ipport, null);
         final EditText mEdIp = v.findViewById(R.id.ed_ip);
         final EditText mEdPort = v.findViewById(R.id.ed_port);
@@ -145,20 +148,41 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
         }
 
         ab.setView(v);
-        ab.setPositiveButton("保存", new DialogInterface.OnClickListener() {
+        ab.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (!(mEdIp.getText().toString()).equals("") && !(mEdPort.getText().toString()).equals("")) {
                     BasicShareUtil.getInstance(App.getContext()).setIP(mEdIp.getText().toString());
                     BasicShareUtil.getInstance(App.getContext()).setPort(mEdPort.getText().toString());
-                    RegisterUtil.getRegiterMaxNum(lastRegister);
+                    //检查是否存在注册码，存在，继续，不存在，再去搜索用户上限数，并且判断注册
+                    App.getRService().doIOAction(WebApi.RegisterCheck,  Hawk.get(Config.PDA_IMIE,""), new MySubscribe<CommonResponse>() {
+                        @Override
+                        public void onNext(CommonResponse commonResponse) {
+//                super.onNext(commonResponse);
+                            if (commonResponse.returnJson.equals("OK")){
+                                Lg.e("存在注册码");
+                                //存在注册码
+                                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,"OK"));
+                            }else{
+                                RegisterUtil.getRegiterMaxNum(lastRegister);
+
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+//                super.onError(e);
+                            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Register_Result,App.getContext().getString(R.string.error_check_register)));
+
+                        }
+                    });
 //                        checkRegister();
                 } else {
                     System.exit(0);
                 }
             }
         });
-        ab.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        ab.setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 System.exit(0);
@@ -206,7 +230,7 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (!EasyPermissions.hasPermissions(WelcomeActivity.this, perm)) {
-            EasyPermissions.requestPermissions(this, "必要的权限", 0, perm);
+            EasyPermissions.requestPermissions(this, getString(R.string.get_permission), 0, perm);
         }
 
     }

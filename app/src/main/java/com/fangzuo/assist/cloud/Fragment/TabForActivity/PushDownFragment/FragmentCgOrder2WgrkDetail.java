@@ -676,11 +676,11 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
 //        }
         //--------------------------------------------------
 //        Lg.e("明细数据:",pushDownSub);
-        if (MathUtil.toD(pushDownSub.FQty) < ((MathUtil.toD(edNum.getText().toString())) + MathUtil.toD(pushDownSub.FQtying))) {
-            MediaPlayer.getInstance(mContext).error();
-            Toast.showText(mContext, "大兄弟,您的数量超过我的想象");
-            return false;
-        }
+//        if (MathUtil.toD(pushDownSub.FQty) < ((MathUtil.toD(edNum.getText().toString())) + MathUtil.toD(pushDownSub.FQtying))) {
+//            MediaPlayer.getInstance(mContext).error();
+//            Toast.showText(mContext, "大兄弟,您的数量超过我的想象");
+//            return false;
+//        }
         if (edNum.getText().toString().trim().equals("") || "0".equals(edNum.getText().toString())) {
             Toast.showText(mContext, "请输入数量");
             MediaPlayer.getInstance(mContext).error();
@@ -714,7 +714,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
                     PrintHistory printHistory = new PrintHistory();
                     printHistory.setData(product, spUnitStore.getDataObject(), spUnitJiben.getDataObject(), storeNum,
                             baseNum, spWavehouse.getWaveHouseId(), activityPager.getNote(),
-                            mainBuyOrg.FNumber, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber());
+                            mainBuyOrg.FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
                         CommonUtil.doPrint(zpSDK, printHistory);
@@ -744,6 +744,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
         try {
 
             String num = edNum.getText().toString();
+            if ("".equals(num)||"0".equals(num))return;//避免多次点击，以上请求多次，导致第一次清空之后，再去添加一个空的数据
 //            if (true) {
 //                Lg.e("合并");
 //                List<T_Detail> detailhebing = t_detailDao.queryBuilder().where(
