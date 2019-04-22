@@ -108,7 +108,12 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FPriceUnitID","FNumber",beans.get(j).FPriceUnitID);
                     addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
                     jsonAr.put("FRealQty",beans.get(j).FRealQty);
-                    jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
+                    if (j > 0 && beans.get(j).FEntryID.equals(beans.get(j-1).FEntryID)) {
+                        jsonAr.put("FMustQty","0");
+                    }else{
+                        jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
+                    }
+//                    jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
                     jsonAr.put("FTaxNetPrice",beans.get(j).FTaxPrice);
 //                    jsonAr.put("FRemainInStockQty",beans.get(j).FRemainInStockQty);
                     jsonAr.put("FGiveAway",beans.get(j).FIsFree);
