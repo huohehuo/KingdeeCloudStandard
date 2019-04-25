@@ -42,6 +42,7 @@ import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Service.DataService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.DataModel;
 import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
@@ -346,6 +347,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             mainSaleDept = LocDataUtil.getDept(pushDownMain.FSaleDeptID).FNumber;
             mainSaleMan = LocDataUtil.getSaleMan(pushDownMain.FSaleManID).FNumber;
             mainSaleOrg = LocDataUtil.getOrg(pushDownMain.FSaleOrgID,"id").FNumber;
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Main_Note, pushDownMains.get(0).FNot));
 //            fwanglaiUnit = list1.get(0).FSupplyID;
 //            employeeId = list1.get(0).FEmpID;
 //            departmentId = list1.get(0).FDeptID;

@@ -119,6 +119,13 @@ public class FragmentSaleOutMain extends BaseFragment {
                     Hawk.put(Config.Note + activityPager.getActivity(), "");//清空保存的客户数据
                 }
                 break;
+            case EventBusInfoCode.Main_Note://带出表头的备注信息
+                if (Hawk.get(Config.Note + activityPager.getActivity(),"").equals("")){
+                    edNot.setText((String) event.postEvent);
+                    Hawk.put(Config.Note + activityPager.getActivity(), edNot.getText().toString());//保存客户数据
+                    activityPager.setNote(edNot == null ? "" : edNot.getText().toString());
+                }
+                break;
         }
     }
 

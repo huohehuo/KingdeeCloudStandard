@@ -77,7 +77,7 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
              model.setText(data.getFModel());
              num.setText(data.getFNum()+"  "+data.getFUnit());//库存数量
              if (null==data.getFNum2()){
-                 num2.setVisibility(View.GONE);
+                 num2.setVisibility(View.INVISIBLE);
              }else{
                  num2.setVisibility(View.VISIBLE);
                  num2.setText(data.getFNum2()+"  "+data.getFUnitAux());//基本数量

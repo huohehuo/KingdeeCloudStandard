@@ -40,5 +40,6 @@ public class EventBusInfoCode {
 
     public static final String Lock_Main = "111117";
     public static final String Register_Result = "111118";
+    public static final String Main_Note = "111119";
 
 }

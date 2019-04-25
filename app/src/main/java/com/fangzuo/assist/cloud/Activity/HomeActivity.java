@@ -54,7 +54,7 @@ public class HomeActivity extends BaseActivity {
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         initBar();
-        setDrawerLeftEdgeSize(this, binding.drawerLayout, 0.1f);//设置抽屉滑动响应范围
+        setDrawerLeftEdgeSize(this, binding.drawerLayout, 0.3f);//设置抽屉滑动响应范围
         binding.tvUser.setText("当前用户:"+ ShareUtil.getInstance(mContext).getUserName());
         binding.tvData.setText("数据中心:"+ Hawk.get(Info.user_data,""));
     }

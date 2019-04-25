@@ -55,6 +55,32 @@ public class PrintHistory {
         this.FDate = date;
         this.FAuxSign = auxSign;
     }
+    public void setPrintHistory(PrintHistory bean) {
+        this.FTitle = bean.FTitle;
+        this.FHuoquan = bean.FHuoquan;
+        this.FBarCode = bean.FBarCode;
+        this.FBatch = bean.FBatch;
+        this.FName = bean.FName;
+        this.FModel = bean.FModel;
+        this.FNum = bean.FNum;
+        this.FNum2 = bean.FNum2;
+        this.FUnit = bean.FUnit;
+        this.FBaseUnit = bean.FBaseUnit;
+        this.FBaseUnitID = bean.FBaseUnitID;
+        this.FStoreUnit = bean.FStoreUnit;
+        this.FUnitAux = bean.FUnitAux;
+        this.FNot = bean.FNot;
+        this.FPrintMan = bean.FPrintMan;
+        this.FNumber = bean.FNumber;
+        this.FStorage = bean.FStorage;
+        this.FWaveHouse = bean.FWaveHouse;
+        this.FSaveIn = bean.FSaveIn;
+        this.FCheck = bean.FCheck;
+        this.FDate = bean.FDate;
+        this.FMaterialid = bean.FMaterialid;
+        this.FAuxSign =bean.FAuxSign;
+        this.FActualModel = bean.FActualModel;
+    }
 
 
 

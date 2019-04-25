@@ -41,6 +41,7 @@ public class PrintBeforeDataActivity extends BaseActivity {
     zpBluetoothPrinter zpSDK;
     private PrintHistoryAdapter adapter;
     BlueToothBean bean;
+    private PrintHistory printHistory;
 
     @Override
     protected void receiveEvent(ClassEvent event) {
@@ -83,16 +84,16 @@ public class PrintBeforeDataActivity extends BaseActivity {
         adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                PrintHistory bean =adapter.getAllData().get(position);
-                Lg.e("点击历史：",bean);
+                printHistory =adapter.getAllData().get(position);
+                Lg.e("点击历史：",printHistory);
 //                if (binding.toolbar.tvRight.getText().toString().equals("点击重连打印机")){
 //                    Toast.showText(mContext,"请先配置好打印机");
 //                }else{
-                    String stringdata = bean.FMaterialid+"|"+bean.FBaseUnitID+"|"+bean.FNum+"|"+
-                            bean.FBatch+"|"+ BasicShareUtil.getInstance(mContext).getIMIE()+"|"+bean.FHuoquan +"|"+
-                            bean.FActualModel+"|"+bean.FAuxSign;
+                    String stringdata = printHistory.FMaterialid+"|"+printHistory.FBaseUnitID+"|"+printHistory.FNum+"|"+
+                            printHistory.FBatch+"|"+ BasicShareUtil.getInstance(mContext).getIMIE()+"|"+printHistory.FHuoquan +"|"+
+                            printHistory.FActualModel+"|"+printHistory.FAuxSign;
 //                bean.FBatch = binding.edPihao.getText().toString();
-                    pushAndCreateCode(bean,stringdata);
+                    pushAndCreateCode(stringdata);
 //                }
 
             }
@@ -166,8 +167,9 @@ public class PrintBeforeDataActivity extends BaseActivity {
     }
 
     //生成条码并执行打印
-    private void pushAndCreateCode(final PrintHistory data, String string){
-        Lg.e("Data:pushAndCreateCode",data);
+    private void pushAndCreateCode(String string){
+        Lg.e("Data:pushAndCreateCode",printHistory);
+
         App.getRService().doIOAction(WebApi.PrintBeforeDataForCreateCode, string, new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
@@ -175,16 +177,20 @@ public class PrintBeforeDataActivity extends BaseActivity {
                 if (!commonResponse.state)return;
                 DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
                 if (null != dBean && dBean.codeCheckBackDataBeans.size() > 0) {
-                    data.FNum=dBean.codeCheckBackDataBeans.get(0).FStoreQty;
-                    data.FNum2=dBean.codeCheckBackDataBeans.get(0).FBaseQty;
-                    data.FBarCode = dBean.codeCheckBackDataBeans.get(0).FBarCode;
-                    data.FDate = getTime(true);
-                    String huozhuNote= LocDataUtil.getOrg(data.FHuoquan,"number").FNote;
-                    data.FHuoquan=huozhuNote;
+                    PrintHistory printBean = new PrintHistory();
+                    printBean.setPrintHistory(printHistory);
+                    printBean.FNum=dBean.codeCheckBackDataBeans.get(0).FStoreQty;
+                    printBean.FNum2=dBean.codeCheckBackDataBeans.get(0).FBaseQty;
+                    printBean.FBarCode = dBean.codeCheckBackDataBeans.get(0).FBarCode;
+                    printBean.FDate = getTime(true);
+                    String huozhuNote= LocDataUtil.getOrg(printBean.FHuoquan,"number").FNote;
+                    printBean.FHuoquan=huozhuNote;
                     try {
-                        CommonUtil.doPrint(zpSDK,data);
+                        CommonUtil.doPrint(zpSDK,printBean);
+                        printHistory=null;
                     } catch (Exception e) {
 //                    e.printStackTrace();
+                        printHistory=null;
                         LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
                     }
                 }else{
