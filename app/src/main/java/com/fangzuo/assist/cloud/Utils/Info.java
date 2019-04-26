@@ -10,8 +10,8 @@ import org.json.JSONArray;
  */
 
 public class Info {
-    public static final String DATABASESETTING = "K3DBConfiger201811123395555";//数据库名称
-//    public static final String DATABASESETTING = "K3DBConfigerRY";
+//    public static final String DATABASESETTING = "K3DBConfiger201811123395555";//数据库名称
+    public static final String DATABASESETTING = "K3DBConfigerRY";
     public static final String TestNo = "5.6";
     public static final int RegisterNo = 155;
     public static final int SEARCHFORRESULT = 9998;

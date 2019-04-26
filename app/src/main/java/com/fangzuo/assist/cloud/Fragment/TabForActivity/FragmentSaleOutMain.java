@@ -114,7 +114,7 @@ public class FragmentSaleOutMain extends BaseFragment {
                     edNot.setFocusableInTouchMode(true);
                     activityPager.setClient(null);
                     edClient.setText("");
-                    edNot.setText("");
+//                    edNot.setText("");
                     Hawk.put(Config.OrderNo + activityPager.getActivity(), "");//清空保存的客户数据
                     Hawk.put(Config.Note + activityPager.getActivity(), "");//清空保存的客户数据
                 }

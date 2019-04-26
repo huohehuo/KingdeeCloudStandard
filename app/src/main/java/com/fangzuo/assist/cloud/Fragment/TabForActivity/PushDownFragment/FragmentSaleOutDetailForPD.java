@@ -228,6 +228,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
 //                    Log.e("ordercode", ordercode + "");
 //                    share.setOrderCode(activityPager.getActivity()+fidcontainer.get(0), ordercode);
                     MediaPlayer.getInstance(mContext).ok();
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));//上传成功，解锁表头
                     Toast.showText(mContext, "上传成功");
 //                btnBackorder.setClickable(true);
                     Bundle b = new Bundle();
@@ -758,6 +759,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
         edNum.setText("");
         product = null;
         pushDownSub = null;
+        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
     }
 
     //执行完单，PDA单据编号+1
