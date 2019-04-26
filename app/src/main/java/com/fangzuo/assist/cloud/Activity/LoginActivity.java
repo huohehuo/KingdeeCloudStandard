@@ -5,14 +5,11 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,37 +17,25 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.ABase.BaseActivity;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
-import com.fangzuo.assist.cloud.Adapter.LoginSpAdapter;
-import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.BackDataLogin;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
-import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
-import com.fangzuo.assist.cloud.Beans.RegisterBean;
 import com.fangzuo.assist.cloud.Beans.UseTimeBean;
 import com.fangzuo.assist.cloud.Dao.User;
-import com.fangzuo.assist.cloud.MainActivity;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.RxSerivce.RService;
 import com.fangzuo.assist.cloud.RxSerivce.ToSubscribe;
 import com.fangzuo.assist.cloud.Service.DataService;
-import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
-import com.fangzuo.assist.cloud.Utils.DataModel;
-import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
-import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
-import com.fangzuo.assist.cloud.Utils.JsonCreater;
-import com.fangzuo.assist.cloud.Utils.JsonDealUtils;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.RegisterUtil;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
@@ -58,19 +43,12 @@ import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
 import com.fangzuo.assist.cloud.widget.SpinnerUser;
-import com.fangzuo.greendao.gen.SaleManDao;
 import com.fangzuo.greendao.gen.UserDao;
-import com.google.gson.Gson;
-import com.loopj.android.http.AsyncHttpClient;
 import com.orhanobut.hawk.Hawk;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,12 +67,14 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     TextView mTvVersion;
     @BindView(R.id.ed_pass)
     EditText mEtPassword;
-//    @BindView(R.id.isOL)
+    //    @BindView(R.id.isOL)
 //    CheckBox mCbisOL;
     @BindView(R.id.btn_login)
     Button btnLogin;
     @BindView(R.id.btn_setting)
     Button btnSetting;
+    @BindView(R.id.tv_vers_tip)
+    TextView tvVersTip;
     private Button mBtnLogin;
     private Button mBtnSetting;
     private LoginActivity mContext;
@@ -102,7 +82,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     SpinnerUser spinner;
     private String userName = "";
     private String userID = "";
-//    private List<User> users;
+    //    private List<User> users;
     private BasicShareUtil share;
     private boolean isOL;
     private String userPass;
@@ -114,19 +94,19 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     }
 
     RService rService;
+
     @Override
     protected void receiveEvent(ClassEvent event) {
         switch (event.Msg) {
             case EventBusInfoCode.Register_Result://注册信息反馈
                 String result = (String) event.postEvent;
-                if ("OK".equals(result)){
+                if ("OK".equals(result)) {
                     btnLogin.setClickable(true);
                     btnLogin.setText(getString(R.string.login_text));
                     Lg.e("成功注册");
 //                    BasicShareUtil.getInstance(App.getContext()).setRegisterState(true);
 //                    startNewActivity(LoginActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, true, null);
-                }
-                else{
+                } else {
                     Lg.e("生成dlg000000");
                     btnLogin.setClickable(false);
                     btnLogin.setText(R.string.not_register);
@@ -136,11 +116,11 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                     ab.setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            RegisterUtil.doRegisterCheck(Hawk.get(Config.PDA_IMIE,""));
+                            RegisterUtil.doRegisterCheck(Hawk.get(Config.PDA_IMIE, ""));
 
                         }
                     });
-                    ab.setNegativeButton(R.string.cancle,null);
+                    ab.setNegativeButton(R.string.cancle, null);
                     ab.setNeutralButton(R.string.close_app, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -155,6 +135,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 break;
         }
     }
+
     @Override
     public void initView() {
         setContentView(R.layout.activity_login);
@@ -170,14 +151,14 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         Lg.e("PDA：" + App.PDA_Choose);
         isRemPass.setChecked(Hawk.get(Info.IsRemanber, false));
         rService = App.getRService();
-        TelephonyManager tm = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         @SuppressLint({"HardwareIds", "MissingPermission"}) String deviceId = tm.getDeviceId();
         BasicShareUtil.getInstance(mContext).setIsOL(true);
         share.setIMIE(deviceId);
         Resources res = mContext.getResources();
         Configuration config = res.getConfiguration();
         String phone_locale = config.locale.getCountry();
-        Lg.e("当前手机语言：",phone_locale);
+        Lg.e("当前手机语言：", phone_locale);
 //        changeAppLanguage();
 
     }
@@ -187,44 +168,63 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         super.onResume();
         Lg.e("Login___onResume");
         //获取用户数据，并且设置默认值
-        spinner.setAutoSelection(Info.AutoLogin,Hawk.get(Info.AutoLogin, ""));
+        spinner.setAutoSelection(Info.AutoLogin, Hawk.get(Info.AutoLogin, ""));
         DataService.updateTime(mContext);
         DataService.updateRegisterMaxNum(mContext);
         DownLoadUseTime();
         //检查是否存在注册码
-       RegisterUtil.checkHasRegister();
+        RegisterUtil.checkHasRegister();
+        //下载app版本号
+        RegisterUtil.downLoadVersion();
+//        Lg.e("本地版本号：",Info.TestNo);
+//        Lg.e("网络版本号：",Hawk.get(Config.Apk_Version, ""));
+        //若网络版本比本地版本高，提示新版本
+        if (!"".equals(Hawk.get(Config.Apk_Version, ""))) {
+            if (Double.parseDouble(Hawk.get(Config.Apk_Version, "0")) > Double.parseDouble(Info.TestNo)) {
+            Lg.e("kong111111");
+                tvVersTip.setVisibility(View.VISIBLE);
+                tvVersTip.setText("有新版本"+Hawk.get(Config.Apk_Version,"0")+"，请于设置页面进行更新");
+            }else{
+            Lg.e("kong222222");
+                tvVersTip.setVisibility(View.GONE);
+            }
+        }else{
+            Lg.e("kong");
+        }
     }
+
     //获取配置文件中的时间数据
-    private void DownLoadUseTime(){
+    private void DownLoadUseTime() {
         App.getRService().doIOAction(WebApi.GetUseTime, "获取时间", new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
                 super.onNext(commonResponse);
                 LoadingUtil.dismiss();
-                if (!commonResponse.state)return;
+                if (!commonResponse.state) return;
                 UseTimeBean bean = gson.fromJson(commonResponse.returnJson, UseTimeBean.class);
-                if (Integer.parseInt(getTime(false))<Integer.parseInt(bean.nowTime)){
-                    Toast.showText(mContext,getString(R.string.error_time_getting));
-                    Hawk.put(Config.SaveTime,bean);
+                if (Integer.parseInt(getTime(false)) < Integer.parseInt(bean.nowTime)) {
+                    Toast.showText(mContext, getString(R.string.error_time_getting));
+                    Hawk.put(Config.SaveTime, bean);
                     return;
-                }else{
-                    if (Integer.parseInt(getTime(false))>Integer.parseInt(dealTime(bean.endTime))){
-                        Toast.showText(mContext,getString(R.string.error_app_past_time));
-                        Hawk.put(Config.SaveTime,bean);
+                } else {
+                    if (Integer.parseInt(getTime(false)) > Integer.parseInt(dealTime(bean.endTime))) {
+                        Toast.showText(mContext, getString(R.string.error_app_past_time));
+                        Hawk.put(Config.SaveTime, bean);
                         return;
-                    }else{
-                        Lg.e("获取起止时间："+commonResponse.returnJson);
-                        Hawk.put(Config.SaveTime,bean);
+                    } else {
+                        Lg.e("获取起止时间：" + commonResponse.returnJson);
+                        Hawk.put(Config.SaveTime, bean);
                     }
                 }
             }
+
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
                 LoadingUtil.dismiss();
 //                Hawk.put(Config.SaveTime,null);
-                Toast.showText(mContext,e.toString());
-                Lg.e("错误："+e.toString());
+                Toast.showText(mContext, e.toString());
+                Lg.e("错误：" + e.toString());
             }
         });
 
@@ -253,22 +253,23 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 //            }
 //        });
     }
+
     //检测是否符合时间要求
-    private boolean checkTime (){
-        if (null== Hawk.get(Config.SaveTime,null)){
-            LoadingUtil.showDialog(mContext,getString(R.string.loading_getseting));
+    private boolean checkTime() {
+        if (null == Hawk.get(Config.SaveTime, null)) {
+            LoadingUtil.showDialog(mContext, getString(R.string.loading_getseting));
             DownLoadUseTime();
             return false;
-        }else{
-            UseTimeBean bean= Hawk.get(Config.SaveTime);
-            if (Integer.parseInt(getTime(false))<Integer.parseInt(bean.nowTime)){
-                Toast.showText(mContext,getString(R.string.error_time_getting));
+        } else {
+            UseTimeBean bean = Hawk.get(Config.SaveTime);
+            if (Integer.parseInt(getTime(false)) < Integer.parseInt(bean.nowTime)) {
+                Toast.showText(mContext, getString(R.string.error_time_getting));
                 return false;
-            }else{
-                if (Integer.parseInt(getTime(false))>Integer.parseInt(dealTime(bean.endTime))){
-                    Toast.showText(mContext,getString(R.string.error_app_past_time));
+            } else {
+                if (Integer.parseInt(getTime(false)) > Integer.parseInt(dealTime(bean.endTime))) {
+                    Toast.showText(mContext, getString(R.string.error_app_past_time));
                     return false;
-                }else{
+                } else {
                     return true;
                 }
             }
@@ -347,64 +348,64 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 
     //    String JsonStr="{"acctID":"5beb8db650b4cf","username":"Administrator","lcid":"888888"}";
     private void Login() {
-        if (!checkTime()){
+        if (!checkTime()) {
             DownLoadUseTime();
-            Toast.showText(mContext,getString(R.string.error_check_fail));
+            Toast.showText(mContext, getString(R.string.error_check_fail));
             return;
         }
 
-        if (Hawk.get(Config.Cloud_ID,"").equals("")){
-            Toast.showText(mContext,getString(R.string.error_check_accout));
+        if (Hawk.get(Config.Cloud_ID, "").equals("")) {
+            Toast.showText(mContext, getString(R.string.error_check_accout));
             return;
         }
-        if ("".equals(userName)){
-            Toast.showText(mContext,getString(R.string.error_choose_user));
+        if ("".equals(userName)) {
+            Toast.showText(mContext, getString(R.string.error_choose_user));
             return;
         }
 //        startNewActivity(HomeActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
 
-        LoadingUtil.showDialog(mContext,getString(R.string.loading_checking));
+        LoadingUtil.showDialog(mContext, getString(R.string.loading_checking));
         //组装登录数据
         JSONArray jParas = new JSONArray();
-        jParas.put(Hawk.get(Config.Cloud_ID,""));// 帐套Id
+        jParas.put(Hawk.get(Config.Cloud_ID, ""));// 帐套Id
         jParas.put(userName);// 用户名
         jParas.put(mEtPassword.getText().toString());// 密码
         jParas.put(2052);// 语言T
         App.CloudService().doIOActionLogin(Config.C_Login, jParas.toString(), new ToSubscribe<BackDataLogin>() {
             @Override
             public void onNext(BackDataLogin bean) {
-                try{
+                try {
 //                    BackDataLogin bean = JsonCreater.gson.fromJson(string, BackDataLogin.class);
                     if (bean.getLoginResultType() == 1 || bean.getLoginResultType() == -5) {
-                    ShareUtil.getInstance(mContext).setUserName(userName);
-                    Hawk.put(Info.user_org,bean.getContext().getCurrentOrganizationInfo().getName());
-                    Hawk.put(Info.user_id,bean.getContext().getUserId()+"");
-                    Hawk.put(Info.user_data,bean.getContext().getDataCenterName()+"");
+                        ShareUtil.getInstance(mContext).setUserName(userName);
+                        Hawk.put(Info.user_org, bean.getContext().getCurrentOrganizationInfo().getName());
+                        Hawk.put(Info.user_id, bean.getContext().getUserId() + "");
+                        Hawk.put(Info.user_data, bean.getContext().getDataCenterName() + "");
 //                    ShareUtil.getInstance(mContext).setUserID(userID);
-                    if (isRemPass.isChecked()){
+                        if (isRemPass.isChecked()) {
 //                        保存该用户的密码
-                        Hawk.put(userName,mEtPassword.getText().toString());
-                    }else {
-                        Hawk.put(userName, "");
-                    }
+                            Hawk.put(userName, mEtPassword.getText().toString());
+                        } else {
+                            Hawk.put(userName, "");
+                        }
                         startNewActivity(HomeActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
                         LoadingUtil.dismiss();
                     } else {
                         LoadingUtil.dismiss();
-                        LoadingUtil.showAlter(mContext,getString(R.string.error_login_fail),bean.getMessage(),false);
+                        LoadingUtil.showAlter(mContext, getString(R.string.error_login_fail), bean.getMessage(), false);
 //                        Toast.showText(App.getContext(), bean.getMessage());
                         Lg.e("登录错误2：" + bean.toString());
                     }
-                }catch (Exception e){
-                        LoadingUtil.dismiss();
-                    Lg.e("json转换错误："+e.toString());
+                } catch (Exception e) {
+                    LoadingUtil.dismiss();
+                    Lg.e("json转换错误：" + e.toString());
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                        LoadingUtil.dismiss();
-                Lg.e("登录错误："+e.toString());
+                LoadingUtil.dismiss();
+                Lg.e("登录错误：" + e.toString());
                 super.onError(e);
             }
         });

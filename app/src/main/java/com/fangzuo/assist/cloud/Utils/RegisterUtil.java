@@ -2,6 +2,8 @@ package com.fangzuo.assist.cloud.Utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
@@ -13,6 +15,10 @@ import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Beans.PrintHistory;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
+import com.fangzuo.assist.cloud.widget.LoadingUtil;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.BufferedReader;
@@ -173,6 +179,43 @@ public class RegisterUtil {
             }
         });
     }
+
+    public static void downLoadVersion() {
+        LoadingUtil.dismiss();
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+
+            String target = Environment.getExternalStorageDirectory()
+                    + "/ScanAppVision"+".txt";
+            HttpUtils utils = new HttpUtils();
+            utils.download(Config.Apk_Version, target, new RequestCallBack<File>() {
+                @Override
+                public void onLoading(long total, long current,
+                                      boolean isUploading) {
+                    super.onLoading(total, current, isUploading);
+//                    System.out.println("下载进度:" + current + "/" + total);
+//                    pDialog.setProgress((int) (current*100/total));
+                }
+
+                @Override
+                public void onSuccess(ResponseInfo<File> arg0) {
+//                    pDialog.dismiss();
+                    Lg.e("下载版本文件成功");
+                    Lg.e("下载的文件数据："+arg0.result);
+                    CommonUtil.getString();
+
+                }
+
+                @Override
+                public void onFailure(com.lidroid.xutils.exception.HttpException arg0, String arg1) {
+                    Lg.e("下载版本文件失败");
+//                    pDialog.dismiss();
+//                    Toast.showText(mContext, "下载失败");
+                }
+            });
+        }
+    }
+
 
 
 }

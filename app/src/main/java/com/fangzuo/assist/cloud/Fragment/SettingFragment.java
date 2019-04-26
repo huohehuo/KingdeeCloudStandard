@@ -33,6 +33,7 @@ import com.fangzuo.assist.cloud.Adapter.SettingListAdapter;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Lg;
@@ -175,7 +176,7 @@ public class SettingFragment extends BaseFragment {
                                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        DownLoad("http://148.70.108.65:8080/AppFile/Cloud/app-debug.apk");
+                                        DownLoad(Config.Apk_Url);
                                     }
                                 })
                                 .create().show();

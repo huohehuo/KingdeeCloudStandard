@@ -5,6 +5,7 @@ public class Config {
 //    public static final String Error_Url = "http://192.168.0.115:8083/Assist/GetLogMessage";
     public static final String Error_Url = "http://148.70.108.65:8080/LogAssist/GetLogMessage";
     public static final String Apk_Url = "http://148.70.108.65:8080/AppFile/Cloud/app-debug.apk";
+    public static final String Apk_Version = "http://148.70.108.65:8080/AppFile/Cloud/version.txt";
     public static String Company="通用Cloud版";
     public static String SaveTime="SaveTime";//用于保存使用截止日期
     public static String Key="01235679";//用于保存使用截止日期（需要web端的key与之相同,并且不能倒序，只能递增的数字）

@@ -256,17 +256,18 @@ public class CommonUtil {
     }
 
     //读取本地的txt文件
-    public static String getString(String txtName) {
+    public static String getString() {
         InputStreamReader inputStreamReader = null;
                 String lineTxt = null;
         try {
-
-            File file = new File(Environment.getExternalStorageDirectory()+"/"+txtName);
+            File file = new File(Environment.getExternalStorageDirectory()+"/ScanAppVision.txt");
             if (file.isFile() && file.exists()) {
                 InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8");
                 BufferedReader br = new BufferedReader(isr);
                 while ((lineTxt = br.readLine()) != null) {
                     Lg.e("读取txt:"+lineTxt);
+                    //保存版本号
+                    Hawk.put(Config.Apk_Version,lineTxt);
                     System.out.println(lineTxt);
                 }
                 br.close();

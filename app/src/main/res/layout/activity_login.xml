@@ -174,15 +174,21 @@
                 android:text="在线配置"
                 android:textColor="@color/dividerLine" />
 
-
         </LinearLayout>
-
+        <TextView
+            android:id="@+id/tv_vers_tip"
+            android:textSize="13sp"
+            android:textColor="#cc4040"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:orientation="horizontal"
             android:weightSum="4">
 
