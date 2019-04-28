@@ -474,7 +474,7 @@ public class ProductInStoreActivity extends BaseActivity {
                     PrintHistory printHistory = new PrintHistory();
                     printHistory.setData(product,unit,binding.spUnitAux.getDataObject(),binding.edNum.getText().toString(),
                             auxNum,binding.spWavehouse.getWaveHouseId(),binding.edNot.getText().toString(),
-                            binding.spOrgHuozhu.getDataName(),barcode,batch,getTime(true),"","");
+                            binding.spOrgHuozhu.getDataName(),barcode,batch,getTime(true),"","",binding.spActualmodel.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
 //                    CommonUtil.doPrint(zpSDK,printHistory);
                     //-----END

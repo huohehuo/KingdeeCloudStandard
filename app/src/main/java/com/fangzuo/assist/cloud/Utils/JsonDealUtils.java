@@ -256,6 +256,7 @@ public class JsonDealUtils {
                 addObject(inObject,"FStockerId","FNUMBER",mains.get(i).FStockerNumber);
                 addObject(inObject,"FPickerId","FNUMBER",mains.get(i).FPurchaserId);
                 inObject.put("FDate",mains.get(i).FDate);
+                inObject.put("FNote",mains.get(i).FNot);
 //                inObject.put("FStockDirect","GENERAL");
 //                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
                 addObject(inObject,"FOwnerIdHead","FNUMBER",mains.get(i).FOwnerIdHead);
@@ -308,7 +309,7 @@ public class JsonDealUtils {
 //                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
                 addObject(inObject,"FOwnerIdHead","FNumber",mains.get(i).FStockOrgId);
                 inObject.put("FDate",mains.get(i).FDate);
-//                inObject.put("FNote",mains.get(i).FDate);
+                inObject.put("FNote",mains.get(i).FNot);
                 JSONObject stockObject = new JSONObject();
                 addObject(stockObject,"FSettleCurrID","FNUMBER",mains.get(i).FSettleCurrId);
 //                inObject.put("FSoorDerno",mains.get(i).FSoorDerno);
@@ -367,7 +368,7 @@ public class JsonDealUtils {
                 addObject(inObject,"FSaleDeptID","FNumber",mains.get(i).FPurchaseDeptId);
                 addObject(inObject,"FSalesManID","FNumber",mains.get(i).FPurchaserId);
                 inObject.put("FDate",mains.get(i).FDate);
-//                inObject.put("FNote",mains.get(i).FDate);
+                inObject.put("FNote",mains.get(i).FNot);
                 JSONObject stockObject = new JSONObject();
                 addObject(stockObject,"FSettleCurrID","FNUMBER",mains.get(i).FSettleCurrId);
 //                inObject.put("FSoorDerno",mains.get(i).FSoorDerno);
