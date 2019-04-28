@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
@@ -24,12 +25,14 @@ import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.BackDataLogin;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
+import com.fangzuo.assist.cloud.Beans.RegisterBean;
 import com.fangzuo.assist.cloud.Beans.UseTimeBean;
 import com.fangzuo.assist.cloud.Dao.User;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.RxSerivce.RService;
 import com.fangzuo.assist.cloud.RxSerivce.ToSubscribe;
+import com.fangzuo.assist.cloud.Service.BaseUtilService;
 import com.fangzuo.assist.cloud.Service.DataService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
@@ -107,7 +110,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 //                    BasicShareUtil.getInstance(App.getContext()).setRegisterState(true);
 //                    startNewActivity(LoginActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, true, null);
                 } else {
-                    Lg.e("生成dlg000000");
+//                    Lg.e("生成dlg000000");
                     btnLogin.setClickable(false);
                     btnLogin.setText(R.string.not_register);
                     AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
@@ -147,7 +150,8 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 
         getPermisssion();
         Log.e("123", ShareUtil.getInstance(mContext).getPISpayMethod() + "");
-        mTvVersion.setText("Cloud Ver:" + CommonUtil.getVersionName());
+//        mTvVersion.setText("Cloud Ver:" + CommonUtil.getVersionName());
+        mTvVersion.setText("Cloud Ver:" + Info.TestNo);
         Lg.e("PDA：" + App.PDA_Choose);
         isRemPass.setChecked(Hawk.get(Info.IsRemanber, false));
         rService = App.getRService();
@@ -155,10 +159,11 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         @SuppressLint({"HardwareIds", "MissingPermission"}) String deviceId = tm.getDeviceId();
         BasicShareUtil.getInstance(mContext).setIsOL(true);
         share.setIMIE(deviceId);
-        Resources res = mContext.getResources();
-        Configuration config = res.getConfiguration();
-        String phone_locale = config.locale.getCountry();
-        Lg.e("当前手机语言：", phone_locale);
+        Hawk.put(Config.PDA_MsgAndIMIE,deviceId);
+//        Resources res = mContext.getResources();
+//        Configuration config = res.getConfiguration();
+//        String phone_locale = config.locale.getCountry();
+//        Lg.e("当前手机语言：", phone_locale);
 //        changeAppLanguage();
 
     }
@@ -176,16 +181,20 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         RegisterUtil.checkHasRegister();
         //下载app版本号
         RegisterUtil.downLoadVersion();
+        //上传手机信息IMIE到注册表
+        BaseUtilService.updateRegisterMsg(mContext,gson.toJson(
+                new RegisterBean(
+                        Hawk.get(Config.PDA_IMIE,""),
+                        Build.MODEL+"-IMEI码:"+Hawk.get(Config.PDA_MsgAndIMIE,""),
+                        Info.TestNo)));
 //        Lg.e("本地版本号：",Info.TestNo);
 //        Lg.e("网络版本号：",Hawk.get(Config.Apk_Version, ""));
         //若网络版本比本地版本高，提示新版本
         if (!"".equals(Hawk.get(Config.Apk_Version, ""))) {
             if (Double.parseDouble(Hawk.get(Config.Apk_Version, "0")) > Double.parseDouble(Info.TestNo)) {
-            Lg.e("kong111111");
                 tvVersTip.setVisibility(View.VISIBLE);
                 tvVersTip.setText("有新版本"+Hawk.get(Config.Apk_Version,"0")+"，请于设置页面进行更新");
             }else{
-            Lg.e("kong222222");
                 tvVersTip.setVisibility(View.GONE);
             }
         }else{

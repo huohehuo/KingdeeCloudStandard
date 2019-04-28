@@ -279,9 +279,13 @@
         <activity
             android:name=".Activity.ScanProductActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.LanguageActivity"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".Activity.LanguageActivity"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".Service.BaseUtilService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

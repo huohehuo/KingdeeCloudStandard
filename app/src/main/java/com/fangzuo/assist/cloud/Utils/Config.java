@@ -9,9 +9,10 @@ public class Config {
     public static String Company="通用Cloud版";
     public static String SaveTime="SaveTime";//用于保存使用截止日期
     public static String Key="01235679";//用于保存使用截止日期（需要web端的key与之相同,并且不能倒序，只能递增的数字）
-    public static String PDA_IMIE="PDA_IMIE";//用于保存注册码
+    public static String PDA_IMIE="PDA_IMIE";//用于保存注册码(注册文件最终显示的注册码)
     public static String PDA_Language="PDA_Language";//用于保存语言
     public static String PDA_RegisterCode="PDA_RegisterCode";//用于保存注册码
+    public static String PDA_MsgAndIMIE="PDA_MsgAndIMIE";//用于保存手机IMIE码
     public static String PDA_RegisterMaxNum="PDA_RegisterMaxNum";//用于保存注册码
 
 
