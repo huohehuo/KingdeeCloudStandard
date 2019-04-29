@@ -76,9 +76,9 @@ public class FragmentDBMain extends BaseFragment {
                 String lock = (String) event.postEvent;
                 if (Config.Lock.equals(lock)){
                     activityPager.setHasLock(true);
-//                    spDbType.setEnable(false);
-//                    spDbType.setFocusable(false);
-//                    spDbDirection.setEnable(false);
+                    spDbType.setEnable(false);
+                    spDbType.setFocusable(false);
+                    spDbDirection.setEnable(false);
                     spOrgIn.setEnable(false);
                     spOrgOut.setEnable(false);
                     spOrgHuozhuIn.setEnable(false);
@@ -90,8 +90,8 @@ public class FragmentDBMain extends BaseFragment {
                 }else{
                     forKzz=false;
                     activityPager.setHasLock(false);
-//                    spDbType.setEnable(true);
-//                    spDbDirection.setEnable(true);
+                    spDbType.setEnable(true);
+                    spDbDirection.setEnable(true);
                     spOrgOut.setEnable(true);
                     spOrgHuozhuOut.setEnable(true);
                     spStoreman.setEnable(true);
@@ -158,8 +158,8 @@ public class FragmentDBMain extends BaseFragment {
         spOrgHuozhuIn.setAutoSelection(getString(R.string.spOrgHuozhuIn_db),activityPager.getOrgIn(), Hawk.get(getString(R.string.spOrgHuozhuIn_db), ""));
 
         spStoreman.setAuto(getString(R.string.spStoreman_db), Hawk.get(getString(R.string.spStoreman_db),""), activityPager.getOrgOut());
-//        spDbType.setAutoSelection(getString(R.string.spDbType_db),Hawk.get(getString(R.string.spDbType_db),""));
-//        spDbDirection.setAutoSelection(getString(R.string.spDbDirection_db),Hawk.get(getString(R.string.spDbDirection_db),""));
+        spDbType.setAutoSelection(getString(R.string.spDbType_db),Hawk.get(getString(R.string.spDbType_db),""));
+        spDbDirection.setAutoSelection(getString(R.string.spDbDirection_db),Hawk.get(getString(R.string.spDbDirection_db),""));
         spDbType.setAutoSelection(getString(R.string.spDbType_db),"组织内调拨");
         spDbDirection.setAutoSelection(getString(R.string.spDbDirection_db),"普通");
 //        binding.spOrgIn.setEnable(false);

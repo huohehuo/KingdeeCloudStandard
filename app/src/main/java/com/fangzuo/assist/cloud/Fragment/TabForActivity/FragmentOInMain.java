@@ -270,6 +270,7 @@ public class FragmentOInMain extends BaseFragment {
                 Bundle b = new Bundle();
                 b.putString("search", edSupplier.getText().toString());
                 b.putInt("where", Info.SEARCHSUPPLIER);
+                b.putString("org", activityPager.getOrgOut().FOrgID);
                 startNewActivity(activityPager,ProductSearchActivity.class, R.anim.activity_open, 0,false, b);
                 break;
         }

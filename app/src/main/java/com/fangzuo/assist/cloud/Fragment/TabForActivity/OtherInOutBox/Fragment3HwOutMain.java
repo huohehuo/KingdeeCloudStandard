@@ -264,6 +264,7 @@ public class Fragment3HwOutMain extends BaseFragment {
                 Bundle b = new Bundle();
                 b.putString("search", edClient.getText().toString());
                 b.putInt("where", Info.SEARCHCLIENT);
+                b.putString("org", activityPager.getOrgOut().FOrgID);
                 startNewActivity(activityPager, ProductSearchActivity.class, R.anim.activity_open, 0, false, b);
                 break;
         }
