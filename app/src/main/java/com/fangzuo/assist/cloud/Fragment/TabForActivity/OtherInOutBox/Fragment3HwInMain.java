@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Activity.PagerForActivity;
 import com.fangzuo.assist.cloud.Activity.ProductSearchActivity;
+import com.fangzuo.assist.cloud.Beans.CommonBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.Storage;
@@ -27,6 +28,7 @@ import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.LocDataUtil;
+import com.fangzuo.assist.cloud.widget.SpinnerCommon;
 import com.fangzuo.assist.cloud.widget.SpinnerDepartMent;
 import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
 import com.fangzuo.assist.cloud.widget.SpinnerOrg;
@@ -68,6 +70,8 @@ public class Fragment3HwInMain extends BaseFragment {
     SpinnerStorage spWhichStorage;
     @BindView(R.id.ed_supplier)
     EditText edSupplier;
+    @BindView(R.id.sp_hz_type)
+    SpinnerCommon spHzType;
     private FragmentActivity mContext;
     private PagerForActivity activityPager;
     Unbinder unbinder;
@@ -78,7 +82,7 @@ public class Fragment3HwInMain extends BaseFragment {
         switch (event.Msg) {
             case EventBusInfoCode.Supplier:
                 supplier = (Suppliers) event.postEvent;
-                Lg.e("获得供应商：" ,supplier.toString());
+                Lg.e("获得供应商：" ,supplier);
                 activityPager.setSuppliers(supplier);
                 edSupplier.setText(supplier.FName);
 //                setDATA("", true);
@@ -94,6 +98,7 @@ public class Fragment3HwInMain extends BaseFragment {
                     activityPager.setHasLock(true);
                     spDepartmentGet.setEnable(false);
                     spOrgCreate.setEnable(false);
+                    spHzType.setEnable(false);
                     spOrgIn.setEnable(false);
 //                    spOrgHuozhu.setEnable(false);
                     spStoreman.setEnable(false);
@@ -110,6 +115,7 @@ public class Fragment3HwInMain extends BaseFragment {
                     spDepartmentGet.setEnable(true);
                     spOrgCreate.setEnable(true);
                     spOrgIn.setEnable(true);
+                    spHzType.setEnable(true);
 //                    spOrgHuozhu.setEnable(true);
                     spStoreman.setEnable(true);
                     edFfOrder.setFocusable(true);
@@ -163,6 +169,8 @@ public class Fragment3HwInMain extends BaseFragment {
     protected void initData() {
         Lg.e("Fg_M:" + "initData");
         tvDate.setText(CommonUtil.getTime(true));
+        spHzType.setData(Info.Type_Hz_type);
+        spHzType.setAutoSelection(getString(R.string.spHzType_oin),Hawk.get(getString(R.string.spHzType_oin),""));
         activityPager.setDate(tvDate.getText().toString());
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
         spOrgIn.setAutoSelection(getString(R.string.spOrgIn_oin), Hawk.get(getString(R.string.spOrgIn_oin), ""));//仓库，仓管员，部门都以组织id来过滤
@@ -210,6 +218,15 @@ public class Fragment3HwInMain extends BaseFragment {
 
     @Override
     protected void initListener() {
+        spHzType.setOnItemSelectedListener(new ItemListener() {
+            @Override
+            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
+                CommonBean dc = (CommonBean) spHzType.getAdapter().getItem(i);
+                Lg.e("货主类型：", dc);
+                activityPager.setDBType(dc.FNumber);
+                Hawk.put(getString(R.string.spHzType_oin),dc.FName);
+            }
+        });
         spWhichStorage.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {

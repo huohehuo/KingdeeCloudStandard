@@ -10,9 +10,9 @@ import org.json.JSONArray;
  */
 
 public class Info {
-    public static final String DATABASESETTING = "K3DBConfiger201811123395555";//数据库名称
-//    public static final String DATABASESETTING = "K3DBConfigerRY";
-    public static final String TestNo = "5.8";
+//    public static final String DATABASESETTING = "K3DBConfiger201811123395555";//数据库名称
+    public static final String DATABASESETTING = "K3DBConfigerRY";
+    public static final String TestNo = "5.9";
     public static final int RegisterNo = 155;
     public static final int SEARCHFORRESULT = 9998;
     public static final int SEARCHFORRESULTPRODUCT = 9997;
@@ -27,8 +27,9 @@ public class Info {
     public static final String IsRemanber="IsRemanber";
     public static final String Storage="storage";
 
-    public static final String Type_DB_type="Type_DB_type";
-    public static final String Type_DB_direction="Type_DB_direction";
+    public static final String Type_DB_type="Type_DB_type";//调拨方式
+    public static final String Type_DB_direction="Type_DB_direction";//调拨方向
+    public static final String Type_Hz_type="Type_Hz_type";//货主类型
 
     public static final int format=1;
     public static final String useragent="ApiClient";

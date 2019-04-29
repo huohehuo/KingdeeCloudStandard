@@ -188,6 +188,12 @@ public class MyWaveHouseSpinner extends RelativeLayout {
 
     //自动设置保存的值
     public void setAuto(final Context context, final Storage storage, String spid) {
+        if (true){
+            waveHouseId ="";
+            waveHouse ="";
+            waveHouseNumber ="";
+            return;
+        }
         autoString = spid;
         this.storage = storage;
         if (null==storage){

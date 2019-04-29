@@ -73,7 +73,7 @@ public class PagerForActivity extends BaseActivity {
     private Storage storage;
     private Client client;
     private Suppliers suppliers;
-    private String DBType;//调拨类型
+    private String DBType;//调拨类型(货主类型)
     private String DBDirection;//调拨方向
     private String note;
     private String FOrderNo;//业务单号

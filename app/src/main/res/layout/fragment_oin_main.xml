@@ -134,6 +134,14 @@
                     app:manspinner_name="库存组织:"
                     app:manspinner_title="请选择库存组织"
                     app:manspinner_size="@dimen/sp_title_size" />
+                <com.fangzuo.assist.cloud.widget.SpinnerCommon
+                    android:visibility="gone"
+                    android:id="@+id/sp_hz_type"
+                    app:manspinner_name="货主类型:"
+                    app:manspinner_title="请选择货主类型"
+                    app:manspinner_size="@dimen/sp_title_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
                     android:id="@+id/sp_org_create"
                     android:layout_width="match_parent"

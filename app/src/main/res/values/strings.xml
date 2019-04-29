@@ -208,6 +208,7 @@
     <string name="spWhichStorage_oin">spWhichStorage_oin</string>
     <string name="spOrgIn_oin">spOrgIn_oin</string>
     <string name="spOrgCreate_oin">spOrgCreate_oin</string>
+    <string name="spHzType_oin">spHzType_oin</string>
     <string name="spOrgHuozhu_oin">spOrgHuozhu_oin</string>
     <!--//其他出库-->
     <string name="spDepartmentSend_oout">spDepartmentSend_oout</string>
