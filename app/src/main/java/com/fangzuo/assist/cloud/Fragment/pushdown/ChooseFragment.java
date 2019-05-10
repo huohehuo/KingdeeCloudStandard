@@ -337,6 +337,7 @@ public class ChooseFragment extends BaseFragment {
     //删除本地数据
     private void delete() {
         PushDownSubDao pushDownSubDao = daosession.getPushDownSubDao();
+
         for (int i = 0; i < downloadIDs.size(); i++) {
             List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
                     PushDownSubDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list();

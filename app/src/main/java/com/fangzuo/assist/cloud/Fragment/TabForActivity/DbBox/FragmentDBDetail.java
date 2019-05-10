@@ -1,4 +1,4 @@
-package com.fangzuo.assist.cloud.Fragment.TabForActivity;
+package com.fangzuo.assist.cloud.Fragment.TabForActivity.DbBox;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -273,7 +273,7 @@ SpinnerStorage spWhichStorageOut;
                 if (null != activityPager||null != spUnit) {
 //                    spUnit.setAuto("", SpinnerUnit.Id);
                     Lg.e("-----------",activityPager.getOrgOut());
-                    spWhichStorageOut.setAuto("", activityPager.getOrgOut());
+                    spWhichStorageOut.setAuto("","", activityPager.getOrgOut());
                 }
                 break;
             case EventBusInfoCode.UpdataViewForDBInStorage://由表头的数据决定是否更新明细数据
@@ -372,7 +372,7 @@ SpinnerStorage spWhichStorageOut;
                 Lg.e("选中调出仓库：", storageOut);
 //                waveHouseOut = null;
 //                spWavehouseOut.setAuto(mContext, storageOut, "");
-                DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getHuozhuOut());
+                DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
 
             }
         });
@@ -421,7 +421,7 @@ SpinnerStorage spWhichStorageOut;
         //带出物料的默认值
         spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
-            spWhichStorageOut.setAuto(autoStorage, activityPager.getOrgOut());
+            spWhichStorageOut.setAuto("",autoStorage, activityPager.getOrgOut());
 //        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
             isOpenBatch = true;
@@ -431,7 +431,7 @@ SpinnerStorage spWhichStorageOut;
             edPihao.setEnabled(false);
             isOpenBatch = false;
         }
-        DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getHuozhuOut());
+        DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
 
         spAuxsign.getData(product.FMASTERID, autoAuxSing);
         spActualmodel.getData(product.FMASTERID, autoActualModel);

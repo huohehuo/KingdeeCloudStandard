@@ -82,7 +82,7 @@ public class FragmentPISMain extends BaseFragment {
             case EventBusInfoCode.UpdataStorage:
                 String id = (String) event.postEvent;
                 Lg.e("更改仓库数据" + id);
-                spWhichStorage.setAuto(id, activityPager.getOrgOut());
+                spWhichStorage.setAuto("",id, activityPager.getOrgOut());
                 break;
             case EventBusInfoCode.Supplier:
                 Suppliers supplier = (Suppliers) event.postEvent;
@@ -138,7 +138,7 @@ public class FragmentPISMain extends BaseFragment {
         spDepartmentBuy.setAuto(getString(R.string.spDepartmentbuy_pis), "", activityPager.getOrgOut(), activityPager.getActivity());
         spStoreman.setAuto(getString(R.string.spStoreMan_pis), "", activityPager.getOrgOut());
         spBuyer.setAuto(getString(R.string.spBuyer_pis), "", activityPager.getOrgOut());
-        spWhichStorage.setAuto("", activityPager.getOrgOut());
+        spWhichStorage.setAuto("","", activityPager.getOrgOut());
 //        binding.spOrgIn.setEnable(false);
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
         setfocus(tvDate);
@@ -188,7 +188,7 @@ public class FragmentPISMain extends BaseFragment {
                 spDepartmentBuy.setAuto(getString(R.string.spDepartmentbuy_pis), "", activityPager.getOrgOut(), activityPager.getActivity());
                 spStoreman.setAuto(getString(R.string.spStoreMan_pis), "", activityPager.getOrgOut());
                 spBuyer.setAuto(getString(R.string.spBuyer_pis), "", activityPager.getOrgOut());
-                spWhichStorage.setAuto("", activityPager.getOrgOut());
+                spWhichStorage.setAuto("","", activityPager.getOrgOut());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
 
             }

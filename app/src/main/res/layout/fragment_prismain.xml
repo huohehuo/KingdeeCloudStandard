@@ -71,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     app:Uspinner_title="请选择生产车间"/>
+                <include layout="@layout/line_heng"/>
                 <TextView
                     android:text="仓库:"
                     android:textSize="22sp"
@@ -83,6 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     app:Uspinner_title="请选择仓库"/>
+                <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
                     android:id="@+id/sp_org_in"
                     android:layout_width="match_parent"
@@ -90,6 +92,7 @@
                     app:manspinner_name="入库组织:"
                     app:manspinner_title="请选择入库组织"
                     app:manspinner_size="@dimen/sp_title_size" />
+                <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
                     android:id="@+id/sp_org_create"
                     android:layout_width="match_parent"
@@ -97,6 +100,7 @@
                     app:manspinner_name="货主:"
                     app:manspinner_title="请选择生产组织"
                     app:manspinner_size="@dimen/sp_title_size" />
+                <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
                     android:visibility="gone"
                     android:id="@+id/sp_org_huozhu"
@@ -105,7 +109,7 @@
                     app:manspinner_name="货主:"
                     app:manspinner_title="请选择货主"
                     app:manspinner_size="@dimen/sp_title_size" />
-
+                <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerStoreMan
                     android:id="@+id/sp_storeman"
                     android:layout_width="match_parent"
@@ -113,6 +117,7 @@
                     app:manspinner_name="仓管员:"
                     app:manspinner_title="请选择仓管员"
                     app:manspinner_size="@dimen/sp_people_title_size" />
+                <include layout="@layout/line_heng"/>
                 <TextView
                     android:text="备注："
                     android:textSize="@dimen/sp_size"

@@ -124,7 +124,20 @@ public class SpinnerCommon extends RelativeLayout {
     public CommonSpAdapter getAdapter() {
         return adapter;
     }
-
+    public void setData(String what,String saveKeyStr,String string){
+        if (Info.Type_DB_type.equals(what)){
+            container.add(new CommonBean("组织内调拨","InnerOrgTransfer"));
+            container.add(new CommonBean("跨组织调拨","OverOrgTransfer"));
+        }else if (Info.Type_DB_direction.equals(what)){
+            container.add(new CommonBean("普通","GENERAL"));
+            container.add(new CommonBean("退货","RETURN"));
+        }else if (Info.Type_Hz_type.equals(what)){
+            container.add(new CommonBean("业务组织","BD_OwnerOrg"));
+            container.add(new CommonBean("供应商","BD_Supplier"));
+        }
+        mSp.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
     public void setData(String what){
         if (Info.Type_DB_type.equals(what)){
             container.add(new CommonBean("组织内调拨","InnerOrgTransfer"));

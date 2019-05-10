@@ -1,4 +1,4 @@
-package com.fangzuo.assist.cloud.Fragment.TabForActivity;
+package com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,9 +17,11 @@ import android.widget.TextView;
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Activity.PagerForActivity;
 import com.fangzuo.assist.cloud.Activity.ProductSearchActivity;
+import com.fangzuo.assist.cloud.Beans.CommonBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.Org;
+import com.fangzuo.assist.cloud.Dao.Suppliers;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
@@ -28,6 +30,7 @@ import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.LocDataUtil;
+import com.fangzuo.assist.cloud.widget.SpinnerCommon;
 import com.fangzuo.assist.cloud.widget.SpinnerDepartMent;
 import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
 import com.fangzuo.assist.cloud.widget.SpinnerOrg;
@@ -71,11 +74,21 @@ public class FragmentOOutMain extends BaseFragment {
     RelativeLayout searchClient;
     @BindView(R.id.sp_org_huozhu)
     SpinnerHuozhu spOrgHuozhu;
+    @BindView(R.id.ll_supplier_hz)
+    LinearLayout llSupplierHz;
+    @BindView(R.id.ed_supplier_hz)
+    EditText edSupplierHz;
+    @BindView(R.id.search_supplier_hz)
+    RelativeLayout searchSupplierHz;
+    @BindView(R.id.sp_hz_type)
+    SpinnerCommon spHzType;
     //    @BindView(R.id.sp_department_sale)
 //    SpinnerDepartMent spDepartmentSale;
     private FragmentActivity mContext;
     private PagerForActivity activityPager;
     Unbinder unbinder;
+    private Suppliers supplierHz;
+    private CommonBean hzType;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(ClassEvent event) {
@@ -85,7 +98,19 @@ public class FragmentOOutMain extends BaseFragment {
                 Lg.e("获得供应商：", client);
                 edClient.setText(client.FName);
                 activityPager.setClient(client);
-                Hawk.put(Config.OrderNo + activityPager.getActivity(), client.FName);
+                Hawk.put(Config.Client + activityPager.getActivity(), client.FName);
+                break;
+            case EventBusInfoCode.Supplier_Hz:
+                supplierHz = (Suppliers) event.postEvent;
+                Lg.e("获得供应商Hz：", supplierHz);
+                if (supplierHz.FItemID.equals("")) {
+                    activityPager.setHuozhuOut(null);
+                    edSupplierHz.setText("");
+                } else {
+                    activityPager.setHuozhuOut(new Org(supplierHz.FItemID, supplierHz.FNumber, supplierHz.FName, supplierHz.FNote));
+                    edSupplierHz.setText(supplierHz.FName);
+                    Hawk.put(Config.SupplierHz + activityPager.getActivity(), supplierHz.FName);//保存业务单号
+                }
                 break;
             case EventBusInfoCode.Lock_Main:
                 String lock = (String) event.postEvent;
@@ -98,12 +123,15 @@ public class FragmentOOutMain extends BaseFragment {
                     searchClient.setClickable(false);
                     edNot.setFocusable(false);
                     edClient.setFocusable(false);
+                    searchSupplierHz.setClickable(false);
+                    spHzType.setEnable(false);
 
-                    Client client1 = LocDataUtil.getClient(Hawk.get(Config.OrderNo + activityPager.getActivity(), edClient.getText().toString()));
+                    Client client1 = LocDataUtil.getClient(Hawk.get(Config.Client + activityPager.getActivity(), edClient.getText().toString()));
                     edClient.setText(client1.FName);
                     activityPager.setClient(client1);
                     edNot.setText(Hawk.get(Config.Note + activityPager.getActivity(), edNot.getText().toString()));
-//                    Hawk.put(Config.OrderNo + activityPager.getActivity(), client1.FName);//保存客户数据
+                    edFfOrder.setText(Hawk.get(Config.OrderNo + activityPager.getActivity(), edFfOrder.getText().toString()));
+                    Hawk.put(Config.OrderNo + activityPager.getActivity(), edFfOrder.getText().toString());//保存客户数据
                     Hawk.put(Config.Note + activityPager.getActivity(), edNot.getText().toString());//保存客户数据
                 } else {
                     activityPager.setHasLock(false);
@@ -116,9 +144,12 @@ public class FragmentOOutMain extends BaseFragment {
                     edClient.setFocusableInTouchMode(true);
                     edNot.setFocusable(true);
                     edNot.setFocusableInTouchMode(true);
+                    searchSupplierHz.setClickable(true);
+                    spHzType.setEnable(true);
                     activityPager.setClient(null);
                     edClient.setText("");
                     edNot.setText("");
+                    Hawk.put(Config.Client + activityPager.getActivity(), "");//清空保存的客户数据
                     Hawk.put(Config.OrderNo + activityPager.getActivity(), "");//清空保存的客户数据
                     Hawk.put(Config.Note + activityPager.getActivity(), "");//清空保存的客户数据
                 }
@@ -163,10 +194,12 @@ public class FragmentOOutMain extends BaseFragment {
     protected void initData() {
         Lg.e("Fg_M:" + "initData");
         tvDate.setText(CommonUtil.getTime(true));
+        spHzType.setData(Info.Type_Hz_type);
+        spHzType.setAutoSelection(getString(R.string.spHzType_oout), Hawk.get(getString(R.string.spHzType_oout), ""));
         activityPager.setDate(tvDate.getText().toString());
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
         spOrgSend.setAutoSelection(getString(R.string.spOrgSend_oout), Hawk.get(getString(R.string.spOrgSend_oout), ""));//仓库，仓管员，部门都以组织id来过滤
-        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout), ""));
+//        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout), ""));
         spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout), Hawk.get(getString(R.string.spDepartmentSend_oout), ""), activityPager.getOrgOut(), activityPager.getActivity());
 //        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout), "", activityPager.getOrgOut(), activityPager.getActivity());
         spStoreman.setAuto(getString(R.string.spStoreman_oout), Hawk.get(getString(R.string.spStoreman_oout), ""), activityPager.getOrgOut());
@@ -223,12 +256,36 @@ public class FragmentOOutMain extends BaseFragment {
 //                Lg.e("选中仓库：", storage);
 //            }
 //        });
+        spHzType.setOnItemSelectedListener(new ItemListener() {
+            @Override
+            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
+                hzType = (CommonBean) spHzType.getAdapter().getItem(i);
+                Lg.e("货主类型：", hzType);
+                activityPager.setDBType(hzType.FNumber);
+                if ("BD_OwnerOrg".equals(hzType.FNumber)) {//业务组织
+                    llSupplierHz.setVisibility(View.GONE);
+                    spOrgHuozhu.setVisibility(View.VISIBLE);
+                    spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout), ""));
+                } else {//供应商
+                    activityPager.setHuozhuOut(null);
+                    spOrgHuozhu.setVisibility(View.GONE);
+                    llSupplierHz.setVisibility(View.VISIBLE);
+                    LocDataUtil.getSuppliers(Hawk.get(Config.SupplierHz + activityPager.getActivity(), ""),activityPager.getOrgOut(1),EventBusInfoCode.Supplier_Hz);
+                }
+                Hawk.put(getString(R.string.spHzType_oout), hzType.FName);
+            }
+        });
         spOrgSend.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgOut((Org) spOrgSend.getAdapter().getItem(i));
                 Hawk.put(getString(R.string.spOrgSend_oout), activityPager.getOrgOut().FName);
-                spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout), activityPager.getOrgOut(), "");
+                if ("BD_OwnerOrg".equals(hzType.FNumber)) {//业务组织
+                    spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout), ""));
+                }else{
+                    LocDataUtil.getSuppliers(Hawk.get(Config.SupplierHz + activityPager.getActivity(), ""),activityPager.getOrgOut(1),EventBusInfoCode.Supplier_Hz);
+                }
+//                spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout), activityPager.getOrgOut(), "");
                 spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout), Hawk.get(getString(R.string.spDepartmentSend_oout), ""), activityPager.getOrgOut(), activityPager.getActivity());
                 spStoreman.setAuto(getString(R.string.spStoreman_oout), Hawk.get(getString(R.string.spStoreman_oout), ""), activityPager.getOrgOut());
 //        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout), "", activityPager.getOrgOut(), activityPager.getActivity());
@@ -253,7 +310,7 @@ public class FragmentOOutMain extends BaseFragment {
 
     }
 
-    @OnClick({R.id.tv_date, R.id.search_client})
+    @OnClick({R.id.tv_date, R.id.search_client, R.id.search_supplier_hz})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_date:
@@ -266,6 +323,13 @@ public class FragmentOOutMain extends BaseFragment {
                 b.putInt("where", Info.SEARCHCLIENT);
                 b.putString("org", activityPager.getOrgOut().FOrgID);
                 startNewActivity(activityPager, ProductSearchActivity.class, R.anim.activity_open, 0, false, b);
+                break;
+            case R.id.search_supplier_hz:
+                Bundle b2 = new Bundle();
+                b2.putString("search", edSupplierHz.getText().toString());
+                b2.putInt("where", Info.SearchSupplier);
+                b2.putString("org", activityPager.getOrgOut().FOrgID);
+                startNewActivity(activityPager, ProductSearchActivity.class, R.anim.activity_open, 0, false, b2);
                 break;
         }
     }

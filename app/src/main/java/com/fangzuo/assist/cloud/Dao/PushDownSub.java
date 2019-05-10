@@ -28,12 +28,15 @@ public class PushDownSub {
     public String FBatchNo;
     public String FBaseCanreturnQty;
     public String FHuoZhuNumber;
-    @Generated(hash = 947756660)
+    public String AuxSign;//辅助标识
+    public String ActualModel;//实际规格
+    @Generated(hash = 211382572)
     public PushDownSub(Long id, String FSEQ, String FID, String FMaterialID,
             String FEntryID, String FUnitID, String FNumber, String FName,
             String FModel, String FBillNo, String FQty, String FQtying,
             String FTaxPrice, String FStockID, String FBatchNo,
-            String FBaseCanreturnQty, String FHuoZhuNumber) {
+            String FBaseCanreturnQty, String FHuoZhuNumber, String AuxSign,
+            String ActualModel) {
         this.id = id;
         this.FSEQ = FSEQ;
         this.FID = FID;
@@ -51,6 +54,8 @@ public class PushDownSub {
         this.FBatchNo = FBatchNo;
         this.FBaseCanreturnQty = FBaseCanreturnQty;
         this.FHuoZhuNumber = FHuoZhuNumber;
+        this.AuxSign = AuxSign;
+        this.ActualModel = ActualModel;
     }
     @Generated(hash = 2008125598)
     public PushDownSub() {
@@ -156,6 +161,18 @@ public class PushDownSub {
     }
     public void setFHuoZhuNumber(String FHuoZhuNumber) {
         this.FHuoZhuNumber = FHuoZhuNumber;
+    }
+    public String getAuxSign() {
+        return this.AuxSign;
+    }
+    public void setAuxSign(String AuxSign) {
+        this.AuxSign = AuxSign;
+    }
+    public String getActualModel() {
+        return this.ActualModel;
+    }
+    public void setActualModel(String ActualModel) {
+        this.ActualModel = ActualModel;
     }
 
 }

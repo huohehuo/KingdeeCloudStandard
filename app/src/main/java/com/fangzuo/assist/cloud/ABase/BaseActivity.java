@@ -33,12 +33,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.Service.BaseUtilService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
+import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.MediaPlayer;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
@@ -341,6 +345,10 @@ public abstract class BaseActivity extends FragmentActivity {
         super.onResume();
         if (isScan()){
             if (null!=mCaptureManager)mCaptureManager.onResume();
+        }
+        //超过10分钟后，自动重新登陆
+        if (MathUtil.MoreTime(10)){
+            BaseUtilService.reLogin(mContext);
         }
 
     }

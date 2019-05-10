@@ -26,15 +26,23 @@ public class GetSettingList {
     }
     public static ArrayList<SettingList> getPurchaseList() {
         ArrayList<SettingList> items = new ArrayList<>();
-        items.add(new SettingList("挑板业务",R.mipmap.sellinout));
-        items.add(new SettingList("改板业务",R.mipmap.sellinout));
-        items.add(new SettingList("其他出入库",R.mipmap.chuku));
-        items.add(new SettingList("销售出库",R.mipmap.sellinout));
-        items.add(new SettingList("调拨单",R.mipmap.diaobo));
-        items.add(new SettingList("到货入库",R.mipmap.sellinout));
-        items.add(new SettingList("标签补打",R.mipmap.printmain));
-        items.add(new SettingList("期初物料补打",R.mipmap.printmain));
+        items.add(new SettingList("销售出库单",R.mipmap.sellinout));
+        items.add(new SettingList("到货入库1",R.mipmap.sellinout));
+        items.add(new SettingList("到货入库2",R.mipmap.sellinout));
         items.add(new SettingList("采购入库",R.mipmap.printmain));//实际是：采购订单下推外购入库
+        items.add(new SettingList("其他出入库",R.mipmap.chuku));
+        items.add(new SettingList("调拨单",R.mipmap.diaobo));
+        items.add(new SettingList("挑板业务1",R.mipmap.sellinout));
+        items.add(new SettingList("挑板业务2",R.mipmap.sellinout));
+        items.add(new SettingList("挑板业务3",R.mipmap.sellinout));
+        items.add(new SettingList("改板业务",R.mipmap.sellinout));
+        items.add(new SettingList("盘盈入库(X)",R.mipmap.sellinout));
+        items.add(new SettingList("盘亏入库(X)",R.mipmap.sellinout));
+        items.add(new SettingList("简单生产领料",R.mipmap.chuku));
+        items.add(new SettingList("简单产品入库",R.mipmap.purchaseinstorage));
+        items.add(new SettingList("扫一扫",R.mipmap.scan));
+        items.add(new SettingList("期初物料补打",R.mipmap.printmain));
+        items.add(new SettingList("标签补打",R.mipmap.printmain));
 
 //        items.add(new SettingList("简单生产领料",R.mipmap.chuku));
 //        items.add(new SettingList("简单产品入库",R.mipmap.purchaseinstorage));

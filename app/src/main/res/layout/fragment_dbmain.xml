@@ -44,12 +44,14 @@
                     android:textSize="22sp" />
 
                 <com.fangzuo.assist.cloud.widget.SpinnerCommon
+                    android:visibility="gone"
                     android:id="@+id/sp_db_type"
                     app:manspinner_name="调拨类型:"
                     app:manspinner_title="请选择调拨类型"
                     app:manspinner_size="@dimen/sp_title_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+                <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerCommon
                     android:id="@+id/sp_db_direction"
                     app:manspinner_name="调拨方向:"
@@ -57,6 +59,7 @@
                     app:manspinner_size="@dimen/sp_title_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+                <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
                     android:id="@+id/sp_org_out"
                     android:layout_width="match_parent"
@@ -64,6 +67,7 @@
                     app:manspinner_name="调出库存组织:"
                     app:manspinner_title="请选择调出库存组织"
                     app:manspinner_size="@dimen/sp_title_size" />
+                <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
                     android:id="@+id/sp_org_huozhu_out"
                     android:layout_width="match_parent"
@@ -71,6 +75,7 @@
                     app:manspinner_name="调出货主:"
                     app:manspinner_title="请选择调出货主"
                     app:manspinner_size="@dimen/sp_title_size"/>
+                <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
                     android:id="@+id/sp_org_in"
                     android:layout_width="match_parent"
@@ -78,6 +83,7 @@
                     app:manspinner_name="调入库存组织:"
                     app:manspinner_title="请选择调入库存组织"
                     app:manspinner_size="@dimen/sp_title_size"/>
+                <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
                     android:id="@+id/sp_org_huozhu_in"
                     android:layout_width="match_parent"
@@ -85,6 +91,7 @@
                     app:manspinner_name="调入货主:"
                     app:manspinner_title="请选择掉入货主"
                     app:manspinner_size="@dimen/sp_title_size" />
+                <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerStoreMan
                     android:id="@+id/sp_storeman"
                     android:layout_width="match_parent"
@@ -92,6 +99,7 @@
                     app:manspinner_name="仓管员:"
                     app:manspinner_title="请选择仓管员"
                     app:manspinner_size="@dimen/sp_people_title_size" />
+                <include layout="@layout/line_heng"/>
                 <TextView
                     android:text="备注："
                     android:textSize="@dimen/sp_size"

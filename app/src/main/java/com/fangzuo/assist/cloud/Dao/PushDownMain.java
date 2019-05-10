@@ -20,15 +20,16 @@ public class PushDownMain {
     public String FSupply;
     public String FSaleOrgID;
     public String FStoreOrgID;
+    public String FSettleOrgId;
     public String FSaleManID;
     public String FSaleDeptID;
     public String FNot;
     public int tag;
     public String FBillTypeName;
-    @Generated(hash = 1193570374)
+    @Generated(hash = 873071130)
     public PushDownMain(Long id, String FID, String FBillNo, String FDate, String FSupplyID, String FSupply,
-            String FSaleOrgID, String FStoreOrgID, String FSaleManID, String FSaleDeptID, String FNot, int tag,
-            String FBillTypeName) {
+            String FSaleOrgID, String FStoreOrgID, String FSettleOrgId, String FSaleManID, String FSaleDeptID,
+            String FNot, int tag, String FBillTypeName) {
         this.id = id;
         this.FID = FID;
         this.FBillNo = FBillNo;
@@ -37,6 +38,7 @@ public class PushDownMain {
         this.FSupply = FSupply;
         this.FSaleOrgID = FSaleOrgID;
         this.FStoreOrgID = FStoreOrgID;
+        this.FSettleOrgId = FSettleOrgId;
         this.FSaleManID = FSaleManID;
         this.FSaleDeptID = FSaleDeptID;
         this.FNot = FNot;
@@ -133,6 +135,12 @@ public class PushDownMain {
     }
     public void setFStoreOrgID(String FStoreOrgID) {
         this.FStoreOrgID = FStoreOrgID;
+    }
+    public String getFSettleOrgId() {
+        return this.FSettleOrgId;
+    }
+    public void setFSettleOrgId(String FSettleOrgId) {
+        this.FSettleOrgId = FSettleOrgId;
     }
 
 //    public String FName;

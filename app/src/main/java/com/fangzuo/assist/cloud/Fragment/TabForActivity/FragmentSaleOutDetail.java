@@ -246,7 +246,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
             case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
                 if (null != activityPager) {
 //                    spUnit.setAuto("", SpinnerUnit.Id);
-                    spWhichStorage.setAuto("", activityPager.getOrgOut());
+                    spWhichStorage.setAuto("","", activityPager.getOrgOut());
                 }
                 break;
 
@@ -341,7 +341,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
                 Lg.e("选中仓库：", storage);
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, storage, "");
-                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut());
+                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getOrgOut());
 
             }
         });
@@ -373,7 +373,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
         spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
-        spWhichStorage.setAuto(autoStorage, activityPager.getOrgOut());
+        spWhichStorage.setAuto("",autoStorage, activityPager.getOrgOut());
 //        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
             isOpenBatch = true;
@@ -383,7 +383,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
             edPihao.setText("");
             isOpenBatch = false;
         }
-        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut());
+        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getOrgOut());
 
         spAuxsign.getData(product.FMASTERID, autoAuxSing);
         spActualmodel.getData(product.FMASTERID, autoActualModel);

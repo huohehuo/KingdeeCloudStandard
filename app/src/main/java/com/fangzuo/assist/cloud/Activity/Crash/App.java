@@ -14,6 +14,7 @@ import com.fangzuo.assist.cloud.MainActivity;
 import com.fangzuo.assist.cloud.RxSerivce.CloudService;
 import com.fangzuo.assist.cloud.RxSerivce.RService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
+import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.LanguageUtil;
 import com.fangzuo.assist.cloud.Utils.Lg;
@@ -81,6 +82,7 @@ public class App extends MultiDexApplication {
 
     public static int PDA_Choose;//{" 1 G02A设备","2 8000设备","3 5000设备"4 M60,"5手机端};
     public static String PDA_Language="CN";//{" 1 G02A设备","2 8000设备","3 5000设备"4 M60,"5手机端};
+    public static String PDA_Time="";//用于重登录
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -96,6 +98,7 @@ public class App extends MultiDexApplication {
         Hawk.init(mContext).build();
         PDA_Choose= Hawk.get(Config.PDA,1);
         NowUrl = BasicShareUtil.getInstance(mContext).getBaseURL();
+        PDA_Time= CommonUtil.getTime2Fen();//用于重登录
         //retrofit的基本初始化相关
 //        gson = new Gson();
 //        final GsonBuilder gsonBuilder = new GsonBuilder();

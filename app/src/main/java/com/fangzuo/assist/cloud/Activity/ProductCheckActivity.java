@@ -357,14 +357,19 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
                 break;
             case Config.ProductInStoreActivity://产品入库
             case Config.TbInActivity://挑板入库
+            case Config.TbIn2Activity://挑板入库
+            case Config.TbIn3Activity://挑板入库
             case Config.GbInActivity://改版入库
             case Config.DhInActivity://到货入库
+            case Config.DhIn2Activity://到货入库
             case Config.SimpleInActivity://产品入库
                 s2Product.FIsProduce="1";
 //                FIsProduce="1";
                 break;
             case Config.ProductGetActivity://生产领料
             case Config.TbGetActivity://挑板领料
+            case Config.TbGet2Activity://挑板领料
+            case Config.TbGet3Activity://挑板领料
             case Config.GbGetActivity://改板领料
                 s2Product.FIsInventory="1";
 //                FIsInventory="1";

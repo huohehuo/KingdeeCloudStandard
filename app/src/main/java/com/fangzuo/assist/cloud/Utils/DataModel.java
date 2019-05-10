@@ -424,14 +424,14 @@ public class DataModel {
     }
 
     //获取库存
-    public static void getStoreNum(Product product, Storage storage, String batch, Context mContext, final TextView textView,Org org){
+    public static void getStoreNum(Product product, Storage storage, String batch, Context mContext, final TextView textView,Org org,Org huozhu){
         if (product == null || storage == null){
             textView.setText("0");
             return;
         }
-        Lg.e("库存查找条件：",product.FMASTERID+"-"+storage.FItemID+"-"+batch);
+        Lg.e("库存查找条件：",product.FMASTERID+"-"+storage.FItemID+"-"+batch+"-"+org.FOrgID+"-"+huozhu.FOrgID);
         if (BasicShareUtil.getInstance(mContext).getIsOL()) {
-            InStoreNumBean storageNum = new InStoreNumBean(product.FMASTERID,storage.FItemID,"",batch,org==null?"":org.FOrgID);
+            InStoreNumBean storageNum = new InStoreNumBean(product.FMASTERID,storage.FItemID,"",batch,org==null?"":org.FOrgID,huozhu==null?"":huozhu.FOrgID);
             App.getRService().doIOAction(WebApi.GETINSTORENUM, new Gson().toJson(storageNum), new MySubscribe<CommonResponse>() {
                 @Override
                 public void onNext(CommonResponse commonResponse) {
@@ -450,33 +450,34 @@ public class DataModel {
                     textView.setText("0");
                 }
             });
-        }else{
-            List<InStorageNum> container = new ArrayList<>();
-            String con="";
-            if (!"".equals(storage.FItemID)){
-                con+=" and FSTOCK_ID='"+storage.FItemID+"'";
-            }
-            if (!"".equals(product.FMaterialid)){
-                con+=" and FITEM_ID='"+product.FMaterialid+"'";
-            }
-            if (!"".equals(batch)){
-                con+=" and FBATCH_NO='"+batch+"'";
-            }
-            String SQL = "SELECT * FROM IN_STORAGE_NUM WHERE 1=1 "+con;
-            Lg.e("库存查询SQL:"+SQL);
-            Cursor cursor = GreenDaoManager.getmInstance(mContext).getDaoSession().getDatabase().rawQuery(SQL, null);
-            while (cursor.moveToNext()) {
-                InStorageNum f = new InStorageNum();
-                f.FQty = cursor.getString(cursor.getColumnIndex("FQTY"));
-                Lg.e("库存查询存在FQty："+f.FQty);
-                container.add(f);
-            }
-            if (container.size() > 0) {
-                textView.setText(container.get(0).FQty);
-            } else {
-                textView.setText("0");
-            }
         }
+//        else{
+//            List<InStorageNum> container = new ArrayList<>();
+//            String con="";
+//            if (!"".equals(storage.FItemID)){
+//                con+=" and FSTOCK_ID='"+storage.FItemID+"'";
+//            }
+//            if (!"".equals(product.FMaterialid)){
+//                con+=" and FITEM_ID='"+product.FMaterialid+"'";
+//            }
+//            if (!"".equals(batch)){
+//                con+=" and FBATCH_NO='"+batch+"'";
+//            }
+//            String SQL = "SELECT * FROM IN_STORAGE_NUM WHERE 1=1 "+con;
+//            Lg.e("库存查询SQL:"+SQL);
+//            Cursor cursor = GreenDaoManager.getmInstance(mContext).getDaoSession().getDatabase().rawQuery(SQL, null);
+//            while (cursor.moveToNext()) {
+//                InStorageNum f = new InStorageNum();
+//                f.FQty = cursor.getString(cursor.getColumnIndex("FQTY"));
+//                Lg.e("库存查询存在FQty："+f.FQty);
+//                container.add(f);
+//            }
+//            if (container.size() > 0) {
+//                textView.setText(container.get(0).FQty);
+//            } else {
+//                textView.setText("0");
+//            }
+//        }
     }
 
     //获取库存()舍弃

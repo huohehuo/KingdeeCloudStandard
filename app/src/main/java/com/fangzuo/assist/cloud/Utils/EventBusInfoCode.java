@@ -9,6 +9,7 @@ public class EventBusInfoCode {
 
     public static final String Product = "9999";
     public static final String Supplier = "9997";
+    public static final String Supplier_Hz = "Supplier_Hz";
     public static final String Client = "9996";
     public static final String DOWNLOADOK = "9998";
 

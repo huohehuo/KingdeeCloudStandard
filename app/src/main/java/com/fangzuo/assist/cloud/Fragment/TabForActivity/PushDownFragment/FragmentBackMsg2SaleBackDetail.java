@@ -176,6 +176,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
     private String mainSaleDept = "";//表头带出
     private String mainSaleMan = "";//表头带出
     private String mainSaleOrg = "";//表头带出
+    private String mainSettleOrg = "";//表头带出
     private Org mainStoreOrg;//表头带出
     private zpBluetoothPrinter zpSDK;
     private BlueToothBean bean;
@@ -390,8 +391,8 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
     protected void initData() {
         s2Product = new SearchBean.S2Product();
         listOrder = new ArrayList<>();
-        spAuxsign.setEnabled(false);
-        spActualmodel.setEnabled(false);
+//        spAuxsign.setEnabled(false);
+//        spActualmodel.setEnabled(false);
 
         container = new ArrayList<>();
         fidcontainer = activityPager.getIntent().getExtras().getStringArrayList("fid");
@@ -404,15 +405,17 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             pushDownMain = pushDownMains.get(0);
             mainSaleDept = LocDataUtil.getDept(pushDownMain.FSaleDeptID).FNumber;
             mainSaleMan = LocDataUtil.getSaleMan(pushDownMain.FSaleManID).FNumber;
-            mainSaleOrg = LocDataUtil.getOrg(pushDownMain.FSaleOrgID,"id").FNumber;
-            mainStoreOrg = LocDataUtil.getOrg(pushDownMain.FStoreOrgID,"id");
+            mainSaleOrg = LocDataUtil.getOrg(pushDownMain.FSaleOrgID,"id").FNumber;//销售组织
+            mainSettleOrg = LocDataUtil.getOrg(pushDownMain.FSettleOrgId,"id").FNumber;//结算组织
+            mainStoreOrg = LocDataUtil.getOrg(pushDownMain.FStoreOrgID,"id");//库存组织
             Lg.e("得到表头解析数据:"+mainSaleDept);
             Lg.e("得到表头解析数据:"+mainSaleMan);
             Lg.e("得到表头解析数据:"+mainSaleOrg);
             Lg.e("得到表头解析数据:",mainStoreOrg);
             activityPager.setOrgOut(mainStoreOrg);
-            spWhichStorage.setAuto("",mainStoreOrg);
+            spWhichStorage.setAuto("","",mainStoreOrg);
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Main_Note, pushDownMains.get(0).FNot));
             if ("".equals(pushDownMain.FSupplyID==null?"":pushDownMain.FSupplyID)){
                 LoadingUtil.showAlter(mContext,"注意","表头明细的客户数据带出失败，请重试...",false);
             }
@@ -560,7 +563,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             boolean flag = true;
             for (int j = 0; j < pushDownSubListAdapter.getCount(); j++) {
                 PushDownSub pushDownSub1 = (PushDownSub) pushDownSubListAdapter.getItem(j);
-                if (product.FMaterialid.equals(pushDownSub1.FMaterialID)) {
+                if (product.FNumber.equals(pushDownSub1.FNumber)) {
                     if (MathUtil.toD(pushDownSub1.FQty) == MathUtil.toD(pushDownSub1.FQtying)) {
                         flag = true;
                         continue;
@@ -607,7 +610,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
         spUnitStore.setAuto(product.FStoreUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
-        spWhichStorage.setAuto(autoStorage, mainStoreOrg);
+        spWhichStorage.setAuto("",autoStorage, mainStoreOrg);
         unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
 //        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
@@ -685,7 +688,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             MediaPlayer.getInstance(mContext).error();
             return false;
         }//--------------------------------------------------
-        ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+pushDownMain.FID+mainStoreOrg.FNumber);//单据编号
+        ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+pushDownMain.FID+pushDownSub.FHuoZhuNumber);//单据编号
 
         //插入条码唯一临时表
 //        CodeCheckBean bean = new CodeCheckBean(barcode, ordercode + "", edNum.getText().toString(), BasicShareUtil.getInstance(mContext).getIMIE());
@@ -694,7 +697,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
         LoadingUtil.showDialog(mContext, "正在获取条码数据...");
         String pdata = product.FMaterialid + "|" + unit.FMeasureUnitID + "|" + edNum.getText().toString().trim()
                 + "|" + spActualmodel.getDataNumber() + "|" + spAuxsign.getDataNumber() + "|" + edPurchaseNo.getText().toString()
-                + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + storage.FNumber + "|" + activityPager.getOrgIn(0);
+                + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + storage.FNumber + "|" + pushDownSub.FHuoZhuNumber;
         App.getRService().doIOAction(WebApi.PrintData, pdata, new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
@@ -780,8 +783,8 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             main.FID = pushDownSub.FID;
             main.FIndex = timesecond;
             main.FBillNo = pushDownMain.FBillNo;
-            main.setData(Info.getType(activity), mainSaleOrg, mainStoreOrg.FNumber, mainStoreOrg.FNumber);
-            main.FDepartmentNumber = activityPager.getDepartMent();
+            main.setDataBBM2SB(Info.getType(activity), mainStoreOrg.FNumber, mainSaleOrg,mainSettleOrg, mainStoreOrg.FNumber);
+//            main.FDepartmentNumber = activityPager.getDepartMent();
 //            main.FPurchaseDeptId = activityPager.getDepartMentBuy();
 //            main.FPurchaserId = activityPager.getManSale();
             main.FPurchaseDeptId = mainSaleDept;
@@ -805,7 +808,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             detail.FEntryID = pushDownSub.FEntryID;
             detail.FID = pushDownSub.FID;
 //            detail.FHuoZhuNumber = scanOfHuozhuNumber;
-            detail.FHuoZhuNumber = activityPager.getHuozhuOut(0);
+            detail.FHuoZhuNumber = pushDownSub.FHuoZhuNumber;
             detail.FSOEntryId = pushDownSub.FEntryID;
             detail.FRemainInStockQty = pushDownSub.FQty;
             detail.FTaxPrice = pushDownSub.FTaxPrice;
@@ -857,6 +860,8 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
         edNum.setText("");
         product = null;
         pushDownSub = null;
+        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+
     }
     //检测打印机连接状态
     private void checkPrint(boolean check) {

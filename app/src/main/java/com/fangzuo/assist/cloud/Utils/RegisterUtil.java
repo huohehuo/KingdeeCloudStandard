@@ -103,7 +103,7 @@ public class RegisterUtil {
                 super.onNext(commonResponse);
                 if (!commonResponse.state) return;
                 Lg.e("注册信息数量：", commonResponse.returnJson);
-                if (Integer.parseInt(commonResponse.returnJson) <= Integer.parseInt(Hawk.get(Config.PDA_RegisterMaxNum,"5"))) {
+                if (Integer.parseInt(commonResponse.returnJson) < Integer.parseInt(Hawk.get(Config.PDA_RegisterMaxNum,"5"))) {
                     Lg.e("符合用户注册最低数量,当前"+commonResponse.returnJson);
                     App.getRService().doIOAction(WebApi.RegisterCheck, lastRegister, new MySubscribe<CommonResponse>() {
                         @Override

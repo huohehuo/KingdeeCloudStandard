@@ -97,7 +97,7 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
                     edNot.setFocusable(true);
                     edNot.setFocusableInTouchMode(true);
                     activityPager.setClient(null);
-                    edNot.setText("");
+//                    edNot.setText("");
                     Hawk.put(Config.OrderNo + activityPager.getActivity(), "");//清空保存的客户数据
                     Hawk.put(Config.Note + activityPager.getActivity(), "");//清空保存的客户数据
                 }
@@ -107,8 +107,14 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
 //                    spUnit.setAuto("", SpinnerUnit.Id);
                     spDepartmentSend.setAuto("", "", activityPager.getOrgOut(), activityPager.getActivity());
                     spStoreman.setAuto(getString(R.string.spStoreman_bmsg2sb), Hawk.get(getString(R.string.spStoreman_bmsg2sb), ""), activityPager.getOrgOut());
-                    spOrgHuozhu.setAutoSelection(getString(R.string.spHuozhu_bmsg2sb),  activityPager.getOrgOut(), Hawk.get(getString(R.string.spHuozhu_bmsg2sb), ""));//仓库，仓管员，部门都以组织id来过滤
-
+//                    spOrgHuozhu.setAutoSelection(getString(R.string.spHuozhu_bmsg2sb),  activityPager.getOrgOut(), Hawk.get(getString(R.string.spHuozhu_bmsg2sb), ""));//仓库，仓管员，部门都以组织id来过滤
+                }
+                break;
+            case EventBusInfoCode.Main_Note://带出表头的备注信息
+                if (Hawk.get(Config.Note + activityPager.getActivity(),"").equals("")){
+                    edNot.setText((String) event.postEvent);
+                    Hawk.put(Config.Note + activityPager.getActivity(), edNot.getText().toString());//保存客户数据
+                    activityPager.setNote(edNot == null ? "" : edNot.getText().toString());
                 }
                 break;
         }
@@ -186,7 +192,7 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
                 activityPager.setManStore(spStoreman.getDataNumber());
 //                activityPager.setManSale(spSaleman.getDataNumber());
                 activityPager.setDepartMent(spDepartmentSend.getDataNumber());
-                activityPager.setHuozhuOut(spOrgHuozhu.getDataObject());
+//                activityPager.setHuozhuOut(spOrgHuozhu.getDataObject());
 //                activityPager.setDepartMentBuy(spDepartmentSale.getDataNumber());
 //                Hawk.put(Config.OrderNo+activityPager.getActivity(),edClient.getText().toString());//保存业务单号
                 Hawk.put(Config.Note + activityPager.getActivity(), edNot.getText().toString());//保存业务单号

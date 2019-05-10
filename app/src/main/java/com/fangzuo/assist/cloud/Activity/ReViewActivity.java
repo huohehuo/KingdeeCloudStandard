@@ -103,7 +103,9 @@ public class ReViewActivity extends BaseActivity {
         Bundle extras = in.getExtras();
         activity = extras.getInt("activity");
         //当为产品入库时，初始化打印机并连接
-        if (activity == Config.ProductInStoreActivity||activity==Config.TbInActivity||activity==Config.DgInActivity||activity==Config.SimpleInActivity||activity==Config.GbInActivity||activity==Config.DhInActivity) {
+        if (activity == Config.ProductInStoreActivity||activity==Config.TbInActivity||activity==Config.DgInActivity
+                ||activity==Config.SimpleInActivity||activity==Config.GbInActivity||activity==Config.DhInActivity
+                ||activity==Config.DhIn2Activity||activity==Config.TbIn2Activity||activity==Config.TbIn3Activity) {
             zpSDK = new zpBluetoothPrinter(this);
             bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
             linkBluePrint();
@@ -499,7 +501,9 @@ public class ReViewActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         Lg.e("ReView：","OnPause");
-        if (activity==Config.ProductInStoreActivity||activity==Config.TbInActivity||activity==Config.DgInActivity||activity==Config.SimpleInActivity||activity==Config.GbInActivity||activity==Config.DhInActivity){
+        if (activity==Config.ProductInStoreActivity||activity==Config.TbInActivity||activity==Config.DgInActivity
+                ||activity==Config.SimpleInActivity||activity==Config.GbInActivity||activity==Config.DhInActivity
+                ||activity==Config.DhIn2Activity||activity==Config.TbIn2Activity||activity==Config.TbIn3Activity){
             try {
                 zpSDK.disconnect();
             }catch (Exception e){}

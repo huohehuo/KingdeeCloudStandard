@@ -46,6 +46,7 @@ public class SpinnerAuxSign extends RelativeLayout {
     public static final String Id = "id";
     public static final String Number = "number";
     public static final String TGP = "AuxSignSecCheckBean+";     //7
+    private boolean canLoad=true;
 
     public SpinnerAuxSign(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -84,10 +85,14 @@ public class SpinnerAuxSign extends RelativeLayout {
         mSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                AuxSignSecCheckBean unit = (AuxSignSecCheckBean) adapter.getItem(i);
-                AuxSignID = unit.FAUXPTYID;
-                AuxSignNumber = unit.FNUMBER;
-                Lg.e("控件内辅助单位选择：",unit);
+//                AuxSignSecCheckBean unit = (AuxSignSecCheckBean) adapter.getItem(i);
+                if (list.size()>0){
+                    AuxSignSecCheckBean unit = list.get(i);
+                    AuxSignID = unit.FAUXPTYID;
+                    AuxSignNumber = unit.FNUMBER;
+                    Lg.e("控件内辅助单位选择：",unit);
+                }
+
 //                    Log.e("AuxSignID", AuxSignID + "");
             }
 
@@ -136,6 +141,8 @@ public class SpinnerAuxSign extends RelativeLayout {
     //自动设置保存的值
     //type: 根据什么字段定位：number，id，name
     public void getData(final String productID,String autoStr) {
+        if (!canLoad)return;
+        canLoad = false;
         AuxSignID = "";
         AuxSignNumber = "";
         autoString = autoStr;
@@ -161,6 +168,7 @@ public class SpinnerAuxSign extends RelativeLayout {
                 if (null!=dBean.FISENABLE){
                     list.clear();
                     if ("0".equals(dBean.FISENABLE)){
+                        canLoad = true;
                         list.clear();
                         mSp.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
@@ -168,6 +176,7 @@ public class SpinnerAuxSign extends RelativeLayout {
                         getResultData(productID);
                     }
                 }else{
+                    canLoad = true;
                     list.clear();
                     mSp.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
@@ -176,6 +185,7 @@ public class SpinnerAuxSign extends RelativeLayout {
 
             @Override
             public void onError(Throwable e) {
+                canLoad = true;
                 super.onError(e);
             }
         });
@@ -227,12 +237,14 @@ public class SpinnerAuxSign extends RelativeLayout {
                 if (null != dBean && dBean.auxSignSecCheckBeans!=null && dBean.auxSignSecCheckBeans.size()>0){
                     dealAuto(dBean.auxSignSecCheckBeans);
                 }else{
+                    canLoad = true;
                     adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onError(Throwable e) {
+                canLoad = true;
                 super.onError(e);
             }
         });
@@ -249,9 +261,13 @@ public class SpinnerAuxSign extends RelativeLayout {
                         mSp.setSelection(i);
                     }
                 }
+                canLoad = true;
+            }else{
+                canLoad = true;
             }
 
         }else{
+            canLoad = true;
             autoString="";
             mSp.setAdapter(adapter);
             adapter.notifyDataSetChanged();

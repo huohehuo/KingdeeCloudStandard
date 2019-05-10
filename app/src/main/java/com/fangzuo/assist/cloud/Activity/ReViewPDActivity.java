@@ -13,14 +13,17 @@ import com.fangzuo.assist.cloud.ABase.BaseActivity;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.ReViewPDAdapter;
 import com.fangzuo.assist.cloud.Beans.BackData;
+import com.fangzuo.assist.cloud.Beans.BlueToothBean;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
+import com.fangzuo.assist.cloud.Beans.PrintHistory;
 import com.fangzuo.assist.cloud.Beans.PurchaseInStoreUploadBean;
 import com.fangzuo.assist.cloud.Dao.PushDownSub;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
 import com.fangzuo.assist.cloud.Dao.T_main;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
+import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
@@ -30,10 +33,12 @@ import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.databinding.ActivityReViewPdBinding;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
+import com.fangzuo.greendao.gen.PrintHistoryDao;
 import com.fangzuo.greendao.gen.PushDownSubDao;
 import com.fangzuo.greendao.gen.T_DetailDao;
 import com.fangzuo.greendao.gen.T_mainDao;
 import com.google.gson.Gson;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +46,7 @@ import java.util.TreeSet;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import zpSDK.zpSDK.zpBluetoothPrinter;
 
 public class ReViewPDActivity extends BaseActivity {
     ActivityReViewPdBinding binding;
@@ -51,7 +57,39 @@ public class ReViewPDActivity extends BaseActivity {
     private List<T_main> list_main;
     private ReViewPDAdapter adapter;
     private List<Boolean> isCheck;
+    private zpBluetoothPrinter zpSDK;
+    private BlueToothBean bean;
+    boolean isOkPrint=false;
 
+    @Override
+    protected void receiveEvent(ClassEvent event) {
+        switch (event.Msg) {
+            case EventBusInfoCode.Print_Check://回单失败
+                String msg = (String) event.postEvent;
+                if ("OK".equals(msg)){
+                    isOkPrint = true;
+                    Toast.showText(mContext,"打印机就绪");
+//                    binding.toolbar.tvRight.setText("打印机就绪");
+//                    binding.toolbar.tvRight.setTextColor(Color.BLACK);
+                }else{
+                    isOkPrint = false;
+                    Toast.showText(mContext,"连接打印机错误");
+//                    binding.toolbar.tvRight.setText("连接打印机错误");
+//                    binding.toolbar.tvRight.setTextColor(Color.RED);
+                }
+                LoadingUtil.dismiss();
+                break;
+            case EventBusInfoCode.Print_Out://打印
+                PrintHistory data = (PrintHistory) event.postEvent;
+                try {
+                    CommonUtil.doPrint(zpSDK,data);
+                } catch (Exception e) {
+//                    e.printStackTrace();
+                    LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
+                }
+                break;
+        }
+    }
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_re_view_pd);
@@ -66,6 +104,14 @@ public class ReViewPDActivity extends BaseActivity {
         fid = extras.getString("fid");
         Lg.e("得到数据："+activity);
         Lg.e("得到数据："+fid);
+        //当为产品入库时，初始化打印机并连接
+        if (activity == Config.PdBackMsg2SaleBackActivity) {
+            zpSDK = new zpBluetoothPrinter(this);
+            bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
+            linkBluePrint();
+        } else {
+            binding.tvPrint.setVisibility(View.GONE);
+        }
         initList();
     }
 
@@ -97,7 +143,7 @@ public class ReViewPDActivity extends BaseActivity {
         List<String> products = new ArrayList<>();
         products.clear();
         if (list.size() > 0) {
-            binding.tvCheckMain.setVisibility(View.GONE);
+//            binding.tvCheckMain.setVisibility(View.GONE);
             list_main = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
             if (products.size() == 0) {
                 products.add(list.get(0).FBarcode);
@@ -111,7 +157,7 @@ public class ReViewPDActivity extends BaseActivity {
             binding.productcategory.setText("已添加数量:" + products.size() + "个");
             binding.productnum.setText("物料总数为:" + num + "");
         } else {
-            binding.tvCheckMain.setVisibility(View.GONE);
+//            binding.tvCheckMain.setVisibility(View.GONE);
             binding.productcategory.setText("已添加数量:" + 0 + "个");
             binding.productnum.setText("物料总数为:" + 0 + "");
         }
@@ -131,25 +177,84 @@ public class ReViewPDActivity extends BaseActivity {
                 adapter.notifyDataSetChanged();
             }
         });
-        binding.tvCheckMain.setOnClickListener(new View.OnClickListener() {
+        binding.tvPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuilder builder = new StringBuilder();
-                    builder.append("客户名称:"+list_main.get(0).FCustomer + "\n");
-                    builder.append("客户ID:"+list_main.get(0).FCustomerID + "\n");
-                    builder.append("销售员ID:"+list_main.get(0).FPurchaserId + "\n");
-                    builder.append("销售组织ID:"+list_main.get(0).FStockOrgId + "\n");
-                    builder.append("发货组织ID:"+list_main.get(0).FPurchaseOrgId + "\n");
-                    builder.append("备注:"+list_main.get(0).FNot + "\n");
-                    builder.append("入库时间:"+list_main.get(0).FDate + "\n");
-                    LoadingUtil.showAlter(mContext,"表头数据:",builder.toString(),false);
+                if (!isOkPrint){
+                    LoadingUtil.showDialog(mContext,"正在重连打印机...");
+                    linkBluePrint();
+                }else{
+                    new AlertDialog.Builder(mContext)
+                            .setTitle("是否补打单据？")
+                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getAndPrintData();
+                                }
+                            })
+                            .create().show();
+                }
+//                startNewActivity(PrintHistoryActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
+
             }
         });
+//        binding.tvCheckMain.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                StringBuilder builder = new StringBuilder();
+//                    builder.append("客户名称:"+list_main.get(0).FCustomer + "\n");
+//                    builder.append("客户ID:"+list_main.get(0).FCustomerID + "\n");
+//                    builder.append("销售员ID:"+list_main.get(0).FPurchaserId + "\n");
+//                    builder.append("销售组织ID:"+list_main.get(0).FStockOrgId + "\n");
+//                    builder.append("发货组织ID:"+list_main.get(0).FPurchaseOrgId + "\n");
+//                    builder.append("备注:"+list_main.get(0).FNot + "\n");
+//                    builder.append("入库时间:"+list_main.get(0).FDate + "\n");
+//                    LoadingUtil.showAlter(mContext,"表头数据:",builder.toString(),false);
+//            }
+//        });
     }
 
-    @Override
-    protected void OnReceive(String code) {
+    //连接蓝牙打印机
+    private void linkBluePrint() {
+//        LoadingUtil.showDialog(mContext,"正在连接打印机...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (bean.address.equals("")) {
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
+                } else {
+                    if (!zpSDK.connect(bean.address)) {
+                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
+                    } else {
+                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "OK"));
+                    }
+                }
+            }
+        }).start();
+    }
 
+    //获取列表相对应的打印数据
+    private void getAndPrintData() {
+        List<PrintHistory> printHistoryList = new ArrayList<>();
+        //收集列表对应的打印数据
+        for (int j = 0; j < isCheck.size(); j++) {
+            if (isCheck.get(j)) {
+                T_Detail t_detail = t_detailDao.queryBuilder().where(
+                        T_DetailDao.Properties.FIndex.eq(list.get(j).FIndex)
+                ).build().unique();
+                PrintHistoryDao printHistoryDao = daoSession.getPrintHistoryDao();
+                printHistoryList.add(printHistoryDao.queryBuilder().where(
+                        PrintHistoryDao.Properties.FBarCode.eq(t_detail.FBarcode)).build().unique());
+            }
+        }
+        if (printHistoryList.size()<=0){
+            Toast.showText(mContext,"请选择需要打印的单据");
+            return;
+        }
+        //遍历逐个打印
+        for (PrintHistory bean:printHistoryList) {
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Out, bean));
+        }
     }
 
     private PurchaseInStoreUploadBean pBean;
@@ -344,6 +449,29 @@ public class ReViewPDActivity extends BaseActivity {
         initList();
 
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Lg.e("ReView：","OnPause");
+        if (activity==Config.PdBackMsg2SaleBackActivity){
+            try {
+                zpSDK.disconnect();
+            }catch (Exception e){}
+        }
+    }
+
+
+    @Override
+    protected void OnReceive(String code) {
+
+    }
+
+    @Override
+    protected boolean isRegisterEventBus() {
+        return true;
+    }
+
 
 //    private double getUnitrateSub(PushDownSub pushDownSub) {
 //        UnitDao unitDao = daoSession.getUnitDao();

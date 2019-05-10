@@ -258,7 +258,7 @@ public class ScanManager extends CaptureManager {
                 // permission was granted
                 barcodeView.resume();
             } else {
-                // TODO: display better error message.
+                // : display better error message.
                 displayFrameworkBugMessageAndExit();
             }
         }

@@ -3,12 +3,14 @@ package com.fangzuo.assist.cloud.Activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -47,10 +49,14 @@ import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
 import com.fangzuo.assist.cloud.widget.SpinnerUser;
 import com.fangzuo.greendao.gen.UserDao;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.orhanobut.hawk.Hawk;
 
 import org.json.JSONArray;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -193,7 +199,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         if (!"".equals(Hawk.get(Config.Apk_Version, ""))) {
             if (Double.parseDouble(Hawk.get(Config.Apk_Version, "0")) > Double.parseDouble(Info.TestNo)) {
                 tvVersTip.setVisibility(View.VISIBLE);
-                tvVersTip.setText("有新版本"+Hawk.get(Config.Apk_Version,"0")+"，请于设置页面进行更新");
+                tvVersTip.setText("有新版本"+Hawk.get(Config.Apk_Version,"0")+"，点击这里进行更新");
             }else{
                 tvVersTip.setVisibility(View.GONE);
             }
@@ -293,6 +299,20 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 
     @Override
     public void initListener() {
+        tvVersTip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(mContext)
+                        .setTitle("是否更新程序")
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DownLoad(Config.Apk_Url);
+                            }
+                        })
+                        .create().show();
+            }
+        });
         isRemPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -387,6 +407,8 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 //                    BackDataLogin bean = JsonCreater.gson.fromJson(string, BackDataLogin.class);
                     if (bean.getLoginResultType() == 1 || bean.getLoginResultType() == -5) {
                         ShareUtil.getInstance(mContext).setUserName(userName);
+                        Hawk.put(Info.user_name, userName);
+                        Hawk.put(Info.user_pwd, mEtPassword.getText().toString());
                         Hawk.put(Info.user_org, bean.getContext().getCurrentOrganizationInfo().getName());
                         Hawk.put(Info.user_id, bean.getContext().getUserId() + "");
                         Hawk.put(Info.user_data, bean.getContext().getDataCenterName() + "");
@@ -418,6 +440,77 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 super.onError(e);
             }
         });
+    }
+
+    private ProgressDialog pDialog;
+    private void DownLoad(String downLoadURL) {
+        LoadingUtil.dismiss();
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pDialog.setTitle("下载中,请耐心等待...");
+            pDialog.setCanceledOnTouchOutside(false);
+            pDialog.show();
+            String target = Environment.getExternalStorageDirectory()
+                    + "/NewApp"+getTimeLong(false)+".apk";
+            HttpUtils utils = new HttpUtils();
+            utils.download(downLoadURL, target, new RequestCallBack<File>() {
+                @Override
+                public void onLoading(long total, long current,
+                                      boolean isUploading) {
+                    super.onLoading(total, current, isUploading);
+                    System.out.println("下载进度:" + current + "/" + total);
+                    pDialog.setProgress((int) (current*100/total));
+                }
+
+                @Override
+                public void onSuccess(ResponseInfo<File> arg0) {
+                    pDialog.dismiss();
+                    Lg.e("下载的文件数据："+arg0.toString());
+                    Lg.e("下载的文件数据："+arg0.result);
+                    System.out.println("下载完成"+arg0.result);
+                    try{
+                        CommonUtil.installApk(mContext,arg0.result+"");
+//                        Intent intent = new Intent(Intent.ACTION_VIEW);
+//                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+//                        intent.setDataAndType(Uri.fromFile(arg0.result),
+//                                "application/vnd.android.package-archive");
+//                        startActivityForResult(intent, 0);
+                    }catch (Exception e){
+                        try{
+                            StringBuilder builder = new StringBuilder();
+                            builder.append("请先退出本软件\n");
+                            builder.append("进入PDA软件主页\n");
+                            builder.append("选择文件管理器\n");
+                            builder.append("找到文件NewApp\n");
+                            builder.append("长按变色点击右下角重命名\n删去后面的数字\n");
+                            builder.append("变成文件名：NewApp.apk\n");
+                            builder.append("点击安装\n");
+                            AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+                            ab.setTitle("下载成功!\n请按操作重新安装APK");
+                            ab.setMessage(builder.toString());
+                            ab.setPositiveButton("确定", null);
+                            ab.create().show();
+                        }catch (Exception e1){
+
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onFailure(com.lidroid.xutils.exception.HttpException arg0, String arg1) {
+                    pDialog.dismiss();
+                    Toast.showText(mContext, "下载失败");
+                }
+            });
+        } else {
+            pDialog.dismiss();
+            Toast.showText(mContext, "正在安装");
+
+        }
     }
 
     //权限获取-------------------------------------------------------------

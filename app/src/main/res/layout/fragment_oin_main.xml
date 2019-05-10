@@ -61,6 +61,7 @@
                     android:textSize="20sp" />
                 <LinearLayout
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -74,14 +75,14 @@
                         android:gravity="center"
                         android:text="供应商:"
                         android:textColor="@android:color/black"
-                        android:textSize="15sp" />
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/ed_supplier"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="3.5"
-                        android:background="@android:drawable/edit_text"
+                        android:background="@drawable/bg_edittext_selector"
                         android:gravity="center"
                         android:selectAllOnFocus="true"
                         android:singleLine="true" />
@@ -115,6 +116,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     app:Uspinner_title="请选择部门"/>
+                <include
+                    layout="@layout/line_heng"/>
                 <TextView
                     android:text="仓库:"
                     android:textSize="22sp"
@@ -127,6 +130,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     app:Uspinner_title="请选择仓库"/>
+                <include
+                    layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
                     android:id="@+id/sp_org_in"
                     android:layout_width="match_parent"
@@ -134,15 +139,66 @@
                     app:manspinner_name="库存组织:"
                     app:manspinner_title="请选择库存组织"
                     app:manspinner_size="@dimen/sp_title_size" />
+                <include
+                    layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerCommon
-                    android:visibility="gone"
                     android:id="@+id/sp_hz_type"
                     app:manspinner_name="货主类型:"
                     app:manspinner_title="请选择货主类型"
                     app:manspinner_size="@dimen/sp_title_size"
+                    android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+                <include
+                    layout="@layout/line_heng"/>
+                <LinearLayout
+                    android:id="@+id/ll_supplier_hz"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="6">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:gravity="center"
+                        android:text="供应商:"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/ed_supplier_hz"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="3.5"
+                        android:background="@drawable/bg_edittext_selector"
+                        android:gravity="center"
+                        android:selectAllOnFocus="true"
+                        android:singleLine="true" />
+
+                    <RelativeLayout
+                        android:id="@+id/search_supplier_hz"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/search" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+                <include
+                    layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
+                    android:visibility="gone"
                     android:id="@+id/sp_org_create"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

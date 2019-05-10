@@ -73,7 +73,7 @@ public class FragmentGbInMain extends BaseFragment {
             case EventBusInfoCode.UpdataStorage:
                 String id = (String) event.postEvent;
                 Lg.e("更改仓库数据"+id);
-                spWhichStorage.setAuto(id, activityPager.getOrgOut());
+                spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_gbin),id, activityPager.getOrgOut());
                 break;
             case EventBusInfoCode.Lock_Main://是否锁住表头
                 String lock = (String) event.postEvent;
@@ -156,8 +156,8 @@ public class FragmentGbInMain extends BaseFragment {
         spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_pris_gbin), activityPager.getOrgOut(),Hawk.get(getString(R.string.spOrgCreate_pris_gbin), ""));
 //        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_pris_gbin), Hawk.get(getString(R.string.spOrgHuozhu_pris_gbin), ""));
         spStoreman.setAuto(getString(R.string.spStoreman_pris_gbin), Hawk.get(getString(R.string.spStoreman_pris_gbin),""), activityPager.getOrgOut());
-        spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pris_gbin), Hawk.get(getString(R.string.spDepartmentGet_pris_gbin),""), activityPager.getOrgOut(), activityPager.getActivity());
-        spWhichStorage.setAuto(Hawk.get(getString(R.string.spWhichStorage_pris_gbin),""), activityPager.getOrgOut());
+        spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pris_gbin), Hawk.get(getString(R.string.spDepartmentGet_pris_gbin),""), activityPager.getOrgIn(), activityPager.getActivity());
+        spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_gbin),Hawk.get(getString(R.string.spWhichStorage_pris_gbin),""), activityPager.getOrgOut());
 //        binding.spOrgIn.setEnable(false);
 //        spOrgCreate.setEnable(false);
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
@@ -215,8 +215,7 @@ public class FragmentGbInMain extends BaseFragment {
                 Hawk.put(getString(R.string.spOrgIn_pris_gbin),activityPager.getOrgOut().FName);
                 spStoreman.setAuto(getString(R.string.spStoreMan_pis), Hawk.get(getString(R.string.spStoreman_pris_gbin),""), activityPager.getOrgOut());
                 spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_pris_gbin),activityPager.getOrgOut(), "");
-                spWhichStorage.setAuto(Hawk.get(getString(R.string.spWhichStorage_pris_gbin),""), activityPager.getOrgOut());
-                spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pris_gbin), Hawk.get(getString(R.string.spDepartmentGet_pris_gbin),""), activityPager.getOrgOut(), activityPager.getActivity());
+                spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_gbin),Hawk.get(getString(R.string.spWhichStorage_pris_gbin),""), activityPager.getOrgOut());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
 
             }
@@ -225,6 +224,7 @@ public class FragmentGbInMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgIn((Org) spOrgCreate.getAdapter().getItem(i));
+                spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pris_gbin), Hawk.get(getString(R.string.spDepartmentGet_pris_gbin),""), activityPager.getOrgIn(), activityPager.getActivity());
                 Hawk.put(getString(R.string.spOrgCreate_pris_gbin),activityPager.getOrgIn().FName);
             }
         });

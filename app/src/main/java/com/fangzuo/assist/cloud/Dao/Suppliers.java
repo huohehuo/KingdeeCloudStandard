@@ -13,6 +13,8 @@ public class Suppliers {
     public String FName;
     public String FNumber;
     public String FOrg;
+    public String FNote;
+    public String FMASTERID;
 
     public String FItemClassID;
     public String FParentID;
@@ -21,74 +23,20 @@ public class Suppliers {
     public String FAddress;
     public String FPhone;
     public String FEmail;
-    public String getFEmail() {
-        return this.FEmail;
+    public Suppliers(String id){
+        this.FItemID=id;
     }
-    public void setFEmail(String FEmail) {
-        this.FEmail = FEmail;
-    }
-    public String getFPhone() {
-        return this.FPhone;
-    }
-    public void setFPhone(String FPhone) {
-        this.FPhone = FPhone;
-    }
-    public String getFAddress() {
-        return this.FAddress;
-    }
-    public void setFAddress(String FAddress) {
-        this.FAddress = FAddress;
-    }
-    public String getFName() {
-        return this.FName;
-    }
-    public void setFName(String FName) {
-        this.FName = FName;
-    }
-    public String getFDetail() {
-        return this.FDetail;
-    }
-    public void setFDetail(String FDetail) {
-        this.FDetail = FDetail;
-    }
-    public String getFLevel() {
-        return this.FLevel;
-    }
-    public void setFLevel(String FLevel) {
-        this.FLevel = FLevel;
-    }
-    public String getFParentID() {
-        return this.FParentID;
-    }
-    public void setFParentID(String FParentID) {
-        this.FParentID = FParentID;
-    }
-    public String getFNumber() {
-        return this.FNumber;
-    }
-    public void setFNumber(String FNumber) {
-        this.FNumber = FNumber;
-    }
-    public String getFItemClassID() {
-        return this.FItemClassID;
-    }
-    public void setFItemClassID(String FItemClassID) {
-        this.FItemClassID = FItemClassID;
-    }
-    public String getFItemID() {
-        return this.FItemID;
-    }
-    public void setFItemID(String FItemID) {
-        this.FItemID = FItemID;
-    }
-    @Generated(hash = 1559650548)
+    @Generated(hash = 171832798)
     public Suppliers(String FItemID, String FName, String FNumber, String FOrg,
-            String FItemClassID, String FParentID, String FLevel, String FDetail,
-            String FAddress, String FPhone, String FEmail) {
+            String FNote, String FMASTERID, String FItemClassID, String FParentID,
+            String FLevel, String FDetail, String FAddress, String FPhone,
+            String FEmail) {
         this.FItemID = FItemID;
         this.FName = FName;
         this.FNumber = FNumber;
         this.FOrg = FOrg;
+        this.FNote = FNote;
+        this.FMASTERID = FMASTERID;
         this.FItemClassID = FItemClassID;
         this.FParentID = FParentID;
         this.FLevel = FLevel;
@@ -100,14 +48,23 @@ public class Suppliers {
     @Generated(hash = 1907968983)
     public Suppliers() {
     }
-
-    @Override
-    public String toString() {
-        return "Suppliers{" +
-                "FItemID='" + FItemID + '\'' +
-                ", FName='" + FName + '\'' +
-                ", FNumber='" + FNumber + '\'' +
-                '}';
+    public String getFItemID() {
+        return this.FItemID;
+    }
+    public void setFItemID(String FItemID) {
+        this.FItemID = FItemID;
+    }
+    public String getFName() {
+        return this.FName;
+    }
+    public void setFName(String FName) {
+        this.FName = FName;
+    }
+    public String getFNumber() {
+        return this.FNumber;
+    }
+    public void setFNumber(String FNumber) {
+        this.FNumber = FNumber;
     }
     public String getFOrg() {
         return this.FOrg;
@@ -115,4 +72,59 @@ public class Suppliers {
     public void setFOrg(String FOrg) {
         this.FOrg = FOrg;
     }
+    public String getFNote() {
+        return this.FNote;
+    }
+    public void setFNote(String FNote) {
+        this.FNote = FNote;
+    }
+    public String getFMASTERID() {
+        return this.FMASTERID;
+    }
+    public void setFMASTERID(String FMASTERID) {
+        this.FMASTERID = FMASTERID;
+    }
+    public String getFItemClassID() {
+        return this.FItemClassID;
+    }
+    public void setFItemClassID(String FItemClassID) {
+        this.FItemClassID = FItemClassID;
+    }
+    public String getFParentID() {
+        return this.FParentID;
+    }
+    public void setFParentID(String FParentID) {
+        this.FParentID = FParentID;
+    }
+    public String getFLevel() {
+        return this.FLevel;
+    }
+    public void setFLevel(String FLevel) {
+        this.FLevel = FLevel;
+    }
+    public String getFDetail() {
+        return this.FDetail;
+    }
+    public void setFDetail(String FDetail) {
+        this.FDetail = FDetail;
+    }
+    public String getFAddress() {
+        return this.FAddress;
+    }
+    public void setFAddress(String FAddress) {
+        this.FAddress = FAddress;
+    }
+    public String getFPhone() {
+        return this.FPhone;
+    }
+    public void setFPhone(String FPhone) {
+        this.FPhone = FPhone;
+    }
+    public String getFEmail() {
+        return this.FEmail;
+    }
+    public void setFEmail(String FEmail) {
+        this.FEmail = FEmail;
+    }
+
 }

@@ -100,6 +100,7 @@ public class ProductSearchActivity extends BaseActivity {
         Log.e("searchString", searchString);
         if (where == Info.SEARCHPRODUCT) title.setText("查询结果(物料)");
         if (where == Info.SEARCHSUPPLIER) title.setText("查询结果(供应商)");
+        if (where == Info.SearchSupplier) title.setText("查询结果(供应商)");
         if (where == Info.SEARCHCLIENT) title.setText("查询结果(客户)");
         if (where == Info.SEARCHJH) title.setText("查询结果(交货单位)");
 
@@ -207,7 +208,7 @@ public class ProductSearchActivity extends BaseActivity {
 //            }
 
             //供应商
-        } else if (where == Info.SEARCHSUPPLIER) {
+        } else if (where == Info.SEARCHSUPPLIER || where == Info.SearchSupplier) {
             model.setText("编号");
             name.setText("名称");
             if (BasicShareUtil.getInstance(mContext).getIsOL()) {
@@ -372,6 +373,9 @@ public class ProductSearchActivity extends BaseActivity {
                 } else if (where == Info.SEARCHSUPPLIER) {
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Supplier,itemAllSupplier.get(i)));
                     onBackPressed();
+                } else if (where == Info.SearchSupplier) {
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Supplier_Hz,itemAllSupplier.get(i)));
+                    onBackPressed();
                 } else if (where == Info.SEARCHCLIENT) {
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Client,itemAllClient.get(i)));
                     onBackPressed();
@@ -410,12 +414,15 @@ public class ProductSearchActivity extends BaseActivity {
             case Config.TbInActivity://挑板入库
             case Config.GbInActivity://改版入库
             case Config.DhInActivity://到货入库
+            case Config.DhIn2Activity://到货入库
             case Config.SimpleInActivity://产品入库
                 s2Product.FIsProduce="1";
                 FIsProduce="1";
                 break;
             case Config.ProductGetActivity://生产领料
             case Config.TbGetActivity://挑板领料
+            case Config.TbGet2Activity://挑板领料
+            case Config.TbGet3Activity://挑板领料
             case Config.GbGetActivity://改板领料
                 s2Product.FIsInventory="1";
                 FIsInventory="1";

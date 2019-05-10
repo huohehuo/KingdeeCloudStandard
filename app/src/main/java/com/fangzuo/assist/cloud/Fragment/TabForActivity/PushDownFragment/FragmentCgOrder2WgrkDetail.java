@@ -127,7 +127,8 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
     @BindView(R.id.ed_purchase_no)
     EditText edPurchaseNo;
     @BindView(R.id.lv_pushsub)
-    ListView lvPushsub;@BindView(R.id.sp_unit_jiben)
+    ListView lvPushsub;
+    @BindView(R.id.sp_unit_jiben)
     SpinnerUnit spUnitJiben;
     @BindView(R.id.ed_storenum)
     TextView edStorenum;
@@ -303,12 +304,12 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
                     Toast.showText(mContext, codeCheckBackDataBean.FTip);
                 }
                 break;
-//            case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
-//                if (null != activityPager) {
+            case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
+                if (null != activityPager) {
 ////                    spUnit.setAuto("", SpinnerUnit.Id);
-//                    spWhichStorage.setAuto("", mainStoreOrg);
-//                }
-//                break;
+                    spWhichStorage.setAuto("","",activityPager.getOrgOut());
+                }
+                break;
             case EventBusInfoCode.Print_Check://检测打印机连接状态
                 String msg = (String) event.postEvent;
                 LoadingUtil.dismiss();
@@ -390,8 +391,8 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
     protected void initData() {
         s2Product = new SearchBean.S2Product();
         listOrder = new ArrayList<>();
-        spAuxsign.setEnabled(false);
-        spActualmodel.setEnabled(false);
+//        spAuxsign.setEnabled(false);
+//        spActualmodel.setEnabled(false);
 
         container = new ArrayList<>();
         fidcontainer = activityPager.getIntent().getExtras().getStringArrayList("fid");
@@ -412,7 +413,6 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
 //            Lg.e("得到表头解析数据:",mainStoreOrg);
 //            activityPager.setOrgOut(mainStoreOrg);
 //            mainBuyOrg = activityPager.getOrgOut();
-            spWhichStorage.setAuto("",mainBuyOrg);
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
             if ("".equals(pushDownMain.FSupplyID==null?"":pushDownMain.FSupplyID)){
                 LoadingUtil.showAlter(mContext,"注意","表头明细的客户数据带出失败，请重试...",false);
@@ -608,7 +608,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
         spUnitStore.setAuto(product.FStoreUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
-        spWhichStorage.setAuto(autoStorage, mainBuyOrg);
+        spWhichStorage.setAuto("",autoStorage, activityPager.getOrgOut());
         unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
 //        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
@@ -619,9 +619,6 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
 //            edPihao.setText("");
             isOpenBatch = false;
         }
-//        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut());
-
-
         spAuxsign.getData(product.FMASTERID, "常规");
         spActualmodel.getData(product.FMASTERID, "");
 
@@ -648,7 +645,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
             return false;
         }
         if (mainBuyOrg.FNumber.equals("")) {
-            Toast.showText(mContext, "发货组织不能为空");
+            Toast.showText(mContext, "采购组织不能为空");
             MediaPlayer.getInstance(mContext).error();
             return false;
         }
@@ -695,7 +692,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
         LoadingUtil.showDialog(mContext, "正在获取条码数据...");
         String pdata = product.FMaterialid + "|" + unit.FMeasureUnitID + "|" + edNum.getText().toString().trim()
                 + "|" + spActualmodel.getDataNumber() + "|" + spAuxsign.getDataNumber() + "|" + edPurchaseNo.getText().toString()
-                + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + storage.FNumber + "|" + activityPager.getOrgIn(0);
+                + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + storage.FNumber + "|" + activityPager.getOrgOut(0);
         App.getRService().doIOAction(WebApi.PrintData, pdata, new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
@@ -781,7 +778,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
             main.FID = pushDownSub.FID;
             main.FIndex = timesecond;
             main.FBillNo = pushDownMain.FBillNo;
-            main.setData(Info.getType(activity), mainBuyOrg.FNumber, mainBuyOrg.FNumber, mainBuyOrg.FNumber);
+            main.setData(Info.getType(activity), activityPager.getOrgOut(0), mainBuyOrg.FNumber, mainBuyOrg.FNumber);
             main.FDepartmentNumber = activityPager.getDepartMent();
 //            main.FPurchaseDeptId = activityPager.getDepartMentBuy();
 //            main.FPurchaserId = activityPager.getManSale();

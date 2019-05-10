@@ -150,7 +150,7 @@ public class FragmentCgOrder2WgrkMain extends BaseFragment {
         tvDate.setText(CommonUtil.getTime(true));
         activityPager.setDate(tvDate.getText().toString());
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-//        spOrgBuy.setAutoSelection(getString(R.string.spOrgBuy_cg2wg), "");
+        spOrgBuy.setAutoSelection(getString(R.string.spOrgBuy_cg2wg), "深圳亿森众合科技有限公司");
 //        spDepartmentSend.setAuto(getString(R.string.spDepartmentBuy_cg2wg), Hawk.get(getString(R.string.spDepartmentBuy_cg2wg), ""), activityPager.getOrgOut(), activityPager.getActivity());
 //        spBuyer.setAuto(getString(R.string.spBuyer_cg2wg), Hawk.get(getString(R.string.spBuyer_cg2wg), ""), activityPager.getOrgOut());
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
@@ -203,17 +203,17 @@ public class FragmentCgOrder2WgrkMain extends BaseFragment {
 //            }
 //        });
 //
-//        spOrgBuy.setOnItemSelectedListener(new ItemListener() {
-//            @Override
-//            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
-//                activityPager.setOrgOut((Org) spOrgBuy.getAdapter().getItem(i));
-//                Hawk.put(getString(R.string.spOrgBuy_cg2wg), activityPager.getOrgOut().FName);
+        spOrgBuy.setOnItemSelectedListener(new ItemListener() {
+            @Override
+            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
+                activityPager.setOrgOut((Org) spOrgBuy.getAdapter().getItem(i));
+                Hawk.put(getString(R.string.spOrgBuy_cg2wg), activityPager.getOrgOut().FName);
 //                spDepartmentSend.setAuto(getString(R.string.spDepartmentBuy_cg2wg), Hawk.get(getString(R.string.spDepartmentBuy_cg2wg), ""), activityPager.getOrgOut(), activityPager.getActivity());
 //                spBuyer.setAuto(getString(R.string.spBuyer_cg2wg), Hawk.get(getString(R.string.spBuyer_cg2wg), ""), activityPager.getOrgOut());
-//                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
-//
-//            }
-//        });
+                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
+
+            }
+        });
         cbIsStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

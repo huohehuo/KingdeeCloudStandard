@@ -2,9 +2,15 @@ package com.fangzuo.assist.cloud.Utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
@@ -37,7 +43,7 @@ public class CommonUtil {
             zpSDK.pageSetup(668, 973);
             zpSDK.drawText(0, 5, "______________________________________________", 2, 0, 0, false, false);
 
-            zpSDK.drawText(105, 50, "荣源木业物料标签", size, 0, 1, false, false);
+            zpSDK.drawText(210, 50, "物料标签", size, 0, 1, false, false);
             zpSDK.drawText(0, 90, "______________________________________________", 2, 0, 0, false, false);
             zpSDK.drawText(10, 120, "货主：", size, 0, 0, false, false);
             zpSDK.drawText(160, 124, bean.FHuoquan==null?"":bean.FHuoquan,size2, 0, 0, false, false);
@@ -60,7 +66,8 @@ public class CommonUtil {
             zpSDK.drawText(300, 560, "仓位：",size2, 0, 0, false, false);
             zpSDK.drawText(380, 560, bean.FWaveHouse==null?"":bean.FWaveHouse,size2, 0, 0, false, false);
             zpSDK.drawText(300, 640, "录入：",size2, 0, 0, false, false);
-            zpSDK.drawText(380, 640, bean.FSaveIn==null?"":bean.FSaveIn,size2, 0, 0, false, false);
+//            zpSDK.drawText(380, 640, bean.FSaveIn==null?"":bean.FSaveIn,size2, 0, 0, false, false);
+            zpSDK.drawText(380, 640, Hawk.get(Info.user_name,""),size2, 0, 0, false, false);
             zpSDK.drawText(300, 720, "审核：",size2, 0, 0, false, false);
             zpSDK.drawText(380, 720, bean.FCheck==null?"":bean.FCheck,size2, 0, 0, false, false);
             zpSDK.drawText(300, 790, "日期：",size2, 0, 0, false, false);
@@ -228,7 +235,12 @@ public class CommonUtil {
         String str = format.format(curDate);
         return str;
     }
-
+    public static String getTime2Fen() {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+        Date curDate = new Date();
+        String str = format.format(curDate);
+        return str;
+    }
     public static String getTimeLong(boolean b) {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(b ? "yyyy-MM-dd-HH-mm-ss" : "yyyyMMddHHmmss");
         Date curDate = new Date();
@@ -245,6 +257,38 @@ public class CommonUtil {
             return false;
         }
     }
+
+    //更新软件
+    public static void installApk(Context context, String apkPath) {
+        if (context == null || TextUtils.isEmpty(apkPath)) {
+            return;
+        }
+        Lg.e("获得文件路径："+apkPath);
+
+        File file = new File(apkPath);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        //判读版本是否在7.0以上
+        if (Build.VERSION.SDK_INT >= 24) {
+            Lg.e(">=24时");
+//            Log.v(TAG,"7.0以上，正在安装apk...");
+            //provider authorities
+            Uri apkUri = FileProvider.getUriForFile(context,
+                    "com.fangzuo.assist.cloud.provider",
+//                    BuildConfig.APPLICATION_ID + ".provider",
+                    file);
+//            Uri apkUri = FileProvider.getUriForFile(context, "com.fangzuo.assist.fileprovider", file);
+            //Granting Temporary Permissions to a URI
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+        } else {
+            Lg.e("<24时");
+//            Log.v(TAG,"7.0以下，正在安装apk...");
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        }
+        context.startActivity(intent);
+    }
+
 
     //是否开启库存管理
     public static boolean isAllowFStore(String string) {

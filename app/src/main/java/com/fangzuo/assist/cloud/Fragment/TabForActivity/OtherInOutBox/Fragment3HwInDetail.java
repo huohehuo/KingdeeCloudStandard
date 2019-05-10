@@ -627,7 +627,7 @@ public class Fragment3HwInDetail extends BaseFragment {
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
             main.FOrderId = ordercode;
             main.FIndex = timesecond;
-            main.setData(Info.getType(activity), activityPager.getOrgOut(0), activityPager.getOrgIn(0), activityPager.getOrgIn(0));
+            main.setDataForOtherIn(Info.getType(activity),activityPager.getOrgOut(0),activityPager.getDBType(),activityPager.getOrgIn(0));
             main.FDepartmentNumber = activityPager.getDepartMent();
 //            main.FPurchaseDeptId = spDepartmentBuy.getDataNumber();
 //            main.FPurchaserId = spBuyer.getDataNumber();

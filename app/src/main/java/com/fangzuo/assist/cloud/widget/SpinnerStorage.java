@@ -200,11 +200,59 @@ public class SpinnerStorage extends RelativeLayout {
             }
         }
     }
-
+    //弃用
     public void setAuto(String autoStr, Org org) {
         Id="";
         Name="";
         autoString = autoStr;
+        autoOrg = org==null?"":org.FOrgID;
+        mTitleTv.setText("");
+        final List<Storage> listTemp = getLocData(autoOrg);
+        dealAuto(listTemp, false);
+
+        ArrayList<Integer> choose = new ArrayList<>();
+        choose.add(6);
+        String json = JsonCreater.DownLoadData(
+                share.getDatabaseIp(),
+                share.getDatabasePort(),
+                share.getDataBaseUser(),
+                share.getDataBasePass(),
+                share.getDataBase(),
+                share.getVersion(),
+                choose
+        );
+        App.getRService().downloadData(json, new MySubscribe<CommonResponse>() {
+            @Override
+            public void onNext(CommonResponse commonResponse) {
+                DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                StorageDao yuandanTypeDao = daoSession.getStorageDao();
+                yuandanTypeDao.deleteAll();
+                yuandanTypeDao.insertOrReplaceInTx(dBean.storage);
+                yuandanTypeDao.detachAll();
+                if (dBean.storage.size() > 0 && container.size()<=0){
+                    dealAuto(dBean.storage,true);
+//                    container.addAll(dBean.storage);
+//                    adapter.notifyDataSetChanged();
+//                    setAutoSelection(saveKeyString,autoString);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+//                    LoadingUtil.dismiss();
+//                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Updata_Error,e.toString()));
+            }
+        });
+
+    }
+
+    public void setAuto(String key,String autoStr, Org org) {
+        Id="";
+        Name="";
+        autoString = autoStr;
+        if ("".equals(autoStr)||"0".equals(autoStr)){
+            autoString = Hawk.get(key,"");
+        }
         autoOrg = org==null?"":org.FOrgID;
         mTitleTv.setText("");
         final List<Storage> listTemp = getLocData(autoOrg);

@@ -10,9 +10,9 @@ import org.json.JSONArray;
  */
 
 public class Info {
-//    public static final String DATABASESETTING = "K3DBConfiger201811123395555";//数据库名称
-    public static final String DATABASESETTING = "K3DBConfigerRY";
-    public static final String TestNo = "5.9";
+    public static final String DATABASESETTING = "K3DBConfiger201811123395555";//数据库名称
+//    public static final String DATABASESETTING = "K3DBConfigerRY";
+    public static final String TestNo = "6.11";
     public static final int RegisterNo = 155;
     public static final int SEARCHFORRESULT = 9998;
     public static final int SEARCHFORRESULTPRODUCT = 9997;
@@ -20,6 +20,7 @@ public class Info {
     public static final int SEARCHFORRESULTJH = 9996;
     public static final int SEARCHPRODUCT = 7777;
     public static final int SEARCHSUPPLIER = 7778;
+    public static final int SearchSupplier = 7780;
     public static final int SEARCHCLIENT = 7779;
     public static final int SEARCHJH = 7770;
 
@@ -33,6 +34,8 @@ public class Info {
 
     public static final int format=1;
     public static final String useragent="ApiClient";
+    public static final String user_name="user_name";//登录时获取到的用户名称
+    public static final String user_pwd="user_pwd";//登录时获取到的用户密码
     public static final String user_org="user_org";//登录时获取到的组织名称
     public static final String user_id="user_id";//登录时获取到的组织名称
     public static final String user_data="user_data";//登录时获取到的数据中心
@@ -89,13 +92,18 @@ public class Info {
                 break;
             case Config.ProductInStoreActivity://产品入库
             case Config.TbInActivity://挑板入库
+            case Config.TbIn2Activity://挑板入库
+            case Config.TbIn3Activity://挑板入库
             case Config.GbInActivity://改版入库
             case Config.DhInActivity://到货入库
+            case Config.DhIn2Activity://到货入库
             case Config.SimpleInActivity://产品入库
                 backString=FormID_ProductIS;
                 break;
             case Config.ProductGetActivity://生产领料
             case Config.TbGetActivity://挑板领料
+            case Config.TbGet2Activity://挑板领料
+            case Config.TbGet3Activity://挑板领料
             case Config.GbGetActivity://改板领料
                 backString=FormID_productGet;
                 break;
@@ -134,6 +142,7 @@ public class Info {
                 backString=FormID_PD;
                 break;
             case Config.DBActivity://调拨单
+            case Config.DB2Activity://调拨单
                 backString=FormID_DB;
                 break;
 
@@ -151,13 +160,18 @@ public class Info {
                 break;
             case Config.ProductInStoreActivity://产品入库
             case Config.TbInActivity://挑板入库
+            case Config.TbIn2Activity://挑板入库
+            case Config.TbIn3Activity://挑板入库
             case Config.GbInActivity://改版入库
             case Config.DhInActivity://到货入库
+            case Config.DhIn2Activity://到货入库
             case Config.SimpleInActivity://产品入库
                 backString=BT_ProductIS;
                 break;
             case Config.ProductGetActivity://生产领料
             case Config.TbGetActivity://挑板领料
+            case Config.TbGet2Activity://挑板领料
+            case Config.TbGet3Activity://挑板领料
             case Config.GbGetActivity://改板领料
                 backString=BT_ProductGet;
                 break;
@@ -196,6 +210,7 @@ public class Info {
                 backString=BT_PD;
                 break;
             case Config.DBActivity://调拨单
+            case Config.DB2Activity://调拨单
                 backString=BT_DB;
                 break;
 

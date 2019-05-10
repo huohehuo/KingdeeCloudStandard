@@ -1,5 +1,7 @@
 package com.fangzuo.assist.cloud.Utils;
 
+import com.fangzuo.assist.cloud.Activity.Crash.App;
+
 import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,5 +40,30 @@ public class MathUtil {
     public static double D2save2(Double d){
         return Double.parseDouble(String.format("%.2f", d));
     }
+
+    //去掉末尾为.0的数
+    public static String cutZero(String num){
+        String string;
+        if (num.endsWith(".0")){
+            Lg.e("有0");
+//            Lg.e("去掉0",string.substring(0,string.length()-2));
+            string = num.substring(0,num.length()-2);
+        }else{
+            string=num;
+        }
+        return string;
+    }
+    //超过时间
+    public static boolean MoreTime(double min){
+        Lg.e("最初时间",App.PDA_Time);
+        Lg.e("当前时间", CommonUtil.getTime2Fen());
+        if (doubleSub(Double.parseDouble(CommonUtil.getTime2Fen()),Double.parseDouble(App.PDA_Time))>min){
+            App.PDA_Time = CommonUtil.getTime2Fen();
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
 }

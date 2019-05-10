@@ -16,14 +16,16 @@ import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.Suppliers;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentDBDetail;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentDBMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.DbBox.FragmentDB2Main;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.DbBox.FragmentDBDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.DbBox.FragmentDBMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrisDh2Main;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.GbManagerBox.FragmentGbGetMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.GbManagerBox.FragmentGbInMain;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentOInDetail;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentOInMain;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentOOutDetail;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentOOutMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.FragmentOInDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.FragmentOInMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.FragmentOOutDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.FragmentOOutMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPISDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPISMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrGetDetail;
@@ -124,8 +126,13 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentPrGetDetail());
                 break;
             case Config.DBActivity:
-                binding.topActivity.tvTitle.setText("调拨单");
+                binding.topActivity.tvTitle.setText("组织内调拨单");
                 fragments.add(new FragmentDBMain());
+                fragments.add(new FragmentDBDetail());
+                break;
+            case Config.DB2Activity:
+                binding.topActivity.tvTitle.setText("跨组织调拨单");
+                fragments.add(new FragmentDB2Main());
                 fragments.add(new FragmentDBDetail());
                 break;
             case Config.SaleOutActivity:
@@ -149,15 +156,36 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentBackMsg2SaleBackDetail());
                 break;
             case Config.TbGetActivity:
-                binding.topActivity.tvTitle.setText("挑板领料");
+                binding.topActivity.tvTitle.setText("挑板领料1");
+                fragments.add(new FragmentTbGetMain());
+                fragments.add(new FragmentPrGetDetail());
+                break;
+            case Config.TbGet2Activity:
+                binding.topActivity.tvTitle.setText("挑板领料2");
+                fragments.add(new FragmentTbGetMain());
+                fragments.add(new FragmentPrGetDetail());
+                break;
+            case Config.TbGet3Activity:
+                binding.topActivity.tvTitle.setText("挑板领料3");
                 fragments.add(new FragmentTbGetMain());
                 fragments.add(new FragmentPrGetDetail());
                 break;
             case Config.TbInActivity:
-                binding.topActivity.tvTitle.setText("挑板入库");
+                binding.topActivity.tvTitle.setText("挑板入库1");
                 fragments.add(new FragmentPrisTBMain());
                 fragments.add(new FragmentPrisTBDetail());
                 break;
+            case Config.TbIn2Activity:
+                binding.topActivity.tvTitle.setText("挑板入库2");
+                fragments.add(new FragmentPrisTBMain());
+                fragments.add(new FragmentPrisTBDetail());
+                break;
+            case Config.TbIn3Activity:
+                binding.topActivity.tvTitle.setText("挑板入库3");
+                fragments.add(new FragmentPrisTBMain());
+                fragments.add(new FragmentPrisTBDetail());
+                break;
+
             case Config.GbGetActivity:
                 binding.topActivity.tvTitle.setText("改板领料");
                 fragments.add(new FragmentGbGetMain());
@@ -169,15 +197,20 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentPrisDetail());
                 break;
             case Config.DhInActivity:
-                binding.topActivity.tvTitle.setText("到货入库");
+                binding.topActivity.tvTitle.setText("到货入库1");
                 fragments.add(new FragmentPrisDhMain());
                 fragments.add(new FragmentPrisDetail());
                 break;
-            case Config.SimpleInActivity:
-                binding.topActivity.tvTitle.setText("简单生产入库");
-                fragments.add(new FragmentPrisSimpleInMain());
+            case Config.DhIn2Activity:
+                binding.topActivity.tvTitle.setText("到货入库2");
+                fragments.add(new FragmentPrisDh2Main());
                 fragments.add(new FragmentPrisDetail());
                 break;
+//            case Config.SimpleInActivity:
+//                binding.topActivity.tvTitle.setText("简单生产入库");
+//                fragments.add(new FragmentPrisSimpleInMain());
+//                fragments.add(new FragmentPrisDetail());
+//                break;
             case Config.YbOutActivity:
                 binding.topActivity.tvTitle.setText("样板出库");
                 fragments.add(new FragmentYbOutMain());
@@ -298,7 +331,7 @@ public class PagerForActivity extends BaseActivity {
         return client!=null?client:new Client("","","","");
     }
     public Suppliers getSuppliers() {
-        return suppliers!=null?suppliers:new Suppliers("","","","","","","","","","","");
+        return suppliers!=null?suppliers:new Suppliers("","","","","","","","","","","","","");
     }
 
     public void setDBType(String DBType) {
@@ -397,7 +430,7 @@ public class PagerForActivity extends BaseActivity {
     }
 
     public Org getOrgIn() {
-        return orgIn;
+        return orgIn==null?new Org("","","",""):orgIn;
     }
     public String getOrgIn(int type) {
         if (type==0){
@@ -408,7 +441,7 @@ public class PagerForActivity extends BaseActivity {
     }
 
     public Org getOrgOut() {
-        return orgOut;
+        return orgOut==null?new Org("","","",""):orgOut;
     }
     public String getOrgOut(int type) {
         if (type==0){

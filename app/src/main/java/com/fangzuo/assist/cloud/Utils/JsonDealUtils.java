@@ -61,7 +61,6 @@ public class JsonDealUtils {
                 outOfModel.put(inObject);
             }
 
-
             outOjbect.put("Model",outOfModel);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -107,6 +106,10 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FRemainInStockUnitId","FNumber",beans.get(j).FRemainInStockUnitId);
                     addObject(jsonAr,"FPriceUnitID","FNumber",beans.get(j).FPriceUnitID);
                     addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
+                    JSONObject jsonfz = new JSONObject();
+                    addObject(jsonfz,"FAUXPROPID__FF100001","FNumber",beans.get(j).ActualModel);
+                    addObject(jsonfz,"FAUXPROPID__FF100002","FNumber",beans.get(j).AuxSign);
+                    jsonAr.put("FAuxpropId",jsonfz);
                     jsonAr.put("FRealQty",beans.get(j).FRealQty);
                     if (j > 0 && beans.get(j).FEntryID.equals(beans.get(j-1).FEntryID)) {
                         jsonAr.put("FMustQty","0");
@@ -207,7 +210,7 @@ public class JsonDealUtils {
                 addObject(inObject,"FDEPTID","FNUMBER",mains.get(i).FDepartmentNumber);
                 addObject(inObject,"FSTOCKERID","FNUMBER",mains.get(i).FStockerNumber);
                 addObject(inObject,"FACCEPTANCE","FNUMBER",mains.get(i).FPurchaserId);
-//                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
+                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
                 addObject(inObject,"FOwnerIdHead","FNUMBER",mains.get(i).FOwnerIdHead);
                 inObject.put("F_FFF_Text",mains.get(i).F_FFF_Text);
                 JSONArray jsonArray = new JSONArray();
@@ -217,7 +220,12 @@ public class JsonDealUtils {
                     JSONObject jsonAr = new JSONObject();
                     addObject(jsonAr,"FMATERIALID","FNUMBER",beans.get(j).FMaterialId);
                     addObject(jsonAr,"FStockId","FNUMBER",beans.get(j).FStorageId);
+                    jsonAr.put("FOWNERTYPEID",mains.get(i).FOwnerTypeIdHead);
                     addObject(jsonAr,"FOWNERID","FNUMBER",mains.get(i).FOwnerIdHead);
+                    JSONObject jsonfz = new JSONObject();
+                    addObject(jsonfz,"FAUXPROPID__FF100001","FNumber",beans.get(j).ActualModel);
+                    addObject(jsonfz,"FAUXPROPID__FF100002","FNumber",beans.get(j).AuxSign);
+                    jsonAr.put("FAuxpropId",jsonfz);
                     jsonAr.put("FEntryNote",beans.get(j).FNote);
 //                    jsonAr.put("FKEEPERTYPEID","BD_KeeperOrg");
                     jsonAr.put("FQty",beans.get(j).FRealQty);
@@ -225,7 +233,6 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FLOT","FNUMBER",beans.get(j).FBatch);
                     addObject(jsonAr,"FUnitID","FNUMBER",beans.get(j).FUnitID);
                     addObject(jsonAr,"FSTOCKSTATUSID","FNUMBER","KCZT01_SYS");
-//                    jsonAr.put("FOWNERTYPEID","BD_OwnerOrg");
                     jsonArray.put(jsonAr);
                 }
                 inObject.put("FEntity",jsonArray);
@@ -258,7 +265,7 @@ public class JsonDealUtils {
                 inObject.put("FDate",mains.get(i).FDate);
                 inObject.put("FNote",mains.get(i).FNot);
 //                inObject.put("FStockDirect","GENERAL");
-//                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
+                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
                 addObject(inObject,"FOwnerIdHead","FNUMBER",mains.get(i).FOwnerIdHead);
                 addObject(inObject,"FCustId","FNUMBER",mains.get(i).FCustomerID);
                 inObject.put("F_FFF_Text",mains.get(i).F_FFF_Text);
@@ -269,10 +276,14 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FMaterialId","FNUMBER",beans.get(j).FMaterialId);
                     addObject(jsonAr,"FStockId","FNUMBER",beans.get(j).FStorageId);
                     addObject(jsonAr,"FLot","FNUMBER",beans.get(j).FBatch);
+                    JSONObject jsonfz = new JSONObject();
+                    addObject(jsonfz,"FAUXPROPID__FF100001","FNumber",beans.get(j).ActualModel);
+                    addObject(jsonfz,"FAUXPROPID__FF100002","FNumber",beans.get(j).AuxSign);
+                    jsonAr.put("FAuxpropId",jsonfz);
                     jsonAr.put("FQty",beans.get(j).FRealQty);
                     addObject(jsonAr,"FUnitID","FNUMBER",beans.get(j).FUnitID);
                     addObject(jsonAr,"FStockStatusId","FNUMBER","KCZT01_SYS");
-//                    jsonAr.put("FOwnerTypeId","BD_OwnerOrg");
+                    jsonAr.put("FOwnerTypeId",mains.get(i).FOwnerTypeIdHead);
                     addObject(jsonAr,"FOwnerId","FNUMBER",mains.get(i).FOwnerIdHead);
                     jsonArray.put(jsonAr);
                 }
@@ -389,6 +400,10 @@ public class JsonDealUtils {
                     }else{
                         jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
                     }
+                    JSONObject jsonfz = new JSONObject();
+                    addObject(jsonfz,"FAUXPROPID__FF100001","FNumber",beans.get(j).ActualModel);
+                    addObject(jsonfz,"FAUXPROPID__FF100002","FNumber",beans.get(j).AuxSign);
+                    jsonAr.put("FAuxpropId",jsonfz);
                     jsonAr.put("FBaseMustQty",beans.get(j).FRemainInStockQty);
                     jsonAr.put("FARNOTJOINQTY",beans.get(j).FRealQty);
 
@@ -803,20 +818,21 @@ public class JsonDealUtils {
                 JSONObject inObject = new JSONObject();
                 inObject.put("FBillNo","");
                 inObject.put("FDate",mains.get(i).FDate);
+                inObject.put("F_FFF_Remarks",mains.get(i).FNot);
 //                inObject.put("FOrderNo",mains.get(i).FSoorDerno);
                 addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
-                addObject(inObject,"FSaleOrgId","FNUMBER",mains.get(i).FStockOrgId);
+                addObject(inObject,"FSaleOrgId","FNUMBER",mains.get(i).FPurchaseOrgId);
                 addObject(inObject,"FRetcustId","FNUMBER",mains.get(i).FCustomerID);
                 addObject(inObject,"FSaledeptid","FNUMBER",mains.get(i).FPurchaseDeptId);
                 addObject(inObject,"FSalesManId","FNUMBER",mains.get(i).FPurchaserId);
-                addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FPurchaseOrgId);
+                addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FStockOrgId);
                 addObject(inObject,"FStockDeptId","FNUMBER",mains.get(i).FDepartmentNumber);
                 addObject(inObject,"FStockerId","FNUMBER",mains.get(i).FStockerNumber);
 //                addObject(inObject,"FSupplierId","FNUMBER",mains.get(i).FSupplierId);
                 JSONObject stockObject = new JSONObject();
 //                addObject(stockObject,"FExchangeTypeId","FNUMBER","HLTX01_SYS");//汇率类型
 //                stockObject.put("FExchangeRate","1");//汇率
-//                addObject(stockObject,"FSettleOrgId","FNUMBER",mains.get(i).FSettleOrgId);
+                addObject(stockObject,"FSettleOrgId","FNUMBER",mains.get(i).FSettleOrgId);
                 addObject(stockObject,"FSettleCurrId","FNUMBER",mains.get(i).FSettleCurrId);
                 inObject.put("SubHeadEntity",stockObject);
 
@@ -828,6 +844,10 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FStockId","FNumber",beans.get(j).FStorageId);
                     addObject(jsonAr,"FStockstatusId","FNumber",beans.get(j).FStorageId);
                     addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
+                    JSONObject jsonfz = new JSONObject();
+                    addObject(jsonfz,"FAUXPROPID__FF100001","FNumber",beans.get(j).ActualModel);
+                    addObject(jsonfz,"FAUXPROPID__FF100002","FNumber",beans.get(j).AuxSign);
+                    jsonAr.put("FAuxpropId",jsonfz);
                     jsonAr.put("FRealQty",beans.get(j).FRealQty);
                     if (j > 0 && beans.get(j).FEntryID.equals(beans.get(j-1).FEntryID)) {
 //                        jsonAr.put("FMustQty","0");

@@ -145,7 +145,7 @@ public class FragmentPrGetMain extends BaseFragment {
         spOrgSend.setAutoSelection(getString(R.string.spOrgSend_pg), Hawk.get(getString(R.string.spOrgSend_pg),""));
         spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_pg), Hawk.get(getString(R.string.spOrgHuozhu_pg),""));
 //        spGetman.setAuto(getString(R.string.spBuyer_pg), "",activityPager.getOrgOut());
-        spDepartment.setAuto(getString(R.string.spDepartmentCreate_pg), Hawk.get(getString(R.string.spDepartmentCreate_pg),""),activityPager.getOrgOut(),activityPager.getActivity());
+        spDepartment.setAuto(getString(R.string.spDepartmentCreate_pg), Hawk.get(getString(R.string.spDepartmentCreate_pg),""),activityPager.getOrgIn(),activityPager.getActivity());
         spStoreman.setAuto(getString(R.string.spStoreman_pg), Hawk.get(getString(R.string.spStoreman_pg),""),activityPager.getOrgOut());
 
 //        binding.spOrgIn.setEnable(false);
@@ -189,7 +189,6 @@ public class FragmentPrGetMain extends BaseFragment {
                 activityPager.setOrgOut((Org) spOrgSend.getAdapter().getItem(i));
                 Hawk.put(getString(R.string.spOrgSend_pg),activityPager.getOrgOut().FName);
 //        spGetman.setAuto(getString(R.string.spBuyer_pg), "",activityPager.getOrgOut());
-                spDepartment.setAuto(getString(R.string.spDepartmentCreate_pg), Hawk.get(getString(R.string.spDepartmentCreate_pg),""),activityPager.getOrgOut(),activityPager.getActivity());
                 spStoreman.setAuto(getString(R.string.spStoreman_pg), Hawk.get(getString(R.string.spStoreman_pg),""),activityPager.getOrgOut());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView,""));
             }
@@ -198,6 +197,7 @@ public class FragmentPrGetMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgIn((Org) spOrgCreate.getAdapter().getItem(i));
+                spDepartment.setAuto(getString(R.string.spDepartmentCreate_pg), Hawk.get(getString(R.string.spDepartmentCreate_pg),""),activityPager.getOrgIn(),activityPager.getActivity());
                 Hawk.put(getString(R.string.spOrgCreate_pg),activityPager.getOrgIn().FName);
             }
         });

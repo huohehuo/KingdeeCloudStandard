@@ -63,11 +63,11 @@ public class HomeActivity extends BaseActivity {
     protected void initData() {
         FragmentManager fm = getSupportFragmentManager();
         PurchaseFragment purchaseFragment = new PurchaseFragment();
-        SaleFragment saleFragment = new SaleFragment();
+//        SaleFragment saleFragment = new SaleFragment();
 //        StorageFragment storageFragment = new StorageFragment();
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(purchaseFragment);
-        fragments.add(saleFragment);
+//        fragments.add(saleFragment);
 //        fragments.add(storageFragment);
         MenuFragmentAdapter menuFragmentAdapter = new MenuFragmentAdapter(fm, fragments);
         binding.viewPager.setAdapter(menuFragmentAdapter);
@@ -99,11 +99,11 @@ public class HomeActivity extends BaseActivity {
                         binding.tabBottom.ivPurchase.setImageResource(R.mipmap.purchase);
                         binding.tabBottom.tvPurchase.setTextColor(getResources().getColor(R.color.bottombartv));
                         break;
-                    case 1:
-                        resetBottomView();
-                        binding.tabBottom.ivSale.setImageResource(R.mipmap.sale);
-                        binding.tabBottom.tvSale.setTextColor(getResources().getColor(R.color.bottombartv));
-                        break;
+//                    case 1:
+//                        resetBottomView();
+//                        binding.tabBottom.ivSale.setImageResource(R.mipmap.sale);
+//                        binding.tabBottom.tvSale.setTextColor(getResources().getColor(R.color.bottombartv));
+//                        break;
 //                    case 2:
 //                        resetBottomView();
 //                        binding.tabBottom.ivStorage.setImageResource(R.mipmap.storage);

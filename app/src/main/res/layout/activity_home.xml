@@ -73,6 +73,7 @@
             </android.support.v7.widget.CardView>
 
             <include
+                android:visibility="gone"
                 android:id="@+id/tab_bottom"
                 layout="@layout/bottom_bar"
                 android:layout_width="fill_parent"

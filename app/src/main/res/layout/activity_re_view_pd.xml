@@ -53,10 +53,26 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="12dp"
-                android:layout_toLeftOf="@id/btn_delete"
+                android:layout_toLeftOf="@id/tv_print"
                 android:autoLink="all"
                 android:text="查看表头"
                 android:textColor="@color/white" />
+            <RelativeLayout
+                android:id="@+id/tv_print"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/btn_delete">
+
+                <ImageView
+                    android:id="@+id/iv_print"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/print" />
+
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/btn_delete"
                 android:layout_width="wrap_content"

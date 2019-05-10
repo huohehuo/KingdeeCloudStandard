@@ -188,6 +188,13 @@
     <string name="spOrgIn_pris_dh">spOrgIn_pris_dh</string>
     <string name="spOrgCreate_pris_dh">spOrgCreate_pris_dh</string>
     <string name="spOrgHuozhu_pris_dh">spOrgHuozhu_pris_dh</string>
+    <!--到货入库2-->
+    <string name="spStoreman_pris_dh2">spStoreman_pris_dh2</string>
+    <string name="spDepartmentGet_pris_dh2">spDepartmentGet_pris_dh2</string>
+    <string name="spWhichStorage_pris_dh2">spWhichStorage_pris_dh2</string>
+    <string name="spOrgIn_pris_dh2">spOrgIn_pris_dh2</string>
+    <string name="spOrgCreate_pris_dh2">spOrgCreate_pris_dh2</string>
+    <string name="spOrgHuozhu_pris_dh2">spOrgHuozhu_pris_dh2</string>
     <!--到柜入库-->
     <string name="spStoreman_pris_dg">spStoreman_pris_dg</string>
     <string name="spDepartmentGet_pris_dg">spDepartmentGet_pris_dg</string>
@@ -210,6 +217,14 @@
     <string name="spOrgCreate_oin">spOrgCreate_oin</string>
     <string name="spHzType_oin">spHzType_oin</string>
     <string name="spOrgHuozhu_oin">spOrgHuozhu_oin</string>
+    <!--其他入库：第三方货物入库-->
+    <string name="spStoreman_oin3">spStoreman_oin3</string>
+    <string name="spDepartmentGet_oin3">spDepartmentGet_oin3</string>
+    <string name="spWhichStorage_oin3">spWhichStorage_oin3</string>
+    <string name="spOrgIn_oin3">spOrgIn_oin3</string>
+    <string name="spOrgCreate_oin3">spOrgCreate_oin3</string>
+    <string name="spHzType_oin3">spHzType_oin3</string>
+    <string name="spOrgHuozhu_oin3">spOrgHuozhu_oin3</string>
     <!--//其他出库-->
     <string name="spDepartmentSend_oout">spDepartmentSend_oout</string>
     <string name="spDepartmentSale_oout">spDepartmentSale_oout</string>
@@ -217,6 +232,23 @@
     <string name="spOrgHuozhu_oout">spOrgHuozhu_oout</string>
     <string name="spStoreman_oout">spStoreman_oout</string>
     <string name="spSaleman_oout">spSaleman_oout</string>
+    <string name="spHzType_oout">spHzType_oout</string>
+    <!--//其他出库：第三方货物出库-->
+    <string name="spDepartmentSend_oout3">spDepartmentSend_oout3</string>
+    <string name="spDepartmentSale_oout3">spDepartmentSale_oout3</string>
+    <string name="spOrgSend_oout3">spOrgSend_oout3</string>
+    <string name="spOrgHuozhu_oout3">spOrgHuozhu_oout3</string>
+    <string name="spStoreman_oout3">spStoreman_oout3</string>
+    <string name="spSaleman_oout3">spSaleman_oout3</string>
+    <string name="spHzType_oout3">spHzType_oout3</string>
+    <!--//其他出库：样板出库-->
+    <string name="spDepartmentSend_oout_yb">spDepartmentSend_oout_yb</string>
+    <string name="spDepartmentSale_oout_yb">spDepartmentSale_oout_yb</string>
+    <string name="spOrgSend_oout_yb">spOrgSend_oout_yb</string>
+    <string name="spOrgHuozhu_oout_yb">spOrgHuozhu_oout_yb</string>
+    <string name="spStoreman_oout_yb">spStoreman_oout_yb</string>
+    <string name="spSaleman_oout_yb">spSaleman_oout_yb</string>
+    <string name="spHzType_oout_yb">spHzType_oout_yb</string>
 
     <string name="spYuandan_so">spYuandan_so</string>
     <string name="spPayMethod_so">spPayMethod_so</string>
@@ -323,6 +355,7 @@
     <string name="spDepartment_pd_fhdb">spDepartment_pd_fhdb</string>
 
 
+    <!--组织内调拨-->
     <string name="spOrgOut_db">spOrgOut_db</string>
     <string name="spOrgHuozhuOut_db">spOrgHuozhuOut_db</string>
     <string name="spOrgIn_db">spOrgIn_db</string>
@@ -330,7 +363,14 @@
     <string name="spStoreman_db">spStoreman_db</string>
     <string name="spDbType_db">spDbType_db</string>
     <string name="spDbDirection_db">spDbDirection_db</string>
-
+    <!--跨组织调拨-->
+    <string name="spOrgOut_db2">spOrgOut_db2</string>
+    <string name="spOrgHuozhuOut_db2">spOrgHuozhuOut_db2</string>
+    <string name="spOrgIn_db2">spOrgIn_db2</string>
+    <string name="spOrgHuozhuIn_db2">spOrgHuozhuIn_db2</string>
+    <string name="spStoreman_db2">spStoreman_db2</string>
+    <string name="spDbType_db2">spDbType_db2</string>
+    <string name="spDbDirection_db2">spDbDirection_db2</string>
 
     <!--翻译-->
     <!--===========================================================================-->

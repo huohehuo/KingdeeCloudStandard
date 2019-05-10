@@ -139,12 +139,12 @@ public class FragmentTbGetMain extends BaseFragment {
     protected void initData() {
         tvDate.setText(CommonUtil.getTime(true));
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-        spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_tbget), Hawk.get(getString(R.string.spOrgCreate_tbget),""));
-        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_tbget), Hawk.get(getString(R.string.spOrgSend_tbget),""));
-        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_tbget), Hawk.get(getString(R.string.spOrgHuozhu_tbget),""));
-//        spGetman.setAuto(getString(R.string.spBuyer_tbget), "",activityPager.getOrgOut());
-        spDepartment.setAuto(getString(R.string.spDepartmentCreate_tbget), Hawk.get(getString(R.string.spDepartmentCreate_tbget),""),activityPager.getOrgOut(),activityPager.getActivity());
-        spStoreman.setAuto(getString(R.string.spStoreman_tbget), Hawk.get(getString(R.string.spStoreman_tbget),""),activityPager.getOrgOut());
+        spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_tbget)+activityPager.getActivity(), Hawk.get(getString(R.string.spOrgCreate_tbget)+activityPager.getActivity(),""));
+        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_tbget)+activityPager.getActivity(), Hawk.get(getString(R.string.spOrgSend_tbget)+activityPager.getActivity(),""));
+        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_tbget)+activityPager.getActivity(), Hawk.get(getString(R.string.spOrgHuozhu_tbget)+activityPager.getActivity(),""));
+//        spGetman.setAuto(getString(R.string.spBuyer_tbget)+activityPager.getActivity(), "",activityPager.getOrgOut());
+        spDepartment.setAuto(getString(R.string.spDepartmentCreate_tbget)+activityPager.getActivity(), Hawk.get(getString(R.string.spDepartmentCreate_tbget)+activityPager.getActivity(),""),activityPager.getOrgIn(),activityPager.getActivity());
+        spStoreman.setAuto(getString(R.string.spStoreman_tbget)+activityPager.getActivity(), Hawk.get(getString(R.string.spStoreman_tbget)+activityPager.getActivity(),""),activityPager.getOrgOut());
 
 //        binding.spOrgIn.setEnable(false);
 //        binding.spOrgCreate.setEnable(false);
@@ -185,10 +185,9 @@ public class FragmentTbGetMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgOut((Org) spOrgSend.getAdapter().getItem(i));
-                Hawk.put(getString(R.string.spOrgSend_tbget),activityPager.getOrgOut().FName);
-//        spGetman.setAuto(getString(R.string.spBuyer_tbget), "",activityPager.getOrgOut());
-                spDepartment.setAuto(getString(R.string.spDepartmentCreate_tbget), Hawk.get(getString(R.string.spDepartmentCreate_tbget),""),activityPager.getOrgOut(),activityPager.getActivity());
-                spStoreman.setAuto(getString(R.string.spStoreman_tbget), Hawk.get(getString(R.string.spStoreman_tbget),""),activityPager.getOrgOut());
+                Hawk.put(getString(R.string.spOrgSend_tbget)+activityPager.getActivity(),activityPager.getOrgOut().FName);
+//        spGetman.setAuto(getString(R.string.spBuyer_tbget)+activityPager.getActivity(), "",activityPager.getOrgOut());
+                spStoreman.setAuto(getString(R.string.spStoreman_tbget)+activityPager.getActivity(), Hawk.get(getString(R.string.spStoreman_tbget)+activityPager.getActivity(),""),activityPager.getOrgOut());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView,""));
             }
         });
@@ -196,14 +195,15 @@ public class FragmentTbGetMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgIn((Org) spOrgCreate.getAdapter().getItem(i));
-                Hawk.put(getString(R.string.spOrgCreate_tbget),activityPager.getOrgIn().FName);
+                spDepartment.setAuto(getString(R.string.spDepartmentCreate_tbget)+activityPager.getActivity(), Hawk.get(getString(R.string.spDepartmentCreate_tbget)+activityPager.getActivity(),""),activityPager.getOrgIn(),activityPager.getActivity());
+                Hawk.put(getString(R.string.spOrgCreate_tbget)+activityPager.getActivity(),activityPager.getOrgIn().FName);
             }
         });
         spOrgHuozhu.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setHuozhuOut((Org) spOrgHuozhu.getAdapter().getItem(i));
-                Hawk.put(getString(R.string.spOrgHuozhu_tbget),activityPager.getHuozhuOut().FName);
+                Hawk.put(getString(R.string.spOrgHuozhu_tbget)+activityPager.getActivity(),activityPager.getHuozhuOut().FName);
             }
         });
         cbIsStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

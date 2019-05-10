@@ -246,7 +246,7 @@ public class Fragment3HwOutDetail extends BaseFragment {
             case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
                 if (null != activityPager) {
 //                    spUnit.setAuto("", SpinnerUnit.Id);
-                    spWhichStorage.setAuto("", activityPager.getOrgOut());
+                    spWhichStorage.setAuto("","", activityPager.getOrgOut());
                 }
                 break;
 
@@ -341,7 +341,7 @@ public class Fragment3HwOutDetail extends BaseFragment {
                 Lg.e("选中仓库：", storage);
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, storage, "");
-                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getHuozhuOut());
+                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
 
             }
         });
@@ -373,7 +373,7 @@ public class Fragment3HwOutDetail extends BaseFragment {
         spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
-        spWhichStorage.setAuto(autoStorage, activityPager.getOrgOut());
+        spWhichStorage.setAuto("",autoStorage, activityPager.getOrgOut());
 //        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
             isOpenBatch = true;
@@ -383,7 +383,7 @@ public class Fragment3HwOutDetail extends BaseFragment {
             edPihao.setText("");
             isOpenBatch = false;
         }
-        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getHuozhuOut());
+        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
 
         spAuxsign.getData(product.FMASTERID, autoAuxSing);
         spActualmodel.getData(product.FMASTERID, autoActualModel);
@@ -529,7 +529,8 @@ public class Fragment3HwOutDetail extends BaseFragment {
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
             main.FOrderId = ordercode;
             main.FIndex = timesecond;
-            main.setData(Info.getType(activity), activityPager.getOrgOut(0), "102", activityPager.getHuozhuOut(0));//领料组织默认为102深圳亿森众合科技有限公司
+            main.setData4OtherOut(Info.getType(activity),activityPager.getOrgOut(0), "102",activityPager.getDBType(),activityPager.getHuozhuOut(0));//领料组织默认为102深圳亿森众合科技有限公司
+//            main.setData(Info.getType(activity), activityPager.getOrgOut(0), "102", activityPager.getHuozhuOut(0));
             main.FDepartmentNumber = activityPager.getDepartMent();
 //            main.FPurchaseDeptId = activityPager.getDepartMentBuy();
 //            main.FPurchaserId = activityPager.getManSale();

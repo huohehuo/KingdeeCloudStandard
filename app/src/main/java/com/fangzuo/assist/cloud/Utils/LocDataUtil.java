@@ -6,21 +6,29 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
+import com.fangzuo.assist.cloud.Beans.CommonResponse;
+import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
+import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Beans.PrintHistory;
+import com.fangzuo.assist.cloud.Beans.SearchBean;
 import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.Department;
 import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.SaleMan;
+import com.fangzuo.assist.cloud.Dao.Suppliers;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
 import com.fangzuo.assist.cloud.Dao.Unit;
+import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.greendao.gen.ClientDao;
 import com.fangzuo.greendao.gen.DepartmentDao;
 import com.fangzuo.greendao.gen.OrgDao;
 import com.fangzuo.greendao.gen.SaleManDao;
 import com.fangzuo.greendao.gen.T_DetailDao;
 import com.fangzuo.greendao.gen.UnitDao;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -64,6 +72,7 @@ public class LocDataUtil {
     public static Client getClient(String name){
         Lg.e("查找本地客户",name);
         if ("".equals(name)||null==name){
+            Lg.e("name空");
             return new Client("","","","");
         }
         ClientDao unitDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getClientDao();
@@ -161,6 +170,35 @@ public class LocDataUtil {
         }
 
 
+    }
+
+    //获取供应商数据
+    public static void getSuppliers(String string, String searchOrg, final String Type){
+        Lg.e("getSuppliers",string+"--"+searchOrg+"--"+Type);
+        if (null==searchOrg || "".equals(searchOrg))return;
+        SearchBean.S2Product s2Product = new SearchBean.S2Product();
+        s2Product.likeOr = string;
+        s2Product.FOrg = searchOrg;
+        App.getRService().doIOAction(WebApi.SUPPLIERSEARCHLIKE, new Gson().toJson(new SearchBean(SearchBean.product_for_like, new Gson().toJson(s2Product))), new MySubscribe<CommonResponse>() {
+            @Override
+            public void onNext(CommonResponse commonResponse) {
+                super.onNext(commonResponse);
+                if (!commonResponse.state)return;
+                DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                if (dBean.suppliers!=null && dBean.suppliers.size()>0){
+                    EventBusUtil.sendEvent(new ClassEvent(Type,dBean.suppliers.get(0)));
+                }else{
+                    EventBusUtil.sendEvent(new ClassEvent(Type,new Suppliers("")));
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                EventBusUtil.sendEvent(new ClassEvent(Type,new Suppliers("")));
+            }
+        });
     }
 
 }

@@ -13,12 +13,14 @@ import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
+import com.fangzuo.assist.cloud.Beans.PrintHistory;
 import com.fangzuo.assist.cloud.Beans.SearchBean;
 import com.fangzuo.assist.cloud.Dao.Product;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.AnimUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
+import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.databinding.ActivityScanProductBinding;
@@ -98,6 +100,8 @@ public class ScanProductActivity extends BaseActivity {
 //                Lg.e("获得打印数据：",commonResponse.returnJson);
                 DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
                 if (dBean.printHistories.size()>0){
+                    PrintHistory history = dBean.printHistories.get(0);
+                    history.FHuoquan= LocDataUtil.getOrg(history.getFHuoquan(),"number").FNote;
                     binding.setPrint(dBean.printHistories.get(0));
                     binding.cvShow.setVisibility(View.VISIBLE);
                     mCaptureManager.onPause();

@@ -287,7 +287,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
                 if (null != activityPager) {
                     spUnit.setAuto("", SpinnerUnit.Id);
-                    spWhichStorage.setAuto("", activityPager.getOrgOut());
+                    spWhichStorage.setAuto("","", activityPager.getOrgOut());
                 }
                 break;
 
@@ -402,7 +402,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                 Lg.e("选中仓库：", storage);
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, storage, "");
-                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,LocDataUtil.getOrg(scanOfHuozhuNumber,"number"));
+                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),LocDataUtil.getOrg(scanOfHuozhuNumber,"number"));
 
             }
         });
@@ -518,13 +518,48 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             boolean flag = true;
             for (int j = 0; j < pushDownSubListAdapter.getCount(); j++) {
                 PushDownSub pushDownSub1 = (PushDownSub) pushDownSubListAdapter.getItem(j);
-                if (product.FMaterialid.equals(pushDownSub1.FMaterialID)) {
+                if (product.FNumber.equals(pushDownSub1.FNumber)) {
 //                    if (MathUtil.toD(pushDownSub1.FQty) == MathUtil.toD(pushDownSub1.FQtying)) {
 //                        flag = true;
 //                        continue;
 //                    } else {
+
+
+                    /*判断条码带出在辅助标识是否为空，不为空就判断，接着判断单位；否则直接判断单位*/
+                    if (null!=autoAuxSing && !"".equals(autoAuxSing)){
+                        if (autoAuxSing.equals(pushDownSub1.AuxSign)){
+                            if (!"".equals(default_unitID)) {
+                                if (default_unitID.equals(pushDownSub1.FUnitID)) {
+                                    flag = false;
+                                    lvPushsub.setSelection(j);
+                                    lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
+                                    break;
+                                }
+                            } else {
+                                flag = false;
+                                lvPushsub.setSelection(j);
+                                lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
+                                break;
+                            }
+                        }else if (null==pushDownSub1.AuxSign || "".equals(pushDownSub1.AuxSign)){
+                            if (!"".equals(default_unitID)) {
+                                if (default_unitID.equals(pushDownSub1.FUnitID)) {
+                                    flag = false;
+                                    lvPushsub.setSelection(j);
+                                    lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
+                                    break;
+                                }
+                            } else {
+                                flag = false;
+                                lvPushsub.setSelection(j);
+                                lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
+                                break;
+                            }
+                        }
+                    }else{
                         if (!"".equals(default_unitID)) {
                             if (default_unitID.equals(pushDownSub1.FUnitID)) {
+
                                 flag = false;
                                 lvPushsub.setSelection(j);
                                 lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
@@ -536,6 +571,8 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                             lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
                             break;
                         }
+                    }
+
 //                    }
 
                 }
@@ -563,7 +600,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
         spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
-        spWhichStorage.setAuto(autoStorage, activityPager.getOrgOut());
+        spWhichStorage.setAuto("",autoStorage, activityPager.getOrgOut());
 //        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
             isOpenBatch = true;
@@ -573,7 +610,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             edPihao.setText("");
             isOpenBatch = false;
         }
-        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,LocDataUtil.getOrg(scanOfHuozhuNumber,"number"));
+        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),LocDataUtil.getOrg(scanOfHuozhuNumber,"number"));
 
 
         spAuxsign.getData(product.FMASTERID, autoAuxSing);

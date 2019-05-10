@@ -86,11 +86,10 @@
                     app:manspinner_name="采购部门:"
                     app:manspinner_size="9sp" />
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
-                    android:visibility="gone"
                     android:id="@+id/sp_org_buy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="采购组织:"
+                    app:manspinner_name="库存组织:"
                     app:manspinner_size="9sp" />
                 <!--<com.fangzuo.assist.cloud.widget.SpinnerHuozhu-->
                 <!--android:id="@+id/sp_org_huozhu"-->

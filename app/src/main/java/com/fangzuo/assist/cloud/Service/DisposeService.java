@@ -12,16 +12,13 @@ import com.fangzuo.greendao.gen.DaoSession;
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
 public class DisposeService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_FOO = "com.fangzuo.assist.Service.action.FOO";
     private static final String ACTION_BAZ = "com.fangzuo.assist.Service.action.BAZ";
 
-    // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "com.fangzuo.assist.Service.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "com.fangzuo.assist.Service.extra.PARAM2";
     private DaoSession session;
@@ -43,7 +40,6 @@ public class DisposeService extends IntentService {
      *
      * @see IntentService
      */
-    // TODO: Customize helper method
     public static void deleteAll(Context context) {
         Intent intent = new Intent(context, DisposeService.class);
         intent.setAction(ACTION_FOO);
@@ -58,7 +54,6 @@ public class DisposeService extends IntentService {
      *
      * @see IntentService
      */
-    // TODO: Customize helper method
     public static void startActionBaz(Context context, String param1, String param2) {
         Intent intent = new Intent(context, DisposeService.class);
         intent.setAction(ACTION_BAZ);
@@ -120,7 +115,6 @@ public class DisposeService extends IntentService {
      * parameters.
      */
     private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }

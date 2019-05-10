@@ -147,13 +147,18 @@ public class UpLoadModel {
                 break;
             case Config.ProductInStoreActivity://产品入库
             case Config.TbInActivity://挑板入库
+            case Config.TbIn2Activity://挑板入库
+            case Config.TbIn3Activity://挑板入库
             case Config.GbInActivity://改板入库
             case Config.DhInActivity://到货入库
+            case Config.DhIn2Activity://到货入库
             case Config.SimpleInActivity://产品入库
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPrIS(mains,details)));
                 break;
             case Config.ProductGetActivity://生产领料
             case Config.TbGetActivity://挑板领料
+            case Config.TbGet2Activity://挑板领料
+            case Config.TbGet3Activity://挑板领料
             case Config.GbGetActivity://改板领料
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonPrG(mains,details)));
                 break;
@@ -196,7 +201,8 @@ public class UpLoadModel {
             case Config.PDActivity:
                 DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonPD(mains,details)));
                 break;
-            case Config.DBActivity:
+            case Config.DBActivity://组织内调拨
+            case Config.DB2Activity://跨组织调拨
                 DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonDB(mains,details)));
                 break;
 

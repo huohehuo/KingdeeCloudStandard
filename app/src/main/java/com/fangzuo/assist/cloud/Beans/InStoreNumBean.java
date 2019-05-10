@@ -7,6 +7,7 @@ public class InStoreNumBean {
 	public String FBatchNo;
 	public String FKFDate;
 	public String FKFPeriod;
+	public String FOrgID;//组织id
 	public String FOwnerID;//货主id
 
 	public InStoreNumBean(String FItemID, String FStockID, String FStockPlaceID, String FBatchNo) {
@@ -15,11 +16,12 @@ public class InStoreNumBean {
 		this.FStockPlaceID = FStockPlaceID;
 		this.FBatchNo = FBatchNo;
 	}
-	public InStoreNumBean(String FItemID, String FStockID, String FStockPlaceID, String FBatchNo,String orgid) {
+	public InStoreNumBean(String FItemID, String FStockID, String FStockPlaceID, String FBatchNo,String orgid,String huozhuid) {
 		this.FItemID = FItemID;
 		this.FStockID = FStockID;
 		this.FStockPlaceID = FStockPlaceID;
 		this.FBatchNo = FBatchNo;
-		this.FOwnerID = orgid;
+		this.FOrgID = orgid;
+		this.FOwnerID = huozhuid;
 	}
 }
