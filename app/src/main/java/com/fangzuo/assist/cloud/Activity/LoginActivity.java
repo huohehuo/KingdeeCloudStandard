@@ -192,7 +192,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 new RegisterBean(
                         Hawk.get(Config.PDA_IMIE,""),
                         Build.MODEL+"-IMEI码:"+Hawk.get(Config.PDA_MsgAndIMIE,""),
-                        Info.TestNo)));
+                        Info.TestNo,getTimeLong(true))));
 //        Lg.e("本地版本号：",Info.TestNo);
 //        Lg.e("网络版本号：",Hawk.get(Config.Apk_Version, ""));
         //若网络版本比本地版本高，提示新版本
@@ -293,7 +293,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 
     @Override
     public void initData() {
-        //下载基础表：//单位//销售员//组织
+        //下载基础表：//单位//销售员//组织//简称表
         DataService.UpdateData(this);
     }
 

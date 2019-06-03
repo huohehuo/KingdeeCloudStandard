@@ -8,6 +8,7 @@ public class WebApi {
     public static final String OCUPLOAD = "PushDownOCUpload";
     public static final String GetUseTime = "GetUseTime";
     public static final String SetUseTime = "SetUseTime";
+    public static final String ServiceVersion = "ServiceVersion";//获取服务器版本
 
     public static final String SCRWSCLLUpload = "SCRWSCLLUpload";
     public static final String SCRWDPDSCHBDUPLOAD = "SCRWDPDSCHBDUpload";
@@ -67,7 +68,11 @@ public class WebApi {
     public static final String CodeCheckInsertForOut = "CodeCheckInsertForOut";
     public static final String CodeCheckInsertForOutDB = "CodeCheckInsertForOutDB";
     public static final String GetQtyForOut = "GetQtyForOut";
+    public static final String CodeCheckForPY = "CodeCheckForPY";
+    public static final String CodeCheckInsertForPY = "CodeCheckInsertForPY";
 
+    public static final String PYUpload = "PYUpload";
+    public static final String PKUpload = "PKUpload";
     public static final String PrISUpload = "PrISUpload";
     public static final String PGUpload = "PGUpload";
     public static final String OtherInUpload = "OtherInUpload";
@@ -86,6 +91,7 @@ public class WebApi {
     public static final String HuozhuByOrg = "HuozhuByOrg";
 
     public static final String PrintOutCheck = "PrintOutCheck";
+    public static final String PrintOutForPD = "PrintOutForPD";
     public static final String PrintBeforeData = "PrintBeforeData";
     public static final String PrintBeforeDataForCreateCode = "PrintBeforeDataForCreateCode";
 

@@ -13,6 +13,7 @@ import com.fangzuo.assist.cloud.ABase.BaseActivity;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.PrintHistoryAdapter;
 import com.fangzuo.assist.cloud.Beans.BlueToothBean;
+import com.fangzuo.assist.cloud.Beans.CommonBean;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
@@ -42,7 +43,6 @@ public class PrintBeforeDataActivity extends BaseActivity {
     private PrintHistoryAdapter adapter;
     BlueToothBean bean;
     private PrintHistory printHistory;
-
     @Override
     protected void receiveEvent(ClassEvent event) {
         switch (event.Msg) {
@@ -66,6 +66,7 @@ public class PrintBeforeDataActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_print_before_data);
         zpSDK=new zpBluetoothPrinter(this);
         binding.toolbar.tvTitle.setText("期初物料补打");
+        binding.cbNum.setSaveKey("PrintBeforeDataActivity-printnum");
         binding.ryPrintHistory.setAdapter(adapter = new PrintHistoryAdapter(this));
         binding.ryPrintHistory.setLayoutManager(new LinearLayoutManager(this));
         bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
@@ -79,13 +80,16 @@ public class PrintBeforeDataActivity extends BaseActivity {
 
     }
 
+    private boolean printing=false;
     @Override
     protected void initListener() {
         adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                printHistory =adapter.getAllData().get(position);
-                Lg.e("点击历史：",printHistory);
+                if (!printing){
+                    printing=true;
+                    printHistory =adapter.getAllData().get(position);
+                    Lg.e("点击历史：",printHistory);
 //                if (binding.toolbar.tvRight.getText().toString().equals("点击重连打印机")){
 //                    Toast.showText(mContext,"请先配置好打印机");
 //                }else{
@@ -95,16 +99,18 @@ public class PrintBeforeDataActivity extends BaseActivity {
 //                bean.FBatch = binding.edPihao.getText().toString();
                     pushAndCreateCode(stringdata);
 //                }
+                }
+
 
             }
         });
         binding.ivFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!binding.edPihao.getText().toString().equals("")){
-                    getPrintHistory(binding.edPihao.getText().toString());
+                if (!binding.edPihao.getText().toString().equals("") || !binding.edProduct.getText().toString().equals("")){
+                    getPrintHistory(binding.edPihao.getText().toString(),binding.edProduct.getText().toString());
                 }else{
-                    Toast.showText(mContext,"请输入需要查询的批号");
+                    Toast.showText(mContext,"请输入需要查询的条件");
                 }
             }
         });
@@ -112,10 +118,10 @@ public class PrintBeforeDataActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == 0 && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (!binding.edPihao.getText().toString().equals("")){
-                        getPrintHistory(binding.edPihao.getText().toString());
+                    if (!binding.edPihao.getText().toString().equals("") || !binding.edProduct.getText().toString().equals("")){
+                        getPrintHistory(binding.edPihao.getText().toString(),binding.edProduct.getText().toString());
                     }else{
-                        Toast.showText(mContext,"请输入需要查询的批号");
+                        Toast.showText(mContext,"请输入需要查询的条件");
                     }
                 }
                 return true;
@@ -126,7 +132,6 @@ public class PrintBeforeDataActivity extends BaseActivity {
             public void onClick(View v) {
                 if (!"打印机就绪".equals(binding.toolbar.tvRight.getText().toString())){
                     LoadingUtil.showDialog(mContext,"正在连接打印机...");
-
                     linkBluePrint();
                 }
             }
@@ -137,9 +142,10 @@ public class PrintBeforeDataActivity extends BaseActivity {
      *              通过批号查找打印数据
      * @param string        需要查找的模糊批号
      */
-    private void getPrintHistory(String string){
+    private void getPrintHistory(String string,String product){
         LoadingUtil.showDialog(mContext,"正在查找打印数据...");
-        App.getRService().doIOAction(WebApi.PrintBeforeData, string, new MySubscribe<CommonResponse>() {
+        printing=true;
+        App.getRService().doIOAction(WebApi.PrintBeforeData, gson.toJson(new CommonBean(string,product)), new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
                 super.onNext(commonResponse);
@@ -150,8 +156,10 @@ public class PrintBeforeDataActivity extends BaseActivity {
                 if (dBean.printHistories.size()>0){
                     adapter.clear();
                     adapter.addAll(dBean.printHistories);
+                    printing=false;
 //                    showMsg(dBean.printHistories.get(0));
                 }else{
+                    printing=false;
                     Toast.showText(mContext,"无数据");
                     adapter.clear();
                 }
@@ -161,6 +169,7 @@ public class PrintBeforeDataActivity extends BaseActivity {
             public void onError(Throwable e) {
                 super.onError(e);
                 adapter.clear();
+                printing=false;
                 LoadingUtil.dismiss();
             }
         });
@@ -169,7 +178,6 @@ public class PrintBeforeDataActivity extends BaseActivity {
     //生成条码并执行打印
     private void pushAndCreateCode(String string){
         Lg.e("Data:pushAndCreateCode",printHistory);
-
         App.getRService().doIOAction(WebApi.PrintBeforeDataForCreateCode, string, new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
@@ -183,17 +191,22 @@ public class PrintBeforeDataActivity extends BaseActivity {
                     printBean.FNum2=dBean.codeCheckBackDataBeans.get(0).FBaseQty;
                     printBean.FBarCode = dBean.codeCheckBackDataBeans.get(0).FBarCode;
                     printBean.FDate = getTime(true);
-                    String huozhuNote= LocDataUtil.getOrg(printBean.FHuoquan,"number").FNote;
+                    String huozhuNote= LocDataUtil.getRemark(printBean.FHuoquan,"number").FNote;
                     printBean.FHuoquan=huozhuNote;
                     try {
-                        CommonUtil.doPrint(zpSDK,printBean);
+                        CommonUtil.doPrint(zpSDK,printBean,binding.cbNum.getNum());
                         printHistory=null;
+                        printing=false;
+                        getPrintHistory(binding.edPihao.getText().toString(),binding.edProduct.getText().toString());
                     } catch (Exception e) {
 //                    e.printStackTrace();
                         printHistory=null;
+                        printing=false;
+                        getPrintHistory(binding.edPihao.getText().toString(),binding.edProduct.getText().toString());
                         LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
                     }
                 }else{
+                    printing=false;
                     Toast.showText(mContext,"生成条码失败,请重试");
                 }
             }
@@ -201,6 +214,7 @@ public class PrintBeforeDataActivity extends BaseActivity {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
+                printing=false;
             }
         });
     }

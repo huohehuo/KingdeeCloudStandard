@@ -71,18 +71,19 @@ public class IpPortActivity extends BaseActivity {
         if (!share.getIP().equals("")) {
             edIp.setText(share.getIP());
             edPort.setText(share.getPort());
-            edUrl.setText(Hawk.get(Config.Cloud_Url, "http://47.106.179.214/K3Cloud/"));
-        } else {
-            if (Info.DATABASESETTING.equals("K3DBConfigerRY")) {
-                edUrl.setText(Hawk.get(Config.Cloud_Url, "http://47.106.179.214/K3Cloud/"));
-                edIp.setText("47.106.179.214");
-                edPort.setText("8080");
-            } else {
-                edUrl.setText("http://192.168.0.201/K3Cloud/");
-                edIp.setText("192.168.0.136");
-                edPort.setText("8082");
-            }
+//            edUrl.setText(Hawk.get(Config.Cloud_Url, "http://120.77.206.67/K3Cloud/"));
         }
+//        else {
+            if (Info.DATABASESETTING.equals("K3DBConfigerRY")) {
+                edUrl.setText(Hawk.get(Config.Cloud_Url, "http://120.77.206.67/K3Cloud/"));
+//                edIp.setText("120.77.206.67");
+//                edPort.setText("8080");
+            } else {
+                edUrl.setText(Hawk.get(Config.Cloud_Url, "http://192.168.0.201/K3Cloud/"));
+//                edIp.setText("192.168.0.136");
+//                edPort.setText("8082");
+            }
+//        }
         edPrintnum.setText(Hawk.get(Config.PrintNum, "2"));
     }
 

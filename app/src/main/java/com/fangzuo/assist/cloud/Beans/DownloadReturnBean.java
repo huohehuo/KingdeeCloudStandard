@@ -14,6 +14,7 @@ import com.fangzuo.assist.cloud.Dao.PayType;
 import com.fangzuo.assist.cloud.Dao.PriceMethod;
 import com.fangzuo.assist.cloud.Dao.Product;
 import com.fangzuo.assist.cloud.Dao.PurchaseMethod;
+import com.fangzuo.assist.cloud.Dao.RemarkData;
 import com.fangzuo.assist.cloud.Dao.SaleMan;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.StoreMan;
@@ -55,6 +56,7 @@ public class DownloadReturnBean {
 	public ArrayList<AuxSignSecCheckBean> auxSignSecCheckBeans;
 	public ArrayList<PrintDataBean> printDataBeans;
 	public ArrayList<PrintHistory> printHistories;
+	public ArrayList<RemarkData> remarkDatas;
 
 
 

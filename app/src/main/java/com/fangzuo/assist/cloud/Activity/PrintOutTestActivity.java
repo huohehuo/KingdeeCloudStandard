@@ -164,6 +164,12 @@ public class PrintOutTestActivity extends AppCompatActivity {
 //        }
         tvBluetooth.setText("已配置的打印机\n" + "名称：" + bean.getName() + "\n地址：" + bean.getAddress());
 
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initBroadcast() {

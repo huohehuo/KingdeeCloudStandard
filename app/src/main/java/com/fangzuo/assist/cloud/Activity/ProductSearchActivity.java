@@ -101,6 +101,8 @@ public class ProductSearchActivity extends BaseActivity {
         if (where == Info.SEARCHPRODUCT) title.setText("查询结果(物料)");
         if (where == Info.SEARCHSUPPLIER) title.setText("查询结果(供应商)");
         if (where == Info.SearchSupplier) title.setText("查询结果(供应商)");
+        if (where == Info.SearchSupplierDetail) title.setText("查询结果(供应商)");
+        if (where == Info.SearchClientDetail) title.setText("查询结果(客户)");
         if (where == Info.SEARCHCLIENT) title.setText("查询结果(客户)");
         if (where == Info.SEARCHJH) title.setText("查询结果(交货单位)");
 
@@ -208,7 +210,7 @@ public class ProductSearchActivity extends BaseActivity {
 //            }
 
             //供应商
-        } else if (where == Info.SEARCHSUPPLIER || where == Info.SearchSupplier) {
+        } else if (where == Info.SEARCHSUPPLIER || where == Info.SearchSupplier || where == Info.SearchSupplierDetail) {
             model.setText("编号");
             name.setText("名称");
             if (BasicShareUtil.getInstance(mContext).getIsOL()) {
@@ -257,7 +259,7 @@ public class ProductSearchActivity extends BaseActivity {
 //
 //            }
                 //客户
-        } else if (where == Info.SEARCHCLIENT) {
+        } else if (where == Info.SEARCHCLIENT || where == Info.SearchClientDetail) {
             model.setText("编号");
             name.setText("名称");
             if (BasicShareUtil.getInstance(mContext).getIsOL()) {
@@ -376,8 +378,14 @@ public class ProductSearchActivity extends BaseActivity {
                 } else if (where == Info.SearchSupplier) {
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Supplier_Hz,itemAllSupplier.get(i)));
                     onBackPressed();
+                } else if (where == Info.SearchSupplierDetail) {
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Supplier_Hz_Detail,itemAllSupplier.get(i)));
+                    onBackPressed();
                 } else if (where == Info.SEARCHCLIENT) {
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Client,itemAllClient.get(i)));
+                    onBackPressed();
+                } else if (where == Info.SearchClientDetail) {
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Client_Detail,itemAllClient.get(i)));
                     onBackPressed();
                 } else if (where == Info.SEARCHJH) {
                     b.putString("001", goodsDepartmentList.get(i).FItemID);

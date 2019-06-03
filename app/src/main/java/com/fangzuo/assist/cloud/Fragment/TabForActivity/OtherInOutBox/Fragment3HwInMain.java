@@ -30,6 +30,7 @@ import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.LocDataUtil;
+import com.fangzuo.assist.cloud.widget.NumberClick;
 import com.fangzuo.assist.cloud.widget.SpinnerCommon;
 import com.fangzuo.assist.cloud.widget.SpinnerDepartMent;
 import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
@@ -82,6 +83,8 @@ public class Fragment3HwInMain extends BaseFragment {
     RelativeLayout searchSupplier;
     @BindView(R.id.search_supplier_hz)
     RelativeLayout searchSupplierHz;
+    @BindView(R.id.cb_num)
+    NumberClick cbNum;
     private FragmentActivity mContext;
     private PagerForActivity activityPager;
     Unbinder unbinder;
@@ -111,7 +114,7 @@ public class Fragment3HwInMain extends BaseFragment {
                     activityPager.setOrgIn(null);
                     edSupplierHz.setText("");
                 } else {
-                    activityPager.setOrgIn(new Org(supplierHz.FItemID, supplierHz.FNumber, supplierHz.FName, supplierHz.FNote));
+                    activityPager.setOrgIn(new Org(supplierHz.FMASTERID, supplierHz.FNumber, supplierHz.FName, supplierHz.FNote));
                     edSupplierHz.setText(supplierHz.FName);
                     Hawk.put(Config.SupplierHz + activityPager.getActivity(), supplierHz.FName);//保存业务单号
                 }
@@ -205,7 +208,22 @@ public class Fragment3HwInMain extends BaseFragment {
     @Override
     protected void initData() {
         Lg.e("Fg_M:" + "initData");
+
+        //判断是否有保存的业务单号，决定是否锁住表头
+        if (!LocDataUtil.hasTDetail(activityPager.getActivity())) {
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock + "NO"));
+        } else {
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+        }
+        setfocus(tvDate);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         tvDate.setText(CommonUtil.getTime(true));
+        cbNum.setSaveKey(activityPager.getActivity()+"printnum");
         spHzType.setData(Info.Type_Hz_type);
 //        spHzType.setEnable(false);
         spHzType.setAutoSelection(getString(R.string.spHzType_oin3), Hawk.get(getString(R.string.spHzType_oin3), ""));
@@ -220,16 +238,7 @@ public class Fragment3HwInMain extends BaseFragment {
 //        binding.spOrgIn.setEnable(false);
 //        spOrgCreate.setEnable(false);
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
-        //判断是否有保存的业务单号，决定是否锁住表头
-        if (!LocDataUtil.hasTDetail(activityPager.getActivity())) {
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock + "NO"));
-        } else {
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
-        }
-        setfocus(tvDate);
-
     }
-
 
     //在oncreateView之前使用 不要使用控件
     @Override
@@ -247,6 +256,7 @@ public class Fragment3HwInMain extends BaseFragment {
                 activityPager.setFOrderNo(edFfOrder == null ? "" : edFfOrder.getText().toString());
                 activityPager.setManStore(spStoreman.getDataNumber());
                 activityPager.setDepartMent(spDepartmentGet.getDataNumber());
+                activityPager.setPrintNum(cbNum.getNum());
                 Hawk.put(Config.OrderNo + activityPager.getActivity(), edFfOrder.getText().toString());//保存业务单号
                 Hawk.put(Config.Note + activityPager.getActivity(), edNot.getText().toString());//保存业务单号
             }

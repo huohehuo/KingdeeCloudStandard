@@ -212,10 +212,6 @@ public class FragmentOOutMain extends BaseFragment {
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
         }
         setfocus(tvDate);
-        //当为下推单时隐藏
-        if (activityPager.getActivity() == Config.PdSaleOrder2SaleOutActivity || activityPager.getActivity() == Config.PdBackMsg2SaleBackActivity) {
-            llClient.setVisibility(View.GONE);
-        }
     }
 
 

@@ -130,6 +130,17 @@ public class T_main {
         this.FSettleOrgId = FPurchaseOrgId;//结算组织
         this.FSettleCurrId = "PRE001";//结算币别
     }
+    //第三方货物出库
+    public void setData4PYing(String FBillTypeID,String FStockOrgId,String FPurchaseOrgId,String type,String huozhu){
+        this.FPriceTimePoint = "";//定价时点
+        this.FStockOrgId = FStockOrgId;//收料组织
+        this.FPurchaseOrgId = FPurchaseOrgId;//采购组织
+        this.FBillTypeID = FBillTypeID;//单据类型
+        this.FOwnerTypeIdHead = type;//货主类型BD_OwnerOrgBD_SupplierBD_Customer
+        this.FOwnerIdHead = huozhu;//货主
+        this.FSettleOrgId = FPurchaseOrgId;//结算组织
+        this.FSettleCurrId = "PRE001";//结算币别
+    }
     public void setDataBBM2SB(String FBillTypeID,String FStockOrgId,String FPurchaseOrgId,String SettleOrgId,String huozhu){
         this.FPriceTimePoint = "";//定价时点
         this.FStockOrgId = FStockOrgId;//收料组织
@@ -146,6 +157,16 @@ public class T_main {
         this.FPurchaseOrgId = FPurchaseOrgId;//采购组织
         this.FBillTypeID = FBillTypeID;//单据类型
         this.FOwnerTypeIdHead = "BD_OwnerOrg";//货主类型BD_SupplierBD_Customer
+        this.FOwnerIdHead = huozhu;//货主
+        this.FSettleOrgId = FPurchaseOrgId;//结算组织
+        this.FSettleCurrId = "PRE001";//结算币别
+    }
+    public void setDataForSOrder2SOut(String FBillTypeID,String FStockOrgId,String FPurchaseOrgId,String hzType,String huozhu){
+        this.FPriceTimePoint = "";//定价时点
+        this.FStockOrgId = FStockOrgId;//收料组织
+        this.FPurchaseOrgId = FPurchaseOrgId;//采购组织
+        this.FBillTypeID = FBillTypeID;//单据类型
+        this.FOwnerTypeIdHead = hzType;//货主类型BD_SupplierBD_Customer
         this.FOwnerIdHead = huozhu;//货主
         this.FSettleOrgId = FPurchaseOrgId;//结算组织
         this.FSettleCurrId = "PRE001";//结算币别

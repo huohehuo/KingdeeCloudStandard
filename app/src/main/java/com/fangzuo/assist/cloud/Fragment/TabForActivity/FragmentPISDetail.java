@@ -196,6 +196,7 @@ public class FragmentPISDetail extends BaseFragment {
                     Toast.showText(mContext, "上传成功");
 //                btnBackorder.setClickable(true);
                     LoadingUtil.dismiss();
+                    DataModel.submitAndAudit(mContext,Config.PurchaseInStoreActivity,listOrder.get(0));
                 } else {
                     LoadingUtil.dismiss();
                     List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
@@ -511,7 +512,7 @@ public class FragmentPISDetail extends BaseFragment {
                             activityPager.getOrgOut().FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber(),spActualmodel.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
-                        CommonUtil.doPrint(zpSDK, printHistory);
+                        CommonUtil.doPrint(zpSDK, printHistory,activityPager.getPrintNum());
                     } catch (Exception e) {
                     }
                     //-----END

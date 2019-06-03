@@ -206,6 +206,7 @@ public class FragmentPrisDetail extends BaseFragment {
                     Toast.showText(mContext, "上传成功");
 //                btnBackorder.setClickable(true);
                     LoadingUtil.dismiss();
+                    DataModel.submitAndAudit(mContext,Config.ProductInStoreActivity,listOrder.get(0));
                 } else {
                     LoadingUtil.dismiss();
                     List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
@@ -289,12 +290,24 @@ public class FragmentPrisDetail extends BaseFragment {
                             activityPager.finish();
                         }
                     });
+                    ab.setNeutralButton("重连", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            LoadingUtil.showDialog(mContext,"正在重连...");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    checkPrint(false);
+                                }
+                            }).start();
+                        }
+                    });
                     ab.create().show();
                     tvPrint.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
-                            activityPager.finish();
+//                            activityPager.finish();
                         }
                     });
                     tvPrint.setText("连接打印机错误");
@@ -560,7 +573,7 @@ public class FragmentPrisDetail extends BaseFragment {
                             activityPager.getOrgIn().FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber(),spActualmodel.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
-                        CommonUtil.doPrint(zpSDK, printHistory);
+                        CommonUtil.doPrint(zpSDK, printHistory,activityPager.getPrintNum());
                     } catch (Exception e) {
                     }
                     //-----END

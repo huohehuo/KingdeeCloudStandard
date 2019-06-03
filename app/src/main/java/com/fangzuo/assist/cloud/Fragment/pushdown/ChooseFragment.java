@@ -1,6 +1,8 @@
 package com.fangzuo.assist.cloud.Fragment.pushdown;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
+import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Activity.Db2FDinActivity;
 import com.fangzuo.assist.cloud.Activity.Db2FDoutActivity;
 import com.fangzuo.assist.cloud.Activity.PagerForActivity;
@@ -29,13 +32,20 @@ import com.fangzuo.assist.cloud.Activity.PdSaleOut2SaleBackActivity;
 import com.fangzuo.assist.cloud.Activity.PdSendMsg2SaleOutActivity;
 import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
 import com.fangzuo.assist.cloud.Adapter.PushDownListAdapter;
+import com.fangzuo.assist.cloud.Beans.CommonResponse;
+import com.fangzuo.assist.cloud.Beans.PurchaseInStoreUploadBean;
 import com.fangzuo.assist.cloud.Dao.PushDownMain;
 import com.fangzuo.assist.cloud.Dao.PushDownSub;
+import com.fangzuo.assist.cloud.Dao.T_Detail;
+import com.fangzuo.assist.cloud.Dao.T_main;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.Toast;
+import com.fangzuo.assist.cloud.Utils.WebApi;
+import com.fangzuo.assist.cloud.widget.LoadingUtil;
 import com.fangzuo.assist.cloud.widget.SpinnerClient;
 import com.fangzuo.assist.cloud.widget.SpinnerClientDlg;
 import com.fangzuo.assist.cloud.widget.SpinnerSupplier;
@@ -44,6 +54,7 @@ import com.fangzuo.greendao.gen.PushDownMainDao;
 import com.fangzuo.greendao.gen.PushDownSubDao;
 import com.fangzuo.greendao.gen.T_DetailDao;
 import com.fangzuo.greendao.gen.T_mainDao;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,7 +93,7 @@ public class ChooseFragment extends BaseFragment {
     SwipeRefreshLayout refresh;
     @BindView(R.id.sp_client)
     SpinnerClientDlg spClient;
-//    @BindView(R.id.sp_supplier)
+    //    @BindView(R.id.sp_supplier)
 //    SpinnerSupplier spSupplier;
     private FragmentActivity mContext;
     private DaoSession daosession;
@@ -92,9 +103,8 @@ public class ChooseFragment extends BaseFragment {
     private int day;
     private String enddate;
     private String startdate;
-    private PushDownMainDao pushDownMainDao;
     private int tag;
-//    private SupplierSpAdapter supplierAdapter;
+    //    private SupplierSpAdapter supplierAdapter;
 //    private ClientSpAdapter clientSpAdapter;
     private String supplierID;
     private boolean defaultsp = false;
@@ -124,6 +134,12 @@ public class ChooseFragment extends BaseFragment {
         return view;
     }
 
+    private T_DetailDao t_detailDao;
+    private T_mainDao t_mainDao;
+    private PushDownSubDao pushDownSubDao;
+    private PushDownMainDao pushDownMainDao;
+    private int activity;
+
     @Override
     protected void initView() {
         isCheck = new ArrayList<>();
@@ -140,6 +156,12 @@ public class ChooseFragment extends BaseFragment {
 //            spSupplier.setVisibility(View.GONE);
 //        }
         initList();
+        if (tag == 1) activity = Config.PdCgOrder2WgrkActivity;
+        if (tag == 2) activity = Config.PdSaleOrder2SaleOutActivity;
+        if (tag == 21) activity = Config.PdSaleOrder2SaleOut2Activity;
+        if (tag == 22) activity = Config.PdDbApply2DBActivity;
+        if (tag == 23) activity = Config.PdDbApply2DB4VMIActivity;
+        if (tag == 6) activity = Config.PdBackMsg2SaleBackActivity;
     }
 
     @Override
@@ -173,36 +195,45 @@ public class ChooseFragment extends BaseFragment {
             Log.e("ChooseFragment", "跳转数据：" + container.toString());
             switch (tag) {
                 case 1://采购订单下推外购入库单
-                    PagerForActivity.start(mContext, Config.PdCgOrder2WgrkActivity,container);
+                    PagerForActivity.start(mContext, Config.PdCgOrder2WgrkActivity, container);
 //                    intent = new Intent(mContext, PdCgOrder2WgrkActivity.class);
                     break;
                 case 2://销售订单下推销售出库单
-                    PagerForActivity.start(mContext, Config.PdSaleOrder2SaleOutActivity,container);
+                    PagerForActivity.start(mContext, Config.PdSaleOrder2SaleOutActivity, container);
+//                    intent = new Intent(mContext, PdSaleOrder2SaleOutActivity.class);
+                    break;
+                case 21://VMI销售订单下推销售出库单
+                    PagerForActivity.start(mContext, Config.PdSaleOrder2SaleOut2Activity, container);
 //                    intent = new Intent(mContext, PdSaleOrder2SaleOutActivity.class);
                     break;
                 case 6://退货通知单下推销售退货单
-                    PagerForActivity.start(mContext, Config.PdBackMsg2SaleBackActivity,container);
+                    PagerForActivity.start(mContext, Config.PdBackMsg2SaleBackActivity, container);
+//                    intent = new Intent(mContext, PdBackMsg2SaleBackActivity.class);
+                    break;
+                case 22://调拨申请单下推直接调拨单
+                    PagerForActivity.start(mContext, Config.PdDbApply2DBActivity, container);
+//                    intent = new Intent(mContext, PdBackMsg2SaleBackActivity.class);
+                    break;
+                case 23://VMI调拨申请单下推直接调拨单
+                    PagerForActivity.start(mContext, Config.PdDbApply2DB4VMIActivity, container);
 //                    intent = new Intent(mContext, PdBackMsg2SaleBackActivity.class);
                     break;
 
-
-
-
-                case 3://销售订单下推销售退货单
-                    intent = new Intent(mContext, PdSaleOrder2SaleBackActivity.class);
-                    break;
-                case 4://销售出库单下推销售退货单
-                    intent = new Intent(mContext, PdSaleOut2SaleBackActivity.class);
-                    break;
-                case 5://发货通知单下推销售出库单
-                    intent = new Intent(mContext, PdSendMsg2SaleOutActivity.class);
-                    break;
-                case 7://调拨申请单下推分布式调入单
-                    intent = new Intent(mContext, Db2FDinActivity.class);
-                    break;
-                case 8://调拨申请单下推分布式调出单
-                    intent = new Intent(mContext, Db2FDoutActivity.class);
-                    break;
+//                case 3://销售订单下推销售退货单
+//                    intent = new Intent(mContext, PdSaleOrder2SaleBackActivity.class);
+//                    break;
+//                case 4://销售出库单下推销售退货单
+//                    intent = new Intent(mContext, PdSaleOut2SaleBackActivity.class);
+//                    break;
+//                case 5://发货通知单下推销售出库单
+//                    intent = new Intent(mContext, PdSendMsg2SaleOutActivity.class);
+//                    break;
+//                case 7://调拨申请单下推分布式调入单
+//                    intent = new Intent(mContext, Db2FDinActivity.class);
+//                    break;
+//                case 8://调拨申请单下推分布式调出单
+//                    intent = new Intent(mContext, Db2FDoutActivity.class);
+//                    break;
             }
 
 
@@ -237,6 +268,9 @@ public class ChooseFragment extends BaseFragment {
         isCheck.clear();
         container.clear();
         downloadIDs.clear();
+        t_mainDao = daosession.getT_mainDao();
+        t_detailDao = daosession.getT_DetailDao();
+        pushDownSubDao = daosession.getPushDownSubDao();
         pushDownMainDao = daosession.getPushDownMainDao();
         //根据 tag 查找相应的单据
         List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
@@ -312,11 +346,11 @@ public class ChooseFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.btn_delete, R.id.btn_search, R.id.btn_getpush,R.id.start_date,R.id.end_date})
+    @OnClick({R.id.btn_delete, R.id.btn_search, R.id.btn_getpush, R.id.start_date, R.id.end_date})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_delete:
-                delete();
+                checkLocData();
                 break;
             case R.id.btn_search:
                 Search();
@@ -334,27 +368,149 @@ public class ChooseFragment extends BaseFragment {
     }
 
 
-    //删除本地数据
-    private void delete() {
-        PushDownSubDao pushDownSubDao = daosession.getPushDownSubDao();
-
-        for (int i = 0; i < downloadIDs.size(); i++) {
-            List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
-                    PushDownSubDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list();
-            for (int j = 0; j < pushDownSubs.size(); j++) {
-                pushDownSubDao.delete(pushDownSubs.get(j));
+    private void checkLocData() {
+        List<T_Detail> list = new ArrayList<>();
+        for (PushDownMain bean : downloadIDs) {
+            List<T_Detail> list1 = t_detailDao.queryBuilder().where(
+                    T_DetailDao.Properties.Activity.eq(activity),
+                    T_DetailDao.Properties.FID.eq(bean.FID)
+            ).build().list();
+            if (list1.size() > 0) {
+                list.addAll(list1);
             }
-            //删掉与该单据相关的明细
-            daosession.getT_DetailDao().deleteInTx(daosession.getT_DetailDao().queryBuilder().where(
-                    T_DetailDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list());
-            daosession.getT_mainDao().deleteInTx(daosession.getT_mainDao().queryBuilder().where(
-                    T_mainDao.Properties.FIndex.eq(downloadIDs.get(i).FID)).build().list());
-            pushDownMainDao.delete(downloadIDs.get(i));
-            Toast.showText(mContext, "删除成功");
+        }
+        if (list.size() > 0) {
+            new AlertDialog.Builder(mContext)
+                    .setTitle("本地存在未删除数据，")
+                    .setPositiveButton("确认删除", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            delete();
+                        }
+                    })
+                    .setNegativeButton("取消",null)
+                    .create().show();
+        }else{
+            delete();
         }
 
-        initList();
-        Search();
+    }
+
+    private PurchaseInStoreUploadBean pBean;
+    private PurchaseInStoreUploadBean.purchaseInStore listBean;
+    private ArrayList<PurchaseInStoreUploadBean.purchaseInStore> data;
+    private ArrayList<T_Detail> t_detailList;
+    private ArrayList<T_main> t_mainsList;
+
+    //删除本地数据
+    private void delete() {
+        List<T_Detail> list = new ArrayList<>();
+        for (PushDownMain bean : downloadIDs) {
+            List<T_Detail> list1 = t_detailDao.queryBuilder().where(
+                    T_DetailDao.Properties.Activity.eq(activity),
+                    T_DetailDao.Properties.FID.eq(bean.FID)
+            ).build().list();
+            if (list1.size() > 0) {
+                list.addAll(list1);
+            }
+        }
+        Lg.e("删除的明细dids：",downloadIDs);
+        Lg.e("删除的明细：",list);
+        if (list.size() > 0) {
+//            t_detailList = new ArrayList<>();
+//            t_mainsList = new ArrayList<>();
+            pBean = new PurchaseInStoreUploadBean();
+            listBean = pBean.new purchaseInStore();
+            data = new ArrayList<>();
+            String detail = "";
+            listBean.main = "";
+            ArrayList<String> detailContainer = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                if (j != 0 && j % 49 == 0) {
+                    Log.e("j%49", j % 49 + "");
+                    T_Detail t_detail = list.get(j);
+                    detail = detail +
+                            t_detail.FBarcode + "|" +
+                            t_detail.FRealQty + "|" +
+                            t_detail.IMIE + "|" +
+                            t_detail.FOrderId + "|";
+                    detail = detail.subSequence(0, detail.length() - 1).toString();
+                    detailContainer.add(detail);
+                    detail = "";
+                } else {
+                    Log.e("j", j + "");
+                    T_Detail t_detail = list.get(j);
+                    detail = detail +
+                            t_detail.FBarcode + "|" +
+                            t_detail.FRealQty + "|" +
+                            t_detail.IMIE + "|" +
+                            t_detail.FOrderId + "|";
+                    Log.e("detail1", detail);
+                }
+            }
+            if (detail.length() > 0) {
+                detail = detail.subSequence(0, detail.length() - 1).toString();
+            }
+            Log.e("detail", detail);
+            detailContainer.add(detail);
+            listBean.detail = detailContainer;
+            data.add(listBean);
+            pBean.list = data;
+            Gson gson = new Gson();
+            App.getRService().doIOAction(WebApi.CodeOnlyDelete, gson.toJson(pBean), new MySubscribe<CommonResponse>() {
+                @Override
+                public void onNext(CommonResponse commonResponse) {
+                    super.onNext(commonResponse);
+                    if (!commonResponse.state) return;
+                    Lg.e("删除请求成功");
+                    for (int i = 0; i < downloadIDs.size(); i++) {
+                        List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
+                                PushDownSubDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list();
+                        Lg.e("删除表体"+pushDownSubs.size(),pushDownSubs);
+                        for (int j = 0; j < pushDownSubs.size(); j++) {
+                            pushDownSubDao.delete(pushDownSubs.get(j));
+                        }
+                        //删掉与该单据相关的明细
+                        t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
+                                T_DetailDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list());
+                        t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
+                                T_mainDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list());
+                        pushDownMainDao.delete(downloadIDs.get(i));
+                        Toast.showText(mContext, "删除成功");
+                    }
+                        initList();
+                        Search();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    LoadingUtil.dismiss();
+                    Toast.showText(mContext, "删除失败：" + e.toString());
+                }
+            });
+
+        } else {
+            for (int i = 0; i < downloadIDs.size(); i++) {
+                List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
+                        PushDownSubDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list();
+                for (int j = 0; j < pushDownSubs.size(); j++) {
+                    pushDownSubDao.delete(pushDownSubs.get(j));
+                }
+                //删掉与该单据相关的明细
+//                daosession.getT_DetailDao().deleteInTx(daosession.getT_DetailDao().queryBuilder().where(
+//                        T_DetailDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list());
+//                daosession.getT_mainDao().deleteInTx(daosession.getT_mainDao().queryBuilder().where(
+//                        T_mainDao.Properties.FIndex.eq(downloadIDs.get(i).FID)).build().list());
+                pushDownMainDao.delete(downloadIDs.get(i));
+                Toast.showText(mContext, "删除成功");
+            }
+            initList();
+            Search();
+        }
+
+
+
     }
 
     //查找本地数据
@@ -363,24 +519,24 @@ public class ChooseFragment extends BaseFragment {
 //            //供应商信息绑定
 //            supplierID=spSupplier.getDataId();
 //        } else {
-            //客户信息绑定
-            supplierID=spClient.getDataName();
+        //客户信息绑定
+        supplierID = spClient.getDataName();
 //        }
 
         container.clear();
         isCheck.clear();
-        String con="";
-        if (!"".equals(endDate.getText().toString())&& !"".equals(startDate.getText().toString())) {
-            con += " and  FDATE between " + "\'" + startDate.getText().toString()+" 00:00:00.0" + "\'" + "and" + "\'" + endDate.getText().toString()+" 00:00:00.0" + "\'";
+        String con = "";
+        if (!"".equals(endDate.getText().toString()) && !"".equals(startDate.getText().toString())) {
+            con += " and  FDATE between " + "\'" + startDate.getText().toString() + " 00:00:00.0" + "\'" + "and" + "\'" + endDate.getText().toString() + " 00:00:00.0" + "\'";
         }
-        if (!"".equals(supplierID)){
-            con+=" and FSUPPLY='"+supplierID+"'";
+        if (!"".equals(supplierID)) {
+            con += " and FSUPPLY='" + supplierID + "'";
         }
-        if (!"".equals(edCode.getText().toString())){
-            con+=" and FBILL_NO='"+edCode.getText().toString()+"'";
+        if (!"".equals(edCode.getText().toString())) {
+            con += " and FBILL_NO='" + edCode.getText().toString() + "'";
         }
-        String SQL = "SELECT * FROM PUSH_DOWN_MAIN WHERE 1=1 "+con+" and TAG="+tag;
-        Lg.e("SQL:"+SQL);
+        String SQL = "SELECT * FROM PUSH_DOWN_MAIN WHERE 1=1 " + con + " and TAG=" + tag;
+        Lg.e("SQL:" + SQL);
         Cursor cursor = GreenDaoManager.getmInstance(mContext).getDaoSession().getDatabase().rawQuery(SQL, null);
         while (cursor.moveToNext()) {
             PushDownMain f = new PushDownMain();
@@ -392,15 +548,15 @@ public class ChooseFragment extends BaseFragment {
             f.tag = cursor.getInt(cursor.getColumnIndex("TAG"));
             container.add(f);
         }
-        if (container.size()==0){
-            Toast.showText(mContext,"未查询到数据");
-        }else{
+        if (container.size() == 0) {
+            Toast.showText(mContext, "未查询到数据");
+        } else {
             for (int i = 0; i < container.size(); i++) {
                 isCheck.add(false);
             }
         }
+        Lg.e("choose列表数据"+container.size(),container);
         pushDownListAdapter.notifyDataSetChanged();
-
 
 
 //        String code = edCode.getText().toString();

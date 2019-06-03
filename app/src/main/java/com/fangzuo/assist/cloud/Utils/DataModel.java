@@ -1,12 +1,17 @@
 package com.fangzuo.assist.cloud.Utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Activity.LoginActivity;
+import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
 import com.fangzuo.assist.cloud.Activity.WelcomeActivity;
+import com.fangzuo.assist.cloud.Adapter.SearchSupplierAdapter;
 import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.CodeCheckBackDataBean;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
@@ -218,6 +223,9 @@ public class DataModel {
                 "FSTORAGE_OUT_ID," +
                 "FSTORAGE_OUT," +
                 "FSTORAGE_IN_ID," +
+                "FQUANTITY," +
+                "FOWNER_ID," +
+                "FOWNER_TYPE_ID," +
                 "FSTORAGE_IN," +
                 "FWAVE_HOUSE_OUT_ID," +
                 "FWAVE_HOUSE_OUT," +
@@ -267,6 +275,7 @@ public class DataModel {
             t_detail.FBatch = cursor.getString(cursor.getColumnIndex("FBATCH"));
             t_detail.FIsFree = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("FIS_FREE")));
             t_detail.FRemainInStockQty = cursor.getString(cursor.getColumnIndex("FREMAIN_IN_STOCK_QTYALL"));
+            t_detail.FQuantity = cursor.getString(cursor.getColumnIndex("FQUANTITY"));
             t_detail.FRealQty = cursor.getString(cursor.getColumnIndex("FREAL_QTYALL"));
             t_detail.FRemainInStockUnitId = cursor.getString(cursor.getColumnIndex("FREMAIN_IN_STOCK_UNIT_ID"));
             t_detail.FPriceUnitID = cursor.getString(cursor.getColumnIndex("FPRICE_UNIT_ID"));
@@ -280,6 +289,8 @@ public class DataModel {
             t_detail.AuxSign = cursor.getString(cursor.getColumnIndex("AUX_SIGN"));
             t_detail.ActualModel = cursor.getString(cursor.getColumnIndex("ACTUAL_MODEL"));
             t_detail.FProductNo = cursor.getString(cursor.getColumnIndex("FPRODUCT_NO"));
+            t_detail.FOwnerId = cursor.getString(cursor.getColumnIndex("FOWNER_ID"));
+            t_detail.FOWnerTypeID = cursor.getString(cursor.getColumnIndex("FOWNER_TYPE_ID"));
 
             t_detail.FStorageOutId = cursor.getString(cursor.getColumnIndex("FSTORAGE_OUT_ID"));
             t_detail.FStorageOut = cursor.getString(cursor.getColumnIndex("FSTORAGE_OUT"));
@@ -423,6 +434,261 @@ public class DataModel {
         return list;
     }
 
+    //调用审核机制（下推时）
+    public static int tag=0;//用于审核时判断下推单跳转
+    public static void submitAndAudit(final Context mContext, final int activity, final List<String> orders,int itag){
+        tag=itag;
+        submitAndAudits(mContext,activity,orders);
+    }
+    //多个订单时同时审核
+    public static void submitAndAudits(final Context mContext, final int activity, final List<String> orders){
+        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+        ab.setTitle("是否直接审核");
+        ab.setMessage("审核单据数量："+orders.size());
+        ab.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                LoadingUtil.showDialog(mContext,"正在审核...");
+                final String json = Info.getJson(activity, JsonDealUtils.JSon_Submit_Audit(orders));
+                App.CloudService().doIOAction(Config.C_Submit, json, new ToSubscribe<BackData>() {
+                    @Override
+                    public void onNext(BackData backData) {
+                        super.onNext(backData);
+                        if (backData.getResult().getResponseStatus().getIsSuccess()) {
+                            Lg.e("提交成功");
+                            App.CloudService().doIOAction(Config.C_Audit, json, new ToSubscribe<BackData>() {
+                                @Override
+                                public void onNext(BackData backData) {
+                                    super.onNext(backData);
+                                    LoadingUtil.dismiss();
+                                    if (backData.getResult().getResponseStatus().getIsSuccess()) {
+                                        if (tag!=0){
+                                            new AlertDialog.Builder(mContext)
+                                                    .setTitle("审核成功")
+                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            tag=0;
+                                                            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Close_Activity,""));
+                                                        }
+                                                    })
+                                                    .create().show();
+                                        }else{
+                                            LoadingUtil.showAlter(mContext,"审核成功");
+                                        }
+
+                                        Lg.e("审核成功");
+                                    }else{
+                                        if (tag!=0){
+
+                                            List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
+                                            StringBuilder builder = new StringBuilder();
+                                            for (BackData.ResultBean.ResponseStatusBean.ErrorsBean error : errorsBeans) {
+                                                builder.append(error.getFieldName() + "\n");
+                                                builder.append(error.getMessage() + "\n");
+                                            }
+                                            new AlertDialog.Builder(mContext)
+                                                    .setTitle("审核失败")
+                                                    .setMessage(builder.toString())
+                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            tag=0;
+                                                            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Close_Activity,""));
+                                                        }
+                                                    })
+                                                    .create().show();
+                                        }else{
+                                            List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
+                                            StringBuilder builder = new StringBuilder();
+                                            for (BackData.ResultBean.ResponseStatusBean.ErrorsBean error : errorsBeans) {
+                                                builder.append(error.getFieldName() + "\n");
+                                                builder.append(error.getMessage() + "\n");
+                                            }
+                                            LoadingUtil.showAlter(mContext,"",builder.toString());
+                                        }
+
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                    LoadingUtil.dismiss();
+                                    if (tag!=0){
+                                        tag=0;
+                                        Toast.showText(mContext,"审核失败，请于系统中审核");
+                                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Close_Activity,""));
+                                    }else{
+                                        Toast.showText(mContext,"审核失败，请于系统中审核");
+                                    }
+                                    Lg.e("审核失败，请于系统中审核");
+                                }
+                            });
+                        } else {
+                            LoadingUtil.dismiss();
+                            Toast.showText(mContext,"提交失败，请于系统中提交并审核");
+                            Lg.e("提交失败");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        LoadingUtil.dismiss();
+                        if (tag!=0){
+                            tag=0;
+                            Toast.showText(mContext,"提交失败，请于系统中提交并审核");
+                            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Close_Activity,""));
+                        }else{
+                            Toast.showText(mContext,"提交失败，请于系统中提交并审核");
+                        }
+                        Lg.e("审核失败");
+                    }
+                });
+            }
+        });
+        ab.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (tag!=0){
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Close_Activity,""));
+                }else{
+                    alertDialog.dismiss();
+                }
+            }
+        });
+        alertDialog = ab.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+
+    }
+    //非下推单的审核
+    public static AlertDialog alertDialog = null;
+    public static void submitAndAudit(final Context mContext, final int activity, final String order){
+        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+        ab.setTitle("是否直接审核");
+        ab.setMessage("确认？");
+        ab.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                LoadingUtil.showDialog(mContext,"正在审核...");
+                final String json = Info.getJson(activity, JsonDealUtils.JSonDB_Check(order));
+                App.CloudService().doIOAction(Config.C_Submit, json, new ToSubscribe<BackData>() {
+                    @Override
+                    public void onNext(BackData backData) {
+                        super.onNext(backData);
+                        if (backData.getResult().getResponseStatus().getIsSuccess()) {
+                            Lg.e("提交成功");
+                            App.CloudService().doIOAction(Config.C_Audit, json, new ToSubscribe<BackData>() {
+                                @Override
+                                public void onNext(BackData backData) {
+                                    super.onNext(backData);
+                                    LoadingUtil.dismiss();
+                                    if (backData.getResult().getResponseStatus().getIsSuccess()) {
+                                        if (tag!=0){
+                                            new AlertDialog.Builder(mContext)
+                                                    .setTitle("审核成功")
+                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            tag=0;
+                                                            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Close_Activity,""));
+                                                        }
+                                                    })
+                                                    .create().show();
+                                        }else{
+                                            LoadingUtil.showAlter(mContext,"审核成功");
+                                        }
+                                        VibratorUtil.Vibrate(mContext,Info.VibratorTime);
+                                        Lg.e("审核成功");
+                                    }else{
+                                        if (tag!=0){
+
+                                            List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
+                                            StringBuilder builder = new StringBuilder();
+                                            for (BackData.ResultBean.ResponseStatusBean.ErrorsBean error : errorsBeans) {
+                                                builder.append(error.getFieldName() + "\n");
+                                                builder.append(error.getMessage() + "\n");
+                                            }
+                                            new AlertDialog.Builder(mContext)
+                                                    .setTitle("审核失败")
+                                                    .setMessage(builder.toString())
+                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            tag=0;
+                                                            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Close_Activity,""));
+                                                        }
+                                                    })
+                                                    .create().show();
+                                        }else{
+                                            List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
+                                            StringBuilder builder = new StringBuilder();
+                                            for (BackData.ResultBean.ResponseStatusBean.ErrorsBean error : errorsBeans) {
+                                                builder.append(error.getFieldName() + "\n");
+                                                builder.append(error.getMessage() + "\n");
+                                            }
+                                            LoadingUtil.showAlter(mContext,"",builder.toString());
+                                        }
+
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                    LoadingUtil.dismiss();
+                                    if (tag!=0){
+                                        tag=0;
+                                        Toast.showText(mContext,"审核失败，请于系统中审核");
+                                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Close_Activity,""));
+                                    }else{
+                                        Toast.showText(mContext,"审核失败，请于系统中审核");
+                                    }
+                                    Lg.e("审核失败，请于系统中审核");
+                                }
+                            });
+                        } else {
+                            LoadingUtil.dismiss();
+                            Toast.showText(mContext,"提交失败，请于系统中提交并审核");
+                            Lg.e("提交失败");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        LoadingUtil.dismiss();
+                        if (tag!=0){
+                            tag=0;
+                            Toast.showText(mContext,"提交失败，请于系统中提交并审核");
+                            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Close_Activity,""));
+                        }else{
+                            Toast.showText(mContext,"提交失败，请于系统中提交并审核");
+                        }
+                        Lg.e("审核失败");
+                    }
+                });
+            }
+        });
+        ab.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (tag!=0){
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Close_Activity,""));
+                }else{
+                    alertDialog.dismiss();
+                }
+            }
+        });
+        alertDialog = ab.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+
+    }
+
+
     //获取库存
     public static void getStoreNum(Product product, Storage storage, String batch, Context mContext, final TextView textView,Org org,Org huozhu){
         if (product == null || storage == null){
@@ -480,6 +746,216 @@ public class DataModel {
 //        }
     }
 
+    //获取库存----------------------------根据货主类型------------------------------------------
+    public static void getStoreNumForType(final Product product, final Storage storage, final String batch, final Context mContext, final TextView textView, final String type, final Org org, Org huozhu){
+        if (product == null || storage == null){
+            textView.setText("0");
+            return;
+        }
+        Lg.e("查库存类型：",type);
+        if ("BD_OwnerOrg".equals(type)){
+            getStoreNumForTypeNext(product,storage,batch,mContext,textView,org,huozhu.FOrgID);
+        }else if ("BD_Supplier".equals(type)){
+            Gson gson = new Gson();
+            SearchBean.S2Product s2Product = new SearchBean.S2Product();
+            s2Product.likeOr = huozhu.FNumber;
+            s2Product.FOrg = org==null?"":org.FOrgID;
+            App.getRService().doIOAction(WebApi.SUPPLIERSEARCHLIKE, gson.toJson(new SearchBean(SearchBean.product_for_like,gson.toJson(s2Product))), new MySubscribe<CommonResponse>() {
+                @Override
+                public void onNext(CommonResponse commonResponse) {
+                    super.onNext(commonResponse);
+                    if (!commonResponse.state)return;
+                    DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                    if (null!=dBean.suppliers && dBean.suppliers.size()>0){
+                        String supplier_huozhu=dBean.suppliers.get(0).FMASTERID;
+                        getStoreNumForTypeNext(product,storage,batch,mContext,textView,org,supplier_huozhu);
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+//                    super.onError(e);
+                    textView.setText("0");
+                    Toast.showText(mContext,"供应商货主查询失败:"+e.getMessage());
+
+                }
+            });
+        }else if ("BD_Customer".equals(type)){
+            Gson gson = new Gson();
+            SearchBean.S2Product s2Product = new SearchBean.S2Product();
+            s2Product.likeOr = huozhu.FName;
+            s2Product.FOrg = org==null?"":org.FOrgID;
+            App.getRService().doIOAction(WebApi.CLIENTSEARCHLIKE, gson.toJson(new SearchBean(SearchBean.product_for_like,gson.toJson(s2Product))), new MySubscribe<CommonResponse>() {
+                @Override
+                public void onNext(CommonResponse commonResponse) {
+                    super.onNext(commonResponse);
+                    if (!commonResponse.state)return;
+                    DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                    if (null!=dBean.clients && dBean.clients.size()>0){
+                        String client_huozhu=dBean.clients.get(0).FItemID;
+                        getStoreNumForTypeNext(product,storage,batch,mContext,textView,org,client_huozhu);
+                    }else{
+                        textView.setText("0");
+                        Toast.showText(mContext,"客户库存查询为空");
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+//                    super.onError(e);
+                    textView.setText("0");
+                    Toast.showText(mContext,"客户库存查询失败:"+e.getMessage());
+
+                }
+            });
+        }
+
+//        else{
+//            List<InStorageNum> container = new ArrayList<>();
+//            String con="";
+//            if (!"".equals(storage.FItemID)){
+//                con+=" and FSTOCK_ID='"+storage.FItemID+"'";
+//            }
+//            if (!"".equals(product.FMaterialid)){
+//                con+=" and FITEM_ID='"+product.FMaterialid+"'";
+//            }
+//            if (!"".equals(batch)){
+//                con+=" and FBATCH_NO='"+batch+"'";
+//            }
+//            String SQL = "SELECT * FROM IN_STORAGE_NUM WHERE 1=1 "+con;
+//            Lg.e("库存查询SQL:"+SQL);
+//            Cursor cursor = GreenDaoManager.getmInstance(mContext).getDaoSession().getDatabase().rawQuery(SQL, null);
+//            while (cursor.moveToNext()) {
+//                InStorageNum f = new InStorageNum();
+//                f.FQty = cursor.getString(cursor.getColumnIndex("FQTY"));
+//                Lg.e("库存查询存在FQty："+f.FQty);
+//                container.add(f);
+//            }
+//            if (container.size() > 0) {
+//                textView.setText(container.get(0).FQty);
+//            } else {
+//                textView.setText("0");
+//            }
+//        }
+    }
+    private static void getStoreNumForTypeNext(Product product, Storage storage, String batch, Context mContext, final TextView textView,Org org,String huozhu){
+        Lg.e("库存查找条件：",product.FMASTERID+"-"+storage.FItemID+"-"+batch+"-"+org.FOrgID+"-"+huozhu);
+            InStoreNumBean storageNum = new InStoreNumBean(product.FMASTERID,storage.FItemID,"",batch,org==null?"":org.FOrgID,huozhu==null?"":huozhu);
+            App.getRService().doIOAction(WebApi.GETINSTORENUM, new Gson().toJson(storageNum), new MySubscribe<CommonResponse>() {
+                @Override
+                public void onNext(CommonResponse commonResponse) {
+                    super.onNext(commonResponse);
+                    if (!commonResponse.state)return;
+                    if (!MathUtil.isNumeric(commonResponse.returnJson)){
+                        textView.setText("0");
+                    }else{
+                        textView.setText(DoubleUtil.Cut0(commonResponse.returnJson)+"");
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+//                    super.onError(e);
+                    textView.setText("0");
+                }
+            });
+//        if (BasicShareUtil.getInstance(mContext).getIsOL()) {
+//        }
+    }
+    //------------------------------------------------------------------------------------END
+
+
+    //销售订单下推销售出库——获取库存————————————
+    static String hz="";
+    public static void getStoreNum4SaleOrder2SaleOut(final Product product, final Storage storage, final String batch, final Context mContext, final TextView textView, final String type, final Org org, final String huozhu){
+        if (product == null || storage == null){
+            textView.setText("0");
+            return;
+        }
+        if ("标准销售订单".equals(type)){
+            Org org1 =LocDataUtil.getOrg(huozhu,"number");
+            hz = org1==null?"":org1.FOrgID;
+        }else{
+            Gson gson = new Gson();
+            SearchBean.S2Product s2Product = new SearchBean.S2Product();
+            s2Product.likeOr = huozhu;
+            s2Product.FOrg = org==null?"":org.FOrgID;
+            App.getRService().doIOAction(WebApi.SUPPLIERSEARCHLIKE, gson.toJson(new SearchBean(SearchBean.product_for_like,gson.toJson(s2Product))), new MySubscribe<CommonResponse>() {
+                @Override
+                public void onNext(CommonResponse commonResponse) {
+                    super.onNext(commonResponse);
+                    if (!commonResponse.state)return;
+                    DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                    if (null!=dBean.suppliers && dBean.suppliers.size()>0){
+                        hz=dBean.suppliers.get(0).FMASTERID;
+                        getStoreNum4SaleOrder2SaleOut2(product,storage,batch,mContext,textView,type,org,hz);
+                    }
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+//                    super.onError(e);
+                    textView.setText("0");
+                    Toast.showText(mContext,"供应商货主查询失败:"+e.getMessage());
+
+                }
+            });
+        }
+//        if (BasicShareUtil.getInstance(mContext).getIsOL()) {
+
+//        }
+//        else{
+//            List<InStorageNum> container = new ArrayList<>();
+//            String con="";
+//            if (!"".equals(storage.FItemID)){
+//                con+=" and FSTOCK_ID='"+storage.FItemID+"'";
+//            }
+//            if (!"".equals(product.FMaterialid)){
+//                con+=" and FITEM_ID='"+product.FMaterialid+"'";
+//            }
+//            if (!"".equals(batch)){
+//                con+=" and FBATCH_NO='"+batch+"'";
+//            }
+//            String SQL = "SELECT * FROM IN_STORAGE_NUM WHERE 1=1 "+con;
+//            Lg.e("库存查询SQL:"+SQL);
+//            Cursor cursor = GreenDaoManager.getmInstance(mContext).getDaoSession().getDatabase().rawQuery(SQL, null);
+//            while (cursor.moveToNext()) {
+//                InStorageNum f = new InStorageNum();
+//                f.FQty = cursor.getString(cursor.getColumnIndex("FQTY"));
+//                Lg.e("库存查询存在FQty："+f.FQty);
+//                container.add(f);
+//            }
+//            if (container.size() > 0) {
+//                textView.setText(container.get(0).FQty);
+//            } else {
+//                textView.setText("0");
+//            }
+//        }
+    }
+    public static void getStoreNum4SaleOrder2SaleOut2(final Product product, final Storage storage, final String batch, final Context mContext, final TextView textView, String type, final Org org, String huozhu) {
+        Lg.e("库存查找条件：",product.FMASTERID+"-"+storage.FItemID+"-"+batch+"-"+org.FOrgID+"-"+hz);
+        InStoreNumBean storageNum = new InStoreNumBean(product.FMASTERID,storage.FItemID,"",batch,org==null?"":org.FOrgID,huozhu);
+        App.getRService().doIOAction(WebApi.GETINSTORENUM, new Gson().toJson(storageNum), new MySubscribe<CommonResponse>() {
+            @Override
+            public void onNext(CommonResponse commonResponse) {
+                super.onNext(commonResponse);
+                if (!commonResponse.state)return;
+                if (!MathUtil.isNumeric(commonResponse.returnJson)){
+                    textView.setText("0");
+                }else{
+                    textView.setText(DoubleUtil.Cut0(commonResponse.returnJson)+"");
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+//                    super.onError(e);
+                textView.setText("0");
+            }
+        });
+    }
+    //———————————---------------------------------
     //获取库存()舍弃
     public static void getStoreNum(Product product, Storage storage, String batch, Context mContext, final TextView textView){
         if (product == null || storage == null){

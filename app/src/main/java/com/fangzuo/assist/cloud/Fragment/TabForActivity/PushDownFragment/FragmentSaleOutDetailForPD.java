@@ -164,6 +164,11 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(ClassEvent event) {
         switch (event.Msg) {
+            case EventBusInfoCode.Close_Activity:
+                Bundle b = new Bundle();
+                b.putInt("123", tag);
+                startNewActivity(activityPager, PushDownPagerActivity.class, 0, 0, true, b);
+                break;
             case EventBusInfoCode.ScanResult:
                 BarcodeResult res = (BarcodeResult) event.postEvent;
 //                if (cbScaning.isChecked()) {
@@ -230,10 +235,8 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     MediaPlayer.getInstance(mContext).ok();
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));//上传成功，解锁表头
                     Toast.showText(mContext, "上传成功");
+                    DataModel.submitAndAudit(mContext,Config.PdSaleOrder2SaleOutActivity,listOrder,tag);
 //                btnBackorder.setClickable(true);
-                    Bundle b = new Bundle();
-                    b.putInt("123", tag);
-                    startNewActivity(activityPager, PushDownPagerActivity.class, 0, 0, true, b);
                 } else {
                     LoadingUtil.dismiss();
                     List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
@@ -402,7 +405,11 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                 Lg.e("选中仓库：", storage);
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, storage, "");
-                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),LocDataUtil.getOrg(scanOfHuozhuNumber,"number"));
+                if (activityPager.getActivity()==Config.PdSaleOrder2SaleOutActivity){//非VMI销售订单下推时，货主类型为业务组织，VMI时，为供应商，则查询库存方式不同，查的是供应商表
+                    DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),LocDataUtil.getOrg(scanOfHuozhuNumber,"number"));
+                }else{
+                    DataModel.getStoreNum4SaleOrder2SaleOut(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,pushDownMain.FBillTypeName,activityPager.getOrgOut(),scanOfHuozhuNumber);
+                }
 
             }
         });
@@ -610,8 +617,11 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             edPihao.setText("");
             isOpenBatch = false;
         }
-        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),LocDataUtil.getOrg(scanOfHuozhuNumber,"number"));
-
+        if (activityPager.getActivity()==Config.PdSaleOrder2SaleOutActivity){//非VMI销售订单下推时，货主类型为业务组织，VMI时，为供应商，则查询库存方式不同，查的是供应商表
+            DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),LocDataUtil.getOrg(scanOfHuozhuNumber,"number"));
+        }else{
+            DataModel.getStoreNum4SaleOrder2SaleOut(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,pushDownMain.FBillTypeName,activityPager.getOrgOut(),scanOfHuozhuNumber);
+        }
 
         spAuxsign.getData(product.FMASTERID, autoAuxSing);
         spActualmodel.getData(product.FMASTERID, autoActualModel);
@@ -640,6 +650,11 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
         }
         if (activityPager.getOrgOut(0).equals("")) {
             Toast.showText(mContext, "发货组织不能为空");
+            MediaPlayer.getInstance(mContext).error();
+            return false;
+        }
+        if (pushDownSub == null) {
+            Toast.showText(mContext, "请重新扫码");
             MediaPlayer.getInstance(mContext).error();
             return false;
         }

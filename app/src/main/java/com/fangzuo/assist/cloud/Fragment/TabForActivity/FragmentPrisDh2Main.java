@@ -25,6 +25,7 @@ import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.LocDataUtil;
+import com.fangzuo.assist.cloud.widget.NumberClick;
 import com.fangzuo.assist.cloud.widget.SpinnerDepartMent;
 import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
 import com.fangzuo.assist.cloud.widget.SpinnerOrg;
@@ -64,6 +65,8 @@ public class FragmentPrisDh2Main extends BaseFragment {
     SpinnerDepartMent spDepartmentGet;
     @BindView(R.id.sp_which_storage)
     SpinnerStorage spWhichStorage;
+    @BindView(R.id.cb_num)
+    NumberClick cbNum;
     private FragmentActivity mContext;
     private PagerForActivity activityPager;
     Unbinder unbinder;
@@ -151,7 +154,22 @@ public class FragmentPrisDh2Main extends BaseFragment {
 
     @Override
     protected void initData() {
+
+        //判断是否有保存的业务单号，决定是否锁住表头
+        if (!LocDataUtil.hasTDetail(activityPager.getActivity())){
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));
+        }else{
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+        }
+        setfocus(tvDate);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         tvDate.setText(CommonUtil.getTime(true));
+        cbNum.setSaveKey(activityPager.getActivity()+"printnum");
         activityPager.setDate(tvDate.getText().toString());
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
         spOrgIn.setAutoSelection(getString(R.string.spOrgIn_pris_dh2), Hawk.get(getString(R.string.spOrgIn_pris_dh2), ""));//仓库，仓管员，部门都以组织id来过滤
@@ -163,16 +181,7 @@ public class FragmentPrisDh2Main extends BaseFragment {
 //        binding.spOrgIn.setEnable(false);
 //        spOrgCreate.setEnable(false);
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
-        //判断是否有保存的业务单号，决定是否锁住表头
-        if (!LocDataUtil.hasTDetail(activityPager.getActivity())){
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));
-        }else{
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
-        }
-        setfocus(tvDate);
-
     }
-
 
     //在oncreateView之前使用 不要使用控件
     @Override
@@ -190,6 +199,7 @@ public class FragmentPrisDh2Main extends BaseFragment {
                 activityPager.setFOrderNo(edFfOrder == null ? "" : edFfOrder.getText().toString());
                 activityPager.setManStore(spStoreman.getDataNumber());
                 activityPager.setDepartMent(spDepartmentGet.getDataNumber());
+                activityPager.setPrintNum(cbNum.getNum());
                 Hawk.put(Config.OrderNo+activityPager.getActivity(),edFfOrder.getText().toString());//保存业务单号
                 Hawk.put(Config.Note+activityPager.getActivity(),edNot.getText().toString());//保存业务单号
             }

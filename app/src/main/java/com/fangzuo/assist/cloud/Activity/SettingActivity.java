@@ -235,8 +235,8 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
             edPass.setText(share.getDataBasePass());
         }else{
             if (Info.DATABASESETTING.equals("K3DBConfigerRY")){
-                edServerip.setText("233z13987d.51mypc.cn");
-                edPort.setText("49717");
+                edServerip.setText("172.18.120.186");
+                edPort.setText("1433");
                 edUsername.setText("sa");
                 edPass.setText("rongyuan@888");
             }else{

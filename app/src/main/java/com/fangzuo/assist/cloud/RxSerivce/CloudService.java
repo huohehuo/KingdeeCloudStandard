@@ -52,7 +52,7 @@ public class CloudService {
                     .client(App.getOkHttpClient())
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                    .baseUrl(Hawk.get(Config.Cloud_Url,"http://47.106.179.214/K3Cloud/"))
+                    .baseUrl(Hawk.get(Config.Cloud_Url,"http://120.77.206.67/K3Cloud/"))
                     .build();
             request = retrofit.create(ServiceRequest.class);
 //            App.setRetrofit(retrofit);

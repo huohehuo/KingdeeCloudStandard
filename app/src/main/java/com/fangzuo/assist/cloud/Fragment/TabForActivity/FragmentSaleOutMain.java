@@ -29,6 +29,7 @@ import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.fangzuo.assist.cloud.widget.SpinnerDepartMent;
+import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
 import com.fangzuo.assist.cloud.widget.SpinnerOrg;
 import com.fangzuo.assist.cloud.widget.SpinnerSaleMan;
 import com.fangzuo.assist.cloud.widget.SpinnerStoreMan;
@@ -69,6 +70,8 @@ public class FragmentSaleOutMain extends BaseFragment {
     LinearLayout llClient;
     @BindView(R.id.search_client)
     RelativeLayout searchClient;
+    @BindView(R.id.sp_huozhu)
+    SpinnerHuozhu spHuozhu;
     //    @BindView(R.id.sp_department_sale)
 //    SpinnerDepartMent spDepartmentSale;
     private FragmentActivity mContext;
@@ -92,6 +95,7 @@ public class FragmentSaleOutMain extends BaseFragment {
                     spOrgSend.setEnable(false);
                     spDepartmentSend.setEnable(false);
                     spStoreman.setEnable(false);
+                    spHuozhu.setEnable(false);
                     searchClient.setClickable(false);
                     edNot.setFocusable(false);
                     edClient.setFocusable(false);
@@ -107,6 +111,7 @@ public class FragmentSaleOutMain extends BaseFragment {
                     spOrgSend.setEnable(true);
                     spDepartmentSend.setEnable(true);
                     spStoreman.setEnable(true);
+                    spHuozhu.setEnable(true);
                     searchClient.setClickable(true);
                     edClient.setFocusable(true);
                     edClient.setFocusableInTouchMode(true);
@@ -168,11 +173,11 @@ public class FragmentSaleOutMain extends BaseFragment {
         tvDate.setText(CommonUtil.getTime(true));
         activityPager.setDate(tvDate.getText().toString());
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_so), Hawk.get(getString(R.string.spOrgSend_so), ""));//仓库，仓管员，部门都以组织id来过滤
-        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_so), Hawk.get(getString(R.string.spDepartmentSend_so), ""), activityPager.getOrgOut(), activityPager.getActivity());
+        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_so)+activityPager.getActivity(), Hawk.get(getString(R.string.spOrgSend_so)+activityPager.getActivity(), ""));//仓库，仓管员，部门都以组织id来过滤
+        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_so)+activityPager.getActivity(), Hawk.get(getString(R.string.spDepartmentSend_so)+activityPager.getActivity(), ""), activityPager.getOrgOut(), activityPager.getActivity());
 //        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_so), "", activityPager.getOrgOut(), activityPager.getActivity());
-        spStoreman.setAuto(getString(R.string.spStoreman_so), Hawk.get(getString(R.string.spStoreman_so), ""), activityPager.getOrgOut());
-//        spSaleman.setAuto(getString(R.string.spSaleman_so), "", activityPager.getOrgOut());
+        spStoreman.setAuto(getString(R.string.spStoreman_so)+activityPager.getActivity(), Hawk.get(getString(R.string.spStoreman_so)+activityPager.getActivity(), ""), activityPager.getOrgOut());
+//        spSaleman.setAuto(getString(R.string.spSaleman_so)+activityPager.getActivity(), "", activityPager.getOrgOut());
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
         //判断是否有保存的业务单号，不存在的话，解锁表头
         if (!LocDataUtil.hasTDetail(activityPager.getActivity())) {
@@ -182,8 +187,9 @@ public class FragmentSaleOutMain extends BaseFragment {
         }
         setfocus(tvDate);
         //当为下推单时隐藏
-        if (activityPager.getActivity() == Config.PdSaleOrder2SaleOutActivity||activityPager.getActivity() == Config.PdBackMsg2SaleBackActivity) {
+        if (activityPager.getActivity() == Config.PdSaleOrder2SaleOutActivity||activityPager.getActivity() == Config.PdSaleOrder2SaleOut2Activity) {
             llClient.setVisibility(View.GONE);
+            spHuozhu.setVisibility(View.GONE);
         }
     }
 
@@ -229,13 +235,22 @@ public class FragmentSaleOutMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgOut((Org) spOrgSend.getAdapter().getItem(i));
-                Hawk.put(getString(R.string.spOrgSend_so), activityPager.getOrgOut().FName);
-                spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_so), Hawk.get(getString(R.string.spDepartmentSend_so), ""), activityPager.getOrgOut(), activityPager.getActivity());
-                spStoreman.setAuto(getString(R.string.spStoreman_so), Hawk.get(getString(R.string.spStoreman_so), ""), activityPager.getOrgOut());
-//        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_so), "", activityPager.getOrgOut(), activityPager.getActivity());
-//        spSaleman.setAuto(getString(R.string.spSaleman_so), "", activityPager.getOrgOut());
+                Hawk.put(getString(R.string.spOrgSend_so)+activityPager.getActivity(), activityPager.getOrgOut().FName);
+                spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_so)+activityPager.getActivity(), Hawk.get(getString(R.string.spDepartmentSend_so)+activityPager.getActivity(), ""), activityPager.getOrgOut(), activityPager.getActivity());
+                spHuozhu.setAutoSelection(Info.HuoZhu+activityPager.getActivity(), activityPager.getOrgOut(), Hawk.get(Info.HuoZhu+activityPager.getActivity(), ""));
+
+                spStoreman.setAuto(getString(R.string.spStoreman_so)+activityPager.getActivity(), Hawk.get(getString(R.string.spStoreman_so)+activityPager.getActivity(), ""), activityPager.getOrgOut());
+//        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_so)+activityPager.getActivity(), "", activityPager.getOrgOut(), activityPager.getActivity());
+//        spSaleman.setAuto(getString(R.string.spSaleman_so)+activityPager.getActivity(), "", activityPager.getOrgOut());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
 
+            }
+        });
+        spHuozhu.setOnItemSelectedListener(new ItemListener() {
+            @Override
+            protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
+                activityPager.setHuozhuOut((Org) spHuozhu.getAdapter().getItem(i));
+                Hawk.put(Info.HuoZhu+activityPager.getActivity(), activityPager.getHuozhuOut().FName);
             }
         });
         cbIsStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

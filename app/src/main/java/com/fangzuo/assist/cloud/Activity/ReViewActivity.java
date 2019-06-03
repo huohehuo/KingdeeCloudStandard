@@ -81,7 +81,7 @@ public class ReViewActivity extends BaseActivity {
             case EventBusInfoCode.Print_Out://打印
                 PrintHistory data = (PrintHistory) event.postEvent;
                 try {
-                    CommonUtil.doPrint(zpSDK,data);
+                    CommonUtil.doPrint(zpSDK,data,"1");
                 } catch (Exception e) {
 //                    e.printStackTrace();
                     LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));

@@ -82,7 +82,7 @@ public class ReViewPDActivity extends BaseActivity {
             case EventBusInfoCode.Print_Out://打印
                 PrintHistory data = (PrintHistory) event.postEvent;
                 try {
-                    CommonUtil.doPrint(zpSDK,data);
+                    CommonUtil.doPrint(zpSDK,data,"1");
                 } catch (Exception e) {
 //                    e.printStackTrace();
                     LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
@@ -262,7 +262,6 @@ public class ReViewPDActivity extends BaseActivity {
     private ArrayList<PurchaseInStoreUploadBean.purchaseInStore> data;
     private ArrayList<T_Detail> t_detailList;
     private ArrayList<T_main> t_mainsList;
-
     @OnClick({R.id.btn_back, R.id.delete_all, R.id.btn_delete})
     public void onClick(View view) {
         switch (view.getId()) {

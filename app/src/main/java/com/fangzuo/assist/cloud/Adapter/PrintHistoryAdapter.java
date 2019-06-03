@@ -71,7 +71,7 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
         @Override
         public void setData(PrintHistory data) {
             super.setData(data);
-             huoquan.setText(LocDataUtil.getOrg(data.getFHuoquan(),"number").FNote);
+             huoquan.setText(LocDataUtil.getRemark(data.getFHuoquan(),"number").FNote);
              batch.setText(data.getFBatch());
              name.setText(data.getFName());
              model.setText(data.getFModel());

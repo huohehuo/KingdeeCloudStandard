@@ -17,6 +17,7 @@ import com.fangzuo.assist.cloud.Beans.SearchBean;
 import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.Department;
 import com.fangzuo.assist.cloud.Dao.Org;
+import com.fangzuo.assist.cloud.Dao.RemarkData;
 import com.fangzuo.assist.cloud.Dao.SaleMan;
 import com.fangzuo.assist.cloud.Dao.Suppliers;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
@@ -25,6 +26,7 @@ import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.greendao.gen.ClientDao;
 import com.fangzuo.greendao.gen.DepartmentDao;
 import com.fangzuo.greendao.gen.OrgDao;
+import com.fangzuo.greendao.gen.RemarkDataDao;
 import com.fangzuo.greendao.gen.SaleManDao;
 import com.fangzuo.greendao.gen.T_DetailDao;
 import com.fangzuo.greendao.gen.UnitDao;
@@ -171,6 +173,34 @@ public class LocDataUtil {
 
 
     }
+    //获取组织/供应商/客户 的简称
+    public static Org getRemark(String id,String type){
+        if ("".equals(id)||null==id){
+            return new Org("","","","");
+        }
+        RemarkDataDao employeeDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getRemarkDataDao();
+        if ("name".equals(type)){
+            List<RemarkData> employees = employeeDao.queryBuilder().where(
+                    RemarkDataDao.Properties.FNAME.eq(id)
+            ).build().list();
+            if (employees.size()>0){
+                return new Org(employees.get(0).FNUMBER,employees.get(0).FNUMBER,employees.get(0).FNAME,employees.get(0).FSHORTNAME);
+            }else{
+                return new Org("","","","");
+            }
+        }else{
+            List<RemarkData> employees = employeeDao.queryBuilder().where(
+                    RemarkDataDao.Properties.FNUMBER.eq(id)
+            ).build().list();
+            if (employees.size()>0){
+                return new Org(employees.get(0).FNUMBER,employees.get(0).FNUMBER,employees.get(0).FNAME,employees.get(0).FSHORTNAME);
+            }else{
+                return new Org("","","","");
+            }
+        }
+
+
+    }
 
     //获取供应商数据
     public static void getSuppliers(String string, String searchOrg, final String Type){
@@ -197,6 +227,34 @@ public class LocDataUtil {
             public void onError(Throwable e) {
                 super.onError(e);
                 EventBusUtil.sendEvent(new ClassEvent(Type,new Suppliers("")));
+            }
+        });
+    }
+    //获取客户数据
+    public static void getClient(String string, String searchOrg, final String Type){
+        Lg.e("getClient",string+"--"+searchOrg+"--"+Type);
+        if (null==searchOrg || "".equals(searchOrg))return;
+        SearchBean.S2Product s2Product = new SearchBean.S2Product();
+        s2Product.likeOr = string;
+        s2Product.FOrg = searchOrg;
+        App.getRService().doIOAction(WebApi.CLIENTSEARCHLIKE, new Gson().toJson(new SearchBean(SearchBean.product_for_like, new Gson().toJson(s2Product))), new MySubscribe<CommonResponse>() {
+            @Override
+            public void onNext(CommonResponse commonResponse) {
+                super.onNext(commonResponse);
+                if (!commonResponse.state)return;
+                DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                if (dBean.clients!=null && dBean.clients.size()>0){
+                    EventBusUtil.sendEvent(new ClassEvent(Type,dBean.clients.get(0)));
+                }else{
+                    EventBusUtil.sendEvent(new ClassEvent(Type,new Client("","","","")));
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                EventBusUtil.sendEvent(new ClassEvent(Type,new Client("","","","")));
             }
         });
     }

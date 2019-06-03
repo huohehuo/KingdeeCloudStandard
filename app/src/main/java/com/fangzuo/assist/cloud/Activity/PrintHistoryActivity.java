@@ -192,7 +192,7 @@ public class PrintHistoryActivity extends BaseActivity {
             data.FDate = getTime(true);
         }
 
-        String huozhuNote= LocDataUtil.getOrg(data.FHuoquan,"number").FNote;
+        String huozhuNote= LocDataUtil.getRemark(data.FHuoquan,"number").FNote;
         data.FHuoquan=huozhuNote;
         Lg.e("打印信息：",data);
         AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
@@ -225,7 +225,7 @@ public class PrintHistoryActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
              try {
-                    CommonUtil.doPrint(zpSDK,data);
+                    CommonUtil.doPrint(zpSDK,data,"1");
                 } catch (Exception e) {
 //                    e.printStackTrace();
                     LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));

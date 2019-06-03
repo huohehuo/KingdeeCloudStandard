@@ -82,13 +82,14 @@ public class PurchaseFragment extends BaseFragment {
     }
 
     private AlertDialog.Builder builder;
-    String[] items_sout = new String[]{"原单", "销售订单下推销售出库单","退货通知单下推销售退货单"};
+    String[] items_sout = new String[]{"原单", "销售订单下推销售出库单","VMI销售订单下推销售出库单","退货通知单下推销售退货单"};
     String[] items_tb = new String[]{"挑板领料1", "挑板入库1"};
     String[] items_tb2 = new String[]{"挑板领料2", "挑板入库2"};
     String[] items_tb3 = new String[]{"挑板领料3", "挑板入库3"};
+    String[] items_pk = new String[]{"盘亏入库", "VMI盘亏入库"};
     String[] items_gb = new String[]{"改板领料", "改板入库"};
     String[] items_dc = new String[]{"代存出库", "代存入库"};
-    String[] items_db = new String[]{"组织间调拨", "跨组织调拨"};
+    String[] items_db = new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单", "VMI调拨申请单下推直接调拨单"};
     String[] items_in_out = new String[]{"样板出库", "第三方货物入库","第三方货物出库"};
     @Override
     protected void initListener() {
@@ -123,6 +124,12 @@ public class PurchaseFragment extends BaseFragment {
                                                 break;
                                             case 1:
                                                 PagerForActivity.start(mContext, Config.DB2Activity);
+                                                break;
+                                            case 2:
+                                                PushDownPagerActivity.start(getActivity(),22);
+                                                break;
+                                            case 3:
+                                                PushDownPagerActivity.start(getActivity(),23);
                                                 break;
                                         }
                                     }
@@ -160,6 +167,9 @@ public class PurchaseFragment extends BaseFragment {
 //                                                startNewActivity(PushDownPagerActivity.class, b);
                                                 break;
                                             case 2:
+                                                PushDownPagerActivity.start(getActivity(),21);
+                                                break;
+                                            case 3:
                                                 PushDownPagerActivity.start(getActivity(),6);
                                                 break;
                                         }
@@ -287,12 +297,35 @@ public class PurchaseFragment extends BaseFragment {
                         startNewActivity(PrintBeforeDataActivity.class, null);
                         break;
                     case "简单生产领料":
-//                        startNewActivity(OtherInStoreActivity.class, null);
                         PagerForActivity.start(mContext, Config.ProductGetActivity);
                         break;
                     case "简单产品入库":
-//                        startNewActivity(OtherInStoreActivity.class, null);
                         PagerForActivity.start(mContext, Config.ProductInStoreActivity);
+                        break;
+                    case "盘盈入库":
+                        PagerForActivity.start(mContext, Config.PYingActivity);
+                        break;
+                    case "盘亏入库":
+                        builder = new AlertDialog.Builder(getActivity());
+                        // 设置参数
+                        builder.setAdapter(
+                                new ArrayAdapter<String>(getActivity(),
+                                        R.layout.item_choose, R.id.textView, items_pk),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        switch (which) {
+                                            case 0:
+                                                PagerForActivity.start(mContext, Config.PkuiActivity);
+                                                break;
+                                            case 1:
+                                                PagerForActivity.start(mContext, Config.PkuiVMIActivity);
+                                                break;
+                                        }
+                                    }
+                                });
+                        builder.create().show();
                         break;
                     case "扫一扫":
                         ScanProductActivity.start(mContext);

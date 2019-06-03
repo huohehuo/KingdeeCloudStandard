@@ -133,6 +133,20 @@ public class FragmentDBMain extends BaseFragment {
 
     @Override
     protected void initData() {
+
+        //判断是否有保存的业务单号，不存在的话，解锁表头
+        if (!LocDataUtil.hasTDetail(activityPager.getActivity())){
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));
+        }else{
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+        }
+
+        setfocus(tvDate);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         tvDate.setText(CommonUtil.getTime(true));
         activityPager.setDBType("InnerOrgTransfer");//组织内调拨
         spDbDirection.setData(Info.Type_DB_direction);
@@ -150,16 +164,7 @@ public class FragmentDBMain extends BaseFragment {
 //        binding.spOrgIn.setEnable(false);
 //        binding.spOrgCreate.setEnable(false);
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
-        //判断是否有保存的业务单号，不存在的话，解锁表头
-        if (!LocDataUtil.hasTDetail(activityPager.getActivity())){
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));
-        }else{
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
-        }
-
-        setfocus(tvDate);
     }
-
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

@@ -52,6 +52,7 @@
             android:id="@+id/buttonPrint"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@drawable/btn_login"
             android:layout_weight="1"
             android:text="打印测试" />
     </LinearLayout>

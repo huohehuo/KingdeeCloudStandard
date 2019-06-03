@@ -161,20 +161,7 @@ public class FragmentYbOutMain extends BaseFragment {
 
     @Override
     protected void initData() {
-        Lg.e("Fg_M:" + "initData");
-        tvDate.setText(CommonUtil.getTime(true));
-        activityPager.setDate(tvDate.getText().toString());
-        //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_oout_yb), Hawk.get(getString(R.string.spOrgSend_oout_yb), ""));//仓库，仓管员，部门都以组织id来过滤
-        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout_yb), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout_yb), ""));
-        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout_yb), Hawk.get(getString(R.string.spDepartmentSend_oout_yb), ""), activityPager.getOrgOut(), activityPager.getActivity());
-//        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout_yb), "", activityPager.getOrgOut(), activityPager.getActivity());
-        spStoreman.setAuto(getString(R.string.spStoreman_oout_yb), Hawk.get(getString(R.string.spStoreman_oout_yb), ""), activityPager.getOrgOut());
-//        spSaleman.setAuto(getString(R.string.spSaleman_oout_yb), "", activityPager.getOrgOut());
-        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
-        Client client1 = LocDataUtil.getClient(Hawk.get(Config.Client + activityPager.getActivity(), edClient.getText().toString()));
-        edClient.setText(client1.FName);
-        activityPager.setClient(client1);
+
         //判断是否有保存的业务单号，不存在的话，解锁表头
         if (!LocDataUtil.hasTDetail(activityPager.getActivity())) {
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock + "NO"));
@@ -188,6 +175,24 @@ public class FragmentYbOutMain extends BaseFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Lg.e("Fg_M:" + "initData");
+        tvDate.setText(CommonUtil.getTime(true));
+        activityPager.setDate(tvDate.getText().toString());
+        //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
+        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_oout_yb), Hawk.get(getString(R.string.spOrgSend_oout_yb), ""));//仓库，仓管员，部门都以组织id来过滤
+//        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout_yb), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout_yb), ""));
+//        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout_yb), Hawk.get(getString(R.string.spDepartmentSend_oout_yb), ""), activityPager.getOrgOut(), activityPager.getActivity());
+//        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout_yb), "", activityPager.getOrgOut(), activityPager.getActivity());
+//        spStoreman.setAuto(getString(R.string.spStoreman_oout_yb), Hawk.get(getString(R.string.spStoreman_oout_yb), ""), activityPager.getOrgOut());
+//        spSaleman.setAuto(getString(R.string.spSaleman_oout_yb), "", activityPager.getOrgOut());
+        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
+        Client client1 = LocDataUtil.getClient(Hawk.get(Config.Client + activityPager.getActivity(), edClient.getText().toString()));
+        edClient.setText(client1.FName);
+        activityPager.setClient(client1);
+    }
 
     //在oncreateView之前使用 不要使用控件
     @Override
@@ -231,7 +236,7 @@ public class FragmentYbOutMain extends BaseFragment {
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgOut((Org) spOrgSend.getAdapter().getItem(i));
                 Hawk.put(getString(R.string.spOrgSend_oout_yb), activityPager.getOrgOut().FName);
-                spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout_yb), activityPager.getOrgOut(), "");
+                spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout_yb), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout_yb), ""));
                 spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout_yb), Hawk.get(getString(R.string.spDepartmentSend_oout), ""), activityPager.getOrgOut(), activityPager.getActivity());
                 spStoreman.setAuto(getString(R.string.spStoreman_oout), Hawk.get(getString(R.string.spStoreman_oout), ""), activityPager.getOrgOut());
 //        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout), "", activityPager.getOrgOut(), activityPager.getActivity());
@@ -244,7 +249,7 @@ public class FragmentYbOutMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setHuozhuOut((Org) spOrgHuozhu.getAdapter().getItem(i));
-                Hawk.put(getString(R.string.spOrgHuozhu_oout), activityPager.getHuozhuOut().FName);
+                Hawk.put(getString(R.string.spOrgHuozhu_oout_yb), activityPager.getHuozhuOut().FName);
             }
         });
         cbIsStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

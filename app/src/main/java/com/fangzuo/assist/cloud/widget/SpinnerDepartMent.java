@@ -190,21 +190,6 @@ public class SpinnerDepartMent extends RelativeLayout {
         mTitleTv.setClickable(b);
         mSp.setEnabled(b);
     }
-    //自动设置保存的值
-
-//
-//    public EmployeeSpAdapter getEmployeeSpAdapter() {
-//        if (adapter.getCount() < 0) {
-//            Lg.e("adapter初始化失败，重新更新adapter");
-//            EmployeeDao employeeDao = daoSession.getEmployeeDao();
-//            List<Employee> employees = employeeDao.loadAll();
-//            container.addAll(employees);
-//            adapter.notifyDataSetChanged();
-//            return adapter;
-//        } else {
-//            return adapter;
-//        }
-//    }
 
     // 为左侧返回按钮添加自定义点击事件
     public void setOnItemSelectedListener(AdapterView.OnItemSelectedListener listener) {
@@ -234,7 +219,7 @@ public class SpinnerDepartMent extends RelativeLayout {
     /**
      *
      * @param saveKeyStr        用于保存的key
-     * @param string            自动设置的z值
+     * @param string            自动设置的z值  弃用
      * */
     public void setAutoSelection(String saveKeyStr,String string) {
         saveKeyString =saveKeyStr;
@@ -255,6 +240,7 @@ public class SpinnerDepartMent extends RelativeLayout {
 
 
     public void setAuto(String saveKeyStr, String autoStr, Org org, int activityT) {
+        Lg.e("部门过滤");
         Id="";
         Name="";
         Number="";
@@ -333,12 +319,15 @@ public class SpinnerDepartMent extends RelativeLayout {
 
     private void dealAuto(List<Department> listData, boolean check) {
         container.clear();
+        Lg.e("得到部门"+listData.size()+check,listData);
         if (check) {
-            if (activityTag== Config.ProductInStoreActivity||activityTag==Config.TbInActivity|| activityTag==Config.DgInActivity
-                    ||activityTag==Config.SimpleInActivity ||activityTag==Config.GbInActivity||activityTag==Config.DhInActivity
-                    ||activityTag==Config.DhIn2Activity ||activityTag==Config.TbGet2Activity ||activityTag==Config.TbGet3Activity
-                    ||activityTag==Config.TbIn2Activity ||activityTag==Config.TbIn3Activity ||
-                    activityTag== Config.ProductGetActivity||activityTag==Config.TbGetActivity||activityTag==Config.GbGetActivity  ) {
+            //当为生产单据时，过滤
+            if (activityTag== Config.ProductInStoreActivity||activityTag==Config.ProductGetActivity||
+                    activityTag==Config.TbGetActivity ||activityTag==Config.TbGet2Activity ||
+                    activityTag==Config.TbGet3Activity||activityTag==Config.TbInActivity ||
+                    activityTag==Config.TbIn2Activity ||activityTag==Config.TbIn3Activity ||
+                    activityTag==Config.GbGetActivity ||activityTag==Config.GbInActivity ||
+                    activityTag==Config.DhInActivity || activityTag== Config.DhIn2Activity ) {
                 for (int i = 0; i < listData.size(); i++) {
                     if (listData.get(i).FOrg.equals(autoOrg)) {
                         if (listData.get(i).FISSTOCK.equals("1")){
@@ -357,6 +346,7 @@ public class SpinnerDepartMent extends RelativeLayout {
         } else {
             container.addAll(listData);
         }
+        Lg.e("sp过滤后部门"+container.size(),container);
         if ("".equals(autoString)){
             autoString = Hawk.get(saveKeyString,"");
         }

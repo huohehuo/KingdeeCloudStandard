@@ -101,7 +101,7 @@ public class ScanProductActivity extends BaseActivity {
                 DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
                 if (dBean.printHistories.size()>0){
                     PrintHistory history = dBean.printHistories.get(0);
-                    history.FHuoquan= LocDataUtil.getOrg(history.getFHuoquan(),"number").FNote;
+                    history.FHuoquan= LocDataUtil.getRemark(history.getFHuoquan(),"number").FNote;
                     binding.setPrint(dBean.printHistories.get(0));
                     binding.cvShow.setVisibility(View.VISIBLE);
                     mCaptureManager.onPause();
@@ -109,6 +109,8 @@ public class ScanProductActivity extends BaseActivity {
 //                    adapter.addAll(dBean.printHistories);
 //                    showMsg(dBean.printHistories.get(0));
                 }else{
+                    binding.cvShow.setVisibility(View.GONE);
+                    binding.zxingBarcodeScanner.setVisibility(View.VISIBLE);
                     mCaptureManager.onResume();
                     mCaptureManager.decode();
                     LoadingUtil.showAlter(mContext,"无数据","");

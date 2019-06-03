@@ -19,6 +19,9 @@ import com.fangzuo.assist.cloud.Dao.Suppliers;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.DbBox.FragmentDB2Main;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.DbBox.FragmentDBDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.DbBox.FragmentDBMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PDBox.FragmentPKDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PDBox.FragmentPYingDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PDBox.FragmentPYingMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrisDh2Main;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.GbManagerBox.FragmentGbGetMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.GbManagerBox.FragmentGbInMain;
@@ -37,8 +40,9 @@ import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOutDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOutMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentCgOrder2WgrkDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentCgOrder2WgrkMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentDbApply2DBDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentDbApply2DBMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentTbGetMain;
-import com.fangzuo.assist.cloud.Fragment.TabForActivity.InStoreBills.FragmentPrisSimpleInMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentPrisTBDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentPrisTBMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.Fragment3HwInDetail;
@@ -86,6 +90,7 @@ public class PagerForActivity extends BaseActivity {
     private String DepartMent;//生产车间
     private String DepartMentBuy;//采购部门
     private String date;//日期
+    private String printNum;//日期
     private boolean hasLock=false;//判断表头是否被锁住
     private boolean isStorage=false;//是否带出默认仓库
     StripAdapter stripAdapter;
@@ -93,6 +98,15 @@ public class PagerForActivity extends BaseActivity {
     protected boolean isScan() {
         return true;
     }
+
+    public String getPrintNum() {
+        return printNum;
+    }
+
+    public void setPrintNum(String printNum) {
+        this.printNum = printNum;
+    }
+
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_pager_for);
@@ -147,6 +161,11 @@ public class PagerForActivity extends BaseActivity {
                 break;
             case Config.PdSaleOrder2SaleOutActivity:
                 binding.topActivity.tvTitle.setText("销售订单下推销售出库");
+                fragments.add(new FragmentSaleOutMain());
+                fragments.add(new FragmentSaleOutDetailForPD());
+                break;
+            case Config.PdSaleOrder2SaleOut2Activity:
+                binding.topActivity.tvTitle.setText("VMI销售订单下推销售出库单");
                 fragments.add(new FragmentSaleOutMain());
                 fragments.add(new FragmentSaleOutDetailForPD());
                 break;
@@ -231,6 +250,33 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentCgOrder2WgrkMain());
                 fragments.add(new FragmentCgOrder2WgrkDetail());
                 break;
+            case Config.PYingActivity:
+                binding.topActivity.tvTitle.setText("盘盈入库");
+                fragments.add(new FragmentPYingMain());
+                fragments.add(new FragmentPYingDetail());
+                break;
+            case Config.PkuiActivity:
+                binding.topActivity.tvTitle.setText("盘亏入库");
+                fragments.add(new FragmentPYingMain());
+                fragments.add(new FragmentPKDetail());
+                break;
+            case Config.PkuiVMIActivity:
+                binding.topActivity.tvTitle.setText("VMI盘亏入库");
+                fragments.add(new FragmentPYingMain());
+                fragments.add(new FragmentPKDetail());
+                break;
+            case Config.PdDbApply2DBActivity:
+                binding.topActivity.tvTitle.setText("调拨申请单下推直接调拨单");
+                fragments.add(new FragmentDbApply2DBMain());
+                fragments.add(new FragmentDbApply2DBDetail());
+                break;
+            case Config.PdDbApply2DB4VMIActivity:
+                binding.topActivity.tvTitle.setText("VMI调拨申请单下推直接调拨单");
+                fragments.add(new FragmentDbApply2DBMain());
+                fragments.add(new FragmentDbApply2DBDetail());
+                break;
+
+
 
 
 

@@ -3,7 +3,9 @@ package com.fangzuo.assist.cloud.Fragment.TabForActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
@@ -51,6 +54,7 @@ import com.fangzuo.assist.cloud.widget.LoadingUtil;
 import com.fangzuo.assist.cloud.widget.MyWaveHouseSpinner;
 import com.fangzuo.assist.cloud.widget.SpinnerActualModel;
 import com.fangzuo.assist.cloud.widget.SpinnerAuxSign;
+import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
 import com.fangzuo.assist.cloud.widget.SpinnerStorage;
 import com.fangzuo.assist.cloud.widget.SpinnerUnit;
 import com.fangzuo.assist.cloud.zxing.ScanManager;
@@ -80,6 +84,8 @@ public class FragmentSaleOutDetail extends BaseFragment {
 
     @BindView(R.id.zxing_barcode_scanner)
     DecoratedBarcodeView zxingBarcodeScanner;
+    @BindView(R.id.ly_scan)
+    RelativeLayout lyScan;
     //    @BindView(R.id.cb_scaning)
 //    CheckBox cbScaning;
     @BindView(R.id.search)
@@ -145,7 +151,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
 //                if (cbScaning.isChecked()) {
 //                } else {
                 mCaptureManager.onPause();
-                zxingBarcodeScanner.setVisibility(View.GONE);
+                lyScan.setVisibility(View.GONE);
 //                }
 
                 OnReceive(res.getResult().getText());
@@ -193,6 +199,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
                     Toast.showText(mContext, "上传成功");
 //                btnBackorder.setClickable(true);
                     LoadingUtil.dismiss();
+                    DataModel.submitAndAudit(mContext,Config.SaleOutActivity,listOrder.get(0));
                 } else {
                     LoadingUtil.dismiss();
                     List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
@@ -341,7 +348,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
                 Lg.e("选中仓库：", storage);
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, storage, "");
-                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getOrgOut());
+                DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
 
             }
         });
@@ -383,7 +390,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
             edPihao.setText("");
             isOpenBatch = false;
         }
-        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getOrgOut());
+        DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
 
         spAuxsign.getData(product.FMASTERID, autoAuxSing);
         spActualmodel.getData(product.FMASTERID, autoActualModel);
@@ -619,16 +626,16 @@ public class FragmentSaleOutDetail extends BaseFragment {
 
     }
 
-    @OnClick({R.id.search, R.id.btn_add, R.id.btn_finishorder, R.id.btn_backorder, R.id.btn_checkorder})
+    @OnClick({R.id.search, R.id.btn_add, R.id.btn_finishorder, R.id.btn_backorder, R.id.btn_checkorder, R.id.btn_pic})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.search:
-                if (zxingBarcodeScanner.getVisibility() == View.VISIBLE) {
-                    zxingBarcodeScanner.setVisibility(View.GONE);
+                if (lyScan.getVisibility() == View.VISIBLE) {
+                    lyScan.setVisibility(View.GONE);
 //                    mCaptureManager.onPause();
                 } else {
                     mCaptureManager.onResume();
-                    zxingBarcodeScanner.setVisibility(View.VISIBLE);
+                    lyScan.setVisibility(View.VISIBLE);
                     mCaptureManager.decode();
                 }
 
@@ -638,6 +645,10 @@ public class FragmentSaleOutDetail extends BaseFragment {
 //                bundle1.putString("org", activityPager.getOrgOut(1));
 //                bundle1.putInt("activity", activity);
 //                startNewActivityForResult(activityPager, ProductSearchActivity.class, R.anim.activity_open, 0, Info.SEARCHFORRESULT, bundle1);
+                break;
+            case R.id.btn_pic:
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, Info.Scan_Pic);
                 break;
 //            case R.id.btn_add:
 //                checkBeforeAdd();

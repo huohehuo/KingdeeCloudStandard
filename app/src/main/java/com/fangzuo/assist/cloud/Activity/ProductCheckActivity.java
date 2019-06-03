@@ -25,6 +25,7 @@ import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.databinding.ActivityProductCheckBinding;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
@@ -176,10 +177,12 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
         binding.btnCheck.setOnClickListener(new NoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View view) {
-                Lg.e("products:",products.size());
                 if (products!=null&&products.size()>0){
+                Lg.e("products:"+products.size(),products.get(0));
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Product,products.get(0)));
                     finish();
+                }else{
+                    Toast.showText(mContext,"物料信息不完整，请重新选择");
                 }
 //                productRyAdapter.clear();
 //                products.clear();
@@ -236,20 +239,33 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
     private void dealProduct(String string){
         List<Product> productList = new ArrayList<>();
 //        productList.addAll(products);
-        Lg.e("333333:",string+products.size());
+        Lg.e("dealProduct:"+products.size(),string);
 //        Lg.e("1111:",productList);
         if (!"".equals(string)){
             for (int i = 0; i < productsForSearch.size(); i++) {
 //                    Lg.e("1111",productsForSearch.get(i));
-                if (productsForSearch.get(i).FModel.contains(string)){
-                    Lg.e("包含：",productsForSearch.get(i));
-                    productList.add(productsForSearch.get(i));
+                if (productsForSearch.get(i).FModel.contains("*")){
+                    String cutModel=productsForSearch.get(i).FModel.substring(0,productsForSearch.get(i).FModel.indexOf("*"));
+                    if (cutModel.equals(string)){
+                        Lg.e("添加：",productsForSearch.get(i));
+                        productList.add(productsForSearch.get(i));
+                    }
+                }else{
+                        Lg.e("添加：",productsForSearch.get(i));
+                        productList.add(productsForSearch.get(i));
                 }
+//                else{
+//                    productTreeBean.FName=bean.FModel;
+//                }
+//                if (productsForSearch.get(i).FModel.startsWith(string)){
+//                    Lg.e("包含：",productsForSearch.get(i));
+//                    productList.add(productsForSearch.get(i));
+//                }
             }
-            binding.tvDataNum.setText(productList.size()+"");
+//            binding.tvDataNum.setText(productList.size()+"");
             productRyAdapter.addAll(productList);
         }else{
-            binding.tvDataNum.setText(productsForSearch.size()+"");
+//            binding.tvDataNum.setText(productsForSearch.size()+"");
             productRyAdapter.addAll(productsForSearch);
         }
         productRyAdapter.notifyDataSetChanged();

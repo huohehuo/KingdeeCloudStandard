@@ -32,18 +32,19 @@ import zpSDK.zpSDK.zpBluetoothPrinter;
 
 public class CommonUtil {
 
-    public static void doPrint(zpBluetoothPrinter zpSDK, PrintHistory bean) throws Exception{
-        Lg.e("打印数据:",bean);
+    public static void doPrint(zpBluetoothPrinter zpSDK, PrintHistory bean,String times) throws Exception{
+        Lg.e("打印数据:"+times,bean);
         if (null== zpSDK)return;
         int size=4;
         int size2=3;
         int lineSize=3;
-        int printNum = Integer.parseInt(Hawk.get(Config.PrintNum,"2"));
+        int printNum = Integer.parseInt(null==times?"1":times);
+//        int printNum = Integer.parseInt(Hawk.get(Config.PrintNum,"2"));
         for (int i = 0; i < printNum; i++) {
-            zpSDK.pageSetup(668, 973);
+            zpSDK.pageSetup(668, 900);
             zpSDK.drawText(0, 5, "______________________________________________", 2, 0, 0, false, false);
 
-            zpSDK.drawText(210, 50, "物料标签", size, 0, 1, false, false);
+            zpSDK.drawText(230, 50, "物料标签", size, 0, 1, false, false);
             zpSDK.drawText(0, 90, "______________________________________________", 2, 0, 0, false, false);
             zpSDK.drawText(10, 120, "货主：", size, 0, 0, false, false);
             zpSDK.drawText(160, 124, bean.FHuoquan==null?"":bean.FHuoquan,size2, 0, 0, false, false);
@@ -54,10 +55,10 @@ public class CommonUtil {
             zpSDK.drawText(10, 280, "规格：", size, 0, 0, false, false);
             zpSDK.drawText(160, 284, bean.FModel,size2, 0, 0, false, false);
             zpSDK.drawText(10, 340, "数量1：", size, 0, 0, false, false);
-            zpSDK.drawText(160, 344, bean.FNum==null?"":bean.FNum,size2, 0, 0, false, false);
+            zpSDK.drawText(230, 344, bean.FNum==null?"":bean.FNum,size2, 0, 0, false, false);
             zpSDK.drawText(450, 344, bean.FUnit==null?"":bean.FUnit,size2, 0, 0, false, false);
             zpSDK.drawText(10, 400, "数量2：", size, 0, 0, false, false);
-            zpSDK.drawText(160, 404, bean.FNum2==null?"":bean.FNum2,size2, 0, 0, false, false);
+            zpSDK.drawText(230, 404, bean.FNum2==null?"":bean.FNum2,size2, 0, 0, false, false);
             zpSDK.drawText(450, 404, bean.FUnitAux==null?"":bean.FUnitAux,size2, 0, 0, false, false);
             zpSDK.drawText(10, 460, "辅助标识：", size, 0, 0, false, false);
             zpSDK.drawText(360, 464, bean.FAuxSign==null?"":bean.FAuxSign,size2, 0, 0, false, false);
@@ -74,7 +75,27 @@ public class CommonUtil {
             zpSDK.drawText(380, 790, bean.FDate,size2, 0, 0, false, false);
             zpSDK.drawText(10, 850, "______________________________________________", 2, 0, 0, false, false);
 
-            zpSDK.print(0, 0);
+            zpSDK.print(0, 1);
+//            int a=zpSDK.GetStatus();
+//            Lg.e("打印机状态",a);
+//            if(a==-1)
+//            { //"获取状态异常------";
+//                Toast.showText(App.getContext(),"获取状态异常---请重连打印机");
+//            }
+//            if(a==1)
+//            {//"缺纸----------";
+//                Toast.showTextLong(App.getContext(),"打印机缺少纸张---请添加纸张后再操作");
+//            }
+//            if(a==2)
+//            {
+//                //"开盖----------";
+//                Toast.showText(App.getContext(),"请勿打开盖子-----");
+//            }
+//            if(a==0)
+//            {
+//                //"打印机正常-------";
+//                Toast.showText(App.getContext(),"打印机正常-----");
+//            }
         }
 
 //        }
@@ -92,7 +113,6 @@ public class CommonUtil {
 //            zpSDK.drawBarCode(124,48+100+56+56+80+80+80 , "12345678901234567", 128, false, 3, 60);
 //            zpSDK.print(0, 0);
     }
-
     /*条码规则：
     物料条码.16位数
 
@@ -399,6 +419,35 @@ public class CommonUtil {
                 break;
             case "":
                 backData="XSCKD01_SYS";
+                break;
+        }
+        return backData;
+    }
+
+    public static String getSaleOutHuoZhuType(String saleoder){
+        String backData="";
+//        if (null==saleoder||"".equals(saleoder)){
+//            backData="XSCKD01_SYS";
+//            return backData;
+//        }
+        switch (saleoder==null||"".equals(saleoder)?"":saleoder){
+            case "标准销售订单":
+                backData="BD_OwnerOrg";
+                break;
+            case "寄售销售订单":
+                backData="BD_OwnerOrg";
+                break;
+            case "分销购销订单":
+                backData="BD_OwnerOrg";
+                break;
+            case "VMI销售订单":
+                backData="BD_Supplier";
+                break;
+            case "现销订单":
+                backData="BD_OwnerOrg";
+                break;
+            case "":
+                backData="BD_OwnerOrg";
                 break;
         }
         return backData;

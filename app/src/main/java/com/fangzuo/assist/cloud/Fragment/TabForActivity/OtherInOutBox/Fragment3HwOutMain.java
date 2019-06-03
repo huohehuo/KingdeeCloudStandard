@@ -193,6 +193,19 @@ public class Fragment3HwOutMain extends BaseFragment {
     @Override
     protected void initData() {
         Lg.e("Fg_M:" + "initData");
+
+        //判断是否有保存的业务单号，不存在的话，解锁表头
+        if (!LocDataUtil.hasTDetail(activityPager.getActivity())) {
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock + "NO"));
+        } else {
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+        }
+        setfocus(tvDate);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         tvDate.setText(CommonUtil.getTime(true));
         spHzType.setData(Info.Type_Hz_type);
 //        spHzType.setEnable(false);
@@ -201,27 +214,15 @@ public class Fragment3HwOutMain extends BaseFragment {
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
         spOrgSend.setAutoSelection(getString(R.string.spOrgSend_oout3), Hawk.get(getString(R.string.spOrgSend_oout3), ""));//仓库，仓管员，部门都以组织id来过滤
 //        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout3), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout3), ""));
-        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout3), Hawk.get(getString(R.string.spDepartmentSend_oout3), ""), activityPager.getOrgOut(), activityPager.getActivity());
+//        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout3), Hawk.get(getString(R.string.spDepartmentSend_oout3), ""), activityPager.getOrgOut(), activityPager.getActivity());
 //        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout3), "", activityPager.getOrgOut(), activityPager.getActivity());
-        spStoreman.setAuto(getString(R.string.spStoreman_oout3), Hawk.get(getString(R.string.spStoreman_oout3), ""), activityPager.getOrgOut());
+//        spStoreman.setAuto(getString(R.string.spStoreman_oout3), Hawk.get(getString(R.string.spStoreman_oout3), ""), activityPager.getOrgOut());
 //        spSaleman.setAuto(getString(R.string.spSaleman_oout3), "", activityPager.getOrgOut());
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
         Client client1 = LocDataUtil.getClient(Hawk.get(Config.Client + activityPager.getActivity(), ""));
         edClient.setText(client1.FName);
         activityPager.setClient(client1);
-        //判断是否有保存的业务单号，不存在的话，解锁表头
-        if (!LocDataUtil.hasTDetail(activityPager.getActivity())) {
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock + "NO"));
-        } else {
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
-        }
-        setfocus(tvDate);
-        //当为下推单时隐藏
-        if (activityPager.getActivity() == Config.PdSaleOrder2SaleOutActivity || activityPager.getActivity() == Config.PdBackMsg2SaleBackActivity) {
-            llClient.setVisibility(View.GONE);
-        }
     }
-
 
     //在oncreateView之前使用 不要使用控件
     @Override

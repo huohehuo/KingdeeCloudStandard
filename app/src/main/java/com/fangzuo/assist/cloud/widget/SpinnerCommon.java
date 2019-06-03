@@ -148,6 +148,10 @@ public class SpinnerCommon extends RelativeLayout {
         }else if (Info.Type_Hz_type.equals(what)){
             container.add(new CommonBean("业务组织","BD_OwnerOrg"));
             container.add(new CommonBean("供应商","BD_Supplier"));
+        }else if (Info.Type_Hz_type_All.equals(what)){
+            container.add(new CommonBean("业务组织","BD_OwnerOrg"));
+            container.add(new CommonBean("供应商","BD_Supplier"));
+            container.add(new CommonBean("客户","BD_Customer"));
         }
         mSp.setAdapter(adapter);
         adapter.notifyDataSetChanged();

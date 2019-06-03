@@ -28,6 +28,7 @@ import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.LocDataUtil;
+import com.fangzuo.assist.cloud.widget.NumberClick;
 import com.fangzuo.assist.cloud.widget.SpinnerDepartMent;
 import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
 import com.fangzuo.assist.cloud.widget.SpinnerOrg;
@@ -65,6 +66,8 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
     SpinnerStoreMan spStoreman;
     @BindView(R.id.ed_not)
     EditText edNot;
+    @BindView(R.id.cb_num)
+    NumberClick cbNum;
 //    @BindView(R.id.search_client)
 //    RelativeLayout searchClient;
     //    @BindView(R.id.sp_department_sale)
@@ -156,15 +159,7 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
     @Override
     protected void initData() {
         Lg.e("Fg_M:" + "initData");
-        tvDate.setText(CommonUtil.getTime(true));
-        activityPager.setDate(tvDate.getText().toString());
-        //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-//        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_so), Hawk.get(getString(R.string.spOrgSend_so), ""));//仓库，仓管员，部门都以组织id来过滤
-//        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_so), Hawk.get(getString(R.string.spDepartmentSend_so), ""), activityPager.getOrgOut(), activityPager.getActivity());
-//        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_so), "", activityPager.getOrgOut(), activityPager.getActivity());
-//        spStoreman.setAuto(getString(R.string.spStoreman_so), Hawk.get(getString(R.string.spStoreman_so), ""), activityPager.getOrgOut());
-//        spSaleman.setAuto(getString(R.string.spSaleman_so), "", activityPager.getOrgOut());
-        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
+
         //判断是否有保存的业务单号，不存在的话，解锁表头
         if (!LocDataUtil.hasTDetail(activityPager.getActivity())) {
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock + "NO"));
@@ -174,6 +169,20 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
         setfocus(tvDate);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        tvDate.setText(CommonUtil.getTime(true));
+        cbNum.setSaveKey(activityPager.getActivity()+"printnum");
+        activityPager.setDate(tvDate.getText().toString());
+        //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
+//        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_so), Hawk.get(getString(R.string.spOrgSend_so), ""));//仓库，仓管员，部门都以组织id来过滤
+//        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_so), Hawk.get(getString(R.string.spDepartmentSend_so), ""), activityPager.getOrgOut(), activityPager.getActivity());
+//        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_so), "", activityPager.getOrgOut(), activityPager.getActivity());
+//        spStoreman.setAuto(getString(R.string.spStoreman_so), Hawk.get(getString(R.string.spStoreman_so), ""), activityPager.getOrgOut());
+//        spSaleman.setAuto(getString(R.string.spSaleman_so), "", activityPager.getOrgOut());
+        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
+    }
 
     //在oncreateView之前使用 不要使用控件
     @Override
@@ -192,6 +201,7 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
                 activityPager.setManStore(spStoreman.getDataNumber());
 //                activityPager.setManSale(spSaleman.getDataNumber());
                 activityPager.setDepartMent(spDepartmentSend.getDataNumber());
+                activityPager.setPrintNum(cbNum.getNum());
 //                activityPager.setHuozhuOut(spOrgHuozhu.getDataObject());
 //                activityPager.setDepartMentBuy(spDepartmentSale.getDataNumber());
 //                Hawk.put(Config.OrderNo+activityPager.getActivity(),edClient.getText().toString());//保存业务单号

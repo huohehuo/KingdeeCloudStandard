@@ -12,6 +12,10 @@
         <include
             layout="@layout/top_bar"
             android:id="@+id/toolbar"/>
+        <com.fangzuo.assist.cloud.widget.NumberClick
+            android:id="@+id/cb_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <com.journeyapps.barcodescanner.DecoratedBarcodeView
             android:visibility="gone"
             android:id="@+id/zxing_barcode_scanner"
@@ -37,9 +41,36 @@
                 android:background="@drawable/bg_edittext_selector"
                 android:singleLine="true"
                 android:hint="通过批号模糊查找"
+                android:selectAllOnFocus="true"
                 android:textSize="18sp" />
+
             <ImageView
                 android:id="@+id/iv_find"
+                android:src="@mipmap/find"
+                android:layout_marginLeft="10dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/ed_product"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:imeOptions="actionNone"
+                android:gravity="center_horizontal|center_vertical"
+                android:background="@drawable/bg_edittext_selector"
+                android:singleLine="true"
+                android:selectAllOnFocus="true"
+                android:hint="通过商品代码、名称模糊查找"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:visibility="invisible"
                 android:src="@mipmap/find"
                 android:layout_marginLeft="10dp"
                 android:layout_width="40dp"

@@ -166,6 +166,7 @@ public class UpLoadModel {
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOut(mains,details)));
                 break;
             case Config.PdSaleOrder2SaleOutActivity://销售订单下推销售出库
+            case Config.PdSaleOrder2SaleOut2Activity://VMI销售订单下推销售出库
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOrder2SaleOut(mains,details)));
                 break;
             case Config.PdSendMsg2SaleOutActivity://发货通知单下推销售出库单
@@ -205,7 +206,13 @@ public class UpLoadModel {
             case Config.DB2Activity://跨组织调拨
                 DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonDB(mains,details)));
                 break;
-
+            case Config.PYingActivity://盘盈入库
+                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonPYing(mains,details)));
+                break;
+            case Config.PkuiActivity://盘亏入库
+            case Config.PkuiVMIActivity://VMI盘亏入库
+                DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonPKui(mains,details)));
+                break;
 
         }
     }

@@ -41,6 +41,16 @@ public class DepartmentSpAdapter extends BaseAdapter {
         return i;
     }
 
+    public void addData(List<Department> clients) {
+        items.clear();
+        items.addAll(clients);
+        notifyDataSetChanged();
+    }
+    public void clear() {
+        items.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view==null){

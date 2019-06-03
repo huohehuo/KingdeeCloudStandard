@@ -16,7 +16,7 @@ public class Config {
     public static String PDA_RegisterMaxNum="PDA_RegisterMaxNum";//用于保存注册码
 
 
-    public static final String Cloud_Url = "http://47.106.179.214/K3Cloud/";
+    public static final String Cloud_Url = "http://120.77.206.67/K3Cloud/";
     public static final String Cloud_ID = "DataBaseID";
     //回单的接口key
     public static final String C_Draft =        "Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Draft.common.kdsvc";//暂存
@@ -100,6 +100,9 @@ public class Config {
     public static final String Supplier                              ="Supplier";//用于锁定表头备注的key
     public static final String Client                              ="Client";//用于锁定表头备注的key
     public static final String SupplierHz                              ="SupplierHz";//用于锁定表头备注的key
+    public static final String SupplierHzDetail                              ="SupplierHzDetail";//用于锁定表头备注的key
+    public static final String ClientHz                              ="ClientHz";//用于锁定表头备注的key
+    public static final String ClientHzDetail                              ="ClientHzDetail";//用于锁定表头备注的key
     public static final int PurchaseInStoreActivity                 =10025;//采购入库
     public static final int ProductInStoreActivity                  =10026;//产品入库
     public static final int ProductGetActivity                      =10027;//生产领料
@@ -110,6 +113,7 @@ public class Config {
     public static final int PurchaseOrderActivity                   =10032;//采购订单
     public static final int PdCgOrder2WgrkActivity                  =10033;//采购订单下推外购入库单
     public static final int PdSaleOrder2SaleOutActivity             =10034;//销售订单下推销售出库单
+    public static final int PdSaleOrder2SaleOut2Activity            =100341;//VMI销售订单下推销售出库单
     public static final int PdSaleOrder2SaleBackActivity            =10035;//销售订单下推销售退货单
     public static final int PdSaleOut2SaleBackActivity              =10036;//销售出库单下推销售退货单
     public static final int PdSendMsg2SaleOutActivity               =10037;//发货通知单下推销售出库单
@@ -136,5 +140,10 @@ public class Config {
     public static final int YbOutActivity                           =10053;//样板出库
     public static final int HwIn3Activity                           =10054;//第三方货物入库
     public static final int HwOut3Activity                          =10055;//第三方货物出库
+    public static final int PYingActivity                           =10056;//盘盈
+    public static final int PkuiActivity                            =10057;//盘亏
+    public static final int PkuiVMIActivity                         =10058;//盘亏
+    public static final int PdDbApply2DBActivity                    =10059;//调拨申请单下推直接调拨单
+    public static final int PdDbApply2DB4VMIActivity                =10060;//VMI调拨申请单下推直接调拨单
 
 }

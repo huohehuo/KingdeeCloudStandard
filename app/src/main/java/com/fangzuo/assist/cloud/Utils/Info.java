@@ -12,8 +12,9 @@ import org.json.JSONArray;
 public class Info {
     public static final String DATABASESETTING = "K3DBConfiger201811123395555";//数据库名称
 //    public static final String DATABASESETTING = "K3DBConfigerRY";
-    public static final String TestNo = "6.11";
+    public static final String TestNo = "6.32";
     public static final int RegisterNo = 155;
+    public static final int VibratorTime = 40;
     public static final int SEARCHFORRESULT = 9998;
     public static final int SEARCHFORRESULTPRODUCT = 9997;
     public static final int SEARCHFORRESULTCLIRNT = 9999;
@@ -21,16 +22,27 @@ public class Info {
     public static final int SEARCHPRODUCT = 7777;
     public static final int SEARCHSUPPLIER = 7778;
     public static final int SearchSupplier = 7780;
+    public static final int SearchSupplierDetail = 77801;
+    public static final int SearchClientDetail = 77791;
     public static final int SEARCHCLIENT = 7779;
     public static final int SEARCHJH = 7770;
+
+    public static final int Scan_Pic = 111;//用于识别照片二维码的返回值
 
     public static final String AutoLogin="AutoLogin";
     public static final String IsRemanber="IsRemanber";
     public static final String Storage="storage";
+    public static final String HuoZhuType="HuoZhuType";
+    public static final String HuoZhu="HuoZhu";
+    public static final String OrgOut="OrgOut";
+    public static final String OrgIn="OrgIn";
+    public static final String StoreMan="StoreMan";
+    public static final String Department="Department";
 
     public static final String Type_DB_type="Type_DB_type";//调拨方式
     public static final String Type_DB_direction="Type_DB_direction";//调拨方向
     public static final String Type_Hz_type="Type_Hz_type";//货主类型
+    public static final String Type_Hz_type_All="Type_Hz_type_All";//货主类型
 
     public static final int format=1;
     public static final String useragent="ApiClient";
@@ -54,6 +66,8 @@ public class Info {
     public static final String FormID_FDi = "STK_TRANSFERIN";//分布式调入单
     public static final String FormID_FDo = "STK_TRANSFEROUT";//分布式调出单
     public static final String FormID_PD = "STK_StockCountScheme";//盘点
+    public static final String FormID_PYing = "STK_StockCountGain";//盘盈单
+    public static final String FormID_PKui = "STK_StockCountLoss";//盘亏单
     //单据类型
     public static final String BT_PIS = "RKD01_SYS";//采购入库单/采购订单下推采购入库单/收料通知单下推采购入库单
     public static final String BT_SaleOut = "XSCKD01_SYS";//销售出库单/销售订单下推销售出库单/发货通知单下推采购入库单
@@ -69,6 +83,11 @@ public class Info {
     public static final String BT_FDi = "FBDR01_SYS";//调拨申请单下推分布式调入单
     public static final String BT_FDo = "FBDC01_SYS";//调拨申请单下推分布式调出单
     public static final String BT_PD = "PDFA01_SYS";//盘点单
+    public static final String BT_PY = "PY01_SYS";//盘盈单
+    public static final String BT_PK = "PK01_SYS";//盘亏单
+    public static final String BT_PK_VMI = "PK02_SYS";//VMI盘亏单
+    public static final String BT_DBSQ = "DBSQD01_SYS";//标准调拨申请单
+    public static final String BT_DBSQ_VMI = "DBSQD02_SYS";//VMI调拨申请单
 
 
     //拼接回单的数据（单据ID+json)
@@ -109,6 +128,7 @@ public class Info {
                 break;
             case Config.SaleOutActivity://销售出库
             case Config.PdSaleOrder2SaleOutActivity:
+            case Config.PdSaleOrder2SaleOut2Activity:
             case Config.PdSendMsg2SaleOutActivity:
                 backString=FormID_SaleOut;
                 break;
@@ -145,6 +165,15 @@ public class Info {
             case Config.DB2Activity://调拨单
                 backString=FormID_DB;
                 break;
+            case Config.PYingActivity://盘盈入库
+                backString=FormID_PYing;
+                break;
+            case Config.PkuiActivity://盘盈入库
+                backString=FormID_PKui;
+                break;
+            case Config.PkuiVMIActivity://盘盈入库
+                backString=FormID_PKui;
+                break;
 
         }
         return backString;
@@ -177,6 +206,7 @@ public class Info {
                 break;
             case Config.SaleOutActivity:
             case Config.PdSaleOrder2SaleOutActivity:
+            case Config.PdSaleOrder2SaleOut2Activity:
             case Config.PdSendMsg2SaleOutActivity:
                 backString=BT_SaleOut;
                 break;
@@ -213,7 +243,15 @@ public class Info {
             case Config.DB2Activity://调拨单
                 backString=BT_DB;
                 break;
-
+            case Config.PYingActivity://盘盈入库
+                backString=BT_PY;
+                break;
+            case Config.PkuiActivity://盘盈入库
+                backString=BT_PK;
+                break;
+            case Config.PkuiVMIActivity://盘盈入库
+                backString=BT_PK_VMI;
+                break;
         }
         return backString;
     }

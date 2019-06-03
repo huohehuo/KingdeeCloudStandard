@@ -3,7 +3,9 @@ package com.fangzuo.assist.cloud.Fragment.TabForActivity.DbBox;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
@@ -85,6 +88,8 @@ public class FragmentDBDetail extends BaseFragment {
 
     @BindView(R.id.zxing_barcode_scanner)
     DecoratedBarcodeView zxingBarcodeScanner;
+    @BindView(R.id.ly_scan)
+    RelativeLayout lyScan;
 //    @BindView(R.id.ed_supplier)
 //    EditText edSupplier;
 //    @BindView(R.id.search_supplier)
@@ -170,7 +175,7 @@ SpinnerStorage spWhichStorageOut;
 //                if (cbScaning.isChecked()) {
 //                } else {
                     mCaptureManager.onPause();
-                    zxingBarcodeScanner.setVisibility(View.GONE);
+                lyScan.setVisibility(View.GONE);
 //                }
 
                 OnReceive(res.getResult().getText());
@@ -219,7 +224,8 @@ SpinnerStorage spWhichStorageOut;
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock + "NO"));//上传成功，解锁表头
 //                btnBackorder.setClickable(true);
                     LoadingUtil.dismiss();
-                    submitAndAudit(listOrder.get(0));//是否提交并审核
+                    DataModel.submitAndAudit(mContext,Config.DBActivity,listOrder.get(0));
+//                    submitAndAudit(listOrder.get(0));//是否提交并审核
                 } else {
                     LoadingUtil.dismiss();
                     List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
@@ -273,12 +279,12 @@ SpinnerStorage spWhichStorageOut;
                 if (null != activityPager||null != spUnit) {
 //                    spUnit.setAuto("", SpinnerUnit.Id);
                     Lg.e("-----------",activityPager.getOrgOut());
-                    spWhichStorageOut.setAuto("","", activityPager.getOrgOut());
+                    spWhichStorageOut.setAuto("storageout"+activityPager.getActivity(),Hawk.get("storageout"+activityPager.getActivity(),""), activityPager.getOrgOut());
                 }
                 break;
             case EventBusInfoCode.UpdataViewForDBInStorage://由表头的数据决定是否更新明细数据
                 if (null != activityPager||null != spUnit) {
-                    spWhichStorageIn.setAuto("", activityPager.getOrgIn());
+                    spWhichStorageIn.setAuto(Hawk.get("storagein"+activityPager.getActivity(),""), activityPager.getOrgIn());
                 }
                 break;
         }
@@ -370,6 +376,7 @@ SpinnerStorage spWhichStorageOut;
                 storageOut = (Storage) spWhichStorageOut.getAdapter().getItem(i);
                 spWhichStorageOut.setTitleText(storageOut.FName);
                 Lg.e("选中调出仓库：", storageOut);
+                Hawk.put("storageout"+activityPager.getActivity(),storageOut.FName);
 //                waveHouseOut = null;
 //                spWavehouseOut.setAuto(mContext, storageOut, "");
                 DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
@@ -383,11 +390,13 @@ SpinnerStorage spWhichStorageOut;
 //                Lg.e("选中调出仓位：", waveHouseOut);
 //            }
 //        });
+
         spWhichStorageIn.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 storageIn = (Storage) spWhichStorageIn.getAdapter().getItem(i);
                 spWhichStorageIn.setTitleText(storageIn.FName);
+                Hawk.put("storagein"+activityPager.getActivity(),storageIn.FName);
                 Lg.e("选中调入仓库：", storageIn);
 //                waveHouseIn = null;
 //                spWavehouseIn.setAuto(mContext, storageIn, "");
@@ -755,16 +764,16 @@ SpinnerStorage spWhichStorageOut;
 
     }
 
-    @OnClick({ R.id.search, R.id.btn_add, R.id.btn_finishorder, R.id.btn_backorder, R.id.btn_checkorder})
+    @OnClick({ R.id.search, R.id.btn_add, R.id.btn_finishorder, R.id.btn_backorder, R.id.btn_checkorder, R.id.btn_pic})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.search:
-                if (zxingBarcodeScanner.getVisibility()==View.VISIBLE){
-                    zxingBarcodeScanner.setVisibility(View.GONE);
+                if (lyScan.getVisibility()==View.VISIBLE){
+                    lyScan.setVisibility(View.GONE);
 //                    mCaptureManager.onPause();
                 }else{
                     mCaptureManager.onResume();
-                    zxingBarcodeScanner.setVisibility(View.VISIBLE);
+                    lyScan.setVisibility(View.VISIBLE);
                     mCaptureManager.decode();
                 }
 
@@ -774,6 +783,10 @@ SpinnerStorage spWhichStorageOut;
 //                bundle1.putString("org", activityPager.getOrgOut(1));
 //                bundle1.putInt("activity", activity);
 //                startNewActivityForResult(activityPager, ProductSearchActivity.class, R.anim.activity_open, 0, Info.SEARCHFORRESULT, bundle1);
+                break;
+            case R.id.btn_pic:
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, Info.Scan_Pic);
                 break;
 //            case R.id.btn_add:
 //                checkBeforeAdd();

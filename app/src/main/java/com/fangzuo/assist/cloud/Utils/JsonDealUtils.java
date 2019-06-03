@@ -310,12 +310,12 @@ public class JsonDealUtils {
                 inObject.put("FBillNo","");
                 addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
                 addObject(inObject,"FSaleOrgId","FNumber",mains.get(i).FStockOrgId);
+                addObject(inObject,"FCustomerID","FNumber",mains.get(i).FCustomerID);
                 addObject(inObject,"FSaleDeptID","FNUMBER",mains.get(i).FPurchaseDeptId);
                 addObject(inObject,"FSalesManID","FNUMBER",mains.get(i).FPurchaserId);
                 addObject(inObject,"FStockOrgId","FNumber",mains.get(i).FStockOrgId);
-                addObject(inObject,"FCustomerID","FNumber",mains.get(i).FCustomerID);
-                addObject(inObject,"FDeliveryDeptID","FNumber",mains.get(i).FDepartmentNumber);
                 addObject(inObject,"FStockerID","FNumber",mains.get(i).FStockerNumber);
+                addObject(inObject,"FDeliveryDeptID","FNumber",mains.get(i).FDepartmentNumber);
 //                addObject(inObject,"FStockerID","FNumber",mains.get(i).FStockerNumber);
 //                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
                 addObject(inObject,"FOwnerIdHead","FNumber",mains.get(i).FStockOrgId);
@@ -335,8 +335,8 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
                     jsonAr.put("FRealQty",beans.get(j).FRealQty);
                     jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
-                    jsonAr.put("FBaseMustQty",beans.get(j).FRemainInStockQty);
-                    jsonAr.put("FARNOTJOINQTY",beans.get(j).FRealQty);
+//                    jsonAr.put("FBaseMustQty",beans.get(j).FRemainInStockQty);
+//                    jsonAr.put("FARNOTJOINQTY",beans.get(j).FRealQty);
                     addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
                     jsonAr.put("FIsFree",beans.get(j).FIsFree);
                     jsonArray.put(jsonAr);
@@ -361,6 +361,10 @@ public class JsonDealUtils {
             outOjbect.put("IsEntryBatchFill",true);
             JSONArray outOfModel = new JSONArray();//Model
             for (int i = 0; i < mains.size(); i++) {
+                List<T_Detail> beans = map.get(mains.get(i).FOrderId+"");
+                if (null==beans || beans.size()<=0){//若是没明细，直接跳过
+                    continue;
+                }
                 Lg.e("jsonMain:",mains.get(i));
                 JSONObject inObject = new JSONObject();
                 inObject.put("FBillNo","");
@@ -368,13 +372,13 @@ public class JsonDealUtils {
                 addObject(inObject,"FSaleOrgId","FNumber",mains.get(i).FStockOrgId);
                 addObject(inObject,"FOwnerIdHead","FNumber",mains.get(i).FStockOrgId);
                 if ("XSCKD05_SYS".equals(mains.get(i).FBillTypeID)){
-                    addObject(inObject,"FSettleOrgID","FNumber",mains.get(i).FPurchaseOrgId);
+                    addObject(inObject,"FSettleOrgID","FNumber",mains.get(i).FPurchaseOrgId);//0530本来是以FPurchaseOrgId
                 }else{
                     addObject(inObject,"FSettleOrgID","FNumber",mains.get(i).FOwnerIdHead);
                 }
                 addObject(inObject,"FStockOrgId","FNumber",mains.get(i).FPurchaseOrgId);
-                addObject(inObject,"FDeliveryDeptID","FNumber",mains.get(i).FDepartmentNumber);
                 addObject(inObject,"FStockerID","FNumber",mains.get(i).FStockerNumber);
+                addObject(inObject,"FDeliveryDeptID","FNumber",mains.get(i).FDepartmentNumber);
                 addObject(inObject,"FCustomerID","FNumber",mains.get(i).FCustomerID);
                 addObject(inObject,"FSaleDeptID","FNumber",mains.get(i).FPurchaseDeptId);
                 addObject(inObject,"FSalesManID","FNumber",mains.get(i).FPurchaserId);
@@ -386,7 +390,7 @@ public class JsonDealUtils {
                 inObject.put("SubHeadEntity",stockObject);
 
                 JSONArray jsonArray = new JSONArray();
-                List<T_Detail> beans = map.get(mains.get(i).FOrderId+"");
+
                 Lg.e("jsonDetail:",beans);
                 for (int j = 0; j < beans.size(); j++) {
                     JSONObject jsonAr = new JSONObject();
@@ -659,9 +663,9 @@ public class JsonDealUtils {
                     addObject(jsonAr,"FStockId","FNumber",beans.get(j).FStorageId);
                     addObject(jsonAr,"FStockStatusId","FNumber","KCZT01_SYS");
                     addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
-                    addObject(jsonAr,"FWorkShopId1","FNumber",beans.get(j).FWorkShopId1);
-                    jsonAr.put("FOwnerTypeId",mains.get(0).FOwnerTypeIdHead);
+//                    jsonAr.put("FOwnerTypeId",mains.get(0).FOwnerTypeIdHead);
                     addObject(jsonAr,"FOwnerId","FNUMBER",mains.get(0).FOwnerIdHead);
+                    addObject(jsonAr,"FWorkShopId1","FNumber",beans.get(j).FWorkShopId1);
                     addObject(jsonAr,"FKeeperID","FNUMBER",mains.get(0).FStockOrgId);
 //                    jsonAr.put("FKeeperTypeId",mains.get(0).FOwnerTypeIdHead);
                     jsonArray.put(jsonAr);
@@ -841,24 +845,24 @@ public class JsonDealUtils {
                 for (int j = 0; j < beans.size(); j++) {
                     JSONObject jsonAr = new JSONObject();
                     addObject(jsonAr,"FMaterialId","FNumber",beans.get(j).FMaterialId);
-                    addObject(jsonAr,"FStockId","FNumber",beans.get(j).FStorageId);
-                    addObject(jsonAr,"FStockstatusId","FNumber",beans.get(j).FStorageId);
-                    addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
                     JSONObject jsonfz = new JSONObject();
                     addObject(jsonfz,"FAUXPROPID__FF100001","FNumber",beans.get(j).ActualModel);
                     addObject(jsonfz,"FAUXPROPID__FF100002","FNumber",beans.get(j).AuxSign);
                     jsonAr.put("FAuxpropId",jsonfz);
-                    jsonAr.put("FRealQty",beans.get(j).FRealQty);
+                    addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
+                    addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
                     if (j > 0 && beans.get(j).FEntryID.equals(beans.get(j-1).FEntryID)) {
 //                        jsonAr.put("FMustQty","0");
 //                        jsonAr.put("FSalBaseNum","0");
 //                        jsonAr.put("FStockBaseDen","0");
                     }else{
                         jsonAr.put("FMustQty",beans.get(j).FRemainInStockQty);
-                        jsonAr.put("FSalBaseNum",beans.get(j).FRemainInStockQty);
-                        jsonAr.put("FStockBaseDen",beans.get(j).FRemainInStockQty);
+//                        jsonAr.put("FSalBaseNum",beans.get(j).FRemainInStockQty);
+//                        jsonAr.put("FStockBaseDen",beans.get(j).FRemainInStockQty);
                     }
-                    addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
+                    jsonAr.put("FRealQty",beans.get(j).FRealQty);
+                    addObject(jsonAr,"FStockId","FNumber",beans.get(j).FStorageId);
+                    addObject(jsonAr,"FStockstatusId","FNumber",beans.get(j).FStorageId);
                     jsonAr.put("FIsFree",beans.get(j).FIsFree);
                     jsonAr.put("FSOEntryId",beans.get(j).FSOEntryId);
                     jsonAr.put("FSrcBillTypeID","SAL_RETURNNOTICE");
@@ -1185,6 +1189,116 @@ public class JsonDealUtils {
         }
         return outOjbect.toString();
     }
+    //盘盈的JSON拼接
+    public static String JSonPYing(List<T_main> mains, Map<String,List<T_Detail>> map){
+        JSONObject outOjbect = new JSONObject();
+        try {
+//            outOjbect.put("IsEntryBatchFill",true);
+            JSONArray outOfModel = new JSONArray();//Model
+            for (int i = 0; i < mains.size(); i++) {
+                JSONObject inObject = new JSONObject();
+                inObject.put("FBillNo","");
+                addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
+                addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FStockOrgId);//库存组织
+                addObject(inObject,"FStockerId","FNUMBER",mains.get(i).FStockerNumber);
+                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
+                addObject(inObject,"FOwnerIdHead","FNUMBER",mains.get(i).FOwnerIdHead);
+                addObject(inObject,"FDeptId","FNumber",mains.get(i).FDepartmentNumber);
+                inObject.put("FDate",mains.get(i).FDate);
+                inObject.put("FNoteHead",mains.get(i).FNot);
+                JSONArray jsonArray = new JSONArray();
+                List<T_Detail> beans = map.get(mains.get(i).FOrderId+"");
+                for (int j = 0; j < beans.size(); j++) {
+                    JSONObject jsonAr = new JSONObject();
+                    addObject(jsonAr,"FMaterialId","FNumber",beans.get(j).FMaterialId);
+                    jsonAr.put("FOwnerTypeId",mains.get(i).FOwnerTypeIdHead);
+                    addObject(jsonAr,"FOwnerid","FNumber",beans.get(j).FOwnerId);
+                    JSONObject jsonfz = new JSONObject();
+                    addObject(jsonfz,"FAUXPROPID__FF100001","FNumber",beans.get(j).ActualModel);
+                    addObject(jsonfz,"FAUXPROPID__FF100002","FNumber",beans.get(j).AuxSign);
+                    jsonAr.put("FAuxpropId",jsonfz);
+                    addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
+                    addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
+                    addObject(jsonAr,"FStockId","FNumber",beans.get(j).FStorageId);
+                    addObject(jsonAr,"FStockStatusId","FNUMBER","KCZT01_SYS");
+                    jsonAr.put("FAcctQty",beans.get(j).FRemainInStockQty);//帐存数量
+//                    jsonAr.put("FBaseAcctQty",beans.get(j).FRealQty);
+//                    jsonAr.put("FGainQty",beans.get(j).FRemainInStockQty);//盘盈数量
+                    jsonAr.put("FCountQty",beans.get(j).FRealQty);//盘点数量
+//                    jsonAr.put("FBaseCountQty",beans.get(j).FRealQty);
+//                    jsonAr.put("FBaseGainQty",beans.get(j).FRemainInStockQty);
+                    addObject(jsonAr,"FKeeperId","FNumber",mains.get(i).FStockOrgId);//默认为库存组织
+//                    jsonAr.put("FKeeperTypeId",mains.get(0).FOwnerTypeIdHead);
+//                    addObject(jsonAr,"FKeeperId","FNUMBER",mains.get(0).FStockOrgId);
+                    jsonArray.put(jsonAr);
+                }
+                inObject.put("FBillEntry",jsonArray);
+                outOfModel.put(inObject);
+            }
+
+
+            outOjbect.put("Model",outOfModel);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Lg.e("解析错误："+e.toString());
+        }
+        return outOjbect.toString();
+    }
+    //盘亏的JSON拼接
+    public static String JSonPKui(List<T_main> mains, Map<String,List<T_Detail>> map){
+        JSONObject outOjbect = new JSONObject();
+        try {
+//            outOjbect.put("IsEntryBatchFill",true);
+            JSONArray outOfModel = new JSONArray();//Model
+            for (int i = 0; i < mains.size(); i++) {
+                JSONObject inObject = new JSONObject();
+                inObject.put("FBillNo","");
+                addObject(inObject,"FBillTypeID","FNUMBER",mains.get(i).FBillTypeID);
+                addObject(inObject,"FStockOrgId","FNUMBER",mains.get(i).FStockOrgId);//库存组织
+                addObject(inObject,"FStockerId","FNUMBER",mains.get(i).FStockerNumber);
+                inObject.put("FOwnerTypeIdHead",mains.get(i).FOwnerTypeIdHead);
+                addObject(inObject,"FOwnerIdHead","FNUMBER",mains.get(i).FOwnerIdHead);
+                addObject(inObject,"FDeptId","FNumber",mains.get(i).FDepartmentNumber);
+                inObject.put("FDate",mains.get(i).FDate);
+                inObject.put("FNoteHead",mains.get(i).FNot);
+                JSONArray jsonArray = new JSONArray();
+                List<T_Detail> beans = map.get(mains.get(i).FOrderId+"");
+                for (int j = 0; j < beans.size(); j++) {
+                    JSONObject jsonAr = new JSONObject();
+                    addObject(jsonAr,"FMaterialId","FNumber",beans.get(j).FMaterialId);
+                    jsonAr.put("FOwnerTypeId",mains.get(i).FOwnerTypeIdHead);
+                    addObject(jsonAr,"FOwnerid","FNumber",beans.get(j).FOwnerId);
+                    JSONObject jsonfz = new JSONObject();
+                    addObject(jsonfz,"FAUXPROPID__FF100001","FNumber",beans.get(j).ActualModel);
+                    addObject(jsonfz,"FAUXPROPID__FF100002","FNumber",beans.get(j).AuxSign);
+                    jsonAr.put("FAuxpropId",jsonfz);
+                    addObject(jsonAr,"FStockStatusId","FNUMBER","KCZT01_SYS");
+                    addObject(jsonAr,"FLot","FNumber",beans.get(j).FBatch);
+                    addObject(jsonAr,"FUnitID","FNumber",beans.get(j).FUnitID);
+//                    addObject(jsonAr,"FExtAuxUnitId","FNumber","m3");
+                    jsonAr.put("FCountQty",beans.get(j).FRealQty);//盘点数量
+                    addObject(jsonAr,"FStockId","FNumber",beans.get(j).FStorageId);
+                    jsonAr.put("FAcctQty",beans.get(j).FQuantity);//帐存数量
+//                    jsonAr.put("FLossQty",beans.get(j).FRemainInStockQty);//盘亏数量
+//                    jsonAr.put("FExtSecAcctQty",beans.get(j).FQuantity);//帐存数量（辅单位
+//                    jsonAr.put("FExtAuxUnitQty",beans.get(j).FRealQty);//帐存数量（辅单位
+//                    jsonAr.put("FExtSecLOSSQty",beans.get(j).FRemainInStockQty);//盘亏数量
+                    addObject(jsonAr,"FKeeperId","FNumber",mains.get(i).FStockOrgId);//默认为库存组织
+//                    jsonAr.put("FKeeperTypeId",mains.get(0).FOwnerTypeIdHead);
+                    jsonArray.put(jsonAr);
+                }
+                inObject.put("FBillEntry",jsonArray);
+                outOfModel.put(inObject);
+            }
+
+
+            outOjbect.put("Model",outOfModel);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Lg.e("解析错误："+e.toString());
+        }
+        return outOjbect.toString();
+    }
 
     //调拨单的JSON拼接（提交和审核的json）
     public static String JSonDB_Check(String id){
@@ -1197,6 +1311,27 @@ public class JsonDealUtils {
                 array.put(id);
                 inObject.put("Numbers",array);
                 inObject.put("Ids","");
+//                inObject.put("InterationFlags","");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Lg.e("解析错误："+e.toString());
+        }
+        return inObject.toString();
+    }
+    //调拨单的JSON拼接（提交和审核的json）
+    public static String JSon_Submit_Audit(List<String> id){
+        JSONObject inObject = new JSONObject();
+        try {
+//                String[] strings = new String[1];
+//                strings[0]=id;
+            inObject.put("CreateOrgId",0);
+            JSONArray array = new JSONArray();//Model
+            for (String string:id) {
+                array.put(string);
+            }
+            inObject.put("Numbers",array);
+            inObject.put("Ids","");
 //                inObject.put("InterationFlags","");
 
         } catch (JSONException e) {

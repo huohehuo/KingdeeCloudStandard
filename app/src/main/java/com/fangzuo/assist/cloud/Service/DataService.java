@@ -23,6 +23,7 @@ import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.greendao.gen.ClientDao;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.OrgDao;
+import com.fangzuo.greendao.gen.RemarkDataDao;
 import com.fangzuo.greendao.gen.SaleManDao;
 import com.fangzuo.greendao.gen.UnitDao;
 import com.loopj.android.http.AsyncHttpClient;
@@ -78,7 +79,7 @@ public class DataService extends IntentService {
         context.startService(intent);
     }
 
-    //更新服务器中的当前时间
+    //获取基础数据
     public static void UpdateData(Context context) {
         Intent intent = new Intent(context, DataService.class);
         intent.setAction(UpdateData);
@@ -198,6 +199,7 @@ public class DataService extends IntentService {
         choose.add(7);//单位
         choose.add(10);//销售员
         choose.add(14);//组织
+        choose.add(15);//简称表
         String json = JsonCreater.DownLoadData(
                 BasicShareUtil.getInstance(App.getContext()).getDatabaseIp(),
                 BasicShareUtil.getInstance(App.getContext()).getDatabasePort(),
@@ -216,21 +218,28 @@ public class DataService extends IntentService {
                     unitDao.deleteAll();
                     unitDao.insertOrReplaceInTx(dBean.units);
                     unitDao.detachAll();
-                    Lg.e("OK单位");
+                    Lg.e("OK单位"+dBean.units.size());
                 }
                 if (dBean.saleMans != null && dBean.saleMans.size() > 0) {
                     SaleManDao saleManDao = session.getSaleManDao();
                     saleManDao.deleteAll();
                     saleManDao.insertOrReplaceInTx(dBean.saleMans);
                     saleManDao.detachAll();
-                    Lg.e("OK销售员");
+                    Lg.e("OK销售员"+dBean.saleMans.size());
                 }
                 if (dBean.orgs != null && dBean.orgs.size() > 0) {
                     OrgDao clientDao = session.getOrgDao();
                     clientDao.deleteAll();
                     clientDao.insertOrReplaceInTx(dBean.orgs);
                     clientDao.detachAll();
-                    Lg.e("OK组织");
+                    Lg.e("OK组织"+dBean.orgs.size());
+                }
+                if (dBean.remarkDatas != null && dBean.remarkDatas.size() > 0) {
+                    RemarkDataDao clientDao = session.getRemarkDataDao();
+                    clientDao.deleteAll();
+                    clientDao.insertOrReplaceInTx(dBean.remarkDatas);
+                    clientDao.detachAll();
+                    Lg.e("OK简称表"+dBean.remarkDatas.size());
                 }
             }
 

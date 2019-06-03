@@ -103,6 +103,9 @@ public class PushDownPagerActivity extends BaseActivity {
             case 2:
                 string = "销售订单下推销售出库单";
                 break;
+            case 21:
+                string = "VMI销售订单下推销售出库单";
+                break;
             case 3:
                 string = "销售订单下推销售退货单";
                 break;

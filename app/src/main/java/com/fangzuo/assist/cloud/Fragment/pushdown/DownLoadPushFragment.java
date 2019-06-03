@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
+import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
 import com.fangzuo.assist.cloud.Adapter.PushDownListAdapter;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
@@ -32,9 +33,12 @@ import com.fangzuo.assist.cloud.Beans.PushDownListReturnBean;
 import com.fangzuo.assist.cloud.Beans.ScanDLReturnBean;
 import com.fangzuo.assist.cloud.Dao.PushDownMain;
 import com.fangzuo.assist.cloud.Dao.PushDownSub;
+import com.fangzuo.assist.cloud.Dao.T_Detail;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.Toast;
@@ -99,11 +103,26 @@ public class DownLoadPushFragment extends BaseFragment {
     private ScanDevice sm;
     private Intent intent;
     private String TAG="DownLoadPushFragment";
+    private PushDownMainDao pushDownMainDao;
+    private PushDownSubDao pushDownSubDao;
+    private T_DetailDao t_detailDao;
+    private T_mainDao t_mainDao;
+    private int activity;
     @Override
     protected void initView() {
         isCheck = new ArrayList<>();
         downloadIDs = new ArrayList<>();
         daosession = GreenDaoManager.getmInstance(mContext).getDaoSession();
+
+        t_mainDao = daosession.getT_mainDao();
+        t_detailDao = daosession.getT_DetailDao();
+        pushDownMainDao = daosession.getPushDownMainDao();
+        pushDownSubDao = daosession.getPushDownSubDao();
+
+        if (tag == 1) activity = Config.PdCgOrder2WgrkActivity;
+        if (tag == 2) activity = Config.PdSaleOrder2SaleOutActivity;
+        if (tag == 21) activity = Config.PdSaleOrder2SaleOut2Activity;
+        if (tag == 6) activity = Config.PdBackMsg2SaleBackActivity;
 
 //        if (tag == 1) {
             //供应商信息绑定
@@ -350,60 +369,106 @@ public class DownLoadPushFragment extends BaseFragment {
             DownLoadSubListBean dBean = new DownLoadSubListBean();
             dBean.interID = downloadIDs.get(i).FBillNo;
             dBean.tag = downloadIDs.get(i).tag;
-            //获取下推订单信息
-            Asynchttp.post(mContext,
-                    BasicShareUtil.getInstance(mContext).getBaseURL()+ WebApi.PUSHDOWNDLLIST,
-                    new Gson().toJson(dBean), new Asynchttp.Response() {
-                @Override
-                public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
-                    //查找本地的单据信息，若和选择的单据id相同，则删除本地相对应的单据信息，
-                    PushDownMainDao pushDownMainDao = daosession.getPushDownMainDao();
-                    List<PushDownMain> pushDownMains = pushDownMainDao.loadAll();
-                    Log.e(TAG,"download-获取数据:"+cBean.returnJson);
-                    PushDownDLBean pBean = new Gson().fromJson(cBean.returnJson, PushDownDLBean.class);
-                    PushDownSubDao pushDownSubDao = daosession.getPushDownSubDao();
-
-                    for (int j = 0; j < pushDownMains.size(); j++) {
-                        if (pushDownMains.get(j).FBillNo.equals(downloadIDs.get(finalI).FBillNo)) {
-                            pushDownMainDao.delete(pushDownMains.get(j));
-                            //查找本地的下推订单信息，若和选择的下推订单id相同，则删除本地相对应的下推订单信息，
-                            List<PushDownSub> pushDownSubs = pushDownSubDao.loadAll();
-                            for (int k = 0; k < pushDownSubs.size(); k++) {
-                                if (pushDownMains.get(j).FBillNo.equals(pushDownSubs.get(k).FBillNo)) {
-                                    pushDownSubDao.delete(pushDownSubs.get(k));
+            App.getRService().doIOAction(WebApi.PUSHDOWNDLLIST
+                    , new Gson().toJson(dBean), new MySubscribe<CommonResponse>() {
+                        @Override
+                        public void onNext(CommonResponse commonResponse) {
+                            super.onNext(commonResponse);
+                            if (!commonResponse.state)return;
+                            Log.e(TAG,"download-获取数据:"+commonResponse.returnJson);
+                            PushDownDLBean pBean = new Gson().fromJson(commonResponse.returnJson, PushDownDLBean.class);
+                            //查找本地相同的单据(该查询条件的结果只存在一个)
+                            List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
+                                    PushDownMainDao.Properties.Tag.eq(tag),
+                                    PushDownMainDao.Properties.FID.eq(pushDownMain.FID)
+                            ).build().list();
+                            if (pushDownMains.size()>0){//本地存在单据，查找相关明细，若不存在明细，删除单据表体并更新
+                                List<T_Detail> detailList = t_detailDao.queryBuilder().where(
+                                        T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FID.eq(pushDownMain.FID)
+                                ).build().list();
+                                if (detailList.size()>0){
+                                    //本地存在单据表头表体，并存在单据明细时,不做操作
+                                }else{//本地存在单据表头表体，并且本地不存在单据明细时
+                                    //查出表头相关的单据表体，删除旧数据并且保存新数据
+                                    List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
+                                            PushDownSubDao.Properties.FID.eq(pushDownMains.get(0).FID)
+                                    ).build().list();
+                                    pushDownMainDao.deleteInTx(pushDownMains.get(0));
+                                    pushDownSubDao.deleteInTx(pushDownSubs);
+                                    pushDownSubDao.insertOrReplaceInTx(pBean.list);
+                                    pushDownMainDao.insertOrReplaceInTx(pushDownMain);
                                 }
+                            }else{
+                                //异步添加下推订单信息
+                                pushDownSubDao.insertOrReplaceInTx(pBean.list);
+                                pushDownMainDao.insertOrReplaceInTx(pushDownMain);
+
                             }
+                            Toast.showText(mContext, "下载成功");
+                            LoadingUtil.dismiss();
                         }
-                    }
-                    //异步添加下推订单信息
-                    for (int j = 0; j < pBean.list.size(); j++) {
-                        pushDownSubDao.insertOrReplaceInTx(pBean.list.get(j));
-                    }
 
-                    T_mainDao t_mainDao = daosession.getT_mainDao();
-                    T_DetailDao t_detailDao = daosession.getT_DetailDao();
-                    //删除本地指定数据
-                    t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
-                            T_mainDao.Properties.FIndex.eq(
-                                    downloadIDs.get(finalI).FBillNo)
-                    ).build().list());
-                    //删除本地指定数据
-//                    t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
-//                            T_DetailDao.Properties.FInterID.eq(
-//                                    downloadIDs.get(finalI).FInterID)
+                        @Override
+                        public void onError(Throwable e) {
+//                    super.onError(e);
+                            Toast.showText(mContext, e.getMessage());
+                            LoadingUtil.dismiss();
+                        }
+                    });
+            //获取下推订单信息
+//            Asynchttp.post(mContext,
+//                    BasicShareUtil.getInstance(mContext).getBaseURL()+ WebApi.PUSHDOWNDLLIST,
+//                    new Gson().toJson(dBean), new Asynchttp.Response() {
+//                @Override
+//                public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
+//                    //查找本地的单据信息，若和选择的单据id相同，则删除本地相对应的单据信息，
+//
+//                    List<PushDownMain> pushDownMains = pushDownMainDao.loadAll();
+//                    Log.e(TAG,"download-获取数据:"+cBean.returnJson);
+//                    PushDownDLBean pBean = new Gson().fromJson(cBean.returnJson, PushDownDLBean.class);
+//
+//                    for (int j = 0; j < pushDownMains.size(); j++) {
+//                        if (pushDownMains.get(j).FBillNo.equals(downloadIDs.get(finalI).FBillNo)) {
+//                            pushDownMainDao.delete(pushDownMains.get(j));
+//                            //查找本地的下推订单信息，若和选择的下推订单id相同，则删除本地相对应的下推订单信息，
+//                            List<PushDownSub> pushDownSubs = pushDownSubDao.loadAll();
+//                            for (int k = 0; k < pushDownSubs.size(); k++) {
+//                                if (pushDownMains.get(j).FBillNo.equals(pushDownSubs.get(k).FBillNo)) {
+//                                    pushDownSubDao.delete(pushDownSubs.get(k));
+//                                }
+//                            }
+//                        }
+//                    }
+//                    //异步添加下推订单信息
+//                    for (int j = 0; j < pBean.list.size(); j++) {
+//                        pushDownSubDao.insertOrReplaceInTx(pBean.list.get(j));
+//                    }
+//
+//                    T_mainDao t_mainDao = daosession.getT_mainDao();
+//                    T_DetailDao t_detailDao = daosession.getT_DetailDao();
+//                    //删除本地指定数据
+//                    t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
+//                            T_mainDao.Properties.FIndex.eq(
+//                                    downloadIDs.get(finalI).FBillNo)
 //                    ).build().list());
-                    //异步添加单据信息
-                    pushDownMainDao.insertOrReplaceInTx(pushDownMain);
-                    Toast.showText(mContext, "下载成功");
-                    LoadingUtil.dismiss();
-                }
-
-                @Override
-                public void onFailed(String Msg, AsyncHttpClient client) {
-                    Toast.showText(mContext, Msg);
-                    LoadingUtil.dismiss();
-                }
-            });
+//                    //删除本地指定数据
+////                    t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
+////                            T_DetailDao.Properties.FInterID.eq(
+////                                    downloadIDs.get(finalI).FInterID)
+////                    ).build().list());
+//                    //异步添加单据信息
+//                    pushDownMainDao.insertOrReplaceInTx(pushDownMain);
+//                    Toast.showText(mContext, "下载成功");
+//                    LoadingUtil.dismiss();
+//                }
+//
+//                @Override
+//                public void onFailed(String Msg, AsyncHttpClient client) {
+//                    Toast.showText(mContext, Msg);
+//                    LoadingUtil.dismiss();
+//                }
+//            });
         }
 
     }

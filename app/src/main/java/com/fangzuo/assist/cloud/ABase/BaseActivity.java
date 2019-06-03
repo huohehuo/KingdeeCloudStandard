@@ -501,7 +501,7 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     public String getTimeLong(boolean b){
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(b?"yyyy-MM-dd-HH-mm-ss":"yyyyMMddHHmmss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(b?"yyyy-MM-dd HH:mm:ss":"yyyyMMddHHmmss");
         Date curDate = new Date();
         Log.e("date",curDate.toString());
         String str = format.format(curDate);

@@ -59,6 +59,7 @@ import com.fangzuo.assist.cloud.Utils.MediaPlayer;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.UpLoadModel;
+import com.fangzuo.assist.cloud.Utils.VibratorUtil;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
 import com.fangzuo.assist.cloud.widget.MyWaveHouseSpinner;
@@ -184,6 +185,11 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(ClassEvent event) {
         switch (event.Msg) {
+            case EventBusInfoCode.Close_Activity:
+                Bundle b = new Bundle();
+                b.putInt("123", tag);
+                startNewActivity(activityPager, PushDownPagerActivity.class, 0, 0, true, b);
+                break;
             case EventBusInfoCode.ScanResult:
                 BarcodeResult res = (BarcodeResult) event.postEvent;
 //                if (cbScaning.isChecked()) {
@@ -250,9 +256,8 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                     MediaPlayer.getInstance(mContext).ok();
                     Toast.showText(mContext, "上传成功");
 //                btnBackorder.setClickable(true);
-                    Bundle b = new Bundle();
-                    b.putInt("123", tag);
-                    startNewActivity(activityPager, PushDownPagerActivity.class, 0, 0, true, b);
+                    Lg.e("审核单据："+listOrder.size(),listOrder);
+                    DataModel.submitAndAudit(mContext,Config.PdBackMsg2SaleBackActivity,listOrder,tag);
                 } else {
                     LoadingUtil.dismiss();
                     List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
@@ -333,12 +338,24 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                             activityPager.finish();
                         }
                     });
+                    ab.setNeutralButton("重连", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            LoadingUtil.showDialog(mContext,"正在重连...");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    checkPrint(false);
+                                }
+                            }).start();
+                        }
+                    });
                     ab.create().show();
                     tvPrint.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
-                            activityPager.finish();
+//                            activityPager.finish();
                         }
                     });
                     tvPrint.setText("连接打印机错误");
@@ -489,6 +506,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 pushDownSub = (PushDownSub) pushDownSubListAdapter.getItem(i);
                 Lg.e("点击明细:", pushDownSub);
+                VibratorUtil.Vibrate(mContext,Info.VibratorTime);
                 if (BasicShareUtil.getInstance(mContext).getIsOL()) {
                     s2Product.likeOr = pushDownSub.FNumber;
                     s2Product.FOrg = mainStoreOrg == null ? "" : mainStoreOrg.FOrgID;
@@ -716,10 +734,10 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                     PrintHistory printHistory = new PrintHistory();
                     printHistory.setData(product, spUnitStore.getDataObject(), spUnitJiben.getDataObject(), storeNum,
                             baseNum, spWavehouse.getWaveHouseId(), activityPager.getNote(),
-                            mainStoreOrg.FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber(),spActualmodel.getDataNumber());
+                            LocDataUtil.getOrg(pushDownSub.FHuoZhuNumber,"number").FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber(),spActualmodel.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
-                        CommonUtil.doPrint(zpSDK, printHistory);
+                        CommonUtil.doPrint(zpSDK, printHistory,activityPager.getPrintNum());
                     } catch (Exception e) {
                     }
                     //-----END

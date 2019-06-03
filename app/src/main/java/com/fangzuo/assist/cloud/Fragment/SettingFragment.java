@@ -44,6 +44,7 @@ import com.fangzuo.assist.cloud.zxing.CustomCaptureActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 
@@ -148,10 +149,6 @@ public class SettingFragment extends BaseFragment {
                     case 6:
                         startActivity(new Intent(mContext, TestingActivity.class));
                         break;
-                    case 7:
-                        LoadingUtil.showAlter(mContext,"功能暂未开放");
-//                        startActivity(new Intent(mContext, LanguageActivity.class));
-                        break;
                 }
 
             }
@@ -160,17 +157,6 @@ public class SettingFragment extends BaseFragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int i, long id) {
                 switch (i){
-//                    case 0:
-//                        Bundle b= new Bundle();
-//                        b.putInt("flag",100);
-//                        startNewActivity(SettingActivity.class,b);
-//                        break;
-//                    case 1:
-//                        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-//                        break;
-//                    case 2:
-//                        startActivity(new Intent(Settings.ACTION_SOUND_SETTINGS));
-//                        break;
                     case 3:
                         new AlertDialog.Builder(mContext)
                                 .setTitle("是否下载更新文件")
@@ -181,26 +167,8 @@ public class SettingFragment extends BaseFragment {
                                     }
                                 })
                                 .create().show();
-//                        Toast.showText(mContext,"长按更新");
-//                        IntentIntegrator intentIntegrator = new IntentIntegrator(mContext);
-//                        // 设置自定义扫描Activity
-//                        intentIntegrator.setCaptureActivity(CustomCaptureActivity.class);
-//                        intentIntegrator.initiateScan();
-//                        checkNewVersion();
                         break;
-//                    case 4:
-//                        startActivity(new Intent(mContext, IpPortActivity.class));
-//                        break;
-//                    case 5:
-//                        startActivity(new Intent(mContext, PrintOutTestActivity.class));
-//                        break;
-//                    case 6:
-//                        startActivity(new Intent(mContext, TestingActivity.class));
-//                        break;
-//                    case 7:
-//                        LoadingUtil.showAlter(mContext,"功能暂未开放");
-//                        startActivity(new Intent(mContext, LanguageActivity.class));
-//                        break;
+
                 }
                 return true;
             }
@@ -333,7 +301,7 @@ public class SettingFragment extends BaseFragment {
                 }
 
                 @Override
-                public void onFailure(com.lidroid.xutils.exception.HttpException arg0, String arg1) {
+                public void onFailure(HttpException arg0, String arg1) {
                     pDialog.dismiss();
                     Toast.showText(mContext, "下载失败");
                 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,8 +16,23 @@ import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
+import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
+import com.fangzuo.assist.cloud.Utils.EventBusUtil;
+import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.Toast;
+import com.fangzuo.assist.cloud.zxing.RGBLuminanceSource;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Reader;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.SourceData;
 
 import java.util.Calendar;
 
@@ -151,6 +167,31 @@ public abstract class BaseFragment extends Fragment {
         activity.overridePendingTransition(enterAnim, exitAnim);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == -1) {
+            if (requestCode == Info.Scan_Pic) {//扫码远距时解析返回的图片二维码
+                Bundle bundle = data.getExtras();
+                Bitmap bitmap = (Bitmap) bundle.get("data");
+                RGBLuminanceSource source = new RGBLuminanceSource(bitmap);
+                BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
+                Reader reader = new QRCodeReader();
+                try {
+                    Result result = reader.decode(binaryBitmap);
+                    Lg.e("解析：",result.getText());
+                    BarcodeResult barcodeResult = new BarcodeResult(result,new SourceData(new byte[10],1,1,1,1));
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.ScanResult,barcodeResult));
+                } catch (NotFoundException | ChecksumException | FormatException e) {
+                    Toast.showText(mContext,"解析失败"+e.getMessage());
+                    Lg.e("解析失败"+e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    //重载点击事件，避免快速点击
     public abstract  class NoDoubleClickListener implements View.OnClickListener{
         public static final int MIN_CLICK_DELAY_TIME = 1500;
         private long lastClickTime = 0;
@@ -169,7 +210,7 @@ public abstract class BaseFragment extends Fragment {
         }
         protected abstract void onNoDoubleClick(View view);
     }
-
+    //重载spinner监听，简化代码
     public abstract class ItemListener implements AdapterView.OnItemSelectedListener{
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {

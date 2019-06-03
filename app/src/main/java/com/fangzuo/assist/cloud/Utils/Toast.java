@@ -16,7 +16,7 @@ public class Toast {
             public void run() {
                 toast.cancel();
             }
-        },700);
+        },1500);
     }
     public static void showTextLong(Context context,String text){
         final android.widget.Toast toast = android.widget.Toast.makeText(context, text, android.widget.Toast.LENGTH_SHORT);

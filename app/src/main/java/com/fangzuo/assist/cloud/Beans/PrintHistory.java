@@ -56,6 +56,25 @@ public class PrintHistory {
         this.FAuxSign = auxSign;
         this.FActualModel = actualModel;
     }
+    //用于盘点单
+    public void setData(Product product, String unit, String unitAux, String num, String num2, String wave,
+                        String not, String huoquan, String barcode, String batch, String date, String title,String auxSign,String actualModel){
+        this.FTitle = title;
+        this.FName = product.FName;
+        this.FModel = product.FModel;
+        this.FUnit=unit;
+        this.FUnitAux=unitAux;
+        this.FNum = num;
+        this.FNum2 = num2;
+        this.FWaveHouse = wave;
+        this.FNot = not;
+        this.FHuoquan = huoquan;
+        this.FBarCode=barcode;
+        this.FBatch = batch;
+        this.FDate = date;
+        this.FAuxSign = auxSign;
+        this.FActualModel = actualModel;
+    }
 
     public void setPrintHistory(PrintHistory bean) {
         this.FTitle = bean.FTitle;

@@ -207,6 +207,8 @@ public class Fragment3HwInDetail extends BaseFragment {
                     Toast.showText(mContext, "上传成功");
 //                btnBackorder.setClickable(true);
                     LoadingUtil.dismiss();
+                    DataModel.submitAndAudit(mContext,Config.HwIn3Activity,listOrder.get(0));
+
                 } else {
                     LoadingUtil.dismiss();
                     List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
@@ -262,7 +264,7 @@ public class Fragment3HwInDetail extends BaseFragment {
 //                    spUnitAux.setAuto("", activityPager.getOrgOut(), SpinnerUnit.Id);
                 }
                 break;
-            case EventBusInfoCode.UpdataWaveHouse://检测打印机连接状态.
+            case EventBusInfoCode.UpdataWaveHouse:
 //                Storage storage = (Storage) event.postEvent;
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, activityPager.getStorage(), "");
@@ -290,12 +292,24 @@ public class Fragment3HwInDetail extends BaseFragment {
                             activityPager.finish();
                         }
                     });
+                    ab.setNeutralButton("重连", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            LoadingUtil.showDialog(mContext,"正在重连...");
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    checkPrint(false);
+                                }
+                            }).start();
+                        }
+                    });
                     ab.create().show();
                     tvPrint.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
-                            activityPager.finish();
+//                            activityPager.finish();
                         }
                     });
                     tvPrint.setText("连接打印机错误");
@@ -566,7 +580,7 @@ public class Fragment3HwInDetail extends BaseFragment {
                             activityPager.getOrgIn().FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber(),spActualmodel.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
-                        CommonUtil.doPrint(zpSDK, printHistory);
+                        CommonUtil.doPrint(zpSDK, printHistory,activityPager.getPrintNum());
                     } catch (Exception e) {
                     }
                     //-----END
