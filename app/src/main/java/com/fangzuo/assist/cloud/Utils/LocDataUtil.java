@@ -1,49 +1,40 @@
 package com.fangzuo.assist.cloud.Utils;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.EditText;
+import android.database.Cursor;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
-import com.fangzuo.assist.cloud.Beans.PrintHistory;
 import com.fangzuo.assist.cloud.Beans.SearchBean;
+import com.fangzuo.assist.cloud.Dao.Buyer;
 import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.Department;
+import com.fangzuo.assist.cloud.Dao.DryingGetData;
 import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.RemarkData;
 import com.fangzuo.assist.cloud.Dao.SaleMan;
+import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.Suppliers;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
 import com.fangzuo.assist.cloud.Dao.Unit;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
+import com.fangzuo.greendao.gen.BuyerDao;
 import com.fangzuo.greendao.gen.ClientDao;
+import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.DepartmentDao;
+import com.fangzuo.greendao.gen.DryingGetDataDao;
 import com.fangzuo.greendao.gen.OrgDao;
 import com.fangzuo.greendao.gen.RemarkDataDao;
 import com.fangzuo.greendao.gen.SaleManDao;
+import com.fangzuo.greendao.gen.StorageDao;
 import com.fangzuo.greendao.gen.T_DetailDao;
 import com.fangzuo.greendao.gen.UnitDao;
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import zpSDK.zpSDK.zpBluetoothPrinter;
 
 public class LocDataUtil {
 
@@ -69,13 +60,34 @@ public class LocDataUtil {
         }
 
     }
+    public static Unit getUnit4Name(String unitid){
+        Lg.e("获取单位位置：",unitid);
+//        Lg.e("获取单位位置org：",org);
+        if (null==unitid){
+            return new Unit("","","","");
+        }
+//        if (null==org){
+//            return new Unit("","","","");
+//        }
+        UnitDao unitDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getUnitDao();
+        List<Unit> units = unitDao.queryBuilder().where(
+//                UnitDao.Properties.FOrg.eq(org.FOrgID),
+                UnitDao.Properties.FName.eq(unitid)
+        ).build().list();
+        if (units.size()>0){
+            return units.get(0);
+        }else{
+            return new Unit("","","","");
+        }
+
+    }
 
     //获取客户数据
     public static Client getClient(String name){
         Lg.e("查找本地客户",name);
         if ("".equals(name)||null==name){
             Lg.e("name空");
-            return new Client("","","","");
+            return new Client("","","","","");
         }
         ClientDao unitDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getClientDao();
         List<Client> units = unitDao.queryBuilder().where(
@@ -84,7 +96,7 @@ public class LocDataUtil {
         if (units.size()>0){
             return units.get(0);
         }else{
-            return new Client("","","","");
+            return new Client("","","","","");
         }
     }
 
@@ -92,7 +104,36 @@ public class LocDataUtil {
     public static boolean hasTDetail(int activity){
         T_DetailDao unitDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getT_DetailDao();
         List<T_Detail> units = unitDao.queryBuilder().where(
-                T_DetailDao.Properties.Activity.eq(activity)
+                T_DetailDao.Properties.Activity.eq(activity),
+                T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+        ).build().list();
+        if (units.size()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    //判断是否存在明细数据
+    public static boolean hasTDetail(int activity,Long orderid){
+        T_DetailDao unitDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getT_DetailDao();
+        List<T_Detail> units = unitDao.queryBuilder().where(
+                T_DetailDao.Properties.Activity.eq(activity),
+                T_DetailDao.Properties.FOrderId.eq(orderid),
+                T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+        ).build().list();
+        if (units.size()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    //判断是否存在明细数据
+    public static boolean hasTDetail(int activity,String billno){
+        T_DetailDao unitDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getT_DetailDao();
+        List<T_Detail> units = unitDao.queryBuilder().where(
+                T_DetailDao.Properties.Activity.eq(activity),
+                T_DetailDao.Properties.FBillNo.eq(billno),
+                T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
         ).build().list();
         if (units.size()>0){
             return true;
@@ -101,6 +142,39 @@ public class LocDataUtil {
         }
     }
 
+    public static String getBaoNum(long orderID,int activity,String addNum){
+        String num ="0";
+        DaoSession daoSession = GreenDaoManager.getmInstance(App.getContext()).getDaoSession();
+        Cursor cursor = daoSession.getDatabase().rawQuery("SELECT " +
+                "ACTIVITY," +
+                "FORDER_ID," +
+                "FBARCODE," +
+                "FACCOUNT_ID," +
+                "SUM(FFBAO_NUM) AS BaoNum  " +
+                "FROM DRYING_GET_DATA " +
+                "WHERE " +
+                "FORDER_ID = ? AND ACTIVITY = ? AND FACCOUNT_ID = ?" +
+                "GROUP BY " +
+                "FORDER_ID", new String[]{orderID+"", activity+"",CommonUtil.getAccountID()});
+        while (cursor.moveToNext()){
+            num=cursor.getString(cursor.getColumnIndex("BaoNum"));
+        }
+
+        return MathUtil.toInt(num)+MathUtil.toInt(addNum)+"";
+    }
+
+    //判断是否存在明细数据
+    public static boolean hasOrderData(int activity){
+        DryingGetDataDao unitDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getDryingGetDataDao();
+        List<DryingGetData> units = unitDao.queryBuilder().where(
+                DryingGetDataDao.Properties.Activity.eq(activity)
+        ).build().list();
+        if (units.size()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
     //获取销售员数据
     public static SaleMan getSaleMan(String id){
         Lg.e("查找本地销售员",id);
@@ -121,7 +195,26 @@ public class LocDataUtil {
             return new SaleMan("","","","","");
         }
     }
-
+    //获取采购员数据
+    public static Buyer getBuyMan(String id){
+        Lg.e("查找本地采购员",id);
+        if ("".equals(id)||null==id){
+            return new Buyer("","","","","");
+        }
+//        if (null==org){
+//            return new SaleMan("","","","","");
+//        }
+        BuyerDao employeeDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getBuyerDao();
+        List<Buyer> employees = employeeDao.queryBuilder().where(
+//                SaleManDao.Properties.FOrg.eq(org.FOrgID),
+                BuyerDao.Properties.FID.eq(id)
+        ).build().list();
+        if (employees.size()>0){
+            return employees.get(0);
+        }else{
+            return new Buyer("","","","","");
+        }
+    }
     //获取部门数据
     public static Department getDept(String id){
         Lg.e("查找本地部门",id);
@@ -143,8 +236,37 @@ public class LocDataUtil {
         }
     }
     //获取组织数据
+    public static Storage getStorage(String id, String type){
+        Lg.e("查找本地StorageDao",id+"-"+type);
+        if ("".equals(id)||null==id){
+            return new Storage("","","","","","");
+        }
+        StorageDao employeeDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getStorageDao();
+        if ("id".equals(type)){
+            List<Storage> employees = employeeDao.queryBuilder().where(
+//                DepartmentDao.Properties.FOrg.eq(org.FOrgID),
+                    StorageDao.Properties.FItemID.eq(id)
+            ).build().list();
+            if (employees.size()>0){
+                return employees.get(0);
+            }else{
+                return new Storage("","","","","","");
+            }
+        }else{
+            List<Storage> employees = employeeDao.queryBuilder().where(
+//                DepartmentDao.Properties.FOrg.eq(org.FOrgID),
+                    StorageDao.Properties.FNumber.eq(id)
+            ).build().list();
+            if (employees.size()>0){
+                return employees.get(0);
+            }else{
+                return new Storage("","","","","","");
+            }
+        }
+    }
+    //获取组织数据
     public static Org getOrg(String id,String type){
-        Lg.e("查找本地组织",id);
+        Lg.e("查找本地组织",id+"-"+type);
         if ("".equals(id)||null==id){
             return new Org("","","","");
         }
@@ -170,8 +292,84 @@ public class LocDataUtil {
                 return new Org("","","","");
             }
         }
+    }
+    //获取组织数据
+    public static void getHuozhuByType(String id,String orgid,String type){
+        Lg.e("查找货主",id+"-"+orgid+"-"+type);
+        if ("".equals(id)||null==id){
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,new Org("","","","")));
+            return;
+        }
+        if ("BD_OwnerOrg".equals(type)){
+            OrgDao employeeDao = GreenDaoManager.getmInstance(App.getContext()).getDaoSession().getOrgDao();
+            List<Org> employees = employeeDao.queryBuilder().where(
+//                DepartmentDao.Properties.FOrg.eq(org.FOrgID),
+                    OrgDao.Properties.FOrgID.eq(id)
+            ).build().list();
+            if (employees.size()>0){
+                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,employees.get(0)));
+            }else{
+                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,new Org("","","","")));
+            }
+        }else if ("BD_Supplier".equals(type)){
+            if (null==orgid || "".equals(orgid)){
+                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,new Org("","","","")));
+                return;
+            }
+            SearchBean.S2Product s2Product = new SearchBean.S2Product();
+            s2Product.likeOr = id;
+            s2Product.FOrg = orgid;
+            App.getRService().doIOAction(WebApi.SUPPLIERSEARCHLIKE, new Gson().toJson(new SearchBean(SearchBean.product_for_like, new Gson().toJson(s2Product))), new MySubscribe<CommonResponse>() {
+                @Override
+                public void onNext(CommonResponse commonResponse) {
+                    super.onNext(commonResponse);
+                    if (!commonResponse.state)return;
+                    DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                    if (dBean.suppliers!=null && dBean.suppliers.size()>0){
+                        Org org = new Org(dBean.suppliers.get(0).FMASTERID,dBean.suppliers.get(0).FNumber,dBean.suppliers.get(0).FName,dBean.suppliers.get(0).FNote);
+                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,org));
+                    }else{
+                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,new Org("","","","")));
+                    }
 
+                }
 
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,new Org("","","","")));
+                }
+            });
+        }else{//BD_Customer
+            if (null==orgid || "".equals(orgid)){
+                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,new Org("","","","")));
+                return;
+            }
+            SearchBean.S2Product s2Product = new SearchBean.S2Product();
+            s2Product.likeOr = id;
+            s2Product.FOrg = orgid;
+            App.getRService().doIOAction(WebApi.CLIENTSEARCHLIKE, new Gson().toJson(new SearchBean(SearchBean.product_for_like, new Gson().toJson(s2Product))), new MySubscribe<CommonResponse>() {
+                @Override
+                public void onNext(CommonResponse commonResponse) {
+                    super.onNext(commonResponse);
+                    if (!commonResponse.state)return;
+                    DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                    if (dBean.clients!=null && dBean.clients.size()>0){
+                        Org org = new Org(dBean.clients.get(0).FMASTERID,dBean.clients.get(0).FNumber,dBean.clients.get(0).FName,dBean.clients.get(0).FNumber);
+                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,org));
+                    }else{
+                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,new Org("","","","")));
+                    }
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Get_HuoZhu,new Org("","","","")));
+                }
+            });
+        }
     }
     //获取组织/供应商/客户 的简称
     public static Org getRemark(String id,String type){
@@ -182,6 +380,15 @@ public class LocDataUtil {
         if ("name".equals(type)){
             List<RemarkData> employees = employeeDao.queryBuilder().where(
                     RemarkDataDao.Properties.FNAME.eq(id)
+            ).build().list();
+            if (employees.size()>0){
+                return new Org(employees.get(0).FNUMBER,employees.get(0).FNUMBER,employees.get(0).FNAME,employees.get(0).FSHORTNAME);
+            }else{
+                return new Org("","","","");
+            }
+        }else if ("id".equals(type)){
+            List<RemarkData> employees = employeeDao.queryBuilder().where(
+                    RemarkDataDao.Properties.FUSEORGID.eq(id)
             ).build().list();
             if (employees.size()>0){
                 return new Org(employees.get(0).FNUMBER,employees.get(0).FNUMBER,employees.get(0).FNAME,employees.get(0).FSHORTNAME);
@@ -246,7 +453,7 @@ public class LocDataUtil {
                 if (dBean.clients!=null && dBean.clients.size()>0){
                     EventBusUtil.sendEvent(new ClassEvent(Type,dBean.clients.get(0)));
                 }else{
-                    EventBusUtil.sendEvent(new ClassEvent(Type,new Client("","","","")));
+                    EventBusUtil.sendEvent(new ClassEvent(Type,new Client("","","","","")));
                 }
 
             }
@@ -254,7 +461,7 @@ public class LocDataUtil {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                EventBusUtil.sendEvent(new ClassEvent(Type,new Client("","","","")));
+                EventBusUtil.sendEvent(new ClassEvent(Type,new Client("","","","","")));
             }
         });
     }

@@ -1,6 +1,8 @@
 package com.fangzuo.assist.cloud.Activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,10 +24,12 @@ import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.LocDataUtil;
+import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.databinding.ActivityPrintHistoryBinding;
@@ -86,7 +90,7 @@ public class PrintHistoryActivity extends BaseActivity {
         binding.ryPrintHistory.setAdapter(adapter = new PrintHistoryAdapter(this));
         binding.ryPrintHistory.setLayoutManager(new LinearLayoutManager(this));
         bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
-        linkBluePrint();
+//        linkBluePrint();
     }
 
     @Override
@@ -103,7 +107,15 @@ public class PrintHistoryActivity extends BaseActivity {
             @Override
             public void onItemClick(int position) {
                 Lg.e("点击历史：",adapter.getAllData().get(position));
-                showMsg(adapter.getAllData().get(position));
+//                if (Hawk.get(Config.PDA_Project_Type,"1").equals("2")){
+//                    if ("0".equals(adapter.getAllData().get(position).F_TypeID)){
+//                        showMsg4P2Shuiban(adapter.getAllData().get(position));
+//                    }else{
+//                        showMsg4P2(adapter.getAllData().get(position));
+//                    }
+//                }else{
+                    showMsg(adapter.getAllData().get(position));
+//                }
             }
         });
         binding.ivScan.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +149,8 @@ public class PrintHistoryActivity extends BaseActivity {
                         getPrintHistory("1",binding.edPihao.getText().toString());
                     }else{
                         Toast.showText(mContext,"请输入需要查询的批号");
-                    }                }
+                    }
+                }
                 return true;
             }
         });
@@ -147,6 +160,12 @@ public class PrintHistoryActivity extends BaseActivity {
                 if (!"打印机就绪".equals(binding.toolbar.tvRight.getText().toString())){
                     linkBluePrint();
                 }
+            }
+        });
+        binding.toolbar.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -159,7 +178,7 @@ public class PrintHistoryActivity extends BaseActivity {
     private void getPrintHistory(String type,String string){
         LoadingUtil.showDialog(mContext,"正在查找打印数据...");
         SearchBean searchBean = new SearchBean(type,string);
-        App.getRService().doIOAction(WebApi.PrintOutCheck, gson.toJson(searchBean), new MySubscribe<CommonResponse>() {
+        App.getRService().doIOAction(Hawk.get(Config.PDA_Project_Type,"1").equals("2")?WebApi.PrintOutCheck4P2:WebApi.PrintOutCheck, gson.toJson(searchBean), new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
                 super.onNext(commonResponse);
@@ -186,12 +205,16 @@ public class PrintHistoryActivity extends BaseActivity {
         });
     }
 
-    //展示打印数据
-    private void showMsg(final PrintHistory data){
+    //展示打印数据（一期）
+    private PrintHistory data;
+    private void showMsg(final PrintHistory print){
+        data = new PrintHistory();
+        data.setPrintHistory4P2(print);
         if (null==data.FDate || "".equals(data.FDate)){
             data.FDate = getTime(true);
         }
 
+        Lg.e("打印信息前：",data);
         String huozhuNote= LocDataUtil.getRemark(data.FHuoquan,"number").FNote;
         data.FHuoquan=huozhuNote;
         Lg.e("打印信息：",data);
@@ -225,7 +248,7 @@ public class PrintHistoryActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
              try {
-                    CommonUtil.doPrint(zpSDK,data,"1");
+                    CommonUtil.doPrintOut(zpSDK,data,"1");
                 } catch (Exception e) {
 //                    e.printStackTrace();
                     LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
@@ -243,8 +266,146 @@ public class PrintHistoryActivity extends BaseActivity {
 //                        }
 //                        });
     }
+    //展示打印数据(二期)区分立方米版本和英尺版本
+//    private PrintHistory data;
+    private void showMsg4P2(final PrintHistory print){
+        data = new PrintHistory();
+        data.setPrintHistory4P2(print);
+        if (null==data.FDate || "".equals(data.FDate)){
+            data.FDate = getTime(true);
+        }
 
+        String huozhuNote= LocDataUtil.getRemark(data.FHuoquan,"number").FNote;
+        data.FHuoquan=huozhuNote;
+        Lg.e("打印信息：",data);
+        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+        ab.setTitle(R.string.msg_print);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.show_print_history_p2, null);
+        TextView huoquan     = v.findViewById(R.id.tv_huoquan);
+        TextView batch       = v.findViewById(R.id.tv_batch);
+        TextView name        = v.findViewById(R.id.tv_name);
+        TextView model       = v.findViewById(R.id.tv_model);
+        TextView num         = v.findViewById(R.id.tv_num);
+        TextView num2        = v.findViewById(R.id.tv_num2);
+        TextView note        = v.findViewById(R.id.tv_note);
+        TextView wavehouse   = v.findViewById(R.id.tv_wavehouse);
+        TextView date        = v.findViewById(R.id.tv_date);
+        TextView btn        = v.findViewById(R.id.btn_print);
+        huoquan.setText(data.getFHuoquan());
+        batch.setText(data.getFBatch());
+        name.setText(data.getFName());
+        model.setText(data.getFModel());
+//        if ("1".equals(data.F_TypeID)){//原木（立方米版本）
+//            num.setText(data.getFYmLenght()+"  "+data.getFUnit());
+//            num2.setText(data.getFYmDiameter()+"  厘米(cm)");
+//            note.setText(data.getFVolume());
+//        }else{//原木入库（英尺版本）
+            num.setText(MathUtil.Cut0(data.getFYmLenght())+"  ft");
+            num2.setText(MathUtil.Cut0(data.getFYmDiameter())+"  in");
+            String val = DoubleUtil.mul(MathUtil.toD(data.getFVolume()),200)+"";
+            note.setText(MathUtil.Cut0(val)+"  bf");
+            data.FVolume = MathUtil.Cut0(val);
+            data.FYmLenght = MathUtil.Cut0(data.getFYmLenght());
+            data.FYmDiameter = MathUtil.Cut0(data.getFYmDiameter());
+//        }
+        wavehouse.setText(data.getFWaveHouse());
+        date.setText(data.getFDate());
+        ab.setView(v);
+        final AlertDialog alertDialog = ab.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+//                    if ("0".equals(data.F_TypeID)){//为水版打印方式
+//                        CommonUtil.doPrint4P2Shuiban(zpSDK,data,"1");
+//                    }else{
+//                    if ("1".equals(data.F_TypeID)){
+//                        CommonUtil.doPrint4P2(zpSDK,data,"1");
+//                    }else{
+                        CommonUtil.doPrint4P2ForYC(zpSDK,data,"1");
+//                    }
+//                    }
+                } catch (Exception e) {
+//                    e.printStackTrace();
+                    LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
+                }
+                alertDialog.dismiss();
+            }
+        });
+//                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                        getProductOL(dBean, i);
+//                        default_unitID = dBean.products.get(i).FUnitID;
+//                        chooseUnit(default_unitID);
+//                        alertDialog.dismiss();
+//                        }
+//                        });
+    }
+    //展示打印数据(二期水版入库)
+    private void showMsg4P2Shuiban(final PrintHistory print){
+        data = new PrintHistory();
+        data.setPrintHistory4P2(print);
+        if (null==data.FDate || "".equals(data.FDate)){
+            data.FDate = getTime(true);
+        }
 
+        String huozhuNote= LocDataUtil.getRemark(data.FHuoquan,"number").FNote;
+        data.FHuoquan=huozhuNote;
+        Lg.e("打印信息：",data);
+        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+        ab.setTitle(R.string.msg_print);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.show_print_history_p2_sb, null);
+        TextView huoquan     = v.findViewById(R.id.tv_huoquan);
+        TextView batch       = v.findViewById(R.id.tv_batch);
+        TextView name        = v.findViewById(R.id.tv_name);
+        TextView model       = v.findViewById(R.id.tv_model);
+        TextView wide         = v.findViewById(R.id.tv_num);
+        TextView ceng        = v.findViewById(R.id.tv_num2);
+        TextView vol        = v.findViewById(R.id.tv_note);
+        TextView wavehouse   = v.findViewById(R.id.tv_wavehouse);
+        TextView date        = v.findViewById(R.id.tv_date);
+        TextView btn        = v.findViewById(R.id.btn_print);
+        huoquan.setText(data.getFHuoquan());
+        batch.setText(data.getFBatch());
+        name.setText(data.getFName());
+        model.setText(MathUtil.Cut0(data.getFYmLenght())+"x"+MathUtil.Cut0(data.getFBWide())+"x"+MathUtil.Cut0(data.getFBThick()));
+        data.FModel=model.getText().toString();
+        data.FBWide = data.FWidth;
+        wide.setText(data.FBWide);
+        ceng.setText(data.getFCeng());
+        vol.setText(data.getFVolume());
+        wavehouse.setText(data.getFWaveHouse());
+        date.setText(data.getFDate());
+        ab.setView(v);
+        final AlertDialog alertDialog = ab.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                        CommonUtil.doPrint4P2Shuiban(zpSDK,data,"1");
+                } catch (Exception e) {
+//                    e.printStackTrace();
+                    LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
+                }
+                alertDialog.dismiss();
+            }
+        });
+//                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                        getProductOL(dBean, i);
+//                        default_unitID = dBean.products.get(i).FUnitID;
+//                        chooseUnit(default_unitID);
+//                        alertDialog.dismiss();
+//                        }
+//                        });
+    }
+    //连接打印机
     private void linkBluePrint(){
         LoadingUtil.showDialog(mContext,"正在连接打印机...");
         new Thread(new Runnable() {
@@ -264,7 +425,11 @@ public class PrintHistoryActivity extends BaseActivity {
         }).start();
     }
 
-
+    public static void start(Context context){
+        Intent intent = new Intent(context,PrintHistoryActivity.class);
+//        intent.putExtra("activity",activity);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onDestroy() {

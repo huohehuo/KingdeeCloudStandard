@@ -1,4 +1,4 @@
-package com.fangzuo.assist.cloud.Utils;
+package com.fangzuo.assist.cloud.Utils.GreedDaoUtil;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

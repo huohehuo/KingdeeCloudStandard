@@ -122,6 +122,7 @@ public class ReViewPDActivity extends BaseActivity {
         list_main = new ArrayList<>();
         list = t_detailDao.queryBuilder().where(
                 T_DetailDao.Properties.Activity.eq(activity),
+                T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                 T_DetailDao.Properties.FID.eq(fid)
         ).build().list();
         if (list.size() > 0) {
@@ -131,6 +132,7 @@ public class ReViewPDActivity extends BaseActivity {
         }else{//若列表为空，删除所有该activity的表头信息
             t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
                     T_mainDao.Properties.Activity.eq(activity),
+                    T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                     T_mainDao.Properties.FID.eq(fid)
             ).build().list());
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));
@@ -144,7 +146,10 @@ public class ReViewPDActivity extends BaseActivity {
         products.clear();
         if (list.size() > 0) {
 //            binding.tvCheckMain.setVisibility(View.GONE);
-            list_main = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
+            list_main = t_mainDao.queryBuilder().where(
+                    T_mainDao.Properties.Activity.eq(activity),
+                    T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+            ).build().list();
             if (products.size() == 0) {
                 products.add(list.get(0).FBarcode);
             }
@@ -198,20 +203,6 @@ public class ReViewPDActivity extends BaseActivity {
 
             }
         });
-//        binding.tvCheckMain.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                StringBuilder builder = new StringBuilder();
-//                    builder.append("客户名称:"+list_main.get(0).FCustomer + "\n");
-//                    builder.append("客户ID:"+list_main.get(0).FCustomerID + "\n");
-//                    builder.append("销售员ID:"+list_main.get(0).FPurchaserId + "\n");
-//                    builder.append("销售组织ID:"+list_main.get(0).FStockOrgId + "\n");
-//                    builder.append("发货组织ID:"+list_main.get(0).FPurchaseOrgId + "\n");
-//                    builder.append("备注:"+list_main.get(0).FNot + "\n");
-//                    builder.append("入库时间:"+list_main.get(0).FDate + "\n");
-//                    LoadingUtil.showAlter(mContext,"表头数据:",builder.toString(),false);
-//            }
-//        });
     }
 
     //连接蓝牙打印机
@@ -436,6 +427,7 @@ public class ReViewPDActivity extends BaseActivity {
         }
         for (String string:treeSet) {
             List<T_Detail> list1=t_detailDao.queryBuilder().where(
+                    T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                     T_DetailDao.Properties.FOrderId.eq(string)
             ).build().list();
             //当明细小于等于1时，删除该单据的表头数据

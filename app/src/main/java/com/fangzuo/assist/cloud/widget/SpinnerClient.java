@@ -21,7 +21,7 @@ import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.greendao.gen.ClientDao;
@@ -89,7 +89,7 @@ public class SpinnerClient extends RelativeLayout {
         mSp.setAdapter(adapter);
         ClientDao inStoreTypeDao = daoSession.getClientDao();
         List<Client> inStoreTypes = inStoreTypeDao.loadAll();
-        container.add(new Client("","","",""));
+        container.add(new Client("","","","",""));
         container.addAll(inStoreTypes);
         adapter.notifyDataSetChanged();
 
@@ -116,7 +116,7 @@ public class SpinnerClient extends RelativeLayout {
                         payTypeDao.deleteAll();
                         payTypeDao.insertOrReplaceInTx(dBean.clients);
                         payTypeDao.detachAll();
-                        container.add(new Client("","","",""));
+                        container.add(new Client("","","","",""));
                         container.addAll(dBean.clients);
                         adapter.notifyDataSetChanged();
 //                        setAutoSelection(saveKeyString,autoString);
@@ -138,7 +138,7 @@ public class SpinnerClient extends RelativeLayout {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Client employee = (Client) adapter.getItem(i);
-                employeeId = employee.FItemID;
+                employeeId = employee.FMASTERID;
                 employeeName = employee.FName;
                 employeeNumber = employee.FNumber;
                 Lg.e("选中"+T,employee);
@@ -171,7 +171,7 @@ public class SpinnerClient extends RelativeLayout {
                     adapter.clear();
                     ClientDao inStoreTypeDao = daoSession.getClientDao();
                     List<Client> inStoreTypes = inStoreTypeDao.loadAll();
-                    container.add(new Client("","","",""));
+                    container.add(new Client("","","","",""));
                     container.addAll(inStoreTypes);
                     mSp.setAdapter(adapter);
                     adapter.notifyDataSetChanged();

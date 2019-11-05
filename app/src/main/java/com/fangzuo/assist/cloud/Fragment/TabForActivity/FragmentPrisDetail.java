@@ -178,7 +178,10 @@ public class FragmentPrisDetail extends BaseFragment {
                     for (int i = 0; i < backData.getResult().getResponseStatus().getSuccessEntitys().size(); i++) {
                         listOrder.add(backData.getResult().getResponseStatus().getSuccessEntitys().get(i).getNumber());
                     }
-                    final List<T_main> mains = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
+                    final List<T_main> mains = t_mainDao.queryBuilder().where(
+                            T_mainDao.Properties.Activity.eq(activity),
+                            T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                    ).build().list();
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
                         String reString = mains.get(i).FBillerID + "|" + listOrder.get(i) + "|" + mains.get(i).FOrderId + "|" + mains.get(i).IMIE;
@@ -188,6 +191,7 @@ public class FragmentPrisDetail extends BaseFragment {
                                 super.onNext(commonResponse);
                                 t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
                                         T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                         T_DetailDao.Properties.FOrderId.eq(mains.get(pos).FOrderId)
                                 ).build().list());
                             }
@@ -219,6 +223,12 @@ public class FragmentPrisDetail extends BaseFragment {
                     delete.setTitle("上传错误");
                     delete.setMessage(builder.toString());
                     delete.setPositiveButton("确定", null);
+                    delete.setNegativeButton("反馈信息", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DataService.pushBackJson(mContext, FragmentPrisDetail.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
+                        }
+                    });
                     delete.create().show();
                 }
 
@@ -267,53 +277,53 @@ public class FragmentPrisDetail extends BaseFragment {
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, activityPager.getStorage(), "");
                 break;
-            case EventBusInfoCode.Print_Check://检测打印机连接状态
-                String msg = (String) event.postEvent;
-                LoadingUtil.dismiss();
-                if ("OK".equals(msg)) {
-                    tvPrint.setText("打印机就绪");
-                    tvPrint.setTextColor(Color.BLACK);
-                } else {
-                    AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
-                    ab.setTitle("连接打印机错误,请到先配置蓝牙打印机");
-//            ab.setMessage("确认？");
-                    ab.setPositiveButton("前往", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
-                            activityPager.finish();
-                        }
-                    });
-                    ab.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            activityPager.finish();
-                        }
-                    });
-                    ab.setNeutralButton("重连", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LoadingUtil.showDialog(mContext,"正在重连...");
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    checkPrint(false);
-                                }
-                            }).start();
-                        }
-                    });
-                    ab.create().show();
-                    tvPrint.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
+//            case EventBusInfoCode.Print_Check://检测打印机连接状态
+//                String msg = (String) event.postEvent;
+//                LoadingUtil.dismiss();
+//                if ("OK".equals(msg)) {
+//                    tvPrint.setText("打印机就绪");
+//                    tvPrint.setTextColor(Color.BLACK);
+//                } else {
+//                    AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+//                    ab.setTitle("连接打印机错误,请到先配置蓝牙打印机");
+////            ab.setMessage("确认？");
+//                    ab.setPositiveButton("前往", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
 //                            activityPager.finish();
-                        }
-                    });
-                    tvPrint.setText("连接打印机错误");
-                    tvPrint.setTextColor(Color.RED);
-                }
-                break;
+//                        }
+//                    });
+//                    ab.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            activityPager.finish();
+//                        }
+//                    });
+//                    ab.setNeutralButton("重连", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            LoadingUtil.showDialog(mContext,"正在重连...");
+//                            new Thread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    checkPrint(false);
+//                                }
+//                            }).start();
+//                        }
+//                    });
+//                    ab.create().show();
+//                    tvPrint.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
+////                            activityPager.finish();
+//                        }
+//                    });
+//                    tvPrint.setText("连接打印机错误");
+//                    tvPrint.setTextColor(Color.RED);
+//                }
+//                break;
 
         }
     }
@@ -362,7 +372,6 @@ public class FragmentPrisDetail extends BaseFragment {
         Lg.e("Fg_D:" + "initData");
         listOrder = new ArrayList<>();
         ordercode = CommonUtil.createOrderCode(activityPager.getActivity());//单据编号
-
     }
 
     private void updataView() {
@@ -573,7 +582,7 @@ public class FragmentPrisDetail extends BaseFragment {
                             activityPager.getOrgIn().FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber(),spActualmodel.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
-                        CommonUtil.doPrint(zpSDK, printHistory,activityPager.getPrintNum());
+                        CommonUtil.doPrintOut(zpSDK, printHistory,activityPager.getPrintNum());
                     } catch (Exception e) {
                     }
                     //-----END
@@ -629,6 +638,7 @@ public class FragmentPrisDetail extends BaseFragment {
             String timesecond = CommonUtil.getTimesecond();
             T_main main = new T_main();//--------------------------------------表头-----------------
             main.activity = activity;
+            main.FAccountID=CommonUtil.getAccountID();
             main.FBillerID = Hawk.get(Info.user_id, "");
             main.FBarcode = barcode;
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
@@ -647,6 +657,7 @@ public class FragmentPrisDetail extends BaseFragment {
 
             T_Detail detail = new T_Detail();//--------------------------------明细-----------------
             detail.activity = activity;
+            detail.FAccountID = CommonUtil.getAccountID();
             detail.FBillerID = Hawk.get(Info.user_id, "");
             detail.FBarcode = barcode;
             detail.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
@@ -790,12 +801,13 @@ public class FragmentPrisDetail extends BaseFragment {
         super.onResume();
         //执行该方法时，Fragment处于活动状态，用户可与之交互。
         Lg.e("onResume");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                checkPrint(false);
-            }
-        }).start();
+        Lg.e("得到部门id：",activityPager.getDepartMent());
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                checkPrint(false);
+//            }
+//        }).start();
     }
 
     @Override
@@ -810,10 +822,10 @@ public class FragmentPrisDetail extends BaseFragment {
         super.onPause();
         //执行该方法时，Fragment处于暂停状态，但依然可见，用户不能与之交互
         Lg.e("onPause");
-        try {
-            if (null != zpSDK) zpSDK.disconnect();
-        } catch (Exception e) {
-        }
+//        try {
+//            if (null != zpSDK) zpSDK.disconnect();
+//        } catch (Exception e) {
+//        }
     }
 
     @Override
@@ -832,11 +844,11 @@ public class FragmentPrisDetail extends BaseFragment {
             EventBusUtil.unregister(this);
         } catch (Exception e) {
         }
-        try {
-            zpSDK.disconnect();
-        } catch (Exception e) {
-
-        }
+//        try {
+//            zpSDK.disconnect();
+//        } catch (Exception e) {
+//
+//        }
     }
 
     @Override

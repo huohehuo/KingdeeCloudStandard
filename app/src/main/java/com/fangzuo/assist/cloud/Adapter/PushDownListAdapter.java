@@ -61,6 +61,10 @@ public class PushDownListAdapter extends BaseAdapter {
         viewHolder.cbIscheck.setChecked(isCheck.get(i));
         viewHolder.tvCode.setText(items.get(i).FBillNo);
         viewHolder.tvSupplier.setText(items.get(i).FSupply);
+        if ("29".equals(items.get(i).tag+"")){
+            viewHolder.tvCarNo.setVisibility(View.VISIBLE);
+            viewHolder.tvCarNo.setText("车厢柜号："+items.get(i).FCarBoxNo);
+        }
         viewHolder.tvDate.setText(items.get(i).FDate);
         return view;
     }
@@ -74,6 +78,8 @@ public class PushDownListAdapter extends BaseAdapter {
         TextView tvSupplier;
         @BindView(R.id.tv_date)
         TextView tvDate;
+        @BindView(R.id.tv_car_no)
+        TextView tvCarNo;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

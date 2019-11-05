@@ -118,7 +118,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.5"
                                 android:gravity="center"
-                                android:text="供应商:"
+                                android:text="@string/supplier"
                                 android:textColor="@android:color/black"
                                 android:textSize="15sp" />
 
@@ -372,7 +372,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:TextView_Title_justone="true"
-                            app:TextView_Title_one="业务单号"
+                            app:TextView_Title_one="@string/business_no"
                             app:TextView_Title_size="@dimen/dp_8" />
                         <EditText
                             android:id="@+id/ed_ff_order"
@@ -658,42 +658,42 @@
                         android:id="@+id/sp_department_create"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:manspinner_name="生产车间:"
+                        app:manspinner_name="@string/production_workshop"
                         app:manspinner_size="@dimen/dp_7" />
 
                     <com.fangzuo.assist.cloud.widget.SpinnerOrg
                         android:id="@+id/sp_org_send"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:manspinner_name="发料组织:"
+                        app:manspinner_name="@string/send_org"
                         app:manspinner_size="@dimen/dp_7" />
                     <com.fangzuo.assist.cloud.widget.SpinnerOrg
                         android:id="@+id/sp_org_create"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:manspinner_name="生产组织:"
+                        app:manspinner_name="@string/production_org"
                         app:manspinner_size="@dimen/dp_7" />
                     <com.fangzuo.assist.cloud.widget.SpinnerOrg
                         android:id="@+id/sp_org_huozhu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:manspinner_name="货主:"
+                        app:manspinner_name="@string/huozhu"
                         app:manspinner_size="@dimen/dp_7" />
                     <com.fangzuo.assist.cloud.widget.SpinnerEmployee
                         android:id="@+id/sp_buyer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:manspinner_name="领料人:"
+                        app:manspinner_name="@string/get_man"
                         app:manspinner_size="@dimen/dp_7" />
 
                     <com.fangzuo.assist.cloud.widget.SpinnerStoreMan
                         android:id="@+id/sp_storeman"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:manspinner_name="仓管员:"
+                        app:manspinner_name="@string/store_man"
                         app:manspinner_size="@dimen/dp_7" />
                     <TextView
-                        android:text="备注："
+                        android:text="@string/note"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <EditText

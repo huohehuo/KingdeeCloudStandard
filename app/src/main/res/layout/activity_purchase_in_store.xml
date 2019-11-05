@@ -116,7 +116,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.5"
                                 android:gravity="center"
-                                android:text="供应商:"
+                                android:text="@string/supplier"
                                 android:textColor="@android:color/black"
                                 android:textSize="15sp" />
 
@@ -572,7 +572,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="入库日期:"
+                        android:text="@string/in_store_date"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
@@ -619,7 +619,7 @@
                         android:id="@+id/sp_storeman"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:manspinner_name="仓管员:"
+                        app:manspinner_name="@string/store_man"
                         app:manspinner_size="9sp" />
 
                     <com.fangzuo.assist.cloud.widget.SpinnerSaleMan

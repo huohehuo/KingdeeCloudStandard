@@ -34,7 +34,7 @@ import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.MathUtil;
@@ -204,7 +204,7 @@ public class PdBackMsg2SaleBackActivity extends BaseActivity {
             binding.lvPushsub.setAdapter(pushDownSubListAdapter);
             pushDownSubListAdapter.notifyDataSetChanged();
         } else {
-            Toast.showText(mContext, "未查询到数据");
+            Toast.showText(mContext, getString(R.string.find_nothing));
         }
     }
 
@@ -365,7 +365,7 @@ public class PdBackMsg2SaleBackActivity extends BaseActivity {
             }
 
             if (flag) {
-                Toast.showText(mContext, "商品不存在");
+                Toast.showText(mContext, getString(R.string.product_nothing));
                 MediaPlayer.getInstance(mContext).error();
 
             }

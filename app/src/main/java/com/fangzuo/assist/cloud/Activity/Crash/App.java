@@ -10,12 +10,16 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.fangzuo.assist.cloud.Activity.WelcomeActivity;
+import com.fangzuo.assist.cloud.Beans.BlueToothBean;
+import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.MainActivity;
 import com.fangzuo.assist.cloud.RxSerivce.CloudService;
 import com.fangzuo.assist.cloud.RxSerivce.RService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
+import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.LanguageUtil;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.orhanobut.hawk.Hawk;
@@ -40,6 +44,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import zpSDK.zpSDK.zpBluetoothPrinter;
 
 /**
  //  ┏┓　　　┏┓
@@ -83,6 +88,10 @@ public class App extends MultiDexApplication {
     public static int PDA_Choose;//{" 1 G02A设备","2 8000设备","3 5000设备"4 M60,"5手机端};
     public static String PDA_Language="CN";//{" 1 G02A设备","2 8000设备","3 5000设备"4 M60,"5手机端};
     public static String PDA_Time="";//用于重登录
+    private zpBluetoothPrinter zpSDK;
+    private BlueToothBean bean;
+    public static String DataBaseSetting;//本地测试：K3DBConfiger201811123395555
+
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -95,7 +104,9 @@ public class App extends MultiDexApplication {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
         mContext = this;
+        instance = this;
         Hawk.init(mContext).build();
+        DataBaseSetting = Hawk.get(Config.DataBase,"K3DBConfigerRY");
         PDA_Choose= Hawk.get(Config.PDA,1);
         NowUrl = BasicShareUtil.getInstance(mContext).getBaseURL();
         PDA_Time= CommonUtil.getTime2Fen();//用于重登录
@@ -182,6 +193,7 @@ public class App extends MultiDexApplication {
         closeAndroidPDialog();
         //更新语言
         LanguageUtil.changeLanguage(getApplicationContext(),false);
+        zpSDK = new zpBluetoothPrinter(this);
 
     }
     private static String bodyToString(final RequestBody request) {
@@ -201,7 +213,12 @@ public class App extends MultiDexApplication {
     public static Context getContext(){
         return mContext;
     }
-
+    public static  App getInstance(){
+        if(instance==null){
+            instance =new App();
+        }
+        return instance;
+    }
 
     //获取Service对象，当ip发生变化时，更换Serivce对象
     public static RService getRService() {
@@ -271,6 +288,38 @@ public class App extends MultiDexApplication {
             mHiddenApiWarningShown.setBoolean(activityThread, true);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    //连接打印机（每次连接都会断开上次的连接）
+    public void connectPrint(){
+        try {
+            bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
+            if (bean.address.equals("")) {
+                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
+            } else {
+                //当打印机已经连上，就不需要再次连接
+//                if (!hasCon){
+                    if (!zpSDK.connect(bean.address)) {
+                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
+                    } else {
+                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "OK"));
+                    }
+//                }
+            }
+        } catch (Exception e) {
+        }
+    }
+    //获取打印sdk对象
+    public zpBluetoothPrinter getZpk(){
+        return zpSDK;
+    }
+    //断开打印机连接
+    public void disPrint(){
+        try {
+            zpSDK.disconnect();
+        } catch (Exception e) {
+
         }
     }
 }

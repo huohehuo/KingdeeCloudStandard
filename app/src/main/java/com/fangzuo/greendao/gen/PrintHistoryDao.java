@@ -48,6 +48,18 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
         public final static Property FMaterialid = new Property(21, String.class, "FMaterialid", false, "FMATERIALID");
         public final static Property FAuxSign = new Property(22, String.class, "FAuxSign", false, "FAUX_SIGN");
         public final static Property FActualModel = new Property(23, String.class, "FActualModel", false, "FACTUAL_MODEL");
+        public final static Property FLevel = new Property(24, String.class, "FLevel", false, "FLEVEL");
+        public final static Property FYmLenght = new Property(25, String.class, "FYmLenght", false, "FYM_LENGHT");
+        public final static Property FYmDiameter = new Property(26, String.class, "FYmDiameter", false, "FYM_DIAMETER");
+        public final static Property FBLenght = new Property(27, String.class, "FBLenght", false, "FBLENGHT");
+        public final static Property FBWide = new Property(28, String.class, "FBWide", false, "FBWIDE");
+        public final static Property FBThick = new Property(29, String.class, "FBThick", false, "FBTHICK");
+        public final static Property FVolume = new Property(30, String.class, "FVolume", false, "FVOLUME");
+        public final static Property FCeng = new Property(31, String.class, "FCeng", false, "FCENG");
+        public final static Property FWidth = new Property(32, String.class, "FWidth", false, "FWIDTH");
+        public final static Property FProject = new Property(33, String.class, "FProject", false, "FPROJECT");
+        public final static Property F_TypeID = new Property(34, String.class, "F_TypeID", false, "F__TYPE_ID");
+        public final static Property F_Plies = new Property(35, String.class, "F_Plies", false, "F__PLIES");
     }
 
 
@@ -86,7 +98,19 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
                 "\"FDATE\" TEXT," + // 20: FDate
                 "\"FMATERIALID\" TEXT," + // 21: FMaterialid
                 "\"FAUX_SIGN\" TEXT," + // 22: FAuxSign
-                "\"FACTUAL_MODEL\" TEXT);"); // 23: FActualModel
+                "\"FACTUAL_MODEL\" TEXT," + // 23: FActualModel
+                "\"FLEVEL\" TEXT," + // 24: FLevel
+                "\"FYM_LENGHT\" TEXT," + // 25: FYmLenght
+                "\"FYM_DIAMETER\" TEXT," + // 26: FYmDiameter
+                "\"FBLENGHT\" TEXT," + // 27: FBLenght
+                "\"FBWIDE\" TEXT," + // 28: FBWide
+                "\"FBTHICK\" TEXT," + // 29: FBThick
+                "\"FVOLUME\" TEXT," + // 30: FVolume
+                "\"FCENG\" TEXT," + // 31: FCeng
+                "\"FWIDTH\" TEXT," + // 32: FWidth
+                "\"FPROJECT\" TEXT," + // 33: FProject
+                "\"F__TYPE_ID\" TEXT," + // 34: F_TypeID
+                "\"F__PLIES\" TEXT);"); // 35: F_Plies
     }
 
     /** Drops the underlying database table. */
@@ -218,6 +242,66 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
         if (FActualModel != null) {
             stmt.bindString(24, FActualModel);
         }
+ 
+        String FLevel = entity.getFLevel();
+        if (FLevel != null) {
+            stmt.bindString(25, FLevel);
+        }
+ 
+        String FYmLenght = entity.getFYmLenght();
+        if (FYmLenght != null) {
+            stmt.bindString(26, FYmLenght);
+        }
+ 
+        String FYmDiameter = entity.getFYmDiameter();
+        if (FYmDiameter != null) {
+            stmt.bindString(27, FYmDiameter);
+        }
+ 
+        String FBLenght = entity.getFBLenght();
+        if (FBLenght != null) {
+            stmt.bindString(28, FBLenght);
+        }
+ 
+        String FBWide = entity.getFBWide();
+        if (FBWide != null) {
+            stmt.bindString(29, FBWide);
+        }
+ 
+        String FBThick = entity.getFBThick();
+        if (FBThick != null) {
+            stmt.bindString(30, FBThick);
+        }
+ 
+        String FVolume = entity.getFVolume();
+        if (FVolume != null) {
+            stmt.bindString(31, FVolume);
+        }
+ 
+        String FCeng = entity.getFCeng();
+        if (FCeng != null) {
+            stmt.bindString(32, FCeng);
+        }
+ 
+        String FWidth = entity.getFWidth();
+        if (FWidth != null) {
+            stmt.bindString(33, FWidth);
+        }
+ 
+        String FProject = entity.getFProject();
+        if (FProject != null) {
+            stmt.bindString(34, FProject);
+        }
+ 
+        String F_TypeID = entity.getF_TypeID();
+        if (F_TypeID != null) {
+            stmt.bindString(35, F_TypeID);
+        }
+ 
+        String F_Plies = entity.getF_Plies();
+        if (F_Plies != null) {
+            stmt.bindString(36, F_Plies);
+        }
     }
 
     @Override
@@ -343,6 +427,66 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
         if (FActualModel != null) {
             stmt.bindString(24, FActualModel);
         }
+ 
+        String FLevel = entity.getFLevel();
+        if (FLevel != null) {
+            stmt.bindString(25, FLevel);
+        }
+ 
+        String FYmLenght = entity.getFYmLenght();
+        if (FYmLenght != null) {
+            stmt.bindString(26, FYmLenght);
+        }
+ 
+        String FYmDiameter = entity.getFYmDiameter();
+        if (FYmDiameter != null) {
+            stmt.bindString(27, FYmDiameter);
+        }
+ 
+        String FBLenght = entity.getFBLenght();
+        if (FBLenght != null) {
+            stmt.bindString(28, FBLenght);
+        }
+ 
+        String FBWide = entity.getFBWide();
+        if (FBWide != null) {
+            stmt.bindString(29, FBWide);
+        }
+ 
+        String FBThick = entity.getFBThick();
+        if (FBThick != null) {
+            stmt.bindString(30, FBThick);
+        }
+ 
+        String FVolume = entity.getFVolume();
+        if (FVolume != null) {
+            stmt.bindString(31, FVolume);
+        }
+ 
+        String FCeng = entity.getFCeng();
+        if (FCeng != null) {
+            stmt.bindString(32, FCeng);
+        }
+ 
+        String FWidth = entity.getFWidth();
+        if (FWidth != null) {
+            stmt.bindString(33, FWidth);
+        }
+ 
+        String FProject = entity.getFProject();
+        if (FProject != null) {
+            stmt.bindString(34, FProject);
+        }
+ 
+        String F_TypeID = entity.getF_TypeID();
+        if (F_TypeID != null) {
+            stmt.bindString(35, F_TypeID);
+        }
+ 
+        String F_Plies = entity.getF_Plies();
+        if (F_Plies != null) {
+            stmt.bindString(36, F_Plies);
+        }
     }
 
     @Override
@@ -376,7 +520,19 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
             cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // FDate
             cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // FMaterialid
             cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // FAuxSign
-            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23) // FActualModel
+            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // FActualModel
+            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // FLevel
+            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // FYmLenght
+            cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26), // FYmDiameter
+            cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27), // FBLenght
+            cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28), // FBWide
+            cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29), // FBThick
+            cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30), // FVolume
+            cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31), // FCeng
+            cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32), // FWidth
+            cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33), // FProject
+            cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34), // F_TypeID
+            cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35) // F_Plies
         );
         return entity;
     }
@@ -407,6 +563,18 @@ public class PrintHistoryDao extends AbstractDao<PrintHistory, Void> {
         entity.setFMaterialid(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
         entity.setFAuxSign(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
         entity.setFActualModel(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
+        entity.setFLevel(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
+        entity.setFYmLenght(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
+        entity.setFYmDiameter(cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26));
+        entity.setFBLenght(cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27));
+        entity.setFBWide(cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28));
+        entity.setFBThick(cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29));
+        entity.setFVolume(cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30));
+        entity.setFCeng(cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31));
+        entity.setFWidth(cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32));
+        entity.setFProject(cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33));
+        entity.setF_TypeID(cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34));
+        entity.setF_Plies(cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35));
      }
     
     @Override

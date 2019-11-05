@@ -171,7 +171,10 @@ public class FragmentSaleOutDetail extends BaseFragment {
                     for (int i = 0; i < backData.getResult().getResponseStatus().getSuccessEntitys().size(); i++) {
                         listOrder.add(backData.getResult().getResponseStatus().getSuccessEntitys().get(i).getNumber());
                     }
-                    final List<T_main> mains = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
+                    final List<T_main> mains = t_mainDao.queryBuilder().where(
+                            T_mainDao.Properties.Activity.eq(activity),
+                            T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                    ).build().list();
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
                         String reString = mains.get(i).FBillerID + "|" + listOrder.get(i) + "|" + mains.get(i).FOrderId + "|" + mains.get(i).IMIE;
@@ -181,6 +184,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
                                 super.onNext(commonResponse);
                                 t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
                                         T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                         T_DetailDao.Properties.FOrderId.eq(mains.get(pos).FOrderId)
                                 ).build().list());
                             }
@@ -199,7 +203,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
                     Toast.showText(mContext, "上传成功");
 //                btnBackorder.setClickable(true);
                     LoadingUtil.dismiss();
-                    DataModel.submitAndAudit(mContext,Config.SaleOutActivity,listOrder.get(0));
+                    DataModel.submitOnly(mContext,Config.SaleOutActivity,listOrder.get(0));
                 } else {
                     LoadingUtil.dismiss();
                     List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
@@ -212,6 +216,12 @@ public class FragmentSaleOutDetail extends BaseFragment {
                     delete.setTitle("上传错误");
                     delete.setMessage(builder.toString());
                     delete.setPositiveButton("确定", null);
+                    delete.setNegativeButton("反馈信息", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DataService.pushBackJson(mContext, FragmentSaleOutDetail.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
+                        }
+                    });
                     delete.create().show();
                 }
 
@@ -515,7 +525,8 @@ public class FragmentSaleOutDetail extends BaseFragment {
                         T_DetailDao.Properties.FBarcode.eq(barcode),
                         T_DetailDao.Properties.FStorageId.eq(storage.FNumber),
                         T_DetailDao.Properties.FWaveHouseId.eq(spWavehouse.getwaveHouseNumber()),
-                        T_DetailDao.Properties.FBatch.eq(edPihao.getText().toString())
+                        T_DetailDao.Properties.FBatch.eq(edPihao.getText().toString()),
+                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
                 ).build().list();
                 if (detailhebing.size() > 0) {
                     Lg.e("合并：" + detailhebing.size() + "--" + detailhebing.get(0).toString());
@@ -531,16 +542,19 @@ public class FragmentSaleOutDetail extends BaseFragment {
             String timesecond = CommonUtil.getTimesecond();
             T_main main = new T_main();//--------------------------------------表头-----------------
             main.activity = activity;
+            main.FWlCompany = activityPager.getWlCompany();
+            main.FCarBoxNo = activityPager.getCarboxNo();
+            main.FAccountID = CommonUtil.getAccountID();
             main.FBillerID = Hawk.get(Info.user_id, "");
             main.FBarcode = barcode;
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
             main.FOrderId = ordercode;
             main.FIndex = timesecond;
-            main.setData(Info.getType(activity), activityPager.getOrgOut(0), activityPager.getOrgOut(0), activityPager.getOrgOut(0));
+            main.setData(Info.getType(activity), activityPager.getOrgOut(0), activityPager.getOrgOut(0), activityPager.getHuozhuOut(0));
             main.FDepartmentNumber = activityPager.getDepartMent();
 //            main.FPurchaseDeptId = activityPager.getDepartMentBuy();
 //            main.FPurchaserId = activityPager.getManSale();
-            main.FStockerNumber = activityPager.getManStore();
+            main.FStockerNumber = activityPager.getManSale();
             main.FDate = activityPager.getDate();
             main.FNot = activityPager.getNote();
             main.F_FFF_Text = activityPager.getFOrderNo();
@@ -550,6 +564,7 @@ public class FragmentSaleOutDetail extends BaseFragment {
 
             T_Detail detail = new T_Detail();//--------------------------------明细-----------------
             detail.activity = activity;
+            detail.FAccountID = CommonUtil.getAccountID();
             detail.FBillerID = Hawk.get(Info.user_id, "");
             detail.FBarcode = barcode;
             detail.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();

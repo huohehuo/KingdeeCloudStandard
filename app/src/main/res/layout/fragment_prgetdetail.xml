@@ -183,14 +183,14 @@
                             android:layout_weight="4"
                             android:layout_height="wrap_content"
                             app:TextView_Title_justone="true"
-                            app:TextView_Title_one="仓库"
+                            app:TextView_Title_one="@string/storage"
                             app:TextView_Title_size="@dimen/size_detail" />
                         <com.fangzuo.assist.cloud.widget.SpinnerStorage
                             android:id="@+id/sp_which_storage"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="6"
-                            app:Uspinner_title="请选择仓库"/>
+                            app:Uspinner_title="@string/storage_hint"/>
                     </LinearLayout>
                     <include layout="@layout/line_heng"/>
                     <LinearLayout

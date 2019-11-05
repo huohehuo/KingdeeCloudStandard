@@ -14,20 +14,29 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Activity.PagerForActivity;
+import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
 import com.fangzuo.assist.cloud.Activity.ReViewActivity;
+import com.fangzuo.assist.cloud.Activity.ReViewPDActivity;
+import com.fangzuo.assist.cloud.Adapter.PushDownSubListAdapter;
 import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.CodeCheckBackDataBean;
 import com.fangzuo.assist.cloud.Beans.CodeCheckBean;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
+import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Beans.GetQtyMsg;
+import com.fangzuo.assist.cloud.Beans.SearchBean;
+import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.Product;
+import com.fangzuo.assist.cloud.Dao.PushDownMain;
+import com.fangzuo.assist.cloud.Dao.PushDownSub;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
 import com.fangzuo.assist.cloud.Dao.T_main;
@@ -41,11 +50,13 @@ import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.DataModel;
+import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.JsonDealUtils;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.MediaPlayer;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
@@ -60,6 +71,8 @@ import com.fangzuo.assist.cloud.widget.SpinnerStorageDlg;
 import com.fangzuo.assist.cloud.widget.SpinnerUnit;
 import com.fangzuo.assist.cloud.zxing.ScanManager;
 import com.fangzuo.greendao.gen.DaoSession;
+import com.fangzuo.greendao.gen.PushDownMainDao;
+import com.fangzuo.greendao.gen.PushDownSubDao;
 import com.fangzuo.greendao.gen.T_DetailDao;
 import com.fangzuo.greendao.gen.T_mainDao;
 import com.google.gson.Gson;
@@ -81,12 +94,12 @@ import butterknife.Unbinder;
 
 //选择单据信息Fragment（所属：PushDownPagerActivity);
 public class FragmentDbApply2DBDetail extends BaseFragment {
-
+    private int tag = 22;
 
     @BindView(R.id.zxing_barcode_scanner)
     DecoratedBarcodeView zxingBarcodeScanner;
-    @BindView(R.id.ly_scan)
-    RelativeLayout lyScan;
+//    @BindView(R.id.ly_scan)
+//    RelativeLayout lyScan;
 //    @BindView(R.id.ed_supplier)
 //    EditText edSupplier;
 //    @BindView(R.id.search_supplier)
@@ -135,6 +148,8 @@ SpinnerStorage spWhichStorageOut;
     Button btnBackorder;
     @BindView(R.id.btn_checkorder)
     Button btnCheckorder;
+    @BindView(R.id.lv_pushsub)
+    ListView lvPushsub;
     private FragmentActivity mContext;
     private PagerForActivity activityPager;
     Unbinder unbinder;
@@ -162,27 +177,50 @@ SpinnerStorage spWhichStorageOut;
     private String autoActualModel = "";
     private String autoStorage = "";
     private ScanManager mCaptureManager;
+    private PushDownSub pushDownSub;
+    private List<PushDownSub> container;
+    private PushDownMainDao pushDownMainDao;
+    private PushDownSubDao pushDownSubDao;
+    private ArrayList<String> fidcontainer;
+    private PushDownSubListAdapter pushDownSubListAdapter;
+    protected PushDownMain pushDownMain;
+    private String default_unitID;
+    private SearchBean.S2Product s2Product;//用于数据查找...
+    private String mainSaleDept = "";//表头带出
+    private String mainDbType = "";//表头带出
+    private String mainHuozhuType = "";//表头带出
+    private Org mainOrgOut;//表头带出
+    private Org mainOrgIn;//表头带出
+    private Org mainAppOrg;//表头带出
+    private Org mainHuozhuOut;//表头带出
+    private Org mainHuozhuIn;//表头带出
+    private String mainSaleMan = "";//表头带出
+    private String mainSaleOrg = "";//表头带出
+
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(ClassEvent event) {
         switch (event.Msg) {
+            case EventBusInfoCode.Close_Activity:
+                Bundle b = new Bundle();
+                b.putInt("123", tag);
+                startNewActivity(activityPager, PushDownPagerActivity.class, 0, 0, true, b);
+                break;
             case EventBusInfoCode.ScanResult:
                 BarcodeResult res = (BarcodeResult) event.postEvent;
-//                if (cbScaning.isChecked()) {
-//                } else {
-                    mCaptureManager.onPause();
-                lyScan.setVisibility(View.GONE);
-//                }
-
+                mCaptureManager.onPause();
+                zxingBarcodeScanner.setVisibility(View.GONE);
                 OnReceive(res.getResult().getText());
 //                Toast.showText(mContext, "扫描结果：" + res.getResult().getText());
                 break;
             case EventBusInfoCode.Product:
                 product = (Product) event.postEvent;
                 Lg.e("获得物料信息：", product);
+                default_unitID = product.FPurchaseUnitID;
+                setProduct(product);
 //                binding.setProduct(product);
-                dealProduct();
+//                dealProduct();
                 break;
             case EventBusInfoCode.Upload_OK://回单成功
                 BackData backData = (BackData) event.postEvent;
@@ -192,7 +230,12 @@ SpinnerStorage spWhichStorageOut;
                     for (int i = 0; i < backData.getResult().getResponseStatus().getSuccessEntitys().size(); i++) {
                         listOrder.add(backData.getResult().getResponseStatus().getSuccessEntitys().get(i).getNumber());
                     }
-                    final List<T_main> mains = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
+                    Lg.e("回单成功查询main",activity+pushDownMain.FID);
+                    final List<T_main> mains = t_mainDao.queryBuilder().where(
+                            T_mainDao.Properties.Activity.eq(activity),
+                            T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
+                            T_mainDao.Properties.FID.eq(pushDownMain.FID)
+                    ).build().list();
                     Lg.e("本地main.size：",mains.size());
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
@@ -203,8 +246,21 @@ SpinnerStorage spWhichStorageOut;
                                 super.onNext(commonResponse);
                                 t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
                                         T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                         T_DetailDao.Properties.FOrderId.eq(mains.get(pos).FOrderId)
                                 ).build().list());
+                                for (int i = 0; i < mains.size(); i++) {
+                                    List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
+                                            PushDownSubDao.Properties.FBillNo.eq(mains.get(i).FBillNo),
+                                            PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                                    ).build().list();
+                                    pushDownSubDao.deleteInTx(pushDownSubs);
+                                    List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
+                                            PushDownMainDao.Properties.FBillNo.eq(mains.get(i).FBillNo),
+                                            PushDownMainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                                    ).build().list();
+                                    pushDownMainDao.deleteInTx(pushDownMains);
+                                }
                             }
 
                             @Override
@@ -215,13 +271,14 @@ SpinnerStorage spWhichStorageOut;
                     }
                     MediaPlayer.getInstance(mContext).ok();
                     Toast.showText(mContext, "上传成功");
-                    ordercode++;
-                    Log.e("ordercode", ordercode + "");
-                    share.setOrderCode(activityPager.getActivity(), ordercode);
+//                    ordercode++;
+//                    Log.e("ordercode", ordercode + "");
+//                    share.setOrderCode(activityPager.getActivity(), ordercode);
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock + "NO"));//上传成功，解锁表头
 //                btnBackorder.setClickable(true);
                     LoadingUtil.dismiss();
-                    DataModel.submitAndAudit(mContext,Config.DBActivity,listOrder.get(0));
+                    DataModel.submitAndAudit(mContext,Config.PdDbApply2DBActivity,listOrder,tag);
+
 //                    submitAndAudit(listOrder.get(0));//是否提交并审核
                 } else {
                     LoadingUtil.dismiss();
@@ -235,6 +292,12 @@ SpinnerStorage spWhichStorageOut;
                     delete.setTitle("上传错误");
                     delete.setMessage(builder.toString());
                     delete.setPositiveButton("确定", null);
+                    delete.setNegativeButton("反馈信息", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DataService.pushBackJson(mContext, FragmentDbApply2DBDetail.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
+                        }
+                    });
                     delete.create().show();
                 }
 
@@ -276,13 +339,21 @@ SpinnerStorage spWhichStorageOut;
                 if (null != activityPager||null != spUnit) {
 //                    spUnit.setAuto("", SpinnerUnit.Id);
                     Lg.e("-----------",activityPager.getOrgOut());
-                    spWhichStorageOut.setAuto("storageout"+activityPager.getActivity(),Hawk.get("storageout"+activityPager.getActivity(),""), activityPager.getOrgOut());
+                    spWhichStorageOut.setAuto("storageout"+activityPager.getActivityMain(),Hawk.get("storageout"+activityPager.getActivityMain(),""), activityPager.getOrgOut());
                 }
                 break;
             case EventBusInfoCode.UpdataViewForDBInStorage://由表头的数据决定是否更新明细数据
                 if (null != activityPager||null != spUnit) {
-                    spWhichStorageIn.setAuto(Hawk.get("storagein"+activityPager.getActivity(),""), activityPager.getOrgIn());
+                    spWhichStorageOut.setAuto("storageout"+activityPager.getActivityMain(),Hawk.get("storageout"+activityPager.getActivityMain(),""), activityPager.getOrgOut());
+                    spWhichStorageIn.setAuto(Hawk.get("storagein"+activityPager.getActivityMain(),""), activityPager.getOrgIn());
                 }
+                break;
+            case EventBusInfoCode.Get_HuoZhu://由表头的数据决定是否更新明细数据
+                mainHuozhuOut = (Org) event.postEvent;
+                activityPager.setHuozhuOut(mainHuozhuOut);
+                Lg.e("获得明细货主：",mainHuozhuOut);
+                DataModel.getStoreNumForType(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,mainHuozhuType, activityPager.getOrgOut(), activityPager.getHuozhuOut());
+
                 break;
         }
     }
@@ -301,7 +372,7 @@ SpinnerStorage spWhichStorageOut;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_dbdetail, container, false);
+        View view = inflater.inflate(R.layout.fragment_dbapply2dbdetail, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getActivity();
         EventBusUtil.register(this);
@@ -324,10 +395,61 @@ SpinnerStorage spWhichStorageOut;
 
     @Override
     protected void initData() {
+        s2Product = new SearchBean.S2Product();
         listOrder = new ArrayList<>();
-        ordercode = CommonUtil.createOrderCode(activityPager.getActivity());//单据编号
         spAuxsign.setEnabled(false);
         spActualmodel.setEnabled(false);
+        container = new ArrayList<>();
+        fidcontainer = activityPager.getIntent().getExtras().getStringArrayList("fid");
+//        ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+fidcontainer.get(0));//单据编号
+        getList();
+        List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
+                PushDownMainDao.Properties.FBillNo.eq(fidcontainer.get(0))).build().list();
+        if (pushDownMains.size() > 0) {
+            Lg.e("表头：", pushDownMains.get(0));
+            pushDownMain = pushDownMains.get(0);
+            mainDbType = pushDownMain.FDbType;//调拨方向
+            mainHuozhuType = pushDownMain.FHuozhuOutType;//货主类型
+            mainAppOrg = LocDataUtil.getOrg(pushDownMain.FAppOrgID,"id");
+            activityPager.setOrgApp(mainAppOrg);
+
+//            mainSaleDept = LocDataUtil.getDept(pushDownMain.FSaleDeptID).FNumber;
+//            mainSaleMan = LocDataUtil.getSaleMan(pushDownMain.FSaleManID).FNumber;
+//            mainSaleOrg = LocDataUtil.getOrg(pushDownMain.FSaleOrgID,"id").FNumber;
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Main_Note, pushDownMains.get(0).FNot));
+//            if ("".equals(pushDownMain.FSupplyID==null?"":pushDownMain.FSupplyID)){
+//                LoadingUtil.showAlter(mContext,"注意","表头明细的客户数据带出失败，请重试...",false);
+//            }
+        } else {
+            LoadingUtil.showAlter(mContext,"注意","表头数据获取失败，请重新下载单据...",false);
+//            Toast.showText(mContext, "表头数据获取失败");
+        }
+
+
+//        ordercode = CommonUtil.createOrderCode(activityPager.getActivity());//单据编号
+    }
+    private void getList() {
+        container.clear();
+        pushDownSubDao = daoSession.getPushDownSubDao();
+        pushDownMainDao = daoSession.getPushDownMainDao();
+        for (int i = 0; i < fidcontainer.size(); i++) {
+            List<PushDownSub> list = pushDownSubDao.queryBuilder().where(
+                    PushDownSubDao.Properties.FBillNo.eq(fidcontainer.get(i))).build().list();
+            container.addAll(list);
+        }
+        if (container.size() > 0) {
+            //确定列表中的调出调入组织（按照规定：列表所有调出调入组织都一致）
+            mainOrgOut=LocDataUtil.getOrg(container.get(0).FOrgOutID,"id");
+            mainOrgIn=LocDataUtil.getOrg(container.get(0).FOrgInID,"id");
+            activityPager.setOrgOut(mainOrgOut);
+            activityPager.setOrgIn(mainOrgIn);
+            pushDownSubListAdapter = new PushDownSubListAdapter(mContext, container);
+            lvPushsub.setAdapter(pushDownSubListAdapter);
+            pushDownSubListAdapter.notifyDataSetChanged();
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataViewForDBInStorage, ""));
+        } else {
+            Toast.showText(mContext, getString(R.string.find_nothing));
+        }
     }
 
     //在oncreateView之前使用 不要使用控件
@@ -338,7 +460,6 @@ SpinnerStorage spWhichStorageOut;
             //相当于Fragment的onResume Lg.e("fragment显示");
             if (null!=activityPager){
                         setfocus(search);
-
 //                spWhichStorage.setAuto("",activityPager.getOrgOut());
 //                spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pis),"",activityPager.getOrgOut());
 //                spUnit.setAuto("", activityPager.getOrgOut(),SpinnerUnit.Id);
@@ -373,10 +494,12 @@ SpinnerStorage spWhichStorageOut;
                 storageOut = (Storage) spWhichStorageOut.getAdapter().getItem(i);
                 spWhichStorageOut.setTitleText(storageOut.FName);
                 Lg.e("选中调出仓库：", storageOut);
-                Hawk.put("storageout"+activityPager.getActivity(),storageOut.FName);
+                Hawk.put("storageout"+activityPager.getActivityMain(),storageOut.FName);
 //                waveHouseOut = null;
 //                spWavehouseOut.setAuto(mContext, storageOut, "");
-                DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
+                DataModel.getStoreNumForType(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,mainHuozhuType, activityPager.getOrgOut(), activityPager.getHuozhuOut());
+
+//                DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
 
             }
         });
@@ -393,7 +516,7 @@ SpinnerStorage spWhichStorageOut;
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 storageIn = (Storage) spWhichStorageIn.getAdapter().getItem(i);
                 spWhichStorageIn.setTitleText(storageIn.FName);
-                Hawk.put("storagein"+activityPager.getActivity(),storageIn.FName);
+                Hawk.put("storagein"+activityPager.getActivityMain(),storageIn.FName);
                 Lg.e("选中调入仓库：", storageIn);
 //                waveHouseIn = null;
 //                spWavehouseIn.setAuto(mContext, storageIn, "");
@@ -414,7 +537,121 @@ SpinnerStorage spWhichStorageOut;
                 unit = (Unit) spUnit.getAdapter().getItem(i);
             }
         });
+        lvPushsub.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                pushDownSub = (PushDownSub) pushDownSubListAdapter.getItem(i);
+                Lg.e("点击明细:", pushDownSub);
+                LocDataUtil.getHuozhuByType(pushDownSub.FHuozhuOutID,mainOrgOut.FOrgID,mainHuozhuType);
+//                mainHuozhuOut = LocDataUtil.getOrg(pushDownSub.FHuozhuOutID,"id");
+//                Lg.e("获得明细货主：",mainHuozhuOut);
+//                activityPager.setHuozhuOut(mainHuozhuOut);
+                if (BasicShareUtil.getInstance(mContext).getIsOL()) {
+                    s2Product.likeOr = pushDownSub.FNumber;
+                    s2Product.FOrg = activityPager.getOrgOut() == null ? "" : activityPager.getOrgOut().FOrgID;
+                    App.getRService().doIOAction(WebApi.S2Product, gson.toJson(new SearchBean(SearchBean.product_for_number, gson.toJson(s2Product))), new MySubscribe<CommonResponse>() {
+                        @Override
+                        public void onNext(CommonResponse commonResponse) {
+                            super.onNext(commonResponse);
+                            if (!commonResponse.state) return;
+                            final DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                            Log.e("product.size", dBean.products.size() + "");
+                            if (dBean.products.size() > 0) {
+                                product = dBean.products.get(0);
+                                Log.e("product.size", product + "");
+                                dealProduct();
+                            } else {
+                                Toast.showText(mContext, "找不到物料数据");
+                            }
+                        }
 
+                        @Override
+                        public void onError(Throwable e) {
+//                            super.onError(e);
+                            Toast.showText(mContext, "列表物料:" + e.toString());
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
+
+
+    private void setProduct(Product product) {
+        if (product != null) {
+            boolean flag = true;
+            for (int j = 0; j < pushDownSubListAdapter.getCount(); j++) {
+                PushDownSub pushDownSub1 = (PushDownSub) pushDownSubListAdapter.getItem(j);
+                if (product.FNumber.equals(pushDownSub1.FNumber)) {
+//                    if (MathUtil.toD(pushDownSub1.FQty) == MathUtil.toD(pushDownSub1.FQtying)) {
+//                        flag = true;
+//                        continue;
+//                    } else {
+
+
+                    /*判断条码带出在辅助标识是否为空，不为空就判断，接着判断单位；否则直接判断单位*/
+                    if (null!=autoAuxSing && !"".equals(autoAuxSing)){
+                        if (autoAuxSing.equals(pushDownSub1.AuxSign)){
+                            if (!"".equals(default_unitID)) {
+                                if (default_unitID.equals(pushDownSub1.FUnitID)) {
+                                    flag = false;
+                                    lvPushsub.setSelection(j);
+                                    lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
+                                    break;
+                                }
+                            } else {
+                                flag = false;
+                                lvPushsub.setSelection(j);
+                                lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
+                                break;
+                            }
+                        }else if (null==pushDownSub1.AuxSign || "".equals(pushDownSub1.AuxSign)){
+                            if (!"".equals(default_unitID)) {
+                                if (default_unitID.equals(pushDownSub1.FUnitID)) {
+                                    flag = false;
+                                    lvPushsub.setSelection(j);
+                                    lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
+                                    break;
+                                }
+                            } else {
+                                flag = false;
+                                lvPushsub.setSelection(j);
+                                lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
+                                break;
+                            }
+                        }
+                    }else{
+                        if (!"".equals(default_unitID)) {
+                            if (default_unitID.equals(pushDownSub1.FUnitID)) {
+
+                                flag = false;
+                                lvPushsub.setSelection(j);
+                                lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
+                                break;
+                            }
+                        } else {
+                            flag = false;
+                            lvPushsub.setSelection(j);
+                            lvPushsub.performItemClick(lvPushsub.getChildAt(j), j, lvPushsub.getItemIdAtPosition(j));
+                            break;
+                        }
+                    }
+
+//                    }
+
+                }
+            }
+
+            if (flag) {
+                Toast.showText(mContext, getString(R.string.product_nothing));
+                MediaPlayer.getInstance(mContext).error();
+
+            }
+        } else {
+            Toast.showText(mContext, "列表中不存在商品");
+        }
     }
 
     //处理物料数据
@@ -427,7 +664,7 @@ SpinnerStorage spWhichStorageOut;
         //带出物料的默认值
         spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
-            spWhichStorageOut.setAuto("",autoStorage, activityPager.getOrgOut());
+        spWhichStorageOut.setAuto("",autoStorage, activityPager.getOrgOut());
 //        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
             isOpenBatch = true;
@@ -437,7 +674,9 @@ SpinnerStorage spWhichStorageOut;
             edPihao.setEnabled(false);
             isOpenBatch = false;
         }
-        DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
+        DataModel.getStoreNumForType(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,mainHuozhuType, activityPager.getOrgOut(), activityPager.getHuozhuOut());
+
+//        DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
 
         spAuxsign.getData(product.FMASTERID, autoAuxSing);
         spActualmodel.getData(product.FMASTERID, autoActualModel);
@@ -511,33 +750,35 @@ SpinnerStorage spWhichStorageOut;
             MediaPlayer.getInstance(mContext).error();
             return false;
         }
-        if ("".equals(activityPager.getHuozhuIn(0))||"".equals(activityPager.getHuozhuOut(0))){
-            Toast.showText(mContext, "调出货主或调入货主不能为空，请检查...");
-            MediaPlayer.getInstance(mContext).error();
-            return false;
-        }
+//        if ("".equals(activityPager.getHuozhuIn(0))||"".equals(activityPager.getHuozhuOut(0))){
+//            Toast.showText(mContext, "调出货主或调入货主不能为空，请检查...");
+//            MediaPlayer.getInstance(mContext).error();
+//            return false;
+//        }
         //--------------------------------------------------
         if (edNum.getText().toString().trim().equals("") || "0".equals(edNum.getText().toString())) {
             Toast.showText(mContext, "请输入数量");
             MediaPlayer.getInstance(mContext).error();
             return false;
         }
-        //当为跨组织调拨时，
-        if ("OverOrgTransfer".equals(activityPager.getDBType())) {
-            if (activityPager.getOrgOut().FName.equals(activityPager.getOrgIn().FName)) {
-                if (activityPager.getHuozhuOut() != null && activityPager.getHuozhuOut().FNumber.equals(activityPager.getHuozhuIn().FNumber)) {
-                    Toast.showText(mContext, "相同组织时，货主不能相同");
-                    MediaPlayer.getInstance(mContext).error();
-                    return false;
-                }
-            }
-        }else{
-            if (!activityPager.getHuozhuOut().FName.equals(activityPager.getHuozhuIn().FName)){
-                Toast.showText(mContext, "组织内调拨时，调出调入货主必须一样");
-                MediaPlayer.getInstance(mContext).error();
-                return false;
-            }
-        }
+//        //当为跨组织调拨时，
+//        if ("OverOrgTransfer".equals(activityPager.getDBType())) {
+//            if (activityPager.getOrgOut().FName.equals(activityPager.getOrgIn().FName)) {
+//                if (activityPager.getHuozhuOut() != null && activityPager.getHuozhuOut().FNumber.equals(activityPager.getHuozhuIn().FNumber)) {
+//                    Toast.showText(mContext, "相同组织时，货主不能相同");
+//                    MediaPlayer.getInstance(mContext).error();
+//                    return false;
+//                }
+//            }
+//        }else{
+//            if (!activityPager.getHuozhuOut().FName.equals(activityPager.getHuozhuIn().FName)){
+//                Toast.showText(mContext, "组织内调拨时，调出调入货主必须一样");
+//                MediaPlayer.getInstance(mContext).error();
+//                return false;
+//            }
+//        }
+        ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+pushDownMain.FID+pushDownSub.FHuozhuOutID);//单据编号
+
         LoadingUtil.showDialog(mContext,"正在添加...");
 
         App.getRService().doIOAction(WebApi.GetQtyForOut, gson.toJson(new GetQtyMsg(product.FMaterialid,unit.FMeasureUnitID,edNum.getText().toString())), new MySubscribe<CommonResponse>() {
@@ -569,61 +810,48 @@ SpinnerStorage spWhichStorageOut;
         try {
             String num = edNum.getText().toString();
             if ("".equals(num)||"0".equals(num))return;//避免多次点击，以上请求多次，导致第一次清空之后，再去添加一个空的数据
-//            if (true) {
-//                Lg.e("合并");
-//                List<T_Detail> detailhebing = t_detailDao.queryBuilder().where(
-//                        T_DetailDao.Properties.Activity.eq(activity),
-//                        T_DetailDao.Properties.FOrderId.eq(ordercode),
-//                        T_DetailDao.Properties.FMaterialId.eq(product.FMaterialid),
-//                        T_DetailDao.Properties.FUnitID.eq(unit.FNumber),
-//                        T_DetailDao.Properties.FBarcode.eq(barcode),
-//                        T_DetailDao.Properties.FStorageOut.eq(storageOut.FNumber),
-//                        T_DetailDao.Properties.FWaveHouseOut.eq(waveHouseOut.FNumber),
-//                        T_DetailDao.Properties.FBatch.eq(edPihao.getText().toString())
-//                ).build().list();
-//                if (detailhebing.size() > 0) {
-//                    Lg.e("合并：" + detailhebing.size() + "--" + detailhebing.get(0).toString());
-//                    for (int i = 0; i < detailhebing.size(); i++) {
-//                        num = (MathUtil.toD(num) + MathUtil.toD(detailhebing.get(i).FRemainInStockQty)) + "";
-//                        t_detailDao.delete(detailhebing.get(i));
-//                    }
-//                }
-//            }
+
             t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
                     T_mainDao.Properties.FOrderId.eq(ordercode)
             ).build().list());
             String timesecond = CommonUtil.getTimesecond();
             T_main main = new T_main();//--------------------------------------表头-----------------
             main.activity = activity;
+            main.FAccountID = CommonUtil.getAccountID();
             main.FBillerID = Hawk.get(Info.user_id, "");
             main.FBarcode = barcode;
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
             main.FOrderId = ordercode;
             main.FIndex = timesecond;
+            main.FID = pushDownSub.FID;
+            main.FBillNo = pushDownMain.FBillNo;
             Lg.e("aa1111",activityPager.getOrgOut());
             Lg.e("aa2222",activityPager.getOrgIn());
             Lg.e("aa3333",activityPager.getHuozhuOut());
             Lg.e("aa4444",activityPager.getHuozhuIn());
-            main.setData(Info.getType(activity),
+            main.setData4DbApply2DB(Info.getType(activity),
                     activityPager.getOrgOut().FNumber, activityPager.getOrgIn().FNumber,
-                    activityPager.getHuozhuOut().FNumber, activityPager.getHuozhuIn().FNumber);
+                    mainHuozhuType,activityPager.getHuozhuOut().FNumber, activityPager.getHuozhuOut().FNumber);
 //            main.FDepartmentNumber = spDepartmentCreate.getDataNumber();
 //            main.FPurchaseDeptId = spDepartmentBuy.getDataNumber();
 //            main.FPurchaserId = spBuyer.getDataNumber();
             main.FStockerNumber = activityPager.getManStore();
             main.FDate = activityPager.getDate();
             main.FNot = activityPager.getNote();
-            main.FDBType = activityPager.getDBType();
+            main.FDBType = mainDbType;
             main.FDBDirection = activityPager.getDBDirection();
             long insert1 = t_mainDao.insert(main);
 
 
             T_Detail detail = new T_Detail();//--------------------------------明细-----------------
             detail.activity = activity;
+            detail.FAccountID = CommonUtil.getAccountID();
             detail.FBillerID = Hawk.get(Info.user_id, "");
             detail.FBarcode = barcode;
             detail.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
             detail.FOrderId = ordercode;
+            detail.FEntryID = pushDownSub.FEntryID;
+            detail.FID = pushDownSub.FID;
             detail.FIndex = timesecond;
             detail.FRemainInStockQty = num;
             detail.FRealQty = num;
@@ -644,6 +872,10 @@ SpinnerStorage spWhichStorageOut;
             long insert2 = t_detailDao.insert(detail);
 
             if (insert1 > 0 && insert2 > 0) {
+                pushDownSub.FQtying = DoubleUtil.sum(MathUtil.toD(pushDownSub.FQtying),
+                        (MathUtil.toD(edNum.getText().toString()))) + "";
+                pushDownSubDao.update(pushDownSub);
+                pushDownSubListAdapter.notifyDataSetChanged();
                 Lg.e("成功添加Main：", main);
                 Lg.e("成功添加Detail：", detail);
                 MediaPlayer.getInstance(mContext).ok();
@@ -678,71 +910,6 @@ SpinnerStorage spWhichStorageOut;
 //        }
     }
 
-    //提交并且审核
-    private void submitAndAudit(final String order){
-        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
-        ab.setTitle("是否直接审核");
-        ab.setMessage("确认？");
-        ab.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                LoadingUtil.showDialog(mContext,"正在审核...");
-                final String json = Info.getJson(Config.DBActivity, JsonDealUtils.JSonDB_Check(order));
-                App.CloudService().doIOAction(Config.C_Submit, json, new ToSubscribe<BackData>() {
-                    @Override
-                    public void onNext(BackData backData) {
-                        super.onNext(backData);
-                        if (backData.getResult().getResponseStatus().getIsSuccess()) {
-                            Lg.e("提交成功");
-                            App.CloudService().doIOAction(Config.C_Audit, json, new ToSubscribe<BackData>() {
-                                @Override
-                                public void onNext(BackData backData) {
-                                    super.onNext(backData);
-                                        LoadingUtil.dismiss();
-                                    if (backData.getResult().getResponseStatus().getIsSuccess()) {
-                                        Toast.showText(mContext,"审核成功");
-                                        Lg.e("审核成功");
-                                    }else{
-                                        List<BackData.ResultBean.ResponseStatusBean.ErrorsBean> errorsBeans = backData.getResult().getResponseStatus().getErrors();
-                                        StringBuilder builder = new StringBuilder();
-                                        for (BackData.ResultBean.ResponseStatusBean.ErrorsBean error : errorsBeans) {
-                                            builder.append(error.getFieldName() + "\n");
-                                            builder.append(error.getMessage() + "\n");
-                                        }
-                                        LoadingUtil.showAlter(mContext,"",builder.toString());
-                                    }
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    super.onError(e);
-                                    LoadingUtil.dismiss();
-                                    Lg.e("审核失败，请于系统中审核");
-                                }
-                            });
-                        } else {
-                            LoadingUtil.dismiss();
-                            Toast.showText(mContext,"提交失败，请于系统中提交并审核");
-                            Lg.e("提交失败");
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        LoadingUtil.dismiss();
-                        Toast.showText(mContext,"提交失败，请于系统中提交并审核");
-                        Lg.e("审核失败");
-                    }
-                });
-            }
-        });
-        ab.setNegativeButton("取消", null);
-        final AlertDialog alertDialog = ab.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
-    }
-
     //执行完单，PDA单据编号+1
     public void finishOrder() {
         AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
@@ -761,30 +928,23 @@ SpinnerStorage spWhichStorageOut;
 
     }
 
-    @OnClick({ R.id.search, R.id.btn_add, R.id.btn_finishorder, R.id.btn_backorder, R.id.btn_checkorder, R.id.btn_pic})
+    @OnClick({ R.id.search, R.id.btn_add, R.id.btn_finishorder, R.id.btn_backorder, R.id.btn_checkorder})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.search:
-                if (lyScan.getVisibility()==View.VISIBLE){
-                    lyScan.setVisibility(View.GONE);
+                if (zxingBarcodeScanner.getVisibility()==View.VISIBLE){
+                    zxingBarcodeScanner.setVisibility(View.GONE);
 //                    mCaptureManager.onPause();
                 }else{
                     mCaptureManager.onResume();
-                    lyScan.setVisibility(View.VISIBLE);
+                    zxingBarcodeScanner.setVisibility(View.VISIBLE);
                     mCaptureManager.decode();
                 }
-
-//                Bundle bundle1 = new Bundle();
-//                bundle1.putString("search", "");
-//                bundle1.putInt("where", Info.SEARCHPRODUCT);
-//                bundle1.putString("org", activityPager.getOrgOut(1));
-//                bundle1.putInt("activity", activity);
-//                startNewActivityForResult(activityPager, ProductSearchActivity.class, R.anim.activity_open, 0, Info.SEARCHFORRESULT, bundle1);
                 break;
-            case R.id.btn_pic:
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, Info.Scan_Pic);
-                break;
+//            case R.id.btn_pic:
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent, Info.Scan_Pic);
+//                break;
 //            case R.id.btn_add:
 //                checkBeforeAdd();
 //                break;
@@ -805,8 +965,9 @@ SpinnerStorage spWhichStorageOut;
                 break;
             case R.id.btn_checkorder:
                 Bundle bundle = new Bundle();
+                bundle.putString("fid", pushDownMain.FID);
                 bundle.putInt("activity", activity);
-                startNewActivity(activityPager, ReViewActivity.class,
+                startNewActivity(activityPager, ReViewPDActivity.class,
                         R.anim.activity_fade_in, R.anim.activity_fade_out, false, bundle);
                 break;
         }

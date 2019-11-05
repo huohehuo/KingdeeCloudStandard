@@ -17,7 +17,7 @@ import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.WebApi;
@@ -192,11 +192,11 @@ public class SpinnerOrg extends RelativeLayout {
     public void setAutoSelection(String saveKeyStr,String string) {
         saveKeyString =saveKeyStr;
         autoString = string;
-        if ("".equals(string)&&!"".equals(saveKeyStr)){
+        if ("".equals(string) && !"".equals(saveKeyStr)){
             autoString = Hawk.get(saveKeyString,"");
         }
         for (int j = 0; j < adapter.getCount(); j++) {
-            if (((Org) adapter.getItem(j)).FNumber.equals(autoString)
+            if (((Org) adapter.getItem(j)).FNumber.equals(autoString)|| ((Org) adapter.getItem(j)).FOrgID.equals(autoString)
                     || ((Org) adapter.getItem(j)).FName.equals(autoString)) {
                 mSp.setSelection(j);
 //                autoString = null;

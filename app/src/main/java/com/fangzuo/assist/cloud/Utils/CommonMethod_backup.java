@@ -32,6 +32,7 @@ import com.fangzuo.assist.cloud.Dao.Wanglaikemu;
 import com.fangzuo.assist.cloud.Dao.WaveHouse;
 import com.fangzuo.assist.cloud.Dao.YuandanType;
 import com.fangzuo.assist.cloud.Server.WebAPI;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.greendao.gen.ClientDao;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.DepartmentDao;

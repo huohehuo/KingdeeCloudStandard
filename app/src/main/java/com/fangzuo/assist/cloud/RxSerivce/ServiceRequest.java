@@ -4,6 +4,7 @@ package com.fangzuo.assist.cloud.RxSerivce;
 import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.BackDataLogin;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
+import com.fangzuo.assist.cloud.Beans.SearchBackData;
 
 import java.util.Map;
 
@@ -103,6 +104,10 @@ interface ServiceRequest {
     @FormUrlEncoded
     @POST("{actionio}")
     Observable<BackData> actionIO(@Path("actionio") String io, @FieldMap Map<String, Object> params);
+
+    @FormUrlEncoded
+    @POST("{actionio}")
+    Observable<SearchBackData> actionIOSearch(@Path("actionio") String io, @FieldMap Map<String, Object> params);
 
     @FormUrlEncoded
     @POST("{actionio}")

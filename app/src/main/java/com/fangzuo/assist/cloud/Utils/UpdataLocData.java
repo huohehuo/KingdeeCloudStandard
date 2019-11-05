@@ -16,6 +16,7 @@ import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
 import com.fangzuo.greendao.gen.BuyerDao;
 import com.fangzuo.greendao.gen.ClientDao;

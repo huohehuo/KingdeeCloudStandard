@@ -77,7 +77,7 @@
                             android:background="@color/divider_color" />
 
                         <com.fangzuo.assist.cloud.widget.TextViewTitle
-                            app:TextView_Title_one="仓库"
+                            app:TextView_Title_one="@string/storage"
                             app:TextView_Title_size="10sp"
                             app:TextView_Title_two="仓位"
                             android:layout_width="match_parent"

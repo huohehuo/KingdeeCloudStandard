@@ -53,6 +53,7 @@
                     android:layout_height="wrap_content"/>
                 <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerCommon
+                    android:visibility="gone"
                     android:id="@+id/sp_db_direction"
                     app:manspinner_name="调拨方向:"
                     app:manspinner_title="请选择调拨方向"
@@ -61,6 +62,7 @@
                     android:layout_height="wrap_content"/>
                 <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
+                    android:visibility="gone"
                     android:id="@+id/sp_org_out"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -69,6 +71,7 @@
                     app:manspinner_size="@dimen/sp_title_size" />
                 <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
+                    android:visibility="gone"
                     android:id="@+id/sp_org_huozhu_out"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -77,6 +80,7 @@
                     app:manspinner_size="@dimen/sp_title_size"/>
                 <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
+                    android:visibility="gone"
                     android:id="@+id/sp_org_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -85,6 +89,7 @@
                     app:manspinner_size="@dimen/sp_title_size"/>
                 <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerHuozhu
+                    android:visibility="gone"
                     android:id="@+id/sp_org_huozhu_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -96,12 +101,12 @@
                     android:id="@+id/sp_storeman"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="仓管员:"
-                    app:manspinner_title="请选择仓管员"
+                    app:manspinner_name="@string/store_man"
+                    app:manspinner_title="@string/store_man_hint"
                     app:manspinner_size="@dimen/sp_people_title_size" />
                 <include layout="@layout/line_heng"/>
                 <TextView
-                    android:text="备注："
+                    android:text="@string/note"
                     android:textSize="@dimen/sp_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

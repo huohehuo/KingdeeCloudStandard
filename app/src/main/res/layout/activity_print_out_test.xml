@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="80dp"
             android:layout_margin="20dp"
-            android:text="蓝牙连接"
+            android:text="@string/bluetooth_set"
             android:textSize="20dp" />
 
         <View
@@ -54,7 +54,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/btn_login"
             android:layout_weight="1"
-            android:text="打印测试" />
+            android:text="@string/print_test" />
     </LinearLayout>
 
 </RelativeLayout>

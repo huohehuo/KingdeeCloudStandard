@@ -28,6 +28,9 @@ public class UserDao extends AbstractDao<User, Void> {
         public final static Property FName = new Property(1, String.class, "FName", false, "FNAME");
         public final static Property FPassWord = new Property(2, String.class, "FPassWord", false, "FPASS_WORD");
         public final static Property FEmpID = new Property(3, String.class, "FEmpID", false, "FEMP_ID");
+        public final static Property FPermit = new Property(4, String.class, "FPermit", false, "FPERMIT");
+        public final static Property FNameERP = new Property(5, String.class, "FNameERP", false, "FNAME_ERP");
+        public final static Property FPassWordERP = new Property(6, String.class, "FPassWordERP", false, "FPASS_WORD_ERP");
     }
 
 
@@ -46,7 +49,10 @@ public class UserDao extends AbstractDao<User, Void> {
                 "\"FUSER_ID\" TEXT," + // 0: FUserID
                 "\"FNAME\" TEXT," + // 1: FName
                 "\"FPASS_WORD\" TEXT," + // 2: FPassWord
-                "\"FEMP_ID\" TEXT);"); // 3: FEmpID
+                "\"FEMP_ID\" TEXT," + // 3: FEmpID
+                "\"FPERMIT\" TEXT," + // 4: FPermit
+                "\"FNAME_ERP\" TEXT," + // 5: FNameERP
+                "\"FPASS_WORD_ERP\" TEXT);"); // 6: FPassWordERP
     }
 
     /** Drops the underlying database table. */
@@ -78,6 +84,21 @@ public class UserDao extends AbstractDao<User, Void> {
         if (FEmpID != null) {
             stmt.bindString(4, FEmpID);
         }
+ 
+        String FPermit = entity.getFPermit();
+        if (FPermit != null) {
+            stmt.bindString(5, FPermit);
+        }
+ 
+        String FNameERP = entity.getFNameERP();
+        if (FNameERP != null) {
+            stmt.bindString(6, FNameERP);
+        }
+ 
+        String FPassWordERP = entity.getFPassWordERP();
+        if (FPassWordERP != null) {
+            stmt.bindString(7, FPassWordERP);
+        }
     }
 
     @Override
@@ -103,6 +124,21 @@ public class UserDao extends AbstractDao<User, Void> {
         if (FEmpID != null) {
             stmt.bindString(4, FEmpID);
         }
+ 
+        String FPermit = entity.getFPermit();
+        if (FPermit != null) {
+            stmt.bindString(5, FPermit);
+        }
+ 
+        String FNameERP = entity.getFNameERP();
+        if (FNameERP != null) {
+            stmt.bindString(6, FNameERP);
+        }
+ 
+        String FPassWordERP = entity.getFPassWordERP();
+        if (FPassWordERP != null) {
+            stmt.bindString(7, FPassWordERP);
+        }
     }
 
     @Override
@@ -116,7 +152,10 @@ public class UserDao extends AbstractDao<User, Void> {
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // FUserID
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // FName
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // FPassWord
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // FEmpID
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // FEmpID
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // FPermit
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // FNameERP
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // FPassWordERP
         );
         return entity;
     }
@@ -127,6 +166,9 @@ public class UserDao extends AbstractDao<User, Void> {
         entity.setFName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setFPassWord(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setFEmpID(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setFPermit(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setFNameERP(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setFPassWordERP(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     @Override

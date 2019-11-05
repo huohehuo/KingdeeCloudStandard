@@ -16,16 +16,14 @@ import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.SaleMan;
-import com.fangzuo.assist.cloud.Dao.StoreMan;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.SaleManDao;
-import com.fangzuo.greendao.gen.StoreManDao;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
@@ -350,6 +348,9 @@ public class SpinnerSaleMan extends RelativeLayout {
                 break;
             }
         }
+    }
+    public void setEnable(boolean b){
+        mSp.setEnabled(b);
     }
 
     public SaleManSpAdapter getAdapter() {

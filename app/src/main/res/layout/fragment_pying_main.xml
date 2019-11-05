@@ -33,7 +33,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="入库日期:"
+                    android:text="@string/in_store_date"
                     android:textColor="@android:color/black"
                     android:textSize="20sp" />
 
@@ -54,7 +54,7 @@
                     <!--android:id="@+id/sp_department"-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="wrap_content"-->
-                    <!--app:manspinner_name="生产车间:"-->
+                    <!--app:manspinner_name="@string/production_workshop"-->
                     <!--app:manspinner_size="@dimen/dp_7" />-->
                 <com.fangzuo.assist.cloud.widget.SpinnerDepartMentDlg
                     android:id="@+id/sp_department_dlg"
@@ -68,14 +68,14 @@
                     android:id="@+id/sp_org_send"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="库存组织:"
-                    app:manspinner_title="请选择库存组织"
+                    app:manspinner_name="@string/store_org"
+                    app:manspinner_title="@string/store_org_hint"
                     app:manspinner_size="@dimen/sp_title_size"/>
                 <include layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerCommon
                     android:id="@+id/sp_hz_type"
-                    app:manspinner_name="货主类型:"
-                    app:manspinner_title="请选择货主类型"
+                    app:manspinner_name="@string/huozhu_type"
+                    app:manspinner_title="@string/huozhu_type_hint"
                     app:manspinner_size="@dimen/sp_title_size"
                     android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:gravity="center"
-                        android:text="供应商:"
+                        android:text="@string/supplier"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
@@ -173,8 +173,8 @@
                     android:id="@+id/sp_org_huozhu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="货主:"
-                    app:manspinner_title="请选择货主"
+                    app:manspinner_name="@string/huozhu"
+                    app:manspinner_title="@string/huozhu_hint"
                     app:manspinner_size="@dimen/sp_title_size"/>
                 <include layout="@layout/line_heng"/>
                 <TextView
@@ -201,7 +201,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:gravity="center"
-                        android:text="供应商:"
+                        android:text="@string/supplier"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
@@ -278,12 +278,12 @@
                     android:id="@+id/sp_storeman"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="仓管员:"
-                    app:manspinner_title="请选择仓管员"
+                    app:manspinner_name="@string/store_man"
+                    app:manspinner_title="@string/store_man_hint"
                     app:manspinner_size="@dimen/sp_people_title_size" />
                 <include layout="@layout/line_heng"/>
                 <TextView
-                    android:text="备注："
+                    android:text="@string/note"
                     android:textSize="@dimen/sp_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

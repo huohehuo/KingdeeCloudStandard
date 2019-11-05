@@ -385,7 +385,7 @@
                                 android:id="@+id/sp_storeman"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:manspinner_name="仓管员:"
+                                app:manspinner_name="@string/store_man"
                                 app:manspinner_size="9sp" />
 
                         </LinearLayout>

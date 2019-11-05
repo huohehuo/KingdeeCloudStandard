@@ -20,14 +20,19 @@ import com.fangzuo.assist.cloud.Activity.OtherOutStoreActivity;
 import com.fangzuo.assist.cloud.Activity.PDActivity;
 import com.fangzuo.assist.cloud.Activity.PagerForActivity;
 import com.fangzuo.assist.cloud.Activity.PrintBeforeDataActivity;
+import com.fangzuo.assist.cloud.Activity.PrintBoxCode4P1Activity;
+import com.fangzuo.assist.cloud.Activity.PrintBoxCodeActivity;
 import com.fangzuo.assist.cloud.Activity.PrintHistoryActivity;
 import com.fangzuo.assist.cloud.Activity.PurchaseInStoreActivity;
 import com.fangzuo.assist.cloud.Activity.PurchaseOrderActivity;
 import com.fangzuo.assist.cloud.Activity.PushDownActivity;
 import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
+import com.fangzuo.assist.cloud.Activity.PushDownSearchActivity;
 import com.fangzuo.assist.cloud.Activity.SaleOrderActivity;
 import com.fangzuo.assist.cloud.Activity.SaleOutActivity;
 import com.fangzuo.assist.cloud.Activity.ScanProductActivity;
+import com.fangzuo.assist.cloud.Activity.SplitBoxP1Activity;
+import com.fangzuo.assist.cloud.Activity.SplitBoxP2Activity;
 import com.fangzuo.assist.cloud.Adapter.GridViewAdapter;
 import com.fangzuo.assist.cloud.Beans.SettingList;
 import com.fangzuo.assist.cloud.R;
@@ -76,7 +81,7 @@ public class PurchaseFragment extends BaseFragment {
     protected void initData() {
 //        String getPermit=share.getString(ShareInfo.USER_PERMIT);
 //        String[] arylist = getPermit.split("\\-"); // 这样才能得到正确的结果
-        ada = new GridViewAdapter(mContext, GetSettingList.getPurchaseList());
+        ada = new GridViewAdapter(mContext, GetSettingList.getPurchaseList(null));
         gv.setAdapter(ada);
         ada.notifyDataSetChanged();
     }
@@ -89,7 +94,9 @@ public class PurchaseFragment extends BaseFragment {
     String[] items_pk = new String[]{"盘亏入库", "VMI盘亏入库"};
     String[] items_gb = new String[]{"改板领料", "改板入库"};
     String[] items_dc = new String[]{"代存出库", "代存入库"};
-    String[] items_db = new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单", "VMI调拨申请单下推直接调拨单"};
+//    String[] items_db = new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单", "VMI调拨申请单下推直接调拨单"};
+    String[] items_db = new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};
+//    String[] items_in_out = new String[]{"样板出库", "第三方货物入库","第三方货物出库","出库申请单下推其他出库单"};
     String[] items_in_out = new String[]{"样板出库", "第三方货物入库","第三方货物出库"};
     @Override
     protected void initListener() {
@@ -98,15 +105,38 @@ public class PurchaseFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 SettingList tv = (SettingList) ada.getItem(i);
                 Log.e("listitem", tv.tv);
-                switch (tv.tv) {
-                    case "采购入库"://实际是采购订单下推外购入库
+                switch (tv.activity) {
+                    /*-------------二期单据---------------------------------------------*/
+                    /*-------------一期单据----------------------------------------------*/
+                    case Config.DB4P1BoxActivity://箱码调拨单
+                        PagerForActivity.start(mContext, Config.DB4P1BoxActivity);
+                        break;
+                    case Config.ProductGet4BoxActivity://生产领料(箱码)
+                        PagerForActivity.start(mContext, Config.ProductGet4BoxActivity);
+                        break;
+                    case Config.SplitBoxP1Activity://拆箱
+                        SplitBoxP1Activity.start(mContext);
+                        break;
+                    case Config.PrintBoxCode4P1Activity://箱码补打
+                        PrintBoxCode4P1Activity.start(mContext);
+                        break;
+                    case Config.P1PdCgrk2ProductGetActivity://采购入库单下推简单生产领料
+                        PushDownPagerActivity.start(getActivity(),28);
+                        break;
+                    case Config.P1PdProductGet2CprkActivity://生产领料单下推产品入库单
+                        PushDownPagerActivity.start(getActivity(),29);
+                        break;
+                    case Config.P1PdProductGet2Cprk2Activity://生产领料单下推产品入库单
+                        PushDownPagerActivity.start(getActivity(),30);
+                        break;
+                    case Config.PdCgOrder2WgrkActivity://实际是采购订单下推外购入库
                         PushDownPagerActivity.start(getActivity(),1);
                         break;
 //                    case "采购入库":
 //                        PagerForActivity.start(mContext, Config.PurchaseInStoreActivity);
 //                        startNewActivity(PurchaseInStoreActivity.class, null);
 //                        break;
-                    case "调拨单":
+                    case Config.DBActivity://调拨单
                         // 创建对话框构建器
                         builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
@@ -128,22 +158,22 @@ public class PurchaseFragment extends BaseFragment {
                                             case 2:
                                                 PushDownPagerActivity.start(getActivity(),22);
                                                 break;
-                                            case 3:
-                                                PushDownPagerActivity.start(getActivity(),23);
-                                                break;
+//                                            case 3:
+//                                                PushDownPagerActivity.start(getActivity(),23);
+//                                                break;
                                         }
                                     }
                                 });
                         builder.create().show();
 //                        startNewActivity(DBActivity.class, null);
                         break;
-                    case "到货入库1":
+                    case Config.DhInActivity://到货入库1
                         PagerForActivity.start(mContext, Config.DhInActivity);
                         break;
-                    case "到货入库2":
+                    case Config.DhIn2Activity://到货入库2
                         PagerForActivity.start(mContext, Config.DhIn2Activity);
                         break;
-                    case "销售出库单":
+                    case Config.SaleOutActivity://销售出库
                         // 创建对话框构建器
                         builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
@@ -177,7 +207,7 @@ public class PurchaseFragment extends BaseFragment {
                                 });
                         builder.create().show();
                         break;
-                    case "挑板业务1":
+                    case Config.TbGetActivity://挑板业务1
                         builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
                         builder.setAdapter(
@@ -199,7 +229,7 @@ public class PurchaseFragment extends BaseFragment {
                                 });
                         builder.create().show();
                         break;
-                    case "挑板业务2":
+                    case Config.TbGet2Activity://挑板业务2
                         builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
                         builder.setAdapter(
@@ -221,7 +251,7 @@ public class PurchaseFragment extends BaseFragment {
                                 });
                         builder.create().show();
                         break;
-                    case "挑板业务3":
+                    case Config.TbGet3Activity://挑板业务3
                         builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
                         builder.setAdapter(
@@ -243,7 +273,7 @@ public class PurchaseFragment extends BaseFragment {
                                 });
                         builder.create().show();
                         break;
-                    case "改板业务":
+                    case Config.GbGetActivity://改板业务
                         builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
                         builder.setAdapter(
@@ -265,7 +295,7 @@ public class PurchaseFragment extends BaseFragment {
                                 });
                         builder.create().show();
                         break;
-                    case "其他出入库":
+                    case Config.HwOut3Activity://其他出入库
                         builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
                         builder.setAdapter(
@@ -285,27 +315,30 @@ public class PurchaseFragment extends BaseFragment {
                                             case 2:
                                                 PagerForActivity.start(mContext, Config.HwOut3Activity);
                                                 break;
+                                            case 3:
+                                                PushDownPagerActivity.start(getActivity(),24);
+                                                break;
                                         }
                                     }
                                 });
                         builder.create().show();
                         break;
-                    case "标签补打":
+                    case Config.PrintHistoryActivity://条码补打
                         startNewActivity(PrintHistoryActivity.class, null);
                         break;
-                    case "期初物料补打":
+                    case Config.PrintBeforeDataActivity://期初条码补打
                         startNewActivity(PrintBeforeDataActivity.class, null);
                         break;
-                    case "简单生产领料":
+                    case Config.ProductGetActivity://生产领料
                         PagerForActivity.start(mContext, Config.ProductGetActivity);
                         break;
-                    case "简单产品入库":
+                    case Config.ProductInStoreActivity://产品入库
                         PagerForActivity.start(mContext, Config.ProductInStoreActivity);
                         break;
-                    case "盘盈入库":
+                    case Config.PYingActivity://盘盈入库
                         PagerForActivity.start(mContext, Config.PYingActivity);
                         break;
-                    case "盘亏入库":
+                    case Config.PkuiActivity://盘亏入库
                         builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
                         builder.setAdapter(
@@ -327,7 +360,7 @@ public class PurchaseFragment extends BaseFragment {
                                 });
                         builder.create().show();
                         break;
-                    case "扫一扫":
+                    case Config.ScanProductActivity://扫一扫
                         ScanProductActivity.start(mContext);
                         break;
 

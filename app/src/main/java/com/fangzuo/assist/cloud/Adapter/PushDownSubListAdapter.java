@@ -12,12 +12,8 @@ import com.fangzuo.assist.cloud.Dao.PushDownSub;
 import com.fangzuo.assist.cloud.Dao.Unit;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.DoubleUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.LocDataUtil;
 import com.fangzuo.assist.cloud.Utils.MathUtil;
-import com.fangzuo.greendao.gen.DaoSession;
-import com.fangzuo.greendao.gen.ProductDao;
-import com.fangzuo.greendao.gen.UnitDao;
 
 import java.util.List;
 

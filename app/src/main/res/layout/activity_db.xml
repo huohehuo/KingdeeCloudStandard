@@ -97,7 +97,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.5"
                                 android:gravity="center"
-                                android:text="供应商:"
+                                android:text="@string/supplier"
                                 android:textColor="@android:color/black"
                                 android:textSize="15sp" />
 
@@ -569,10 +569,10 @@
                         android:id="@+id/sp_storeman"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:manspinner_name="仓管员:"
+                        app:manspinner_name="@string/store_man"
                         app:manspinner_size="@dimen/dp_7" />
                     <TextView
-                        android:text="备注："
+                        android:text="@string/note"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <EditText

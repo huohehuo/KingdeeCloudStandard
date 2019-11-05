@@ -27,7 +27,7 @@ import com.fangzuo.assist.cloud.Utils.AnimUtil;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
@@ -84,7 +84,6 @@ public class LoginNewActivity extends BaseActivity implements EasyPermissions.Pe
         mContext = this;
         share = BasicShareUtil.getInstance(mContext);
         getPermisssion();
-        Log.e("123", ShareUtil.getInstance(mContext).getPISpayMethod() + "");
         getListUser();
         mTvVersion.setText("标准版 Ver:" + CommonUtil.getVersionName());
     }

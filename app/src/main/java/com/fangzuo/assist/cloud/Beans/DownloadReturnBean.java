@@ -5,11 +5,13 @@ import com.fangzuo.assist.cloud.Dao.Bibie;
 import com.fangzuo.assist.cloud.Dao.Buyer;
 import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.Department;
+import com.fangzuo.assist.cloud.Dao.DryingGetData;
 import com.fangzuo.assist.cloud.Dao.Employee;
 import com.fangzuo.assist.cloud.Dao.GetGoodsDepartment;
 import com.fangzuo.assist.cloud.Dao.InStorageNum;
 import com.fangzuo.assist.cloud.Dao.InStoreType;
 import com.fangzuo.assist.cloud.Dao.Org;
+import com.fangzuo.assist.cloud.Dao.PGetData;
 import com.fangzuo.assist.cloud.Dao.PayType;
 import com.fangzuo.assist.cloud.Dao.PriceMethod;
 import com.fangzuo.assist.cloud.Dao.Product;
@@ -57,6 +59,9 @@ public class DownloadReturnBean {
 	public ArrayList<PrintDataBean> printDataBeans;
 	public ArrayList<PrintHistory> printHistories;
 	public ArrayList<RemarkData> remarkDatas;
+	public ArrayList<WortPrintData> wortPrintDatas;
+	public ArrayList<DryingGetData> dryingGetDatas;
+	public ArrayList<PGetData> pGetDatas;
 
 
 

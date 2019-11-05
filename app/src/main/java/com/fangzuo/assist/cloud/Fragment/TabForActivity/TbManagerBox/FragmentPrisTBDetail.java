@@ -30,6 +30,7 @@ import com.fangzuo.assist.cloud.Beans.CodeCheckBean;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
+import com.fangzuo.assist.cloud.Beans.MainSaveBean;
 import com.fangzuo.assist.cloud.Beans.PrintHistory;
 import com.fangzuo.assist.cloud.Dao.Product;
 import com.fangzuo.assist.cloud.Dao.PushDownMain;
@@ -108,6 +109,8 @@ public class FragmentPrisTBDetail extends BaseFragment {
 //    SpinnerUnit spUnitAux;
     @BindView(R.id.ed_purchase_no)
     EditText edPurchaseNo;
+    @BindView(R.id.ed_batch_remark)
+    EditText edBatchRermark;
     @BindView(R.id.sp_auxsign)
     SpinnerAuxSign spAuxsign;
     @BindView(R.id.sp_actualmodel)
@@ -180,7 +183,10 @@ public class FragmentPrisTBDetail extends BaseFragment {
                     for (int i = 0; i < backData.getResult().getResponseStatus().getSuccessEntitys().size(); i++) {
                         listOrder.add(backData.getResult().getResponseStatus().getSuccessEntitys().get(i).getNumber());
                     }
-                    final List<T_main> mains = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
+                    final List<T_main> mains = t_mainDao.queryBuilder().where(
+                            T_mainDao.Properties.Activity.eq(activity),
+                            T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                    ).build().list();
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
                         String reString = mains.get(i).FBillerID + "|" + listOrder.get(i) + "|" + mains.get(i).FOrderId + "|" + mains.get(i).IMIE;
@@ -190,6 +196,7 @@ public class FragmentPrisTBDetail extends BaseFragment {
                                 super.onNext(commonResponse);
                                 t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
                                         T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                         T_DetailDao.Properties.FOrderId.eq(mains.get(pos).FOrderId)
                                 ).build().list());
                             }
@@ -200,6 +207,7 @@ public class FragmentPrisTBDetail extends BaseFragment {
                             }
                         });
                     }
+                    Hawk.delete(Info.MainData+ordercode);
                     ordercode++;
                     Log.e("ordercode", ordercode + "");
                     share.setOrderCode(activityPager.getActivity(), ordercode);
@@ -222,6 +230,12 @@ public class FragmentPrisTBDetail extends BaseFragment {
                     delete.setTitle("上传错误");
                     delete.setMessage(builder.toString());
                     delete.setPositiveButton("确定", null);
+                    delete.setNegativeButton("反馈信息", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DataService.pushBackJson(mContext, FragmentPrisTBDetail.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
+                        }
+                    });
                     delete.create().show();
                 }
 
@@ -270,53 +284,53 @@ public class FragmentPrisTBDetail extends BaseFragment {
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, activityPager.getStorage(), "");
                 break;
-            case EventBusInfoCode.Print_Check://检测打印机连接状态
-                String msg = (String) event.postEvent;
-                LoadingUtil.dismiss();
-                if ("OK".equals(msg)) {
-                    tvPrint.setText("打印机就绪");
-                    tvPrint.setTextColor(Color.BLACK);
-                } else {
-                    AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
-                    ab.setTitle("连接打印机错误,请到先配置蓝牙打印机");
-//            ab.setMessage("确认？");
-                    ab.setPositiveButton("前往", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
-                            activityPager.finish();
-                        }
-                    });
-                    ab.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            activityPager.finish();
-                        }
-                    });
-                    ab.setNeutralButton("重连", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LoadingUtil.showDialog(mContext,"正在重连...");
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    checkPrint(false);
-                                }
-                            }).start();
-                        }
-                    });
-                    ab.create().show();
-                    tvPrint.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
+//            case EventBusInfoCode.Print_Check://检测打印机连接状态
+//                String msg = (String) event.postEvent;
+//                LoadingUtil.dismiss();
+//                if ("OK".equals(msg)) {
+//                    tvPrint.setText("打印机就绪");
+//                    tvPrint.setTextColor(Color.BLACK);
+//                } else {
+//                    AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+//                    ab.setTitle("连接打印机错误,请到先配置蓝牙打印机");
+////            ab.setMessage("确认？");
+//                    ab.setPositiveButton("前往", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
 //                            activityPager.finish();
-                        }
-                    });
-                    tvPrint.setText("连接打印机错误");
-                    tvPrint.setTextColor(Color.RED);
-                }
-                break;
+//                        }
+//                    });
+//                    ab.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            activityPager.finish();
+//                        }
+//                    });
+//                    ab.setNeutralButton("重连", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            LoadingUtil.showDialog(mContext,"正在重连...");
+//                            new Thread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    checkPrint(false);
+//                                }
+//                            }).start();
+//                        }
+//                    });
+//                    ab.create().show();
+//                    tvPrint.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            startNewActivity(activityPager, PrintOutTestActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
+////                            activityPager.finish();
+//                        }
+//                    });
+//                    tvPrint.setText("连接打印机错误");
+//                    tvPrint.setTextColor(Color.RED);
+//                }
+//                break;
 
         }
     }
@@ -336,7 +350,7 @@ public class FragmentPrisTBDetail extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_prisdetail, container, false);
+        View view = inflater.inflate(R.layout.fragment_pris_tb_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getActivity();
         EventBusUtil.register(this);
@@ -365,7 +379,7 @@ public class FragmentPrisTBDetail extends BaseFragment {
         Lg.e("Fg_D:" + "initData");
         listOrder = new ArrayList<>();
         ordercode = CommonUtil.createOrderCode(activityPager.getActivity());//单据编号
-
+        edBatchRermark.setText(Hawk.get(Info.BatchRemark+ordercode,""));
     }
 
     private void updataView() {
@@ -554,8 +568,8 @@ public class FragmentPrisTBDetail extends BaseFragment {
         LoadingUtil.showDialog(mContext, "正在获取条码数据...");
         String pdata = product.FMaterialid + "|" + unit.FMeasureUnitID + "|" + edNum.getText().toString().trim()
                 + "|" + spActualmodel.getDataNumber() + "|" + spAuxsign.getDataNumber() + "|" + edPurchaseNo.getText().toString()
-                + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + activityPager.getStorage().FNumber + "|" + activityPager.getOrgIn(0);
-        App.getRService().doIOAction(WebApi.PrintData, pdata, new MySubscribe<CommonResponse>() {
+                + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + activityPager.getStorage().FNumber + "|" + activityPager.getOrgIn(0)+"|"+edBatchRermark.getText().toString();
+        App.getRService().doIOAction(WebApi.PrintData4P1, pdata, new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
                 super.onNext(commonResponse);
@@ -575,8 +589,10 @@ public class FragmentPrisTBDetail extends BaseFragment {
                             baseNum, spWavehouse.getWaveHouseId(), activityPager.getNote(),
                             activityPager.getOrgIn().FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber(),spActualmodel.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
+                    //保存当前的批号附加值字段，下次默认带出
+                    Hawk.put(Info.BatchRemark+ordercode,edBatchRermark.getText().toString());
                     try {
-                        CommonUtil.doPrint(zpSDK, printHistory,activityPager.getPrintNum());
+                        CommonUtil.doPrintOut(zpSDK, printHistory,activityPager.getPrintNum());
                     } catch (Exception e) {
                     }
                     //-----END
@@ -626,30 +642,45 @@ public class FragmentPrisTBDetail extends BaseFragment {
 //                }
 //            }
 
-            t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
-                    T_mainDao.Properties.FOrderId.eq(ordercode)
-            ).build().list());
             String timesecond = CommonUtil.getTimesecond();
-            T_main main = new T_main();//--------------------------------------表头-----------------
-            main.activity = activity;
-            main.FBillerID = Hawk.get(Info.user_id, "");
-            main.FBarcode = barcode;
-            main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
-            main.FOrderId = ordercode;
-            main.FIndex = timesecond;
-            main.setData(Info.getType(activity), activityPager.getOrgOut(0), activityPager.getOrgIn(0), activityPager.getOrgIn(0));
-            main.FDepartmentNumber = activityPager.getDepartMent();
+            if (!activityPager.isHasLock()){
+                t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
+                        T_mainDao.Properties.FOrderId.eq(ordercode)
+                ).build().list());
+                T_main main = new T_main();//--------------------------------------表头-----------------
+                main.activity = activity;
+                main.FAccountID = CommonUtil.getAccountID();
+                main.FBillerID = Hawk.get(Info.user_id, "");
+                main.FBarcode = barcode;
+                main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
+                main.FOrderId = ordercode;
+                main.FIndex = timesecond;
+                main.setData(Info.getType(activity), activityPager.getOrgOut(0), activityPager.getOrgIn(0), activityPager.getOrgIn(0));
+                main.FDepartmentNumber = activityPager.getDepartMent();
 //            main.FPurchaseDeptId = spDepartmentBuy.getDataNumber();
 //            main.FPurchaserId = spBuyer.getDataNumber();
-            main.FStockerNumber = activityPager.getManStore();
-            main.FDate = activityPager.getDate();
-            main.FNot = activityPager.getNote();
-            main.F_FFF_Text = activityPager.getFOrderNo();
-            long insert1 = t_mainDao.insert(main);
+                main.FStockerNumber = activityPager.getManStore();
+                main.FDate = activityPager.getDate();
+                main.FNot = activityPager.getNote();
+                main.F_FFF_Text = activityPager.getFOrderNo();
+                long insert1 = t_mainDao.insert(main);
+                Lg.e("成功添加：", main);
+                MainSaveBean saveBean = new MainSaveBean();
+                saveBean.FDepartment = activityPager.getDepartMentObj();
+                saveBean.FOrgOut = activityPager.getOrgOut();
+                saveBean.FOrgIn = activityPager.getOrgIn();
+                saveBean.FMan1 = activityPager.getManStoreObj().FName;
+                Hawk.put(Info.MainData+ordercode,saveBean);
+                Lg.e("保存了Main",saveBean);
+            }else{
+                Lg.e("不更新表头信息");
+            }
+
 
 
             T_Detail detail = new T_Detail();//--------------------------------明细-----------------
             detail.activity = activity;
+            detail.FAccountID = CommonUtil.getAccountID();
             detail.FBillerID = Hawk.get(Info.user_id, "");
             detail.FBarcode = barcode;
             detail.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
@@ -672,8 +703,7 @@ public class FragmentPrisTBDetail extends BaseFragment {
             detail.setStoreUnit(spUnitStore.getDataObject());
             long insert2 = t_detailDao.insert(detail);
 
-            if (insert1 > 0 && insert2 > 0) {
-                Lg.e("成功添加：", main);
+            if (insert2 > 0) {
                 Lg.e("成功添加：", detail);
                 MediaPlayer.getInstance(mContext).ok();
                 Toast.showText(mContext, "添加成功");
@@ -759,6 +789,7 @@ public class FragmentPrisTBDetail extends BaseFragment {
         listOrder.clear();
 //        edPihao.setText("");
         edNum.setText("");
+//        edBatchRermark.setText("");
 //        edPurchaseNo.setText("");
 //        tvCode.setText("");
 //        tvGoodName.setText("");
@@ -857,12 +888,12 @@ public class FragmentPrisTBDetail extends BaseFragment {
         super.onResume();
         //执行该方法时，Fragment处于活动状态，用户可与之交互。
         Lg.e("onResume");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                checkPrint(false);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                checkPrint(false);
+//            }
+//        }).start();
     }
 
     @Override
@@ -877,10 +908,10 @@ public class FragmentPrisTBDetail extends BaseFragment {
         super.onPause();
         //执行该方法时，Fragment处于暂停状态，但依然可见，用户不能与之交互
         Lg.e("onPause");
-        try {
-            if (null != zpSDK) zpSDK.disconnect();
-        } catch (Exception e) {
-        }
+//        try {
+//            if (null != zpSDK) zpSDK.disconnect();
+//        } catch (Exception e) {
+//        }
     }
 
     @Override
@@ -899,11 +930,11 @@ public class FragmentPrisTBDetail extends BaseFragment {
             EventBusUtil.unregister(this);
         } catch (Exception e) {
         }
-        try {
-            zpSDK.disconnect();
-        } catch (Exception e) {
-
-        }
+//        try {
+//            zpSDK.disconnect();
+//        } catch (Exception e) {
+//
+//        }
     }
 
     @Override

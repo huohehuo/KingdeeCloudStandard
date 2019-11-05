@@ -70,9 +70,12 @@ public class PrintBeforeDataActivity extends BaseActivity {
         binding.ryPrintHistory.setAdapter(adapter = new PrintHistoryAdapter(this));
         binding.ryPrintHistory.setLayoutManager(new LinearLayoutManager(this));
         bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
-        LoadingUtil.showDialog(mContext,"正在连接打印机...");
+        if ("".equals(bean.address)){
+            LoadingUtil.showAlter(mContext,"未配置打印机，请先配置打印机");
+        }
+//        LoadingUtil.showDialog(mContext,"正在连接打印机...");
 
-        linkBluePrint();
+//        linkBluePrint();
     }
 
     @Override
@@ -194,7 +197,7 @@ public class PrintBeforeDataActivity extends BaseActivity {
                     String huozhuNote= LocDataUtil.getRemark(printBean.FHuoquan,"number").FNote;
                     printBean.FHuoquan=huozhuNote;
                     try {
-                        CommonUtil.doPrint(zpSDK,printBean,binding.cbNum.getNum());
+                        CommonUtil.doPrintOut(zpSDK,printBean,binding.cbNum.getNum());
                         printHistory=null;
                         printing=false;
                         getPrintHistory(binding.edPihao.getText().toString(),binding.edProduct.getText().toString());

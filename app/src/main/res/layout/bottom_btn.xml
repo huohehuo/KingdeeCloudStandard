@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/btn_check"
-            android:text="添加"
+            android:text="@string/add"
             android:textSize="@dimen/size_btn"
             android:textColor="@android:color/white" />
 
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/btn_check"
-            android:text="上传"
+            android:text="@string/upload"
             android:textSize="@dimen/size_btn"
             android:textColor="@android:color/white" />
 
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/btn_check"
-            android:text="查看"
+            android:text="@string/review"
             android:textSize="@dimen/size_btn"
             android:textColor="@android:color/white" />
 

@@ -25,7 +25,7 @@ import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.greendao.gen.DaoSession;
@@ -53,6 +53,7 @@ public class SpinnerDepartMent extends RelativeLayout {
     private String Id="";
     private String Name="";
     private String Number="";
+    private Department Obj;
     private String T="部门：";     //2
     private Activity activity;
     private int activityTag=0;
@@ -156,6 +157,7 @@ public class SpinnerDepartMent extends RelativeLayout {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Department employee = (Department) adapter.getItem(i);
+                Obj = employee;
                 Id = employee.FItemID;
                 Name = employee.FName;
                 Number = employee.FNumber;
@@ -215,6 +217,9 @@ public class SpinnerDepartMent extends RelativeLayout {
     public String getDataNumber() {
         return Number == null ? "" : Number;
     }
+    public Department getDataNumberObj() {
+        return Obj;
+    }
 
     /**
      *
@@ -240,7 +245,7 @@ public class SpinnerDepartMent extends RelativeLayout {
 
 
     public void setAuto(String saveKeyStr, String autoStr, Org org, int activityT) {
-        Lg.e("部门过滤");
+        Lg.e("部门过滤",autoStr);
         Id="";
         Name="";
         Number="";
@@ -267,12 +272,12 @@ public class SpinnerDepartMent extends RelativeLayout {
             @Override
             public void onNext(CommonResponse commonResponse) {
                 DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
-                DepartmentDao yuandanTypeDao = daoSession.getDepartmentDao();
-                yuandanTypeDao.deleteAll();
-                yuandanTypeDao.insertOrReplaceInTx(dBean.department);
-                yuandanTypeDao.detachAll();
-//                Lg.e(T,dBean.department);
+                Lg.e("下载的部门总数",dBean.department.size());
                 if (dBean.department.size() > 0 && container.size()<=0){
+                    DepartmentDao yuandanTypeDao = daoSession.getDepartmentDao();
+                    yuandanTypeDao.deleteAll();
+                    yuandanTypeDao.insertOrReplaceInTx(dBean.department);
+                    yuandanTypeDao.detachAll();
                     dealAuto(dBean.department,true);
 //                    if (activity instanceof ProductInStoreActivity || activity instanceof ProductGetActivity){
 //                        for (int i = 0; i < dBean.department.size(); i++) {
@@ -300,6 +305,7 @@ public class SpinnerDepartMent extends RelativeLayout {
     private List<Department> getLocData(String org) {
         DepartmentDao employeeDao = daoSession.getDepartmentDao();
         List<Department> employees;
+        Lg.e("部门所属组织",org);
         if (activity instanceof ProductInStoreActivity || activity instanceof ProductGetActivity){
             Lg.e("属于：ProductInStoreActivity过滤："+org);
             Lg.e("过滤",org);
@@ -322,12 +328,29 @@ public class SpinnerDepartMent extends RelativeLayout {
         Lg.e("得到部门"+listData.size()+check,listData);
         if (check) {
             //当为生产单据时，过滤
-            if (activityTag== Config.ProductInStoreActivity||activityTag==Config.ProductGetActivity||
-                    activityTag==Config.TbGetActivity ||activityTag==Config.TbGet2Activity ||
-                    activityTag==Config.TbGet3Activity||activityTag==Config.TbInActivity ||
-                    activityTag==Config.TbIn2Activity ||activityTag==Config.TbIn3Activity ||
-                    activityTag==Config.GbGetActivity ||activityTag==Config.GbInActivity ||
-                    activityTag==Config.DhInActivity || activityTag== Config.DhIn2Activity ) {
+            if (activityTag== Config.ProductInStoreActivity||activityTag==Config.ProductGetActivity||activityTag==Config.ProductGet4P2Activity||
+                    activityTag==Config.P1PdProductGet2CprkActivity||activityTag==Config.ChangeInActivity|| activityTag==Config.TbGetActivity ||
+                    activityTag==Config.TbGet2Activity ||activityTag==Config.ProductInStore4P2Activity||activityTag==Config.BoxReAddP1Activity||
+                    activityTag==Config.ChangeGetActivity|| activityTag==Config.TbGet3Activity||activityTag==Config.TbInActivity ||
+                    activityTag==Config.DryingInStoreActivity||activityTag==Config.P1PdProductGet2Cprk2Activity|| activityTag==Config.TbIn2Activity ||
+                    activityTag==Config.TbIn3Activity ||activityTag==Config.ShuiBanGetActivity||activityTag==Config.ShuiBanGet2Activity||
+                    activityTag==Config.GbGetActivity ||activityTag==Config.GbInActivity ||activityTag==Config.DryingGetActivity||
+                    activityTag==Config.ProductGet4BoxActivity|| activityTag==Config.P2ProductionInStoreActivity ||activityTag==Config.P2ProductionInStore2Activity ||
+                    activityTag==Config.WorkOrgIn4P2Activity || activityTag==Config.P2PdCgrk2ProductGetActivity ||activityTag==Config.P1PdCgrk2ProductGetActivity ||
+                    activityTag==Config.WortInStore4P2Activity ||activityTag==Config.WorkOrgGet4P2Activity || activityTag==Config.DhInActivity ||
+                    activityTag== Config.DhIn2Activity || activityTag== Config.ProductInStore4P2MpActivity|| activityTag== Config.BoxReBoxP1Activity ||
+                    activityTag== Config.OutKilnGetActivity|| activityTag== Config.ChangeLvGetActivity || activityTag== Config.ChangeModelGetActivity||
+                    activityTag== Config.SplitBoxGetActivity|| activityTag== Config.ChangeLvInActivity|| activityTag== Config.ChangeModelInActivity||
+                    activityTag== Config.SplitBoxInActivity|| activityTag== Config.ZbCheJianInActivity|| activityTag== Config.ZbCheJianHunInActivity||
+                    activityTag== Config.ZbCheJianDiGetActivity || activityTag== Config.Bg1CheJianInActivity|| activityTag== Config.Bg2CheJianInActivity||
+                    activityTag== Config.Bg1CheJianHunInActivity|| activityTag== Config.Bg2CheJianHunInActivity||activityTag== Config.CpWgHunInActivity||
+                    activityTag== Config.Bg1CheJianDiGetActivity|| activityTag== Config.Bg2CheJianDiGetActivity|| activityTag== Config.CpWgInActivity
+                    || activityTag== Config.SplitBoxHunInActivity|| activityTag== Config.SplitBoxDiGetActivity|| activityTag== Config.Tb1HunInActivity
+                    || activityTag== Config.Tb1DiGetActivity|| activityTag== Config.Tb2DiGetActivity|| activityTag== Config.Tb3DiGetActivity
+                    || activityTag== Config.Tb2HunInActivity|| activityTag== Config.Tb3HunInActivity|| activityTag== Config.GbDiGetActivity
+                    || activityTag== Config.GbHunInActivity|| activityTag== Config.ZbCheJianDiZGetActivity|| activityTag== Config.BoxReAddP2Activity
+                    || activityTag== Config.ProductGet4BoxP2Activity
+                    ) {
                 for (int i = 0; i < listData.size(); i++) {
                     if (listData.get(i).FOrg.equals(autoOrg)) {
                         if (listData.get(i).FISSTOCK.equals("1")){
@@ -354,8 +377,8 @@ public class SpinnerDepartMent extends RelativeLayout {
             mSp.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             for (int j = 0; j < container.size(); j++) {
-                if (container.get(j).FName.equals(autoString)
-                        || container.get(j).FItemID.equals(autoString)) {
+                if (container.get(j).FName.equals(autoString)|| container.get(j).FItemID.equals(autoString)
+                        || container.get(j).FNumber.equals(autoString)) {
                     mSp.setSelection(j);
                     break;
                 }

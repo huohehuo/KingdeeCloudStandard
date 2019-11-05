@@ -15,16 +15,18 @@ import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
-import com.fangzuo.greendao.gen.ClientDao;
+import com.fangzuo.greendao.gen.BuyerDao;
 import com.fangzuo.greendao.gen.DaoSession;
+import com.fangzuo.greendao.gen.DepartmentDao;
 import com.fangzuo.greendao.gen.OrgDao;
 import com.fangzuo.greendao.gen.RemarkDataDao;
 import com.fangzuo.greendao.gen.SaleManDao;
+import com.fangzuo.greendao.gen.StorageDao;
 import com.fangzuo.greendao.gen.UnitDao;
 import com.loopj.android.http.AsyncHttpClient;
 import com.orhanobut.hawk.Hawk;
@@ -41,6 +43,7 @@ public class DataService extends IntentService {
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_FOO = "com.fangzuo.assist.Service.action.FOO";
     private static final String ACTION_BAZ = "com.fangzuo.assist.Service.action.BAZ";
+    private static final String ACTION_BackJson = "com.fangzuo.assist.Service.action.ACTION_BackJson";
     private static final String UpdateTime = "com.fangzuo.assist.Service.action.UpdateTime";
     private static final String UpdateData = "com.fangzuo.assist.Service.action.UpdateData";
     private static final String UpdateRegisterMaxNum = "com.fangzuo.assist.Service.action.UpdateRegisterMaxNum";
@@ -112,6 +115,14 @@ public class DataService extends IntentService {
         intent.putExtra(EXTRA_PARAM2, builder.toString());
         context.startService(intent);
     }
+    //反馈回执
+    public static void pushBackJson(Context context, String txtName, String json) {
+        Intent intent = new Intent(context, DataService.class);
+        intent.setAction(ACTION_BackJson);
+        intent.putExtra(EXTRA_PARAM1, "反馈回执："+txtName);
+        intent.putExtra(EXTRA_PARAM2, json);
+        context.startService(intent);
+    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -129,6 +140,10 @@ public class DataService extends IntentService {
                 handleActionUpdateData();
             } else if (UpdateRegisterMaxNum.equals(action)) {
                 handleActionUpdateRegisterMaxNum();
+            } else if (ACTION_BackJson.equals(action)) {
+                final String txtNa = intent.getStringExtra(EXTRA_PARAM1);
+                final String err = intent.getStringExtra(EXTRA_PARAM2);
+                handleActionBackJson(txtNa,err);
             }
 
         }
@@ -177,7 +192,20 @@ public class DataService extends IntentService {
             }
         });
     }
+    //上传反馈数据
+    private void handleActionBackJson(String txtN, String param1) {
 
+        Asynchttp.post(App.getContext(), Config.Error_Url, Config.Company + "^" + txtN + "^" + param1, new Asynchttp.Response() {
+            @Override
+            public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
+
+            }
+
+            @Override
+            public void onFailed(String Msg, AsyncHttpClient client) {
+            }
+        });
+    }
     //更新时间
     private void handleActionUpdateTime() {
         App.getRService().doIOAction(WebApi.SetUseTime, "更新时间", new MySubscribe<CommonResponse>() {
@@ -196,10 +224,13 @@ public class DataService extends IntentService {
     //下载数据,只能小数据，数据多的会崩溃
     private void handleActionUpdateData() {
         ArrayList<Integer> choose = new ArrayList<>();
+        choose.add(1);//单位
         choose.add(7);//单位
+        choose.add(6);//仓库
         choose.add(10);//销售员
         choose.add(14);//组织
         choose.add(15);//简称表
+        choose.add(2);//部门表
         String json = JsonCreater.DownLoadData(
                 BasicShareUtil.getInstance(App.getContext()).getDatabaseIp(),
                 BasicShareUtil.getInstance(App.getContext()).getDatabasePort(),
@@ -227,6 +258,13 @@ public class DataService extends IntentService {
                     saleManDao.detachAll();
                     Lg.e("OK销售员"+dBean.saleMans.size());
                 }
+                if (dBean.buyers!= null && dBean.buyers.size() > 0) {
+                    BuyerDao saleManDao = session.getBuyerDao();
+                    saleManDao.deleteAll();
+                    saleManDao.insertOrReplaceInTx(dBean.buyers);
+                    saleManDao.detachAll();
+                    Lg.e("OK采购员"+dBean.buyers.size());
+                }
                 if (dBean.orgs != null && dBean.orgs.size() > 0) {
                     OrgDao clientDao = session.getOrgDao();
                     clientDao.deleteAll();
@@ -241,6 +279,21 @@ public class DataService extends IntentService {
                     clientDao.detachAll();
                     Lg.e("OK简称表"+dBean.remarkDatas.size());
                 }
+                if (dBean.storage != null && dBean.storage.size() > 0) {
+                    StorageDao yuandanTypeDao = session.getStorageDao();
+                    yuandanTypeDao.deleteAll();
+                    yuandanTypeDao.insertOrReplaceInTx(dBean.storage);
+                    yuandanTypeDao.detachAll();
+                    Lg.e("OK仓库"+dBean.storage.size());
+                }
+                if (dBean.department != null && dBean.department.size() > 0) {
+                    DepartmentDao yuandanTypeDao = session.getDepartmentDao();
+                    yuandanTypeDao.deleteAll();
+                    yuandanTypeDao.insertOrReplaceInTx(dBean.department);
+                    yuandanTypeDao.detachAll();
+                    Lg.e("OK部门表"+dBean.department.size());
+                }
+
             }
 
             @Override

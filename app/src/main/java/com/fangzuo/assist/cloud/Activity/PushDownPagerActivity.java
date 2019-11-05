@@ -49,8 +49,8 @@ public class PushDownPagerActivity extends BaseActivity {
         ArrayList<String> titles = new ArrayList<>();
         fragments.add(new DownLoadPushFragment());
         fragments.add(new ChooseFragment());
-        titles.add("下载单据");
-        titles.add("选择单据");
+        titles.add(getString(R.string.download_order));
+        titles.add(getString(R.string.choose_order));
         StripAdapter stripAdapter = new StripAdapter(getSupportFragmentManager(), fragments, titles);
         Log.e("stripAdapter", stripAdapter + "");
         viewpager.setAdapter(stripAdapter);
@@ -103,6 +103,9 @@ public class PushDownPagerActivity extends BaseActivity {
             case 2:
                 string = "销售订单下推销售出库单";
                 break;
+            case 31:
+                string = "销售订单下推销售出库单(箱码)";
+                break;
             case 21:
                 string = "VMI销售订单下推销售出库单";
                 break;
@@ -124,6 +127,26 @@ public class PushDownPagerActivity extends BaseActivity {
             case 8:
                 string = "调拨申请单下推分布式调出单";
                 break;
+            case 28:
+                string = getString(R.string.p2_cgrk2production_get);
+                break;
+                /*----------------------------------二期单据--------------------------------------*/
+            case 25:
+                string = getString(R.string.p2_production_instore);
+                break;
+            case 27:
+                string = getString(R.string.p2_production_instore2);
+                break;
+            case 26:
+                string = getString(R.string.p2_cgrk2production_get);
+                break;
+            case 29:
+                string = "水板采购";//生产领料单下推产品入库单(整单装箱)
+                break;
+            case 30:
+                string = "码拍入窑";//生产领料单下推产品入库单(重新装箱)
+                break;
+
         }
         if (!"".equals(string)){
             tvPdname.setText(string);

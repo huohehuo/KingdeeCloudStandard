@@ -19,6 +19,7 @@ import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.Suppliers;
+import com.fangzuo.assist.cloud.Dao.T_main;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
@@ -31,10 +32,13 @@ import com.fangzuo.assist.cloud.widget.SpinnerOrg;
 import com.fangzuo.assist.cloud.widget.SpinnerSaleMan;
 import com.fangzuo.assist.cloud.widget.SpinnerStorage;
 import com.fangzuo.assist.cloud.widget.SpinnerStoreMan;
+import com.fangzuo.greendao.gen.T_mainDao;
 import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -132,18 +136,31 @@ public class FragmentPISMain extends BaseFragment {
         tvDate.setText(CommonUtil.getTime(true));
         activityPager.setDate(tvDate.getText().toString());
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-        spOrgBuy.setAutoSelection(getString(R.string.spOrgbuy_pis), Hawk.get(Info.user_org, ""));//仓库，仓管员，部门都以组织id来过滤
-        spOrgGet.setAutoSelection(getString(R.string.spOrgget_pis), Hawk.get(Info.user_org, ""));
-        spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pis), "", activityPager.getOrgOut(), activityPager.getActivity());
-        spDepartmentBuy.setAuto(getString(R.string.spDepartmentbuy_pis), "", activityPager.getOrgOut(), activityPager.getActivity());
-        spStoreman.setAuto(getString(R.string.spStoreMan_pis), "", activityPager.getOrgOut());
-        spBuyer.setAuto(getString(R.string.spBuyer_pis), "", activityPager.getOrgOut());
+        spOrgBuy.setAutoSelection(getString(R.string.spOrgbuy_pis)+activityPager.getActivityMain(), Hawk.get(Info.user_org, ""));//仓库，仓管员，部门都以组织id来过滤
+        spOrgGet.setAutoSelection(getString(R.string.spOrgget_pis)+activityPager.getActivityMain(), Hawk.get(Info.user_org, ""));
+        spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pis)+activityPager.getActivityMain(), "", activityPager.getOrgOut(), activityPager.getActivity());
+        spDepartmentBuy.setAuto(getString(R.string.spDepartmentbuy_pis)+activityPager.getActivityMain(), "", activityPager.getOrgOut(), activityPager.getActivity());
+        spStoreman.setAuto(getString(R.string.spStoreMan_pis)+activityPager.getActivityMain(), "", activityPager.getOrgOut());
+        spBuyer.setAuto(getString(R.string.spBuyer_pis)+activityPager.getActivityMain(), "", activityPager.getOrgOut());
         spWhichStorage.setAuto("","", activityPager.getOrgOut());
 //        binding.spOrgIn.setEnable(false);
-        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
+        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivityMain(), false));
         setfocus(tvDate);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        List<T_main> list =activityPager.getT_mainDao().queryBuilder().where(
+                T_mainDao.Properties.FOrderId.eq(CommonUtil.createOrderCode(activityPager.getActivity())),
+                T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
+                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+        ).build().list();
+        if (list.size()>0){
+//            edFfOrder.setText(list.get(0).F_FFF_Text);
+            edNot.setText(list.get(0).FNot);
+        }
+    }
 
     //在oncreateView之前使用 不要使用控件
     @Override
@@ -184,10 +201,10 @@ public class FragmentPISMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgOut((Org) spOrgBuy.getAdapter().getItem(i));
-                spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pis), "", activityPager.getOrgOut(), activityPager.getActivity());
-                spDepartmentBuy.setAuto(getString(R.string.spDepartmentbuy_pis), "", activityPager.getOrgOut(), activityPager.getActivity());
-                spStoreman.setAuto(getString(R.string.spStoreMan_pis), "", activityPager.getOrgOut());
-                spBuyer.setAuto(getString(R.string.spBuyer_pis), "", activityPager.getOrgOut());
+                spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pis)+activityPager.getActivityMain(), "", activityPager.getOrgOut(), activityPager.getActivity());
+                spDepartmentBuy.setAuto(getString(R.string.spDepartmentbuy_pis)+activityPager.getActivityMain(), "", activityPager.getOrgOut(), activityPager.getActivity());
+                spStoreman.setAuto(getString(R.string.spStoreMan_pis)+activityPager.getActivityMain(), "", activityPager.getOrgOut());
+                spBuyer.setAuto(getString(R.string.spBuyer_pis)+activityPager.getActivityMain(), "", activityPager.getOrgOut());
                 spWhichStorage.setAuto("","", activityPager.getOrgOut());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
 

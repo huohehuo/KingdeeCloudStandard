@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="打印次数"
+            android:text="@string/print_num"
             android:textColor="@android:color/black"
             android:textSize="15sp" />
 

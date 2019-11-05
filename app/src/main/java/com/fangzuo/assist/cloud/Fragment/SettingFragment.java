@@ -163,7 +163,7 @@ public class SettingFragment extends BaseFragment {
                                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        DownLoad(Config.Apk_Url);
+                                        DownLoad(Config.getApk_Url());
                                     }
                                 })
                                 .create().show();

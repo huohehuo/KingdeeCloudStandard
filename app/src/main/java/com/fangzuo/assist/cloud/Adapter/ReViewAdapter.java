@@ -13,7 +13,7 @@ import com.fangzuo.assist.cloud.Dao.T_Detail;
 import com.fangzuo.assist.cloud.Dao.T_main;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.Config;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.T_mainDao;
 
@@ -85,7 +85,9 @@ public class ReViewAdapter extends BaseAdapter implements View.OnClickListener {
 //                viewHolder.productxh.setText("物料名:" + detail.get(i).FProductName);
         viewHolder.num.setText("采购数量:" + detail.get(i).FRemainInStockQty + detail.get(i).FUnit);
         viewHolder.unit.setText("单位:" + detail.get(i).FUnit);
-        if (detail.get(i).activity== Config.DBActivity||detail.get(i).activity== Config.DB2Activity){
+        if (detail.get(i).activity== Config.DBActivity||detail.get(i).activity== Config.DB2Activity||
+                detail.get(i).activity== Config.DBClientActivity||detail.get(i).activity== Config.DBStorageActivity||
+                detail.get(i).activity== Config.PdDbApply2DBActivity||detail.get(i).activity== Config.PdDbApply2DB4VMIActivity){
             viewHolder.storage.setVisibility(View.GONE);
             viewHolder.wavehouse.setVisibility(View.GONE);
             viewHolder.storagein.setVisibility(View.VISIBLE);

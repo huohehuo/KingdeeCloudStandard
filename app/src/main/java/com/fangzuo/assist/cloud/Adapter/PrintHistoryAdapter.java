@@ -7,7 +7,10 @@ import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.Beans.PrintHistory;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.Utils.DoubleUtil;
+import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.LocDataUtil;
+import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
@@ -23,25 +26,27 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
 //    public MarkAdapter(Context context, List<MarkBean> objects) {
 //        super(context, objects);
 //    }
-//    @Override
-//    public int getViewType(int position) {
-//        return Integer.valueOf(getAllData().get(position).getType());
-//
-//    }
+    @Override
+    public int getViewType(int position) {
+        if (null==(getAllData().get(position).getFYmLenght())){//当原木长为空时，为一期项目布局
+            return 1;
+        }else{
+            return 2;
+        }
+    }
     @Override
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MarkHolder(parent);
-//        if (viewType==2){
-//            Log.e("holder","返回图文布局");
-//            return new MarkHolder(parent);
-//        }else{
-//            Log.e("holder","返回--文字--布局");
-//            return new MainHolderForTxt(parent);
-//        }
+        if (viewType==2){
+            Lg.e("二期布局");
+            return new MarkHolder4P2(parent);
+        }else{
+            Lg.e("一期布局");
+            return new MarkHolder(parent);
+        }
 
     }
 
-
+    /*一期布局*/
     class MarkHolder extends BaseViewHolder<PrintHistory> {
 
         private TextView huoquan;
@@ -51,6 +56,7 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
         private TextView num;
         private TextView num2;
         private TextView note;
+        private TextView storage;
         private TextView wavehouse;
         private TextView date;
 
@@ -65,6 +71,7 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
             note =      $(R.id.tv_note);
             wavehouse = $(R.id.tv_wavehouse);
             date =      $(R.id.tv_date);
+            storage =   $(R.id.tv_storage);
 
         }
 
@@ -85,6 +92,97 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
              note.setText(data.getFAuxSign());
              wavehouse.setText(data.getFWaveHouse());
              date.setText(data.getFDate());
+             storage.setText(data.getFStorage());
+
+        }
+    }
+    /*二期布局*/
+    class MarkHolder4P2 extends BaseViewHolder<PrintHistory> {
+
+        private TextView huoquan;
+        private TextView batch;
+        private TextView name;
+        private TextView model;
+        private TextView num;
+        private TextView num2;
+        private TextView note;
+        private TextView wavehouse;
+        private TextView date;
+        private TextView tvLeftLenght;
+        private TextView tvLeftDia;
+
+        public MarkHolder4P2(ViewGroup parent) {
+            super(parent, R.layout.item_print_history_p2);
+            huoquan =   $(R.id.tv_huoquan);
+            batch =     $(R.id.tv_batch);
+            name =      $(R.id.tv_name);
+            model =     $(R.id.tv_model);
+            num =       $(R.id.tv_num);
+            num2 =      $(R.id.tv_num2);
+            note =      $(R.id.tv_note);
+            wavehouse = $(R.id.tv_wavehouse);
+            date =      $(R.id.tv_date);
+            tvLeftDia =      $(R.id.tv_left_dia);
+            tvLeftLenght =      $(R.id.tv_left_leng);
+
+        }
+
+        @Override
+        public void setData(PrintHistory data) {
+            super.setData(data);
+            huoquan.setText(LocDataUtil.getRemark(data.getFHuoquan(),"number").FNote);
+            batch.setText(data.getFBatch());
+            name.setText(data.getFName());
+            if ("0".equals(data.F_TypeID)){//----------------水版时
+                tvLeftLenght.setText("测量宽:");
+                tvLeftDia.setText("层数:");
+                model.setText(MathUtil.Cut0(data.getFYmLenght())+"*"+MathUtil.Cut0(data.getFBWide())+"*"+MathUtil.Cut0(data.getFBThick()));
+//            num.setText(data.getFNum()+"  "+data.getFUnit());//库存数量
+                num.setText(data.getFWidth());//库存数量
+                num2.setText(data.getFCeng());//库存数量
+                note.setText(data.getFVolume());
+                wavehouse.setText(data.getFWaveHouse());
+                date.setText(data.getFDate());
+            }else{//--------------------原木布局
+//                if ("1".equals(data.F_TypeID)){//立方米时(基本不用)
+//                    model.setText(data.getFModel());
+////            num.setText(data.getFNum()+"  "+data.getFUnit());//库存数量
+//                    num.setText(data.getFYmLenght()+"  "+data.getFUnit());//库存数量
+//                    if (null==data.getFNum2()){
+//                        num2.setVisibility(View.INVISIBLE);
+//                    }else{
+//                        num2.setVisibility(View.VISIBLE);
+////                num2.setText(data.getFNum2()+"  "+data.getFUnitAux());//基本数量
+//                        num2.setText(data.getFYmDiameter()+"  厘米(cm)");//基本数量
+//                    }
+//                    note.setText(data.getFVolume());
+//                    wavehouse.setText(data.getFWaveHouse());
+//                    date.setText(data.getFDate());
+//                }else{//----------------------------英尺时
+                    model.setText(data.getFModel());
+//            num.setText(data.getFNum()+"  "+data.getFUnit());//库存数量
+                    num.setText(MathUtil.Cut0(data.getFYmLenght())+"  ft");//库存数量
+                    num2.setText(MathUtil.Cut0(data.getFYmDiameter())+"  in");//基本数量
+//                    if (null==data.getFNum2()){
+//                        num2.setVisibility(View.INVISIBLE);
+//                    }else{
+//                        num2.setVisibility(View.VISIBLE);
+////                num2.setText(data.getFNum2()+"  "+data.getFUnitAux());//基本数量
+//                        num2.setText(data.getFYmDiameter()+"  厘米(cm)");//基本数量
+//                    }
+                    String val =DoubleUtil.mul(MathUtil.toD(data.getFVolume()),200)+"";
+                    note.setText(val.substring(0,val.indexOf("."))+"  bf");
+                    wavehouse.setText(data.getFWaveHouse());
+                    date.setText(data.getFDate());
+//                }
+
+            }
+
+
+
+
+
+
 //            name.setTextColor(App.getInstance().getColor(R.color.black));
 //        //3、为集合添加值
 //            isClicks = new ArrayList<>();
@@ -115,8 +213,6 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
 
         }
     }
-
-
 
 
 //    //纯文字布局

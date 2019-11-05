@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.fangzuo.assist.cloud.Dao.Unit;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.greendao.gen.DaoSession;
 
 import java.util.ArrayList;

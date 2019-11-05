@@ -371,8 +371,17 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
                 s2Product.FIsPurchase="1";
 //                FIsPurchase="1";
                 break;
+            case Config.WorkOrgIn4P2Activity://产品入库
             case Config.ProductInStoreActivity://产品入库
             case Config.TbInActivity://挑板入库
+            case Config.ChangeInActivity://挑板入库
+            case Config.ZbCheJianInActivity://挑板入库
+            case Config.Bg1CheJianInActivity://挑板入库
+            case Config.Bg2CheJianInActivity://挑板入库
+            case Config.CpWgInActivity://挑板入库
+            case Config.ChangeLvInActivity://挑板入库
+            case Config.ChangeModelInActivity://挑板入库
+            case Config.SplitBoxInActivity://挑板入库
             case Config.TbIn2Activity://挑板入库
             case Config.TbIn3Activity://挑板入库
             case Config.GbInActivity://改版入库
@@ -382,6 +391,8 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
                 s2Product.FIsProduce="1";
 //                FIsProduce="1";
                 break;
+            case Config.WorkOrgGet4P2Activity://生产领料
+            case Config.ProductGet4P2Activity://生产领料
             case Config.ProductGetActivity://生产领料
             case Config.TbGetActivity://挑板领料
             case Config.TbGet2Activity://挑板领料
@@ -399,6 +410,8 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
                 s2Product.FIsInventory="1";
 //                FIsInventory="1";
                 break;
+            case Config.SupplierGet4P2Activity://其他出库
+            case Config.YbOut4P2Activity://其他出库
             case Config.OtherOutStoreActivity://其他出库
             case Config.YbOutActivity://样板出库
             case Config.HwOut3Activity://第三方货物出库

@@ -195,7 +195,10 @@ SpinnerStorage spWhichStorageOut;
                     for (int i = 0; i < backData.getResult().getResponseStatus().getSuccessEntitys().size(); i++) {
                         listOrder.add(backData.getResult().getResponseStatus().getSuccessEntitys().get(i).getNumber());
                     }
-                    final List<T_main> mains = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
+                    final List<T_main> mains = t_mainDao.queryBuilder().where(
+                            T_mainDao.Properties.Activity.eq(activity),
+                            T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                    ).build().list();
                     Lg.e("本地main.size：",mains.size());
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
@@ -206,6 +209,7 @@ SpinnerStorage spWhichStorageOut;
                                 super.onNext(commonResponse);
                                 t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
                                         T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                         T_DetailDao.Properties.FOrderId.eq(mains.get(pos).FOrderId)
                                 ).build().list());
                             }
@@ -238,6 +242,12 @@ SpinnerStorage spWhichStorageOut;
                     delete.setTitle("上传错误");
                     delete.setMessage(builder.toString());
                     delete.setPositiveButton("确定", null);
+                    delete.setNegativeButton("反馈信息", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DataService.pushBackJson(mContext, FragmentDBDetail.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
+                        }
+                    });
                     delete.create().show();
                 }
 
@@ -279,12 +289,12 @@ SpinnerStorage spWhichStorageOut;
                 if (null != activityPager||null != spUnit) {
 //                    spUnit.setAuto("", SpinnerUnit.Id);
                     Lg.e("-----------",activityPager.getOrgOut());
-                    spWhichStorageOut.setAuto("storageout"+activityPager.getActivity(),Hawk.get("storageout"+activityPager.getActivity(),""), activityPager.getOrgOut());
+                    spWhichStorageOut.setAuto("storageout"+activityPager.getActivityMain(),Hawk.get("storageout"+activityPager.getActivityMain(),""), activityPager.getOrgOut());
                 }
                 break;
             case EventBusInfoCode.UpdataViewForDBInStorage://由表头的数据决定是否更新明细数据
                 if (null != activityPager||null != spUnit) {
-                    spWhichStorageIn.setAuto(Hawk.get("storagein"+activityPager.getActivity(),""), activityPager.getOrgIn());
+                    spWhichStorageIn.setAuto(Hawk.get("storagein"+activityPager.getActivityMain(),""), activityPager.getOrgIn());
                 }
                 break;
         }
@@ -376,7 +386,7 @@ SpinnerStorage spWhichStorageOut;
                 storageOut = (Storage) spWhichStorageOut.getAdapter().getItem(i);
                 spWhichStorageOut.setTitleText(storageOut.FName);
                 Lg.e("选中调出仓库：", storageOut);
-                Hawk.put("storageout"+activityPager.getActivity(),storageOut.FName);
+                Hawk.put("storageout"+activityPager.getActivityMain(),storageOut.FName);
 //                waveHouseOut = null;
 //                spWavehouseOut.setAuto(mContext, storageOut, "");
                 DataModel.getStoreNum(product, storageOut, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),activityPager.getHuozhuOut());
@@ -396,7 +406,7 @@ SpinnerStorage spWhichStorageOut;
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 storageIn = (Storage) spWhichStorageIn.getAdapter().getItem(i);
                 spWhichStorageIn.setTitleText(storageIn.FName);
-                Hawk.put("storagein"+activityPager.getActivity(),storageIn.FName);
+                Hawk.put("storagein"+activityPager.getActivityMain(),storageIn.FName);
                 Lg.e("选中调入仓库：", storageIn);
 //                waveHouseIn = null;
 //                spWavehouseIn.setAuto(mContext, storageIn, "");
@@ -593,11 +603,15 @@ SpinnerStorage spWhichStorageOut;
 //                }
 //            }
             t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
-                    T_mainDao.Properties.FOrderId.eq(ordercode)
+                    T_mainDao.Properties.FOrderId.eq(ordercode),
+                    T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
             ).build().list());
             String timesecond = CommonUtil.getTimesecond();
             T_main main = new T_main();//--------------------------------------表头-----------------
             main.activity = activity;
+            main.FWlCompany = activityPager.getWlCompany();
+            main.FCarBoxNo = activityPager.getCarboxNo();
+            main.FAccountID = CommonUtil.getAccountID();
             main.FBillerID = Hawk.get(Info.user_id, "");
             main.FBarcode = barcode;
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
@@ -623,6 +637,7 @@ SpinnerStorage spWhichStorageOut;
 
             T_Detail detail = new T_Detail();//--------------------------------明细-----------------
             detail.activity = activity;
+            detail.FAccountID = CommonUtil.getAccountID();
             detail.FBillerID = Hawk.get(Info.user_id, "");
             detail.FBarcode = barcode;
             detail.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();

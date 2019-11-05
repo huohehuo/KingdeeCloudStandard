@@ -22,6 +22,27 @@ public class CodeCheckBackDataBean {
     public String FBarCode;
     public String FHuoZhuNumber;
 
+    public String FLevel;//等级
+    public String FYmLenght;//原木长度
+    public String FYmDiameter;//原木直径
+    public String FBLenght;//板长
+    public String FBWide;//板宽
+    public String FBThick;//板厚
+    public String FVolume;//体积
+    public String FCeng;//体积
+    public String FCodeType;//0水板，其他 1原木
+
+
+    public String FName;
+    public String FStorage;
+    public String FModel;
+    public String FNumber;
+    public String FUnitNumber;
+    public String FStorageNumber;
+    public String FStoreOrgNumber;
+
+
+
 
 
     public CodeCheckBackDataBean(String FTip){

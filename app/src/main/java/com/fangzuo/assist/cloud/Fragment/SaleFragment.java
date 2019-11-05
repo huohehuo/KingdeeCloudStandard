@@ -12,6 +12,7 @@ import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Activity.PagerForActivity;
 import com.fangzuo.assist.cloud.Activity.ScanProductActivity;
 import com.fangzuo.assist.cloud.Adapter.GridViewAdapter;
+import com.fangzuo.assist.cloud.Beans.SettingList;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.GetSettingList;
@@ -49,10 +50,10 @@ public class SaleFragment extends BaseFragment {
     protected void OnReceive(String barCode) {
 
     }
-
+    GridViewAdapter ada;
     @Override
     protected void initData() {
-        GridViewAdapter ada = new GridViewAdapter(mContext, GetSettingList.getSaleList());
+        ada = new GridViewAdapter(mContext, GetSettingList.getSaleList());
         gv.setAdapter(ada);
         ada.notifyDataSetChanged();
     }
@@ -62,7 +63,8 @@ public class SaleFragment extends BaseFragment {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i){
+                SettingList tv = (SettingList) ada.getItem(i);
+                switch (tv.activity){
                     case 0://简单生产领料
                         PagerForActivity.start(mContext, Config.ProductGetActivity);
 //                        startNewActivity(ProductInStoreActivity.class, null);

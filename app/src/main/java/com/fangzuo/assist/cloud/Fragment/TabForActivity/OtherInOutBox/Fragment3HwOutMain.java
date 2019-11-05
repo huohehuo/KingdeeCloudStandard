@@ -22,6 +22,7 @@ import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.Suppliers;
+import com.fangzuo.assist.cloud.Dao.T_main;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
@@ -35,10 +36,13 @@ import com.fangzuo.assist.cloud.widget.SpinnerDepartMent;
 import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
 import com.fangzuo.assist.cloud.widget.SpinnerOrg;
 import com.fangzuo.assist.cloud.widget.SpinnerStoreMan;
+import com.fangzuo.greendao.gen.T_mainDao;
 import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,7 +102,7 @@ public class Fragment3HwOutMain extends BaseFragment {
                 Lg.e("获得供应商：", client);
                 edClient.setText(client.FName);
                 activityPager.setClient(client);
-                Hawk.put(Config.Client + activityPager.getActivity(), client.FName);
+                Hawk.put(Config.Client + activityPager.getActivityMain(), client.FName);
                 break;
             case EventBusInfoCode.Supplier_Hz:
                 supplierHz = (Suppliers) event.postEvent;
@@ -109,7 +113,7 @@ public class Fragment3HwOutMain extends BaseFragment {
                 } else {
                     activityPager.setHuozhuOut(new Org(supplierHz.FMASTERID, supplierHz.FNumber, supplierHz.FName, supplierHz.FNote));
                     edSupplierHz.setText(supplierHz.FName);
-                    Hawk.put(Config.SupplierHz + activityPager.getActivity(), supplierHz.FName);//保存业务单号
+                    Hawk.put(Config.SupplierHz + activityPager.getActivityMain(), supplierHz.FName);//保存业务单号
                 }
                 break;
             case EventBusInfoCode.Lock_Main:
@@ -126,13 +130,13 @@ public class Fragment3HwOutMain extends BaseFragment {
                     searchSupplierHz.setClickable(false);
                     spHzType.setEnable(false);
 
-                    Client client1 = LocDataUtil.getClient(Hawk.get(Config.Client + activityPager.getActivity(), edClient.getText().toString()));
+                    Client client1 = LocDataUtil.getClient(Hawk.get(Config.Client + activityPager.getActivityMain(), edClient.getText().toString()));
                     edClient.setText(client1.FName);
                     activityPager.setClient(client1);
-                    edNot.setText(Hawk.get(Config.Note + activityPager.getActivity(), edNot.getText().toString()));
-                    edFfOrder.setText(Hawk.get(Config.OrderNo + activityPager.getActivity(), edFfOrder.getText().toString()));
-                    Hawk.put(Config.OrderNo + activityPager.getActivity(), edFfOrder.getText().toString());//保存客户数据
-                    Hawk.put(Config.Note + activityPager.getActivity(), edNot.getText().toString());//保存客户数据
+//                    edNot.setText(Hawk.get(Config.Note + activityPager.getActivityMain(), edNot.getText().toString()));
+//                    edFfOrder.setText(Hawk.get(Config.OrderNo + activityPager.getActivityMain(), edFfOrder.getText().toString()));
+//                    Hawk.put(Config.OrderNo + activityPager.getActivityMain(), edFfOrder.getText().toString());//保存客户数据
+//                    Hawk.put(Config.Note + activityPager.getActivityMain(), edNot.getText().toString());//保存客户数据
                 } else {
                     activityPager.setHasLock(false);
                     spOrgSend.setEnable(true);
@@ -148,10 +152,10 @@ public class Fragment3HwOutMain extends BaseFragment {
                     searchSupplierHz.setClickable(true);
 //                    activityPager.setClient(null);
 //                    edClient.setText("");
-                    edNot.setText("");
-//                    Hawk.put(Config.Client + activityPager.getActivity(), "");//清空保存的客户数据
-                    Hawk.put(Config.OrderNo + activityPager.getActivity(), "");//清空保存的客户数据
-                    Hawk.put(Config.Note + activityPager.getActivity(), "");//清空保存的客户数据
+//                    edNot.setText("");
+//                    Hawk.put(Config.Client + activityPager.getActivityMain(), "");//清空保存的客户数据
+//                    Hawk.put(Config.OrderNo + activityPager.getActivityMain(), "");//清空保存的客户数据
+//                    Hawk.put(Config.Note + activityPager.getActivityMain(), "");//清空保存的客户数据
                 }
                 break;
         }
@@ -209,19 +213,29 @@ public class Fragment3HwOutMain extends BaseFragment {
         tvDate.setText(CommonUtil.getTime(true));
         spHzType.setData(Info.Type_Hz_type);
 //        spHzType.setEnable(false);
-        spHzType.setAutoSelection(getString(R.string.spHzType_oout3), Hawk.get(getString(R.string.spHzType_oout3), ""));
+        spHzType.setAutoSelection(getString(R.string.spHzType_oout3)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spHzType_oout3)+activityPager.getActivityMain(), ""));
         activityPager.setDate(tvDate.getText().toString());
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_oout3), Hawk.get(getString(R.string.spOrgSend_oout3), ""));//仓库，仓管员，部门都以组织id来过滤
-//        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout3), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout3), ""));
-//        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout3), Hawk.get(getString(R.string.spDepartmentSend_oout3), ""), activityPager.getOrgOut(), activityPager.getActivity());
-//        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout3), "", activityPager.getOrgOut(), activityPager.getActivity());
-//        spStoreman.setAuto(getString(R.string.spStoreman_oout3), Hawk.get(getString(R.string.spStoreman_oout3), ""), activityPager.getOrgOut());
-//        spSaleman.setAuto(getString(R.string.spSaleman_oout3), "", activityPager.getOrgOut());
-        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
-        Client client1 = LocDataUtil.getClient(Hawk.get(Config.Client + activityPager.getActivity(), ""));
+        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_oout3)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgSend_oout3)+activityPager.getActivityMain(), ""));//仓库，仓管员，部门都以组织id来过滤
+//        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout3)+activityPager.getActivityMain(), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout3)+activityPager.getActivityMain(), ""));
+//        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout3)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spDepartmentSend_oout3)+activityPager.getActivityMain(), ""), activityPager.getOrgOut(), activityPager.getActivity());
+//        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout3)+activityPager.getActivityMain(), "", activityPager.getOrgOut(), activityPager.getActivityMain());
+//        spStoreman.setAuto(getString(R.string.spStoreman_oout3)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spStoreman_oout3)+activityPager.getActivityMain(), ""), activityPager.getOrgOut());
+//        spSaleman.setAuto(getString(R.string.spSaleman_oout3)+activityPager.getActivityMain(), "", activityPager.getOrgOut());
+        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivityMain(), false));
+        Client client1 = LocDataUtil.getClient(Hawk.get(Config.Client + activityPager.getActivityMain(), ""));
         edClient.setText(client1.FName);
         activityPager.setClient(client1);
+
+        List<T_main> list =activityPager.getT_mainDao().queryBuilder().where(
+                T_mainDao.Properties.FOrderId.eq(CommonUtil.createOrderCode(activityPager.getActivity())),
+                T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
+                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+        ).build().list();
+        if (list.size()>0){
+            edFfOrder.setText(list.get(0).F_FFF_Text);
+            edNot.setText(list.get(0).FNot);
+        }
     }
 
     //在oncreateView之前使用 不要使用控件
@@ -242,8 +256,8 @@ public class Fragment3HwOutMain extends BaseFragment {
 //                activityPager.setManSale(spSaleman.getDataNumber());
                 activityPager.setDepartMent(spDepartmentSend.getDataNumber());
 //                activityPager.setDepartMentBuy(spDepartmentSale.getDataNumber());
-//                Hawk.put(Config.OrderNo+activityPager.getActivity(),edClient.getText().toString());//保存业务单号
-                Hawk.put(Config.Note + activityPager.getActivity(), edNot.getText().toString());//保存业务单号
+//                Hawk.put(Config.OrderNo+activityPager.getActivityMain(),edClient.getText().toString());//保存业务单号
+//                Hawk.put(Config.Note + activityPager.getActivityMain(), edNot.getText().toString());//保存业务单号
             }
         }
     }
@@ -270,31 +284,31 @@ public class Fragment3HwOutMain extends BaseFragment {
                 if ("BD_OwnerOrg".equals(hzType.FNumber)) {//业务组织
                     llSupplierHz.setVisibility(View.GONE);
                     spOrgHuozhu.setVisibility(View.VISIBLE);
-                    spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout3), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout3), ""));
+                    spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout3)+activityPager.getActivityMain(), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout3)+activityPager.getActivityMain(), ""));
                 } else {//供应商
                     activityPager.setHuozhuOut(null);
                     spOrgHuozhu.setVisibility(View.GONE);
                     llSupplierHz.setVisibility(View.VISIBLE);
-                    LocDataUtil.getSuppliers(Hawk.get(Config.SupplierHz + activityPager.getActivity(), ""),activityPager.getOrgOut(1),EventBusInfoCode.Supplier_Hz);
+                    LocDataUtil.getSuppliers(Hawk.get(Config.SupplierHz + activityPager.getActivityMain(), ""),activityPager.getOrgOut(1),EventBusInfoCode.Supplier_Hz);
                 }
-                Hawk.put(getString(R.string.spHzType_oout3), hzType.FName);
+                Hawk.put(getString(R.string.spHzType_oout3)+activityPager.getActivityMain(), hzType.FName);
             }
         });
         spOrgSend.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgOut((Org) spOrgSend.getAdapter().getItem(i));
-                Hawk.put(getString(R.string.spOrgSend_oout3), activityPager.getOrgOut().FName);
+                Hawk.put(getString(R.string.spOrgSend_oout3)+activityPager.getActivityMain(), activityPager.getOrgOut().FName);
                 if ("BD_OwnerOrg".equals(hzType.FNumber)) {//业务组织
-                    spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout3), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout3), ""));
+                    spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout3)+activityPager.getActivityMain(), activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhu_oout3)+activityPager.getActivityMain(), ""));
                 }else{
-                    LocDataUtil.getSuppliers(Hawk.get(Config.SupplierHz + activityPager.getActivity(), ""),activityPager.getOrgOut(1),EventBusInfoCode.Supplier_Hz);
+                    LocDataUtil.getSuppliers(Hawk.get(Config.SupplierHz + activityPager.getActivityMain(), ""),activityPager.getOrgOut(1),EventBusInfoCode.Supplier_Hz);
                 }
-//                spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout3), activityPager.getOrgOut(), "");
-                spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout3), Hawk.get(getString(R.string.spDepartmentSend_oout3), ""), activityPager.getOrgOut(), activityPager.getActivity());
-                spStoreman.setAuto(getString(R.string.spStoreman_oout3), Hawk.get(getString(R.string.spStoreman_oout3), ""), activityPager.getOrgOut());
-//        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout3), "", activityPager.getOrgOut(), activityPager.getActivity());
-//        spSaleman.setAuto(getString(R.string.spSaleman_oout3), "", activityPager.getOrgOut());
+//                spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_oout3)+activityPager.getActivityMain(), activityPager.getOrgOut(), "");
+                spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_oout3)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spDepartmentSend_oout3)+activityPager.getActivityMain(), ""), activityPager.getOrgOut(), activityPager.getActivity());
+                spStoreman.setAuto(getString(R.string.spStoreman_oout3)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spStoreman_oout3)+activityPager.getActivityMain(), ""), activityPager.getOrgOut());
+//        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_oout3)+activityPager.getActivityMain(), "", activityPager.getOrgOut(), activityPager.getActivityMain());
+//        spSaleman.setAuto(getString(R.string.spSaleman_oout3)+activityPager.getActivityMain(), "", activityPager.getOrgOut());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
 
             }
@@ -303,7 +317,7 @@ public class Fragment3HwOutMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setHuozhuOut((Org) spOrgHuozhu.getAdapter().getItem(i));
-                Hawk.put(getString(R.string.spOrgHuozhu_oout3), activityPager.getHuozhuOut().FName);
+                Hawk.put(getString(R.string.spOrgHuozhu_oout3)+activityPager.getActivityMain(), activityPager.getHuozhuOut().FName);
             }
         });
         cbIsStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

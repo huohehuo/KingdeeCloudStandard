@@ -31,7 +31,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="入库日期:"
+                    android:text="@string/in_store_date"
                     android:textColor="@android:color/black"
                     android:textSize="20sp" />
 
@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:gravity="center"
-                        android:text="供应商:"
+                        android:text="@string/supplier"
                         android:textColor="@android:color/black"
                         android:textSize="15sp" />
 
@@ -83,7 +83,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:text="业务单号:"
+                    android:text="@string/business_no"
                     android:textSize="22sp"
                     android:textColor="#1e1e1e"
                     android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                     android:singleLine="true"
                     android:textSize="20sp" />
                 <TextView
-                    android:text="仓库:"
+                    android:text="@string/storage"
                     android:textSize="22sp"
                     android:textColor="#1e1e1e"
                     android:layout_width="match_parent"
@@ -110,7 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    app:Uspinner_title="请选择仓库"/>
+                    app:Uspinner_title="@string/storage_hint"/>
                 <TextView
                     android:text="采购部门:"
                     android:textSize="22sp"
@@ -159,7 +159,7 @@
                     android:id="@+id/sp_storeman"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="仓管员:"
+                    app:manspinner_name="@string/store_man"
                     app:manspinner_size="9sp" />
 
                 <com.fangzuo.assist.cloud.widget.SpinnerSaleMan
@@ -170,7 +170,7 @@
                     app:manspinner_name="销售员:"
                     app:manspinner_size="9sp" />
                 <TextView
-                    android:text="备注："
+                    android:text="@string/note"
                     android:textSize="@dimen/sp_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

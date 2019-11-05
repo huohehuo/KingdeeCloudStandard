@@ -18,7 +18,7 @@ import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.greendao.gen.DaoSession;
@@ -273,11 +273,12 @@ public class SpinnerStorage extends RelativeLayout {
             @Override
             public void onNext(CommonResponse commonResponse) {
                 DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
-                StorageDao yuandanTypeDao = daoSession.getStorageDao();
-                yuandanTypeDao.deleteAll();
-                yuandanTypeDao.insertOrReplaceInTx(dBean.storage);
-                yuandanTypeDao.detachAll();
+                Lg.e("得到仓库数量",dBean.storage.size());
                 if (dBean.storage.size() > 0 && container.size()<=0){
+                    StorageDao yuandanTypeDao = daoSession.getStorageDao();
+                    yuandanTypeDao.deleteAll();
+                    yuandanTypeDao.insertOrReplaceInTx(dBean.storage);
+                    yuandanTypeDao.detachAll();
                     dealAuto(dBean.storage,true);
 //                    container.addAll(dBean.storage);
 //                    adapter.notifyDataSetChanged();
@@ -302,6 +303,7 @@ public class SpinnerStorage extends RelativeLayout {
     }
 
     private void dealAuto(List<Storage> listData, boolean check) {
+        Lg.e("筛选仓库",autoString);
         container.clear();
         if (check) {
             for (int i = 0; i < listData.size(); i++) {
@@ -316,7 +318,7 @@ public class SpinnerStorage extends RelativeLayout {
             mSp.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             for (int j = 0; j < container.size(); j++) {
-                if (container.get(j).FName.equals(autoString)
+                if (container.get(j).FName.equals(autoString)|| container.get(j).FNumber.equals(autoString)
                         || container.get(j).FItemID.equals(autoString)) {
                     mSp.setSelection(j);
                     break;
@@ -343,6 +345,10 @@ public class SpinnerStorage extends RelativeLayout {
 //     设置标题的方法
     public void setTitleText(String title) {
         mTitleTv.setText(title);
+    }
+
+    public void setEnable(boolean b){
+        mSp.setEnabled(b);
     }
 
 }

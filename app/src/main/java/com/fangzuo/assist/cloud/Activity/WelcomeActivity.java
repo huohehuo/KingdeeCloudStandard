@@ -138,7 +138,7 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
         View v = LayoutInflater.from(WelcomeActivity.this).inflate(R.layout.ipport, null);
         final EditText mEdIp = v.findViewById(R.id.ed_ip);
         final EditText mEdPort = v.findViewById(R.id.ed_port);
-        if (Info.DATABASESETTING.equals("K3DBConfigerRY")) {
+        if (App.DataBaseSetting.equals("K3DBConfigerRY")) {
             mEdIp.setText(BasicShareUtil.getInstance(App.getContext()).getIP().equals("")?"120.77.206.67":BasicShareUtil.getInstance(App.getContext()).getIP());
             mEdPort.setText(BasicShareUtil.getInstance(App.getContext()).getPort().equals("")?"8080":BasicShareUtil.getInstance(App.getContext()).getPort());
         } else {

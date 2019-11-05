@@ -25,12 +25,16 @@ import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
 import com.fangzuo.assist.cloud.Adapter.PushDownListAdapter;
+import com.fangzuo.assist.cloud.Beans.CommonBean;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownLoadSubListBean;
+import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.PushDownDLBean;
 import com.fangzuo.assist.cloud.Beans.PushDownListRequestBean;
 import com.fangzuo.assist.cloud.Beans.PushDownListReturnBean;
 import com.fangzuo.assist.cloud.Beans.ScanDLReturnBean;
+import com.fangzuo.assist.cloud.Beans.SearchBean;
+import com.fangzuo.assist.cloud.Dao.PGetData;
 import com.fangzuo.assist.cloud.Dao.PushDownMain;
 import com.fangzuo.assist.cloud.Dao.PushDownSub;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
@@ -38,16 +42,16 @@ import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
+import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
-import com.fangzuo.assist.cloud.widget.SpinnerClient;
 import com.fangzuo.assist.cloud.widget.SpinnerClientDlg;
-import com.fangzuo.assist.cloud.widget.SpinnerSupplier;
 import com.fangzuo.greendao.gen.DaoSession;
+import com.fangzuo.greendao.gen.PGetDataDao;
 import com.fangzuo.greendao.gen.PushDownMainDao;
 import com.fangzuo.greendao.gen.PushDownSubDao;
 import com.fangzuo.greendao.gen.T_DetailDao;
@@ -120,9 +124,17 @@ public class DownLoadPushFragment extends BaseFragment {
         pushDownSubDao = daosession.getPushDownSubDao();
 
         if (tag == 1) activity = Config.PdCgOrder2WgrkActivity;
+        if (tag == 32) activity = Config.FLInStoreP1Activity;
         if (tag == 2) activity = Config.PdSaleOrder2SaleOutActivity;
+        if (tag == 31) activity = Config.PdSaleOrder2SaleOut4BoxActivity;
         if (tag == 21) activity = Config.PdSaleOrder2SaleOut2Activity;
         if (tag == 6) activity = Config.PdBackMsg2SaleBackActivity;
+        if (tag == 25) activity = Config.P2ProductionInStoreActivity;
+        if (tag == 27) activity = Config.P2ProductionInStore2Activity;
+        if (tag == 26) activity = Config.P2PdCgrk2ProductGetActivity;
+        if (tag == 28) activity = Config.P1PdCgrk2ProductGetActivity;
+        if (tag == 29) activity = Config.P1PdProductGet2CprkActivity;
+        if (tag == 30) activity = Config.P1PdProductGet2Cprk2Activity;
 
 //        if (tag == 1) {
             //供应商信息绑定
@@ -137,16 +149,18 @@ public class DownLoadPushFragment extends BaseFragment {
 
     @Override
     protected void OnReceive(String barCode) {
+        /*不存在扫码下载单据逻辑*/
         Log.e("Fragment-code:",barCode);
 
         final ProgressDialog pg = new ProgressDialog(mContext);
         pg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pg.setMessage("正在下载..");
+        pg.setMessage(getString(R.string.downing)+barCode);
         pg.show();
-        Toast.showText(mContext,barCode+"下载中...");
+//        Toast.showText(mContext,barCode+"下载中...");
         PushDownListRequestBean pBean = new PushDownListRequestBean();
         pBean.id = tag;
         pBean.code = barCode;
+        pBean.FAccountID = CommonUtil.getAccountID();
         Asynchttp.post(
                 mContext,
                 BasicShareUtil.getInstance(mContext).getBaseURL() + WebApi.SCANTODLPDLIST,
@@ -157,19 +171,23 @@ public class DownLoadPushFragment extends BaseFragment {
                 pg.dismiss();
                 Log.e(TAG,"OnReceive-获取数据:"+cBean.returnJson);
                 ScanDLReturnBean sBean = new Gson().fromJson(cBean.returnJson,ScanDLReturnBean.class);
-                PushDownMainDao pushDownMainDao = daosession.getPushDownMainDao();
-                PushDownSubDao pushDownSubDao = daosession.getPushDownSubDao();
                 List<PushDownMain> list = pushDownMainDao.queryBuilder().where(
-                        PushDownMainDao.Properties.FBillNo.eq(sBean.list1.get(0).FBillNo)).build().list();
+                        PushDownMainDao.Properties.FBillNo.eq(sBean.list1.get(0).FBillNo),
+                        PushDownMainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                ).build().list();
                 if(list.size()>0){
                     pushDownMainDao.deleteInTx(list);
                     List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
-                            PushDownSubDao.Properties.FMaterialID.eq(sBean.list1.get(0).FBillNo)).build().list();
-                    if(pushDownSubs.size()>0){ pushDownSubDao.deleteInTx(pushDownSubs);}
-                    T_mainDao t_mainDao = daosession.getT_mainDao();
-                    T_DetailDao t_detailDao = daosession.getT_DetailDao();
+                            PushDownSubDao.Properties.FMaterialID.eq(sBean.list1.get(0).FBillNo),
+                            PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                    ).build().list();
+                    if(pushDownSubs.size()>0){
+                        pushDownSubDao.deleteInTx(pushDownSubs);
+                    }
                     t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
-                            T_mainDao.Properties.FIndex.eq(sBean.list1.get(0).FBillNo)).build().list());
+                            T_mainDao.Properties.FIndex.eq(sBean.list1.get(0).FBillNo),
+                            T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                    ).build().list());
 //                    t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(T_DetailDao.Properties.FInterID.eq(sBean.list1.get(0).FInterID)).build().list());
                 }
                 pushDownMainDao.insert(sBean.list1.get(0));
@@ -286,6 +304,7 @@ public class DownLoadPushFragment extends BaseFragment {
                 pushDownListAdapter.notifyDataSetChanged();
             }
         });
+        //长按清空
         startDate.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -360,15 +379,20 @@ public class DownLoadPushFragment extends BaseFragment {
 
     //下载数据
     private void download(final ArrayList<PushDownMain> downloadIDs) {
-        LoadingUtil.show(mContext,"下载中...");
+        LoadingUtil.show(mContext,getString(R.string.downing));
         for (int i = 0; i < downloadIDs.size(); i++) {
             final PushDownMain pushDownMain = downloadIDs.get(i);
             final int finalI = i;
             Log.e("finterid", i + "");
             Log.e("finterid2", finalI + "");
             DownLoadSubListBean dBean = new DownLoadSubListBean();
-            dBean.interID = downloadIDs.get(i).FBillNo;
+            if (tag==25 || tag == 26|| tag == 27|| tag == 28|| tag == 29|| tag == 30){
+                dBean.interID = downloadIDs.get(i).FID;
+            }else{
+                dBean.interID = downloadIDs.get(i).FBillNo;
+            }
             dBean.tag = downloadIDs.get(i).tag;
+            dBean.FAccountID = CommonUtil.getAccountID();
             App.getRService().doIOAction(WebApi.PUSHDOWNDLLIST
                     , new Gson().toJson(dBean), new MySubscribe<CommonResponse>() {
                         @Override
@@ -380,11 +404,13 @@ public class DownLoadPushFragment extends BaseFragment {
                             //查找本地相同的单据(该查询条件的结果只存在一个)
                             List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
                                     PushDownMainDao.Properties.Tag.eq(tag),
+                                    PushDownMainDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                     PushDownMainDao.Properties.FID.eq(pushDownMain.FID)
                             ).build().list();
                             if (pushDownMains.size()>0){//本地存在单据，查找相关明细，若不存在明细，删除单据表体并更新
                                 List<T_Detail> detailList = t_detailDao.queryBuilder().where(
                                         T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                         T_DetailDao.Properties.FID.eq(pushDownMain.FID)
                                 ).build().list();
                                 if (detailList.size()>0){
@@ -392,7 +418,8 @@ public class DownLoadPushFragment extends BaseFragment {
                                 }else{//本地存在单据表头表体，并且本地不存在单据明细时
                                     //查出表头相关的单据表体，删除旧数据并且保存新数据
                                     List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
-                                            PushDownSubDao.Properties.FID.eq(pushDownMains.get(0).FID)
+                                            PushDownSubDao.Properties.FID.eq(pushDownMains.get(0).FID),
+                                            PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
                                     ).build().list();
                                     pushDownMainDao.deleteInTx(pushDownMains.get(0));
                                     pushDownSubDao.deleteInTx(pushDownSubs);
@@ -403,9 +430,11 @@ public class DownLoadPushFragment extends BaseFragment {
                                 //异步添加下推订单信息
                                 pushDownSubDao.insertOrReplaceInTx(pBean.list);
                                 pushDownMainDao.insertOrReplaceInTx(pushDownMain);
-
                             }
-                            Toast.showText(mContext, "下载成功");
+                            if (tag == 30){
+                                getDataFor30(pushDownMain);
+                            }
+                            Toast.showText(mContext, getString(R.string.down_successful));
                             LoadingUtil.dismiss();
                         }
 
@@ -472,10 +501,44 @@ public class DownLoadPushFragment extends BaseFragment {
         }
 
     }
+    //下载生产领料单汇总表数据
+    private void getDataFor30(final PushDownMain pushDownMain){
+        CommonBean searchBean = new CommonBean();
+        searchBean.FStandby1 = pushDownMain.FID;
+        searchBean.FStandby2 = CommonUtil.getAccountID();
+        App.getRService().doIOAction(WebApi.GetPGetData
+                , new Gson().toJson(searchBean), new MySubscribe<CommonResponse>() {
+                    @Override
+                    public void onNext(CommonResponse commonResponse) {
+                        super.onNext(commonResponse);
+                        if (!commonResponse.state)return;
+                        Log.e(TAG,"getDataFor30-获取数据:"+commonResponse.returnJson);
+                        DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                        if (null!=dBean.pGetDatas && dBean.pGetDatas.size() > 0 ){
+                            PGetDataDao pGetDataDao = daosession.getPGetDataDao();
+                            List<PGetData> list = pGetDataDao.queryBuilder().where(PGetDataDao.Properties.FID.eq(pushDownMain.FID)).build().list();
+                            if (list.size()>0){
+                                pGetDataDao.deleteInTx(list);
+                            }
+                            pGetDataDao.insertInTx(dBean.pGetDatas);
+                            pGetDataDao.detachAll();
+                        }
+                        Lg.e("下载生产领料汇总表成功");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+//                    super.onError(e);
+                        Lg.e("下载生产领料汇总表---失败");
+                        Toast.showText(mContext, e.getMessage());
+//                        LoadingUtil.dismiss();
+                    }
+                });
+    }
 
     //获取数据
     private void searchList() {
-        LoadingUtil.showDialog(mContext,"正在加载...");
+        LoadingUtil.showDialog(mContext,getString(R.string.loading));
         container = new ArrayList<>();
         isCheck = new ArrayList<>();
         String code = edCode.getText().toString();
@@ -487,6 +550,7 @@ public class DownLoadPushFragment extends BaseFragment {
         pBean.code = code;
         pBean.StartTime = startTime;
         pBean.endTime = endtime;
+        pBean.FAccountID = CommonUtil.getAccountID();
 //        if (tag == 1) {
 //            pBean.FWLUnitID = spSupplier.getDataId();
 //        } else {
@@ -494,15 +558,13 @@ public class DownLoadPushFragment extends BaseFragment {
 //        }
         String Json = new Gson().toJson(pBean);
         //获取单据信息
-        Asynchttp.post(
-                mContext,
-                BasicShareUtil.getInstance(mContext).getBaseURL()+ WebApi.PUSHDOWNLIST,
-                Json,
-                new Asynchttp.Response() {
+        App.getRService().doIOAction(WebApi.PUSHDOWNLIST, Json, new MySubscribe<CommonResponse>() {
             @Override
-            public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
+            public void onNext(CommonResponse commonResponse) {
+                super.onNext(commonResponse);
+                if (!commonResponse.state)return;
                 LoadingUtil.dismiss();
-                puBean = new Gson().fromJson(cBean.returnJson, PushDownListReturnBean.class);
+                puBean = new Gson().fromJson(commonResponse.returnJson, PushDownListReturnBean.class);
                 Log.e("获取单据信息数：", puBean.list.size() + "");
                 isCheck.clear();
                 for (int i = 0; i < puBean.list.size(); i++) {
@@ -518,16 +580,32 @@ public class DownLoadPushFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailed(String Msg, AsyncHttpClient client) {
+            public void onError(Throwable e) {
+                super.onError(e);
                 LoadingUtil.dismiss();
-                Toast.showText(mContext, Msg);
+                Toast.showText(mContext, e.getMessage());
                 pushDownListAdapter = new PushDownListAdapter(mContext, container, isCheck);
                 if(lvPushdownDownload!=null){
                     lvPushdownDownload.setAdapter(pushDownListAdapter);
                 }
                 pushDownListAdapter.notifyDataSetChanged();
-
             }
         });
+//        Asynchttp.post(
+//                mContext,
+//                BasicShareUtil.getInstance(mContext).getBaseURL()+ WebApi.PUSHDOWNLIST,
+//                Json,
+//                new Asynchttp.Response() {
+//            @Override
+//            public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
+//
+//            }
+//
+//            @Override
+//            public void onFailed(String Msg, AsyncHttpClient client) {
+//
+//
+//            }
+//        });
     }
 }

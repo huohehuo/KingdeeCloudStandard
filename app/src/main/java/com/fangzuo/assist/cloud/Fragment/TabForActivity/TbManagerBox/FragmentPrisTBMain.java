@@ -8,15 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Activity.PagerForActivity;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
+import com.fangzuo.assist.cloud.Beans.MainSaveBean;
 import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.Storage;
+import com.fangzuo.assist.cloud.Dao.T_main;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
@@ -31,10 +33,13 @@ import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
 import com.fangzuo.assist.cloud.widget.SpinnerOrg;
 import com.fangzuo.assist.cloud.widget.SpinnerStorage;
 import com.fangzuo.assist.cloud.widget.SpinnerStoreMan;
+import com.fangzuo.greendao.gen.T_mainDao;
 import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +58,7 @@ public class FragmentPrisTBMain extends BaseFragment {
     SpinnerOrg spOrgIn;
     @BindView(R.id.sp_org_create)
     SpinnerHuozhu spOrgCreate;
-//    @BindView(R.id.sp_org_huozhu)
+    //    @BindView(R.id.sp_org_huozhu)
 //    SpinnerOrg spOrgHuozhu;
     @BindView(R.id.sp_storeman)
     SpinnerStoreMan spStoreman;
@@ -67,20 +72,33 @@ public class FragmentPrisTBMain extends BaseFragment {
     SpinnerStorage spWhichStorage;
     @BindView(R.id.cb_num)
     NumberClick cbNum;
+    @BindView(R.id.tv_lock1)
+    TextView tvLock1;
+    @BindView(R.id.tv_lock2)
+    TextView tvLock2;
+    @BindView(R.id.tv_lock3)
+    TextView tvLock3;
+    @BindView(R.id.tv_lock4)
+    TextView tvLock4;
+    @BindView(R.id.ll_lock)
+    LinearLayout llLock;
+    @BindView(R.id.ll_will_lock)
+    LinearLayout llWillLock;
     private FragmentActivity mContext;
     private PagerForActivity activityPager;
     Unbinder unbinder;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(ClassEvent event) {
         switch (event.Msg) {
             case EventBusInfoCode.UpdataStorage:
                 String id = (String) event.postEvent;
-                Lg.e("更改仓库数据"+id);
-                spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_tb)+activityPager.getActivity(),id, activityPager.getOrgOut());
+                Lg.e("更改仓库数据" + id);
+                spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_tb) + activityPager.getActivityMain(), id, activityPager.getOrgOut());
                 break;
             case EventBusInfoCode.Lock_Main://是否锁住表头
                 String lock = (String) event.postEvent;
-                if (Config.Lock.equals(lock)){          //锁住表头数据
+                if (Config.Lock.equals(lock)) {          //锁住表头数据
                     activityPager.setHasLock(true);
                     spDepartmentGet.setEnable(false);
                     spOrgCreate.setEnable(false);
@@ -90,11 +108,11 @@ public class FragmentPrisTBMain extends BaseFragment {
                     edFfOrder.setFocusable(false);
                     edNot.setFocusable(false);
 
-                    edFfOrder.setText(Hawk.get(Config.OrderNo+activityPager.getActivity(),""));
-                    edNot.setText(Hawk.get(Config.Note+activityPager.getActivity(),""));
-                    Hawk.put(Config.OrderNo+activityPager.getActivity(),edFfOrder.getText().toString());//保存业务单号
-                    Hawk.put(Config.Note+activityPager.getActivity(),edNot.getText().toString());//保存业务单号
-                }else{
+//                    edFfOrder.setText(Hawk.get(Config.OrderNo+activityPager.getActivityMain(),""));
+//                    edNot.setText(Hawk.get(Config.Note+activityPager.getActivityMain(),""));
+//                    Hawk.put(Config.OrderNo+activityPager.getActivityMain(),edFfOrder.getText().toString());//保存业务单号
+//                    Hawk.put(Config.Note+activityPager.getActivityMain(),edNot.getText().toString());//保存业务单号
+                } else {
                     activityPager.setHasLock(false);
                     spDepartmentGet.setEnable(true);
                     spOrgCreate.setEnable(true);
@@ -106,10 +124,10 @@ public class FragmentPrisTBMain extends BaseFragment {
                     edNot.setFocusable(true);
                     edNot.setFocusableInTouchMode(true);
 
-                    edFfOrder.setText("");
-                    edNot.setText("");
-                    Hawk.put(Config.OrderNo+activityPager.getActivity(),"");//清空存储的业务单号
-                    Hawk.put(Config.Note+activityPager.getActivity(),"");//清空存储的业务单号
+//                    edFfOrder.setText("");
+//                    edNot.setText("");
+//                    Hawk.put(Config.OrderNo+activityPager.getActivityMain(),"");//清空存储的业务单号
+//                    Hawk.put(Config.Note+activityPager.getActivityMain(),"");//清空存储的业务单号
                 }
                 break;
             case EventBusInfoCode.ScanResult://是否锁住表头
@@ -127,24 +145,24 @@ public class FragmentPrisTBMain extends BaseFragment {
     public void onAttach(Activity activity) {//与activity绑定
         super.onAttach(activity);
         activityPager = ((PagerForActivity) activity);
-        Lg.e("Fg_M:"+"onAttach");
+        Lg.e("Fg_M:" + "onAttach");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_prismain, container, false);
+        View view = inflater.inflate(R.layout.fragment_pris_tb_main, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getActivity();
         EventBusUtil.register(this);
-        Lg.e("Fg_M:"+"onCreateView");
+        Lg.e("Fg_M:" + "onCreateView");
         return view;
     }
 
     @Override
     protected void initView() {
-        Lg.e("Fg_M:"+"initView");
+        Lg.e("Fg_M:" + "initView");
     }
 
     @Override
@@ -154,12 +172,7 @@ public class FragmentPrisTBMain extends BaseFragment {
 
     @Override
     protected void initData() {
-//判断是否有保存的业务单号，决定是否锁住表头
-        if (!LocDataUtil.hasTDetail(activityPager.getActivity())){
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));
-        }else{
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
-        }
+
 
     }
 
@@ -180,10 +193,12 @@ public class FragmentPrisTBMain extends BaseFragment {
                 activityPager.setNote(edNot == null ? "" : edNot.getText().toString());
                 activityPager.setFOrderNo(edFfOrder == null ? "" : edFfOrder.getText().toString());
                 activityPager.setManStore(spStoreman.getDataNumber());
+                activityPager.setManStoreObj(spStoreman.getDataNumberObj());
                 activityPager.setDepartMent(spDepartmentGet.getDataNumber());
+                activityPager.setDepartMentObj(spDepartmentGet.getDataNumberObj());
                 activityPager.setPrintNum(cbNum.getNum());
-                Hawk.put(Config.OrderNo+activityPager.getActivity(),edFfOrder.getText().toString());//保存业务单号
-                Hawk.put(Config.Note+activityPager.getActivity(),edNot.getText().toString());//保存业务单号
+//                Hawk.put(Config.OrderNo+activityPager.getActivityMain(),edFfOrder.getText().toString());//保存业务单号
+//                Hawk.put(Config.Note+activityPager.getActivityMain(),edNot.getText().toString());//保存业务单号
             }
         }
     }
@@ -194,10 +209,10 @@ public class FragmentPrisTBMain extends BaseFragment {
         spWhichStorage.setOnItemSelectedListener(new ItemListener() {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
-                Storage storage =(Storage) spWhichStorage.getAdapter().getItem(i);
+                Storage storage = (Storage) spWhichStorage.getAdapter().getItem(i);
                 activityPager.setStorage(storage);
                 spWhichStorage.setTitleText(storage.FName);
-                Hawk.put(Info.Storage+activityPager.getActivity(),storage.FName);
+                Hawk.put(Info.Storage + activityPager.getActivityMain(), storage.FName);
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataWaveHouse, storage));
                 Lg.e("选中仓库：", storage);
             }
@@ -206,10 +221,10 @@ public class FragmentPrisTBMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgOut((Org) spOrgIn.getAdapter().getItem(i));
-                Hawk.put(Info.OrgOut+activityPager.getActivity(),activityPager.getOrgOut().FName);
-                spStoreman.setAuto(Info.StoreMan+activityPager.getActivity(), Hawk.get(Info.StoreMan+activityPager.getActivity(),""), activityPager.getOrgOut());
-                spOrgCreate.setAutoSelection(Info.HuoZhu+activityPager.getActivity(),activityPager.getOrgOut(), "");
-                spWhichStorage.setAuto(Info.Storage+activityPager.getActivity(),Hawk.get(Info.Storage+activityPager.getActivity(),""), activityPager.getOrgOut());
+                Hawk.put(Info.OrgOut + activityPager.getActivityMain(), activityPager.getOrgOut().FName);
+                spStoreman.setAuto(Info.StoreMan + activityPager.getActivityMain(), autoMan, activityPager.getOrgOut());
+                spOrgCreate.setAutoSelection(Info.HuoZhu + activityPager.getActivityMain(), activityPager.getOrgOut(), "");
+                spWhichStorage.setAuto(Info.Storage + activityPager.getActivityMain(), autoStorage, activityPager.getOrgOut());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
             }
         });
@@ -217,8 +232,8 @@ public class FragmentPrisTBMain extends BaseFragment {
             @Override
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 activityPager.setOrgIn((Org) spOrgCreate.getAdapter().getItem(i));
-                spDepartmentGet.setAuto(Info.Department+activityPager.getActivity(), Hawk.get(Info.Department+activityPager.getActivity(),""), activityPager.getOrgIn(), activityPager.getActivity());
-                Hawk.put(Info.HuoZhu+activityPager.getActivity(),activityPager.getOrgIn().FName);
+                spDepartmentGet.setAuto(Info.Department + activityPager.getActivityMain(), autoDep, activityPager.getOrgIn(), activityPager.getActivity());
+                Hawk.put(Info.HuoZhu + activityPager.getActivityMain(), activityPager.getOrgIn().FName);
             }
         });
 //        spOrgHuozhu.setOnItemSelectedListener(new ItemListener() {
@@ -248,29 +263,84 @@ public class FragmentPrisTBMain extends BaseFragment {
                 break;
         }
     }
+
+    private String autoHuozhu, autoMan, autoStorage, autoDep;
+
     @Override
     public void onResume() {
         super.onResume();
         //执行该方法时，Fragment处于活动状态，用户可与之交互。
         Lg.e("A-onResume");
-        Lg.e("Fg_M:"+"initData");
+        Lg.e("Fg_M:" + "initData");
         tvDate.setText(CommonUtil.getTime(true));
-        cbNum.setSaveKey(activityPager.getActivity()+"printnum");
+        cbNum.setSaveKey(activityPager.getActivityMain() + "printnum");
         activityPager.setDate(tvDate.getText().toString());
-        edFfOrder.setText(Hawk.get(Config.OrderNo+activityPager.getActivity(),""));
-        edNot.setText(Hawk.get(Config.Note+activityPager.getActivity(),""));
+//        edFfOrder.setText(Hawk.get(Config.OrderNo+activityPager.getActivityMain(),""));
+//        edNot.setText(Hawk.get(Config.Note+activityPager.getActivityMain(),""));
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-        spOrgIn.setAutoSelection(Info.OrgOut+activityPager.getActivity(), Hawk.get(Info.OrgOut+activityPager.getActivity(), ""));//仓库，仓管员，部门都以组织id来过滤
-//        spOrgCreate.setAutoSelection(Info.HuoZhu+activityPager.getActivity(), activityPager.getOrgOut(),Hawk.get(Info.HuoZhu+activityPager.getActivity(), ""));
+//        spOrgIn.setAutoSelection(Info.OrgOut+activityPager.getActivityMain(), Hawk.get(Info.OrgOut+activityPager.getActivityMain(), ""));//仓库，仓管员，部门都以组织id来过滤
+//        spOrgCreate.setAutoSelection(Info.HuoZhu+activityPager.getActivityMain(), activityPager.getOrgOut(),Hawk.get(Info.HuoZhu+activityPager.getActivityMain(), ""));
 //        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_pris), Hawk.get(getString(R.string.spOrgHuozhu_pris), ""));
-//        spStoreman.setAuto(Info.StoreMan+activityPager.getActivity(), Hawk.get(Info.StoreMan+activityPager.getActivity(),""), activityPager.getOrgOut());
-//        spDepartmentGet.setAuto(Info.Department+activityPager.getActivity(), Hawk.get(Info.Department+activityPager.getActivity(),""), activityPager.getOrgIn(), activityPager.getActivity());
-//        spWhichStorage.setAuto(Info.Storage+activityPager.getActivity(),Hawk.get(Info.Storage+activityPager.getActivity(),""), activityPager.getOrgOut());
+//        spStoreman.setAuto(Info.StoreMan+activityPager.getActivityMain(), Hawk.get(Info.StoreMan+activityPager.getActivityMain(),""), activityPager.getOrgOut());
+//        spDepartmentGet.setAuto(Info.Department+activityPager.getActivityMain(), Hawk.get(Info.Department+activityPager.getActivityMain(),""), activityPager.getOrgIn(), activityPager.getActivity());
+//        spWhichStorage.setAuto(Info.Storage+activityPager.getActivityMain(),Hawk.get(Info.Storage+activityPager.getActivityMain(),""), activityPager.getOrgOut());
 //        binding.spOrgIn.setEnable(false);
 //        spOrgCreate.setEnable(false);
-//        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
+//        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivityMain(), false));
+
 
         setfocus(tvDate);
+        List<T_main> list = activityPager.getT_mainDao().queryBuilder().where(
+                T_mainDao.Properties.FOrderId.eq(CommonUtil.createOrderCode(activityPager.getActivity())),
+                T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
+                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+        ).build().list();
+        if (list.size() > 0) {
+            edFfOrder.setText(list.get(0).F_FFF_Text);
+            edNot.setText(list.get(0).FNot);
+            activityPager.setOrgOut(LocDataUtil.getOrg(list.get(0).FStockOrgId,"number"));
+            spOrgIn.setAutoSelection(Info.OrgOut + activityPager.getActivityMain(), list.get(0).FStockOrgId);//仓库，仓管员，部门都以组织id来过滤
+            autoStorage = list.get(0).FStorage;
+            autoMan = list.get(0).FStockerNumber;
+            autoHuozhu = list.get(0).FOwnerIdHead;
+            autoDep = list.get(0).FDepartmentNumber;
+            spWhichStorage.setAuto(Info.Storage + activityPager.getActivityMain(), "", activityPager.getOrgOut());
+        } else {
+            spOrgIn.setAutoSelection(Info.OrgOut + activityPager.getActivityMain(), Hawk.get(Info.OrgOut + activityPager.getActivityMain(), ""));//仓库，仓管员，部门都以组织id来过滤
+            autoStorage = Hawk.get(Info.Storage + activityPager.getActivityMain(), "");
+            autoMan = Hawk.get(Info.StoreMan + activityPager.getActivityMain(), "");
+//            autoHuozhu=list.get(0).FOwnerIdHead;
+            autoDep = Hawk.get(Info.Department + activityPager.getActivityMain(), "");
+        }
+        //判断是否有保存的业务单号，决定是否锁住表头
+        if (!LocDataUtil.hasTDetail(activityPager.getActivity())) {
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock + "NO"));
+            llLock.setVisibility(View.GONE);
+            llWillLock.setVisibility(View.VISIBLE);
+        } else {
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+            llLock.setVisibility(View.VISIBLE);
+            llWillLock.setVisibility(View.GONE);
+            MainSaveBean bean = Hawk.get(Info.MainData+CommonUtil.createOrderCode(activityPager.getActivity()),new MainSaveBean());
+            if (null!=bean){
+                if (null==bean.FDepartment || null== bean.FOrgOut || null== bean.FOrgIn || null== bean.FMan1){
+                    tvLock1.setText("表头信息带出有误");
+                    return;
+                }
+                tvLock1.setText("生产车间："+bean.FDepartment.FName);
+                tvLock2.setText("入库组织："+bean.FOrgOut.FName);
+                tvLock3.setText("货主："+bean.FOrgIn.FName);
+                tvLock4.setText("仓管员："+bean.FMan1);
+                activityPager.setOrgOut(bean.FOrgOut);
+                activityPager.setOrgIn(bean.FOrgIn);
+                activityPager.setDepartMent(bean.FDepartment.FNumber);
+                activityPager.setDepartMentObj(bean.FDepartment);
+//                spWhichStorage.setAuto(Info.Storage + activityPager.getActivityMain(), autoStorage, activityPager.getOrgOut());
+
+            }else{
+                tvLock1.setText("表头信息带出有误");
+            }
+        }
     }
 
     @Override
@@ -293,25 +363,29 @@ public class FragmentPrisTBMain extends BaseFragment {
         //执行该方法时，Fragment完全不可见。
         Lg.e("A-onStop");
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
         //解除与Activity的绑定。在onDestroy方法之后调用。
         Lg.e("A-onDetach");
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //保存当前Fragment的状态。该方法会自动保存Fragment的状态，比如EditText键入的文本，即使Fragment被回收又重新创建，一样能恢复EditText之前键入的文本
         Lg.e("A-onSaveInstanceState");
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         Lg.e("A-onDestroy");
         try {
             EventBusUtil.unregister(this);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Override

@@ -27,6 +27,7 @@ import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.DoubleUtil;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
+import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
@@ -103,9 +104,13 @@ public class ReViewActivity extends BaseActivity {
         Bundle extras = in.getExtras();
         activity = extras.getInt("activity");
         //当为产品入库时，初始化打印机并连接
-        if (activity == Config.ProductInStoreActivity||activity==Config.TbInActivity||activity==Config.DgInActivity
-                ||activity==Config.SimpleInActivity||activity==Config.GbInActivity||activity==Config.DhInActivity
-                ||activity==Config.DhIn2Activity||activity==Config.TbIn2Activity||activity==Config.TbIn3Activity) {
+        if (activity == Config.ProductInStoreActivity||activity==Config.TbInActivity||activity==Config.DgInActivity||activity==Config.ChangeModelInActivity
+                ||activity==Config.WorkOrgIn4P2Activity||activity==Config.ChangeInActivity||activity==Config.ChangeLvInActivity
+                ||activity==Config.SimpleInActivity||activity==Config.GbInActivity||activity==Config.DhInActivity||activity==Config.P1PdProductGet2CprkActivity
+                ||activity==Config.DhIn2Activity||activity==Config.TbIn2Activity||activity==Config.TbIn3Activity||activity==Config.P1PdProductGet2Cprk2Activity
+                ||activity==Config.SplitBoxInActivity||activity==Config.ZbCheJianInActivity||activity==Config.Bg1CheJianInActivity||activity==Config.Bg2CheJianInActivity
+                ||activity==Config.CpWgInActivity
+                ) {
             zpSDK = new zpBluetoothPrinter(this);
             bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
             linkBluePrint();
@@ -121,14 +126,18 @@ public class ReViewActivity extends BaseActivity {
         isCheck = new ArrayList<>();
         list = new ArrayList<>();
         list = t_detailDao.queryBuilder().where(
-                T_DetailDao.Properties.Activity.eq(activity)
+                T_DetailDao.Properties.Activity.eq(activity),
+                T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
         ).build().list();
         if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 isCheck.add(false);
             }
         } else {//若列表为空，删除所有该activity的表头信息
-            t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list());
+            t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
+                    T_mainDao.Properties.Activity.eq(activity),
+                    T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+            ).build().list());
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));
         }
         Lg.e("列表数据：" + gson.toJson(list));
@@ -160,13 +169,20 @@ public class ReViewActivity extends BaseActivity {
         }
 
         mainsList = new ArrayList<>();
-        mainsList = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
-
+        mainsList = t_mainDao.queryBuilder().where(
+                T_mainDao.Properties.Activity.eq(activity),
+                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+        ).build().list();
+        Lg.e("表头信息",mainsList);
         if (mainsList.size() > 0) {
             for (int i = 0; i < mainsList.size(); i++) {
-                List<T_Detail> details = t_detailDao.queryBuilder().where(T_DetailDao.Properties.FOrderId.eq(mainsList.get(i).FOrderId)).build().list();
+                List<T_Detail> details = t_detailDao.queryBuilder().where(
+                        T_DetailDao.Properties.FOrderId.eq(mainsList.get(i).FOrderId),
+                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                ).build().list();
                 if (details.size() == 0 || details == null) {
                     t_mainDao.deleteInTx(mainsList.get(i));
+                    Hawk.delete(Info.MainData+mainsList.get(i).FOrderId);
                 }
             }
         }
@@ -335,10 +351,14 @@ public class ReViewActivity extends BaseActivity {
                                 super.onNext(commonResponse);
                                 if (!commonResponse.state) return;
                                 t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
-                                        T_DetailDao.Properties.Activity.eq(activity)).build().list());
+                                        T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                                ).build().list());
                                 initList();
                                 t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
-                                        T_mainDao.Properties.Activity.eq(activity)).build().list());
+                                        T_mainDao.Properties.Activity.eq(activity),
+                                        T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                                ).build().list());
                                 Toast.showText(mContext, "删除成功");
                                 initList();
 //                                adapter.notifyDataSetChanged();
@@ -485,6 +505,7 @@ public class ReViewActivity extends BaseActivity {
         }
         for (String string : treeSet) {
             List<T_Detail> list1 = t_detailDao.queryBuilder().where(
+                    T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                     T_DetailDao.Properties.FOrderId.eq(string)
             ).build().list();
 
@@ -501,9 +522,12 @@ public class ReViewActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         Lg.e("ReView：","OnPause");
-        if (activity==Config.ProductInStoreActivity||activity==Config.TbInActivity||activity==Config.DgInActivity
-                ||activity==Config.SimpleInActivity||activity==Config.GbInActivity||activity==Config.DhInActivity
-                ||activity==Config.DhIn2Activity||activity==Config.TbIn2Activity||activity==Config.TbIn3Activity){
+        if (activity==Config.ProductInStoreActivity||activity==Config.TbInActivity||activity==Config.DgInActivity||activity==Config.WorkOrgIn4P2Activity||activity==Config.ChangeInActivity
+                ||activity==Config.SimpleInActivity||activity==Config.GbInActivity||activity==Config.DhInActivity||activity==Config.P1PdProductGet2CprkActivity||activity==Config.ChangeLvInActivity
+                ||activity==Config.DhIn2Activity||activity==Config.TbIn2Activity||activity==Config.TbIn3Activity||activity==Config.P1PdProductGet2Cprk2Activity||activity==Config.ChangeModelInActivity
+                ||activity==Config.SplitBoxInActivity||activity==Config.ZbCheJianInActivity||activity==Config.Bg1CheJianInActivity||activity==Config.Bg2CheJianInActivity
+                ||activity==Config.CpWgInActivity
+                ){
             try {
                 zpSDK.disconnect();
             }catch (Exception e){}

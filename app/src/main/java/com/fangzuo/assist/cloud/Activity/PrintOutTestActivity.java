@@ -58,9 +58,9 @@ public class PrintOutTestActivity extends AppCompatActivity {
     private IntentFilter intentFilter = null;
     PrintOutTestActivity mActivity;
     private static String TAG = "SearchBTActivity";
-    zpBluetoothPrinter zpSDK;
+//    zpBluetoothPrinter zpSDK;
     private BTAdapter btAdapter;
-    boolean isOk = false;
+//    boolean isOk = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,16 +71,16 @@ public class PrintOutTestActivity extends AppCompatActivity {
         mActivity = this;
         ryBl.setAdapter(btAdapter = new BTAdapter(this));
         ryBl.setLayoutManager(new LinearLayoutManager(this));
-        zpSDK = new zpBluetoothPrinter(this);
+//        zpSDK = new zpBluetoothPrinter(this);
 
-        tvTitle.setText("蓝牙配置");
+        tvTitle.setText(R.string.bluetooth_set);
         btAdapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Hawk.put(Config.OBJ_BLUETOOTH, btAdapter.getAllData().get(position));
                 Print1(btAdapter.getAllData().get(position).getAddress());
 //                es.submit(new TaskOpen(mBt, btAdapter.getAllData().get(position).getAddress(), mActivity));
-                Toast.makeText(mActivity, "正在配置:" + btAdapter.getAllData().get(position).getAddress(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, getString(R.string.setting) + btAdapter.getAllData().get(position).getAddress(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -113,38 +113,38 @@ public class PrintOutTestActivity extends AppCompatActivity {
             }
         });
 
-        /* 启动WIFI */
-        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        switch (wifiManager.getWifiState()) {
-            case WifiManager.WIFI_STATE_DISABLED:
-                wifiManager.setWifiEnabled(true);
-                break;
-            default:
-                break;
-        }
+//        /* 启动WIFI */
+//        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+//        switch (wifiManager.getWifiState()) {
+//            case WifiManager.WIFI_STATE_DISABLED:
+//                wifiManager.setWifiEnabled(true);
+//                break;
+//            default:
+//                break;
+//        }
 
-        /* 启动蓝牙 */
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        if (null != adapter) {
-            if (!adapter.isEnabled()) {
-                if (!adapter.enable()) {
-                    finish();
-                    return;
-                }
-            }
-        }
-        if (!adapter.isEnabled()) {
-            if (adapter.enable()) {
-                while (!adapter.isEnabled())
-                    ;
-                Log.v(TAG, "Enable BluetoothAdapter");
-            } else {
-                finish();
-            }
-        }
-
-        adapter.cancelDiscovery();
-        adapter.startDiscovery();
+//        /* 启动蓝牙 */
+//        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+//        if (null != adapter) {
+//            if (!adapter.isEnabled()) {
+//                if (!adapter.enable()) {
+//                    finish();
+//                    return;
+//                }
+//            }
+//        }
+//        if (!adapter.isEnabled()) {
+//            if (adapter.enable()) {
+//                while (!adapter.isEnabled())
+//                    ;
+//                Log.v(TAG, "Enable BluetoothAdapter");
+//            } else {
+//                finish();
+//            }
+//        }
+//
+//        adapter.cancelDiscovery();
+//        adapter.startDiscovery();
         initBroadcast();
 
         BlueToothBean bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
@@ -162,7 +162,7 @@ public class PrintOutTestActivity extends AppCompatActivity {
 //                tvRight.setTextColor(Color.BLACK);
 //            }
 //        }
-        tvBluetooth.setText("已配置的打印机\n" + "名称：" + bean.getName() + "\n地址：" + bean.getAddress());
+        tvBluetooth.setText(getString(R.string.get_printer)+"\n" +getString(R.string.name) + bean.getName() + "\n"+getString(R.string.address) + bean.getAddress());
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,7 +240,9 @@ public class PrintOutTestActivity extends AppCompatActivity {
 
 
     public void Print1(String BDAddress) {
-        if (!isOk) {
+        zpBluetoothPrinter zpSDK = new zpBluetoothPrinter(mActivity);
+
+//        if (!isOk) {
             if (!zpSDK.connect(BDAddress)) {
                 Toast.makeText(this, "连接失败------", Toast.LENGTH_LONG).show();
                 return;
@@ -249,23 +251,24 @@ public class PrintOutTestActivity extends AppCompatActivity {
                 tvBluetooth.setText("已配置的打印机\n" + "名称：" + bean.getName() + "\n地址：" + bean.getAddress());
                 Toast.makeText(this, "连接成功------", Toast.LENGTH_LONG).show();
             }
-        }
+//        }
 
 
-        Resources res = getResources();
-        @SuppressLint("ResourceType") InputStream is = res.openRawResource(R.mipmap.logo);
-        BitmapDrawable bmpDraw = new BitmapDrawable(is);
-        Bitmap bmp = bmpDraw.getBitmap();
+//        Resources res = getResources();
+//        @SuppressLint("ResourceType") InputStream is = res.openRawResource(R.mipmap.logo);
+//        BitmapDrawable bmpDraw = new BitmapDrawable(is);
+//        Bitmap bmp = bmpDraw.getBitmap();
 
 //        for (int i = 0; i < 6; i++) {
         zpSDK.pageSetup(668, 973);
         zpSDK.drawText(0, 100, "测试-------------111222333344-----55666777881234", 2, 0, 0, false, false);
         zpSDK.drawText(0, 400, "测试-------------111222333344-----55666777881234", 2, 0, 0, false, false);
-        zpSDK.print(0, 0);
 //        }
-//            zpSDK.drawBarCode(8, 540, "12345678901234567", 128, true, 3, 60);
+            zpSDK.drawBarCode(8, 540, "12345678901234567", 128, true, 3, 60);
 //              zpSDK.drawGraphic(90, 70, 0, 0, bmp);
-//            zpSDK.drawQrCode(350, 48, "111111111", 0, 6, 0);
+            zpSDK.drawQrCode(350, 48, "111111111", 0, 6, 0);
+        zpSDK.print(0, 0);
+        zpSDK.disconnect();
 //            zpSDK.drawText(90, 48+100, "400-8800-", 2
 //                    , 0, 0, false, false);
 //            zpSDK.drawText(100, 48+100+56, "株洲      张贺", 4, 0, 0, false, false);
@@ -282,9 +285,9 @@ public class PrintOutTestActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try{
-            zpSDK.disconnect();
-        }catch (Exception e){}
+//        try{
+//            zpSDK.disconnect();
+//        }catch (Exception e){}
         uninitBroadcast();
     }
 }

@@ -219,6 +219,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                     }
                     final List<T_main> mains = t_mainDao.queryBuilder().where(
                             T_mainDao.Properties.Activity.eq(activity),
+                            T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                             T_mainDao.Properties.FID.eq(pushDownMain.FID)
                     ).build().list();
                     for (int i = 0; i < mains.size(); i++) {
@@ -230,14 +231,19 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                                 super.onNext(commonResponse);
                                 t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
                                         T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                         T_DetailDao.Properties.FOrderId.eq(mains.get(pos).FOrderId)
                                 ).build().list());
                                 for (int i = 0; i < mains.size(); i++) {
                                     List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
-                                            PushDownSubDao.Properties.FBillNo.eq(mains.get(i).FBillNo)).build().list();
+                                            PushDownSubDao.Properties.FBillNo.eq(mains.get(i).FBillNo),
+                                            PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                                    ).build().list();
                                     pushDownSubDao.deleteInTx(pushDownSubs);
                                     List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
-                                            PushDownMainDao.Properties.FBillNo.eq(mains.get(i).FBillNo)).build().list();
+                                            PushDownMainDao.Properties.FBillNo.eq(mains.get(i).FBillNo),
+                                            PushDownMainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                                    ).build().list();
                                     pushDownMainDao.deleteInTx(pushDownMains);
                                 }
                             }
@@ -270,6 +276,12 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                     delete.setTitle("上传错误");
                     delete.setMessage(builder.toString());
                     delete.setPositiveButton("确定", null);
+                    delete.setNegativeButton("反馈信息", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DataService.pushBackJson(mContext, FragmentBackMsg2SaleBackDetail.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
+                        }
+                    });
                     delete.create().show();
                 }
 
@@ -430,7 +442,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             Lg.e("得到表头解析数据:"+mainSaleOrg);
             Lg.e("得到表头解析数据:",mainStoreOrg);
             activityPager.setOrgOut(mainStoreOrg);
-            spWhichStorage.setAuto("","",mainStoreOrg);
+            spWhichStorage.setAuto(Info.Storage+activity,"",mainStoreOrg);
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Main_Note, pushDownMains.get(0).FNot));
             if ("".equals(pushDownMain.FSupplyID==null?"":pushDownMain.FSupplyID)){
@@ -480,6 +492,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 storage = (Storage) spWhichStorage.getAdapter().getItem(i);
                 spWhichStorage.setTitleText(storage.FName);
+                Hawk.put(Info.Storage+activity,storage.FName);
                 Lg.e("选中仓库：", storage);
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, storage, "");
@@ -572,7 +585,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             lvPushsub.setAdapter(pushDownSubListAdapter);
             pushDownSubListAdapter.notifyDataSetChanged();
         } else {
-            Toast.showText(mContext, "未查询到数据");
+            Toast.showText(mContext, getString(R.string.find_nothing));
         }
     }
 
@@ -605,7 +618,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             }
 
             if (flag) {
-                Toast.showText(mContext, "商品不存在");
+                Toast.showText(mContext, getString(R.string.product_nothing));
                 MediaPlayer.getInstance(mContext).error();
 
             }
@@ -628,7 +641,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
         spUnitStore.setAuto(product.FStoreUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
-        spWhichStorage.setAuto("",autoStorage, mainStoreOrg);
+        spWhichStorage.setAuto(Info.Storage+activity,autoStorage, mainStoreOrg);
         unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
 //        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
@@ -696,11 +709,11 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
 //        }
         //--------------------------------------------------
 //        Lg.e("明细数据:",pushDownSub);
-        if (MathUtil.toD(pushDownSub.FQty) < ((MathUtil.toD(edNum.getText().toString())) + MathUtil.toD(pushDownSub.FQtying))) {
-            MediaPlayer.getInstance(mContext).error();
-            Toast.showText(mContext, "大兄弟,您的数量超过我的想象");
-            return false;
-        }
+//        if (MathUtil.toD(pushDownSub.FQty) < ((MathUtil.toD(edNum.getText().toString())) + MathUtil.toD(pushDownSub.FQtying))) {
+//            MediaPlayer.getInstance(mContext).error();
+//            Toast.showText(mContext, "大兄弟,您的数量超过我的想象");
+//            return false;
+//        }
         if (edNum.getText().toString().trim().equals("") || "0".equals(edNum.getText().toString())) {
             Toast.showText(mContext, "请输入数量");
             MediaPlayer.getInstance(mContext).error();
@@ -793,6 +806,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             String timesecond = CommonUtil.getTimesecond();
             T_main main = new T_main();//--------------------------------------表头-----------------
             main.activity = activity;
+            main.FAccountID = CommonUtil.getAccountID();
             main.FBillerID = Hawk.get(Info.user_id, "");
             main.FBarcode = barcode;
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
@@ -818,6 +832,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
 
             T_Detail detail = new T_Detail();//--------------------------------明细-----------------
             detail.activity = activity;
+            detail.FAccountID = CommonUtil.getAccountID();
             detail.FBillerID = Hawk.get(Info.user_id, "");
             detail.FBarcode = barcode;
             detail.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();

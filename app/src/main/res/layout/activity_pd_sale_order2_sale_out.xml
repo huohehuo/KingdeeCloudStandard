@@ -89,7 +89,7 @@
                         android:orientation="vertical">
 
                         <com.fangzuo.assist.cloud.widget.TextViewTitle
-                            app:TextView_Title_one="仓库"
+                            app:TextView_Title_one="@string/storage"
                             app:TextView_Title_size="8sp"
                             app:TextView_Title_two="仓位"
                             android:layout_width="match_parent"
@@ -348,7 +348,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="入库日期:"
+                                android:text="@string/in_store_date"
                                 android:textColor="@android:color/black"
                                 android:textSize="18sp" />
 
@@ -382,7 +382,7 @@
                                 android:id="@+id/sp_storeman"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:manspinner_name="仓管员:"
+                                app:manspinner_name="@string/store_man"
                                 app:manspinner_size="8sp" />
 
                         </LinearLayout>

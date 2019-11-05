@@ -183,7 +183,10 @@ public class FragmentPKDetail extends BaseFragment {
                     for (int i = 0; i < backData.getResult().getResponseStatus().getSuccessEntitys().size(); i++) {
                         listOrder.add(backData.getResult().getResponseStatus().getSuccessEntitys().get(i).getNumber());
                     }
-                    final List<T_main> mains = t_mainDao.queryBuilder().where(T_mainDao.Properties.Activity.eq(activity)).build().list();
+                    final List<T_main> mains = t_mainDao.queryBuilder().where(
+                            T_mainDao.Properties.Activity.eq(activity),
+                            T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                    ).build().list();
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
                         String reString = mains.get(i).FBillerID + "|" + listOrder.get(i) + "|" + mains.get(i).FOrderId + "|" + mains.get(i).IMIE;
@@ -193,6 +196,7 @@ public class FragmentPKDetail extends BaseFragment {
                                 super.onNext(commonResponse);
                                 t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
                                         T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                         T_DetailDao.Properties.FOrderId.eq(mains.get(pos).FOrderId)
                                 ).build().list());
                             }
@@ -224,6 +228,12 @@ public class FragmentPKDetail extends BaseFragment {
                     delete.setTitle("上传错误");
                     delete.setMessage(builder.toString());
                     delete.setPositiveButton("确定", null);
+                    delete.setNegativeButton("反馈信息", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DataService.pushBackJson(mContext, FragmentPKDetail.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
+                        }
+                    });
                     delete.create().show();
                 }
 
@@ -587,6 +597,7 @@ public class FragmentPKDetail extends BaseFragment {
         try {
             String num = edNum.getText().toString();
             if ("".equals(num) || "0".equals(num)) return;//避免多次点击，以上请求多次，导致第一次清空之后，再去添加一个空的数据
+            batch = edPihao.getText().toString();
 //            if (true) {
 //                Lg.e("合并");
 //                List<T_Detail> detailhebing = t_detailDao.queryBuilder().where(
@@ -613,6 +624,7 @@ public class FragmentPKDetail extends BaseFragment {
             String timesecond = CommonUtil.getTimesecond();
             T_main main = new T_main();//--------------------------------------表头-----------------
             main.activity = activity;
+            main.FAccountID = CommonUtil.getAccountID();
             main.FBillerID = Hawk.get(Info.user_id, "");
             main.FBarcode = barcode;
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
@@ -631,6 +643,7 @@ public class FragmentPKDetail extends BaseFragment {
 
             T_Detail detail = new T_Detail();//--------------------------------明细-----------------
             detail.activity = activity;
+            detail.FAccountID = CommonUtil.getAccountID();
             detail.FBillerID = Hawk.get(Info.user_id, "");
             detail.FBarcode = barcode;
             detail.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
@@ -693,7 +706,7 @@ public class FragmentPKDetail extends BaseFragment {
                     PrintHistory printHistory = new PrintHistory();
                     printHistory.setData(product, history.FUnit, history.FUnitAux, history.FNum,
                             history.FNum2, history.FWaveHouse, "",
-                            history.FHuoquan, barcode, batch, CommonUtil.getTime(true), "",history.FAuxSign,history.FActualModel);
+                            history.FHuoquan, barcode, history.FBatch, CommonUtil.getTime(true), "",history.FAuxSign,history.FActualModel);
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     resetAll();
                     try {

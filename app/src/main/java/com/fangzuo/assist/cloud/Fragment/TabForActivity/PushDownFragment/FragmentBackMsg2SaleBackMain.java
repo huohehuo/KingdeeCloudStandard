@@ -20,6 +20,7 @@ import com.fangzuo.assist.cloud.Activity.ProductSearchActivity;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.Org;
+import com.fangzuo.assist.cloud.Dao.T_main;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
@@ -33,10 +34,13 @@ import com.fangzuo.assist.cloud.widget.SpinnerDepartMent;
 import com.fangzuo.assist.cloud.widget.SpinnerHuozhu;
 import com.fangzuo.assist.cloud.widget.SpinnerOrg;
 import com.fangzuo.assist.cloud.widget.SpinnerStoreMan;
+import com.fangzuo.greendao.gen.T_mainDao;
 import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,9 +92,9 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
                     spStoreman.setEnable(false);
 //                    searchClient.setClickable(false);
                     edNot.setFocusable(false);
-                    edNot.setText(Hawk.get(Config.Note + activityPager.getActivity(), edNot.getText().toString()));
-//                    Hawk.put(Config.OrderNo + activityPager.getActivity(), client1.FName);//保存客户数据
-                    Hawk.put(Config.Note + activityPager.getActivity(), edNot.getText().toString());//保存客户数据
+//                    edNot.setText(Hawk.get(Config.Note + activityPager.getActivityMain(), edNot.getText().toString()));
+//                    Hawk.put(Config.OrderNo + activityPager.getActivityMain(), client1.FName);//保存客户数据
+//                    Hawk.put(Config.Note + activityPager.getActivityMain(), edNot.getText().toString());//保存客户数据
                 } else {
                     activityPager.setHasLock(false);
 //                    spOrgSend.setEnable(true);
@@ -101,8 +105,8 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
                     edNot.setFocusableInTouchMode(true);
                     activityPager.setClient(null);
 //                    edNot.setText("");
-                    Hawk.put(Config.OrderNo + activityPager.getActivity(), "");//清空保存的客户数据
-                    Hawk.put(Config.Note + activityPager.getActivity(), "");//清空保存的客户数据
+//                    Hawk.put(Config.OrderNo + activityPager.getActivityMain(), "");//清空保存的客户数据
+//                    Hawk.put(Config.Note + activityPager.getActivityMain(), "");//清空保存的客户数据
                 }
                 break;
             case EventBusInfoCode.UpdataView://由表头的的数据决定是否更新明细数据
@@ -114,9 +118,9 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
                 }
                 break;
             case EventBusInfoCode.Main_Note://带出表头的备注信息
-                if (Hawk.get(Config.Note + activityPager.getActivity(),"").equals("")){
+                if (edNot.getText().toString().equals("")){
                     edNot.setText((String) event.postEvent);
-                    Hawk.put(Config.Note + activityPager.getActivity(), edNot.getText().toString());//保存客户数据
+//                    Hawk.put(Config.Note + activityPager.getActivityMain(), edNot.getText().toString());//保存客户数据
                     activityPager.setNote(edNot == null ? "" : edNot.getText().toString());
                 }
                 break;
@@ -173,7 +177,7 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
     public void onResume() {
         super.onResume();
         tvDate.setText(CommonUtil.getTime(true));
-        cbNum.setSaveKey(activityPager.getActivity()+"printnum");
+        cbNum.setSaveKey(activityPager.getActivityMain()+"printnum");
         activityPager.setDate(tvDate.getText().toString());
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
 //        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_so), Hawk.get(getString(R.string.spOrgSend_so), ""));//仓库，仓管员，部门都以组织id来过滤
@@ -181,7 +185,17 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
 //        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_so), "", activityPager.getOrgOut(), activityPager.getActivity());
 //        spStoreman.setAuto(getString(R.string.spStoreman_so), Hawk.get(getString(R.string.spStoreman_so), ""), activityPager.getOrgOut());
 //        spSaleman.setAuto(getString(R.string.spSaleman_so), "", activityPager.getOrgOut());
-        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
+//        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
+
+        List<T_main> list =activityPager.getT_mainDao().queryBuilder().where(
+//                T_mainDao.Properties.FOrderId.eq(CommonUtil.createOrderCode(activityPager.getActivity())),
+                T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
+                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+        ).build().list();
+        if (list.size()>0){
+//            edFfOrder.setText(list.get(0).F_FFF_Text);
+            edNot.setText(list.get(0).FNot);
+        }
     }
 
     //在oncreateView之前使用 不要使用控件
@@ -204,8 +218,8 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
                 activityPager.setPrintNum(cbNum.getNum());
 //                activityPager.setHuozhuOut(spOrgHuozhu.getDataObject());
 //                activityPager.setDepartMentBuy(spDepartmentSale.getDataNumber());
-//                Hawk.put(Config.OrderNo+activityPager.getActivity(),edClient.getText().toString());//保存业务单号
-                Hawk.put(Config.Note + activityPager.getActivity(), edNot.getText().toString());//保存业务单号
+//                Hawk.put(Config.OrderNo+activityPager.getActivityMain(),edClient.getText().toString());//保存业务单号
+//                Hawk.put(Config.Note + activityPager.getActivityMain(), edNot.getText().toString());//保存业务单号
             }
         }
     }

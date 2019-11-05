@@ -3,6 +3,7 @@ package com.fangzuo.assist.cloud.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,6 +24,7 @@ import com.fangzuo.assist.cloud.Beans.ConnectResponseBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
+import com.fangzuo.assist.cloud.Service.BaseUtilService;
 import com.fangzuo.assist.cloud.Service.DataService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
@@ -52,6 +54,8 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
     RelativeLayout btnBack;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.tvtiti)
+    TextView tvTiTi;
     @BindView(R.id.ry_data_search)
     RecyclerView ryDataSearch;
     @BindView(R.id.btn_connect)
@@ -70,7 +74,9 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
     EditText edPass;
     @BindView(R.id.lv_database)
     ListView lvDatabase;
-//    @BindView(R.id.container)
+    @BindView(R.id.tv_right)
+    TextView tvRight;
+    //    @BindView(R.id.container)
 //    CoordinatorLayout containerView;
     private DataBaseAdapter adapter;
     private SettingActivity mContext;
@@ -131,17 +137,28 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
 //                String str = (String) event.postEvent;
 //                LoadingUtil.dismiss();
 //                Toast.showText(mContext, "连接错误:" + str);
-                LoadingUtil.showAlter(mContext,getString(R.string.connect_fail),(String)event.postEvent);
+                LoadingUtil.showAlter(mContext, getString(R.string.connect_fail), (String) event.postEvent);
                 LoadingUtil.dismiss();
                 break;
             case EventBusInfoCode.Prop_OK:
                 CommonResponse prop = (CommonResponse) event.postEvent;
                 final AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
                 if (prop.state) {
-                    if (isClearAll) {
-                        DataService.deleteAll(mContext);
-                        ShareUtil.getInstance(mContext).clear();
-                    }
+//                    if (isClearAll) {
+//                        DataService.deleteAll(mContext);
+//                        ShareUtil.getInstance(mContext).clear();
+//                        App.getRService().doIOAction(WebApi.DetailTableDeleteAll, BasicShareUtil.getInstance(mContext).getIMIE(), new MySubscribe<CommonResponse>() {
+//                            @Override
+//                            public void onNext(CommonResponse commonResponse) {
+//                                Lg.e("删除临时表成功1");
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable e) {
+//                                Lg.e("删除临时表失败");
+//                            }
+//                        });
+//                    }
                     LoadingUtil.dismiss();
                     ab.setTitle(R.string.set_result);
                     ab.setMessage(R.string.set_successful);
@@ -154,16 +171,7 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
                     });
                     ab.create().show();
                     DataService.UpdateData(this);
-                    App.getRService().doIOAction(WebApi.DetailTableDeleteAll,BasicShareUtil.getInstance(mContext).getIMIE(), new MySubscribe<CommonResponse>() {
-                        @Override
-                        public void onNext(CommonResponse commonResponse) {
-                            Lg.e("删除临时表成功1");
-                        }
-                        @Override
-                        public void onError(Throwable e) {
-                            Lg.e("删除临时表失败");
-                        }
-                    });
+
                     share.setVersion(prop.returnJson);
                     share.setDataBase(chooseDatabase);
                 } else {
@@ -197,18 +205,18 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
                 ab2.create().show();
                 break;
             case EventBusInfoCode.Updata_OK://回单成功
-                String time = (String)event.Msg2;
-                String size = (String)event.Msg3;
+                String time = (String) event.Msg2;
+                String size = (String) event.Msg3;
                 long endTime = System.currentTimeMillis();
                 AlertDialog.Builder ab4 = new AlertDialog.Builder(mContext);
                 ab4.setTitle(R.string.download_successful);
                 ab4.setMessage("耗时:" + (endTime - Long.parseLong(time)) + "ms" + ",共插入" + size + "条数据");
-                ab4.setPositiveButton(R.string.yes,null);
+                ab4.setPositiveButton(R.string.yes, null);
                 ab4.create().show();
                 break;
             case EventBusInfoCode.Updata_Error://回单失败
                 LoadingUtil.dismiss();
-                LoadingUtil.showAlter(mContext,getString(R.string.down_fail),(String)event.postEvent);
+                LoadingUtil.showAlter(mContext, getString(R.string.down_fail), (String) event.postEvent);
 //                Toast.showText(mContext,(String)event.postEvent);
                 break;
         }
@@ -219,6 +227,12 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
         tvTitle.setText(getResources().getString(R.string.down_set));
+        tvRight.setText("清空");
+        if (!Hawk.get(Info.user_data, "").equals("")) {
+            tvTiTi.setText("账套选择：当前登陆的账套中心：" + Hawk.get(Info.user_data, ""));
+        } else {
+            tvTiTi.setText("账套选择：");
+        }
     }
 
     @Override
@@ -233,13 +247,13 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
             edPort.setText(share.getDatabasePort());
             edUsername.setText(share.getDataBaseUser());
             edPass.setText(share.getDataBasePass());
-        }else{
-            if (Info.DATABASESETTING.equals("K3DBConfigerRY")){
+        } else {
+            if (App.DataBaseSetting.equals("K3DBConfigerRY")) {
                 edServerip.setText("172.18.120.186");
                 edPort.setText("1433");
                 edUsername.setText("sa");
                 edPass.setText("rongyuan@888");
-            }else{
+            } else {
                 edServerip.setText("192.168.0.201");
                 edPort.setText("1433");
                 edUsername.setText("sa");
@@ -258,17 +272,73 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
 
     @Override
     public void initListener() {
+        tvRight.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View view) {
+                AlertDialog.Builder ab4 = new AlertDialog.Builder(mContext);
+                ab4.setTitle("是否清空本地数据及临时表");
+                ab4.setPositiveButton("清空", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clearData();
+                    }
+                });
+                ab4.setNegativeButton("取消",null);
+                ab4.create().show();
+            }
+        });
     }
+
+    //清空临时表和贝蒂数据
+    private void clearData(){
+        LoadingUtil.showDialog(mContext,"正在清空...");
+        DataService.deleteAll(mContext);
+        ShareUtil.getInstance(mContext).clear();
+        App.getRService().doIOAction(WebApi.DetailTableDeleteAll, BasicShareUtil.getInstance(mContext).getIMIE(), new MySubscribe<CommonResponse>() {
+            @Override
+            public void onNext(CommonResponse commonResponse) {
+                Lg.e("删除临时表成功1");
+                Toast.showText(mContext,"清空临时表完毕");
+                App.getRService().doIOAction(WebApi.DeleteBoxCodeAll, BasicShareUtil.getInstance(mContext).getIMIE(), new MySubscribe<CommonResponse>() {
+                    @Override
+                    public void onNext(CommonResponse commonResponse) {
+                        Lg.e("删除临时表成功1");
+                        Toast.showText(mContext,"清空箱码临时表完毕完毕");
+                        LoadingUtil.dismiss();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LoadingUtil.dismiss();
+                        Lg.e("删除临时表失败");
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Lg.e("删除临时表失败");
+                LoadingUtil.dismiss();
+            }
+        });
+    }
+
     @Override
     protected void OnReceive(String code) {
     }
+
+
     @Override
     public void onItemClick(View view, int position) {
         dataSearchRyAdapter.setIsCheck(position);
         chooseDatabase = container.get(position).dataBase;
-        Toast.showText(mContext, chooseDatabase);
+//        Toast.showText(mContext, chooseDatabase);
         share.setDataBase(chooseDatabase);
-        Hawk.put(Config.Cloud_ID,container.get(position).dataBaseID);
+        Hawk.put(Config.Cloud_ID, container.get(position).dataBaseID);
+        Lg.e("设置账套id", Hawk.get(Config.Cloud_ID, ""));
+        LoadingUtil.showAlter(mContext, "已选择数据中心：" + container.get(position).name);
+        DataService.UpdateData(this);
+        BaseUtilService.reLogin(mContext);
     }
 
     @Override
@@ -296,23 +366,43 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
         }
     }
 
+//    //清空的话，重启程序
+//    public void restartApplication() {
+//        if (isGotoLogin){
+//            Lg.e("关闭？？？");
+//            Intent intent = new Intent(this, SplashActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            this.startActivity(intent);
+//            android.os.Process.killProcess(android.os.Process.myPid());
+////            Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+////            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////            startActivity(intent);
+//        }else{
+//            finish();
+//        }
+//    }
+//    @Override
+//    public void onBackPressed() {
+//        restartApplication();
+//        super.onBackPressed();
+//    }
 
     private void prop() {
         AlertDialog.Builder ab1 = new AlertDialog.Builder(mContext);
         ab1.setTitle(R.string.if_configuration);
-        ab1.setMessage(R.string.configuration_tips);
-        ab1.setPositiveButton(R.string.clear, new DialogInterface.OnClickListener() {
+//        ab1.setMessage(R.string.configuration_tips);
+        ab1.setPositiveButton("配置", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 setprop(true);
             }
         });
-        ab1.setNeutralButton(R.string.unclear, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                setprop(false);
-            }
-        });
+//        ab1.setNeutralButton(R.string.unclear, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                setprop(false);
+//            }
+//        });
         ab1.setNegativeButton(R.string.cancle, null);
         ab1.create().show();
     }
@@ -341,7 +431,7 @@ public class SettingActivity extends BaseActivity implements DataSearchRyAdapter
                 edPort.getText().toString(),
                 edUsername.getText().toString(),
                 edPass.getText().toString(),
-                Info.DATABASESETTING));
+                App.DataBaseSetting));
     }
 
 

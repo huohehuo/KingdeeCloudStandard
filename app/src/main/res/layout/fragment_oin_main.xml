@@ -31,7 +31,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="入库日期:"
+                    android:text="@string/in_store_date"
                     android:textColor="@android:color/black"
                     android:textSize="20sp" />
 
@@ -43,7 +43,7 @@
 
 
                 <TextView
-                    android:text="业务单号:"
+                    android:text="@string/business_no"
                     android:textSize="22sp"
                     android:textColor="#1e1e1e"
                     android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:paddingLeft="8dp"
-                    android:hint="请输入业务单号"
+                    android:hint="@string/business_no_hint"
                     android:gravity="center_horizontal|center_vertical"
                     android:background="@drawable/bg_edittext_selector"
                     android:singleLine="true"
@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:gravity="center"
-                        android:text="供应商:"
+                        android:text="@string/supplier"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
@@ -119,7 +119,7 @@
                 <include
                     layout="@layout/line_heng"/>
                 <TextView
-                    android:text="仓库:"
+                    android:text="@string/storage"
                     android:textSize="22sp"
                     android:textColor="#1e1e1e"
                     android:layout_width="match_parent"
@@ -129,22 +129,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    app:Uspinner_title="请选择仓库"/>
+                    app:Uspinner_title="@string/storage_hint"/>
                 <include
                     layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
                     android:id="@+id/sp_org_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="库存组织:"
-                    app:manspinner_title="请选择库存组织"
+                    app:manspinner_name="@string/store_org"
+                    app:manspinner_title="@string/store_org_hint"
                     app:manspinner_size="@dimen/sp_title_size" />
                 <include
                     layout="@layout/line_heng"/>
                 <com.fangzuo.assist.cloud.widget.SpinnerCommon
                     android:id="@+id/sp_hz_type"
-                    app:manspinner_name="货主类型:"
-                    app:manspinner_title="请选择货主类型"
+                    app:manspinner_name="@string/huozhu_type"
+                    app:manspinner_title="@string/huozhu_type_hint"
                     app:manspinner_size="@dimen/sp_title_size"
                     android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
@@ -166,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:gravity="center"
-                        android:text="供应商:"
+                        android:text="@string/supplier"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
 
@@ -202,16 +202,16 @@
                     android:id="@+id/sp_org_create"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="货主:"
-                    app:manspinner_title="请选择生产组织"
+                    app:manspinner_name="@string/huozhu"
+                    app:manspinner_title="@string/production_org_hint"
                     app:manspinner_size="@dimen/sp_title_size" />
                 <com.fangzuo.assist.cloud.widget.SpinnerOrg
                     android:visibility="gone"
                     android:id="@+id/sp_org_huozhu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="货主:"
-                    app:manspinner_title="请选择货主"
+                    app:manspinner_name="@string/huozhu"
+                    app:manspinner_title="@string/huozhu_hint"
                     app:manspinner_size="@dimen/sp_title_size" />
 
                 <com.fangzuo.assist.cloud.widget.SpinnerStoreMan
@@ -219,11 +219,11 @@
                     android:id="@+id/sp_storeman"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:manspinner_name="仓管员:"
-                    app:manspinner_title="请选择仓管员"
+                    app:manspinner_name="@string/store_man"
+                    app:manspinner_title="@string/store_man_hint"
                     app:manspinner_size="@dimen/sp_people_title_size" />
                 <TextView
-                    android:text="备注："
+                    android:text="@string/note"
                     android:textSize="@dimen/sp_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

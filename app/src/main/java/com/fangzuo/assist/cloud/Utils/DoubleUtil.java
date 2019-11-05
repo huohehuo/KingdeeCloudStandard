@@ -35,8 +35,19 @@ public class DoubleUtil {
 
     //保留4为小数四舍五入,new BigDecimal(String)避免了0.745四舍五入变成0.74，不用new BigDecimal(double)
     public static double Cut4(String value) {
+        if (null==value || "".equals(value)){
+            value = "0";
+        }
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(4, BigDecimal.ROUND_HALF_UP);
+        double d = bd.doubleValue();
+        bd = null;
+        return d;
+    }
+    //保留4为小数四舍五入,new BigDecimal(String)避免了0.745四舍五入变成0.74，不用new BigDecimal(double)
+    public static double CutTo0(String value) {
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(0, BigDecimal.ROUND_HALF_UP);
         double d = bd.doubleValue();
         bd = null;
         return d;
@@ -44,6 +55,8 @@ public class DoubleUtil {
     //舍掉小数取整:Math.floor(3.5)=3
     //四舍五入取整:Math.rint(3.5)=4
     //进位取整:Math.ceil(3.1)=4
+
+    //切除小数点后面的所有数据
    public static String Cut0(String value) {
         if (value==null||"".equals(value)){
             return "0";
@@ -93,8 +106,11 @@ public class DoubleUtil {
         BigDecimal bd2 = new BigDecimal(Double.toString(d2));
         return bd1.multiply(bd2).doubleValue();
     }
-
-
+    public static double mulX10(String d1){
+        BigDecimal bd1 = new BigDecimal(d1);
+        BigDecimal bd2 = new BigDecimal("10");
+        return bd1.multiply(bd2).doubleValue();
+    }
     /**
      * double 除法
      * @param d1
@@ -105,12 +121,21 @@ public class DoubleUtil {
     public static double div(double d1,double d2,int scale){
         //  当然在此之前，你要判断分母是否为0，
         //  为0你可以根据实际需求做相应的处理
-
+        if (d2<=0)return 0;
         BigDecimal bd1 = new BigDecimal(Double.toString(d1));
         BigDecimal bd2 = new BigDecimal(Double.toString(d2));
         return bd1.divide
                 (bd2,scale,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
+    //除以10
+    public static double divC10(String d1,int scale){
+        //  当然在此之前，你要判断分母是否为0，
+        //  为0你可以根据实际需求做相应的处理
 
+        BigDecimal bd1 = new BigDecimal(d1);
+        BigDecimal bd2 = new BigDecimal("10");
+        return bd1.divide
+                (bd2,scale,BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
 
 }

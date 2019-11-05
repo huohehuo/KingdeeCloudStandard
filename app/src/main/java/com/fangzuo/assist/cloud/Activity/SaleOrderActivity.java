@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.fangzuo.assist.cloud.ABase.BaseActivity;
-import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Dao.Client;
@@ -27,8 +26,7 @@ import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.DataModel;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
-import com.fangzuo.assist.cloud.Utils.EventBusUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.MathUtil;

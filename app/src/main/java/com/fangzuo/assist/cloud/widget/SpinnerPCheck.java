@@ -160,6 +160,53 @@ public class SpinnerPCheck extends RelativeLayout {
             }
         }
     }
+    //二期逻辑,自动设置第一位数据
+    public void setAutoSelection(String fid,String auto,String at) {
+        autoString=auto;
+        if (null==fid)return;
+        if ("".equals(fid))return;
+//        container.clear();
+        App.getRService().doIOAction(WebApi.ProductTreeGet,fid, new MySubscribe<CommonResponse>() {
+            @Override
+            public void onNext(CommonResponse commonResponse) {
+                super.onNext(commonResponse);
+                if (!commonResponse.state)return;
+                ProductTreeBeanList dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, ProductTreeBeanList.class);
+                if (dBean != null && dBean.treeBeans != null && dBean.treeBeans.size() > 0) {
+                    dealAuto(dBean.treeBeans,"");
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+//                super.onError(e);
+//                    LoadingUtil.dismiss();
+//                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Updata_Error,e.toString()));
+            }
+        });
+
+    }
+    //自动设置第一位
+    private void dealAuto(List<ProductTreeBeanList.ProductTreeBean> listData,String at){
+        container.clear();
+        employeeId =        "";
+        employeeName =      "";
+        employeeNumber =    "";
+        FPARENTID =    "";
+//        container.add(new ProductTreeBeanList().new ProductTreeBean("","","",""));
+        container.addAll(listData);
+        mSp.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        if (container.size()>0){
+            for (int j = 0; j < container.size(); j++) {
+                if (container.get(j).FNumber.equals(autoString)) {
+                    mSp.setSelection(j);
+                    break;
+                }
+            }
+        }
+    }
+
 
     public void addItems(List<Product> products){
         container.clear();

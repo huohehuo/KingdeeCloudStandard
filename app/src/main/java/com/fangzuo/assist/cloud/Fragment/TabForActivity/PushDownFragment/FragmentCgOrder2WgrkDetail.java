@@ -179,6 +179,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
 //    private String mainSaleMan = "";//表头带出
 //    private String mainSaleOrg = "";//表头带出
     private Org mainBuyOrg;//表头带出
+    private Org mainSettleOrg;//表头带出
     private zpBluetoothPrinter zpSDK;
     private BlueToothBean bean;
 
@@ -219,6 +220,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
                     }
                     final List<T_main> mains = t_mainDao.queryBuilder().where(
                             T_mainDao.Properties.Activity.eq(activity),
+                            T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                             T_mainDao.Properties.FID.eq(pushDownMain.FID)
                     ).build().list();
                     for (int i = 0; i < mains.size(); i++) {
@@ -230,14 +232,19 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
                                 super.onNext(commonResponse);
                                 t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
                                         T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                         T_DetailDao.Properties.FOrderId.eq(mains.get(pos).FOrderId)
                                 ).build().list());
                                 for (int i = 0; i < mains.size(); i++) {
                                     List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
-                                            PushDownSubDao.Properties.FBillNo.eq(mains.get(i).FBillNo)).build().list();
+                                            PushDownSubDao.Properties.FBillNo.eq(mains.get(i).FBillNo),
+                                            PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                                    ).build().list();
                                     pushDownSubDao.deleteInTx(pushDownSubs);
                                     List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
-                                            PushDownMainDao.Properties.FBillNo.eq(mains.get(i).FBillNo)).build().list();
+                                            PushDownMainDao.Properties.FBillNo.eq(mains.get(i).FBillNo),
+                                            PushDownMainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                                    ).build().list();
                                     pushDownMainDao.deleteInTx(pushDownMains);
                                 }
                             }
@@ -269,6 +276,12 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
                     delete.setTitle("上传错误");
                     delete.setMessage(builder.toString());
                     delete.setPositiveButton("确定", null);
+                    delete.setNegativeButton("反馈信息", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DataService.pushBackJson(mContext, FragmentCgOrder2WgrkDetail.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
+                        }
+                    });
                     delete.create().show();
                 }
 
@@ -311,7 +324,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
             case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
                 if (null != activityPager) {
 ////                    spUnit.setAuto("", SpinnerUnit.Id);
-                    spWhichStorage.setAuto("","",activityPager.getOrgOut());
+                    spWhichStorage.setAuto(Info.Storage+activityPager.getActivityMain(),"",activityPager.getOrgOut());
                 }
                 break;
             case EventBusInfoCode.Print_Check://检测打印机连接状态
@@ -378,7 +391,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_backmsg2saleback, container, false);
+        View view = inflater.inflate(R.layout.fragment_cgorder2wgrk_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getActivity();
         EventBusUtil.register(this);
@@ -419,10 +432,12 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
         if (pushDownMains.size() > 0) {
             Lg.e("表头：", pushDownMains.get(0));
             pushDownMain = pushDownMains.get(0);
+            activityPager.setFBillNo(pushDownMain.FBillNo);
             mainBuyDept = LocDataUtil.getDept(pushDownMain.FSaleDeptID).FNumber;
 //            mainSaleMan = LocDataUtil.getSaleMan(pushDownMain.FSaleManID).FNumber;
 //            mainSaleOrg = LocDataUtil.getOrg(pushDownMain.FSaleOrgID,"id").FNumber;
             mainBuyOrg = LocDataUtil.getOrg(pushDownMain.FSaleOrgID,"id");
+            mainSettleOrg = LocDataUtil.getOrg(pushDownMain.FSettleOrgId,"id");
 //            Lg.e("得到表头解析数据:"+mainSaleDept);
 //            Lg.e("得到表头解析数据:"+mainSaleMan);
 //            Lg.e("得到表头解析数据:"+mainSaleOrg);
@@ -477,6 +492,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 storage = (Storage) spWhichStorage.getAdapter().getItem(i);
                 spWhichStorage.setTitleText(storage.FName);
+                Hawk.put(Info.Storage+activityPager.getActivityMain(),storage.FName);
                 Lg.e("选中仓库：", storage);
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, storage, "");
@@ -569,7 +585,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
             lvPushsub.setAdapter(pushDownSubListAdapter);
             pushDownSubListAdapter.notifyDataSetChanged();
         } else {
-            Toast.showText(mContext, "未查询到数据");
+            Toast.showText(mContext, getString(R.string.find_nothing));
         }
     }
 
@@ -602,7 +618,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
             }
 
             if (flag) {
-                Toast.showText(mContext, "商品不存在");
+                Toast.showText(mContext, getString(R.string.product_nothing));
                 MediaPlayer.getInstance(mContext).error();
 
             }
@@ -625,7 +641,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
         spUnitStore.setAuto(product.FStoreUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
-        spWhichStorage.setAuto("",autoStorage, activityPager.getOrgOut());
+        spWhichStorage.setAuto(Info.Storage+activityPager.getActivityMain(),autoStorage, activityPager.getOrgOut());
         unit = LocDataUtil.getUnit(product.FPurchaseUnitID);
 //        }
         if (CommonUtil.isOpen(product.FIsBatchManage)) {
@@ -709,7 +725,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
         LoadingUtil.showDialog(mContext, "正在获取条码数据...");
         String pdata = product.FMaterialid + "|" + unit.FMeasureUnitID + "|" + edNum.getText().toString().trim()
                 + "|" + spActualmodel.getDataNumber() + "|" + spAuxsign.getDataNumber() + "|" + edPurchaseNo.getText().toString()
-                + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + storage.FNumber + "|" + activityPager.getOrgOut(0);
+                + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + storage.FNumber + "|" + mainSettleOrg.FNumber;
         App.getRService().doIOAction(WebApi.PrintData, pdata, new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
@@ -728,7 +744,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
                     PrintHistory printHistory = new PrintHistory();
                     printHistory.setData(product, spUnitStore.getDataObject(), spUnitJiben.getDataObject(), storeNum,
                             baseNum, spWavehouse.getWaveHouseId(), activityPager.getNote(),
-                            mainBuyOrg.FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber(),spActualmodel.getDataNumber());
+                            mainSettleOrg.FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber(),spActualmodel.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
                         CommonUtil.doPrint(zpSDK, printHistory,activityPager.getPrintNum());
@@ -787,15 +803,17 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
             String timesecond = CommonUtil.getTimesecond();
             T_main main = new T_main();//--------------------------------------表头-----------------
             main.activity = activity;
+            main.FAccountID = CommonUtil.getAccountID();
             main.FBillerID = Hawk.get(Info.user_id, "");
             main.FBarcode = barcode;
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
             main.FOrderId = ordercode;
             main.FSoorDerno = pushDownMain.FBillNo;
             main.FID = pushDownSub.FID;
+            main.FNeedOrgId = LocDataUtil.getOrg(pushDownSub.FNeedOrgID,"id").FNumber;
             main.FIndex = timesecond;
             main.FBillNo = pushDownMain.FBillNo;
-            main.setData(Info.getType(activity), activityPager.getOrgOut(0), mainBuyOrg.FNumber, mainBuyOrg.FNumber);
+            main.setData(Info.getType(activity), activityPager.getOrgOut(0), mainBuyOrg.FNumber, mainSettleOrg.FNumber);
             main.FDepartmentNumber = activityPager.getDepartMent();
 //            main.FPurchaseDeptId = activityPager.getDepartMentBuy();
 //            main.FPurchaserId = activityPager.getManSale();
@@ -813,8 +831,10 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
 
             T_Detail detail = new T_Detail();//--------------------------------明细-----------------
             detail.activity = activity;
+            detail.FAccountID = CommonUtil.getAccountID();
             detail.FBillerID = Hawk.get(Info.user_id, "");
             detail.FBarcode = barcode;
+            detail.FBillNo = pushDownMain.FBillNo;
             detail.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
             detail.FOrderId = ordercode;
             detail.FIndex = timesecond;
@@ -825,6 +845,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
             detail.FSOEntryId = pushDownSub.FEntryID;
             detail.FRemainInStockQty = pushDownSub.FQty;
             detail.FTaxPrice = pushDownSub.FTaxPrice;
+            detail.FTaxRate = pushDownSub.FTaxRate;
             detail.FRealQty = num;
             detail.FStoreNum = edStorenum.getText().toString();
             detail.FBaseNum = edBasenum.getText().toString();
@@ -839,6 +860,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
             detail.setStorage(storage);
             detail.setWaveHouse(waveHouse);
             detail.setUnit(unit);
+            detail.FPriceUnitID = pushDownSub.FPriceUnitID;//必须再设置上面的单位之后设置计价单位
             detail.setBaseUnit(spUnitJiben.getDataObject());
             detail.setStoreUnit(spUnitStore.getDataObject());
             long insert2 = t_detailDao.insert(detail);
@@ -873,6 +895,8 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
         edNum.setText("");
         product = null;
         pushDownSub = null;
+        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+
     }
     //检测打印机连接状态
     private void checkPrint(boolean check) {

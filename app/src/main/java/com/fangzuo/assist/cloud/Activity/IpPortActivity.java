@@ -53,8 +53,12 @@ public class IpPortActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.ed_url)
     EditText edUrl;
+    @BindView(R.id.ed_type)
+    EditText edType;
     @BindView(R.id.tv_endtime)
     TextView tvEndtime;
+    @BindView(R.id.tv_pda)
+    TextView tvPda;
     @BindView(R.id.ed_printnum)
     EditText edPrintnum;
     private BasicShareUtil share;
@@ -74,7 +78,7 @@ public class IpPortActivity extends BaseActivity {
 //            edUrl.setText(Hawk.get(Config.Cloud_Url, "http://120.77.206.67/K3Cloud/"));
         }
 //        else {
-            if (Info.DATABASESETTING.equals("K3DBConfigerRY")) {
+            if (App.DataBaseSetting.equals("K3DBConfigerRY")) {
                 edUrl.setText(Hawk.get(Config.Cloud_Url, "http://120.77.206.67/K3Cloud/"));
 //                edIp.setText("120.77.206.67");
 //                edPort.setText("8080");
@@ -86,7 +90,7 @@ public class IpPortActivity extends BaseActivity {
 //        }
         edPrintnum.setText(Hawk.get(Config.PrintNum, "2"));
     }
-
+    String pdaMsg;
     @Override
     protected void initData() {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Config.PDA_Type);
@@ -100,10 +104,13 @@ public class IpPortActivity extends BaseActivity {
 
         if (null != Hawk.get(Config.SaveTime, null)) {
             UseTimeBean bean = Hawk.get(Config.SaveTime);
-            tvEndtime.setText("有效期：" + dealTime(bean.endTime) + "   用户码：" + Hawk.get(Config.PDA_IMIE, "获取失败")+"  注册码："+Hawk.get(Config.PDA_RegisterCode,"获取失败"));
+            pdaMsg = "有效期：" + dealTime(bean.endTime) + "   \n用户码：" + Hawk.get(Config.PDA_IMIE, "获取失败")+"  \n注册码："+Hawk.get(Config.PDA_RegisterCode,"获取失败");
+//            tvEndtime.setText("有效期：" + dealTime(bean.endTime) + "   用户码：" + Hawk.get(Config.PDA_IMIE, "获取失败")+"  注册码："+Hawk.get(Config.PDA_RegisterCode,"获取失败"));
         } else {
-            tvEndtime.setText("获取时间失效" + "   用户码：" + Hawk.get(Config.PDA_IMIE, "获取失败")+"  注册码："+Hawk.get(Config.PDA_RegisterCode,"获取失败"));
+            pdaMsg ="获取时间失效" + "   \n用户码：" + Hawk.get(Config.PDA_IMIE, "获取失败")+"  \n注册码："+Hawk.get(Config.PDA_RegisterCode,"获取失败");
+//            tvEndtime.setText("获取时间失效" + "   用户码：" + Hawk.get(Config.PDA_IMIE, "获取失败")+"  注册码："+Hawk.get(Config.PDA_RegisterCode,"获取失败"));
         }
+        edType.setText(Hawk.get(Config.PDA_Project_Type,"1"));
     }
 
     @Override
@@ -133,6 +140,31 @@ public class IpPortActivity extends BaseActivity {
 
             }
         });
+        btnSave.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (App.DataBaseSetting.equals("K3DBConfigerRY")){
+                    Hawk.put(Config.DataBase,"K3DBConfiger201811123395555");
+                    App.DataBaseSetting = "K3DBConfiger201811123395555";
+                }else{
+                    Hawk.put(Config.DataBase,"K3DBConfigerRY");
+                    App.DataBaseSetting = "K3DBConfigerRY";
+                }
+                Toast.showText(mContext,"已切换到服务器地址："+App.DataBaseSetting);
+                return true;
+            }
+        });
+
+        tvPda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(mContext)
+                        .setTitle("PDA信息")
+                        .setMessage(pdaMsg)
+                        .setPositiveButton("确认", null)
+                        .create().show();
+            }
+        });
     }
 
     @Override
@@ -149,6 +181,9 @@ public class IpPortActivity extends BaseActivity {
         }
         if (!edPrintnum.getText().toString().equals("")) {
             Hawk.put(Config.PrintNum, edPrintnum.getText().toString());
+        }
+        if (!edType.getText().toString().equals("")) {
+            Hawk.put(Config.PDA_Project_Type, edType.getText().toString());
         }
         super.onDestroy();
     }

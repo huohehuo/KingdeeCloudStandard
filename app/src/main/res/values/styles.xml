@@ -1,5 +1,10 @@
 <resources>
-
+    <style name="AppTheme_BackJson" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--窗体透明-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--窗体背景-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!--&lt;!&ndash; 表示状态栏透明，并且会使得状态栏悬浮在activity之上(activity布局会扩展到状态栏底部) &ndash;&gt;-->
@@ -93,4 +98,22 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <!--<attr name="T_world_name" format="string"/>-->
     <!--<attr name="T_world_name_size" format="dimension"/>-->
+
+
+    <!--viewpager指示器-->
+    <declare-styleable name="BannerIndicator">
+        <!--指示器之间的间隙-->
+        <attr name="gap" format="dimension" />
+        <!--指示器的宽度-->
+        <attr name="slider_width" format="dimension" />
+        <!--指示器的高度-->
+        <attr name="slider_height" format="dimension" />
+        <!--指示器大小变化方向-->
+        <attr name="sleider_align">
+            <enum name="Left" value="1" />
+            <enum name="Center" value="0" />
+            <enum name="Right" value="2" />
+        </attr>
+    </declare-styleable>
+
 </resources>

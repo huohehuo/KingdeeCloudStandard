@@ -51,13 +51,20 @@ public class Product{
     public String FOrg;
     public String FMASTERID;//库存ID,用于查库存
 
-    @Generated(hash = 334440646)
+    public String FStr1;
+    public String FStr2;
+    public String FStr3;
+    public String FStr4;
+    public String FStr5;
+
+    @Generated(hash = 906953856)
     public Product(String FProduceUnitID, String FPurchaseUnitID, String FPurchasePriceUnitID, String FSaleUnitID, String FSalePriceUnitID,
             String FStoreUnitID, String FAuxUnitID, String FStockID, String FStockPlaceID, String FIsBatchManage, String FIsKFperiod,
             String FExpperiod, String FExpUnit, String FIsPurchase, String FIsSale, String FIsInventory, String FIsProduce,
             String FIsSubContract, String FIsAsset, String FBaseUnitID, String FFWeightUnitID, String FVolumeUnitID, String FBarcode,
             String FGrossWeight, String FNetWeight, String FLenght, String FWidth, String FHeight, String FVolume, String FMaterialid,
-            String FNumber, String FoldNumber, String FName, String FModel, String FMnemoniccode, String FOrg, String FMASTERID) {
+            String FNumber, String FoldNumber, String FName, String FModel, String FMnemoniccode, String FOrg, String FMASTERID, String FStr1,
+            String FStr2, String FStr3, String FStr4, String FStr5) {
         this.FProduceUnitID = FProduceUnitID;
         this.FPurchaseUnitID = FPurchaseUnitID;
         this.FPurchasePriceUnitID = FPurchasePriceUnitID;
@@ -95,6 +102,11 @@ public class Product{
         this.FMnemoniccode = FMnemoniccode;
         this.FOrg = FOrg;
         this.FMASTERID = FMASTERID;
+        this.FStr1 = FStr1;
+        this.FStr2 = FStr2;
+        this.FStr3 = FStr3;
+        this.FStr4 = FStr4;
+        this.FStr5 = FStr5;
     }
 
     @Generated(hash = 1890278724)
@@ -395,5 +407,45 @@ public class Product{
 
     public void setFMASTERID(String FMASTERID) {
         this.FMASTERID = FMASTERID;
+    }
+
+    public String getFStr1() {
+        return this.FStr1;
+    }
+
+    public void setFStr1(String FStr1) {
+        this.FStr1 = FStr1;
+    }
+
+    public String getFStr2() {
+        return this.FStr2;
+    }
+
+    public void setFStr2(String FStr2) {
+        this.FStr2 = FStr2;
+    }
+
+    public String getFStr3() {
+        return this.FStr3;
+    }
+
+    public void setFStr3(String FStr3) {
+        this.FStr3 = FStr3;
+    }
+
+    public String getFStr4() {
+        return this.FStr4;
+    }
+
+    public void setFStr4(String FStr4) {
+        this.FStr4 = FStr4;
+    }
+
+    public String getFStr5() {
+        return this.FStr5;
+    }
+
+    public void setFStr5(String FStr5) {
+        this.FStr5 = FStr5;
     }
 }

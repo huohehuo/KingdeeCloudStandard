@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
 import com.fangzuo.assist.cloud.Dao.T_main;
 import com.fangzuo.assist.cloud.R;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.T_mainDao;
 

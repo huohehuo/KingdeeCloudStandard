@@ -9,4 +9,5 @@ public class PushDownListRequestBean {
     public String code;
     public String StartTime;
     public String endTime;
+    public String FAccountID;
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3de1ad"
+    android:background="@drawable/bg_wel"
     android:orientation="vertical">
 
     <TextView
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="199dp"
             android:gravity="center"
-            android:text="小助手"
+            android:text="@string/scan_helper"
             android:textColor="@android:color/white"
             android:textSize="40sp"
             android:textStyle="bold" />

@@ -116,7 +116,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.5"
                                 android:gravity="center"
-                                android:text="供应商:"
+                                android:text="@string/supplier"
                                 android:textColor="@android:color/black"
                                 android:textSize="15sp" />
 

@@ -192,7 +192,7 @@ public class Db2FDoutActivity extends BaseActivity {
             binding.lvPushsub.setAdapter(pushDownSubListAdapter);
             pushDownSubListAdapter.notifyDataSetChanged();
         } else {
-            Toast.showText(mContext, "未查询到数据");
+            Toast.showText(mContext, getString(R.string.find_nothing));
         }
     }
 
@@ -379,7 +379,7 @@ public class Db2FDoutActivity extends BaseActivity {
             }
 
             if (flag) {
-                Toast.showText(mContext, "商品不存在");
+                Toast.showText(mContext, getString(R.string.product_nothing));
                 MediaPlayer.getInstance(mContext).error();
 
             }

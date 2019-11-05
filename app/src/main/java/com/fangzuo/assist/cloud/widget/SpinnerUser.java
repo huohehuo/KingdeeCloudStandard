@@ -1,7 +1,6 @@
 package com.fangzuo.assist.cloud.widget;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,23 +11,19 @@ import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.LoginSpAdapter;
-import com.fangzuo.assist.cloud.Adapter.OrgSpAdapter;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
-import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.User;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
-import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.greendao.gen.DaoSession;
-import com.fangzuo.greendao.gen.OrgDao;
 import com.fangzuo.greendao.gen.UserDao;
-import com.loopj.android.http.AsyncHttpClient;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
@@ -121,9 +116,9 @@ public class SpinnerUser extends RelativeLayout {
     public void setAutoSelection(String saveKeyStr,String string) {
         saveKeyString =saveKeyStr;
         autoString = string;
-
         UserDao employeeDao = daoSession.getUserDao();
         List<User> employees = employeeDao.loadAll();
+        container.clear();
         container.addAll(employees);
         adapter.notifyDataSetChanged();
         chooseUser(saveKeyString,autoString);
@@ -171,6 +166,11 @@ public class SpinnerUser extends RelativeLayout {
             if (((User) adapter.getItem(j)).FName.equals(autoString)
                     || ((User) adapter.getItem(j)).FUserID.equals(autoString)) {
                 mSp.setSelection(j);
+                if ("Administrator".equals(((User) adapter.getItem(j)).FName)){
+                    Hawk.put(Config.User_Permit,"1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33-34-35-201-202-203-204-205-206-207-208");
+                }else{
+                    Hawk.put(Config.User_Permit,((User) adapter.getItem(j)).FPermit);
+                }
 //                autoString = null;
                 break;
             }

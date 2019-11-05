@@ -6,8 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Configuration;
-import android.content.res.Resources;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -42,9 +41,12 @@ import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.RegisterUtil;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
+import com.fangzuo.assist.cloud.Utils.UpgradeUtil.AppStatisticalUtil;
+import com.fangzuo.assist.cloud.Utils.UpgradeUtil.AppVersionUtil;
 import com.fangzuo.assist.cloud.Utils.WebApi;
 import com.fangzuo.assist.cloud.widget.LoadingUtil;
 import com.fangzuo.assist.cloud.widget.SpinnerUser;
@@ -89,12 +91,13 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
     private LoginActivity mContext;
     @BindView(R.id.sp_login)
     SpinnerUser spinner;
-    private String userName = "";
-    private String userID = "";
+    private User user;
+//    private String userName = "";
+//    private String userID = "";
     //    private List<User> users;
     private BasicShareUtil share;
     private boolean isOL;
-    private String userPass;
+//    private String userPass;
     private UserDao userDao;
 
     @Override
@@ -153,11 +156,10 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         initBar();
         share = BasicShareUtil.getInstance(mContext);
         userDao = daoSession.getUserDao();
-
+        Hawk.put(Config.PDA_Project_Type, "1");//确定一期/二期项目;确定之后，将决定apk和版本号的下载地址，版本号
         getPermisssion();
-        Log.e("123", ShareUtil.getInstance(mContext).getPISpayMethod() + "");
 //        mTvVersion.setText("Cloud Ver:" + CommonUtil.getVersionName());
-        mTvVersion.setText("Cloud Ver:" + Info.TestNo);
+        mTvVersion.setText("Cloud Ver:" + Info.getAppNo());
         Lg.e("PDA：" + App.PDA_Choose);
         isRemPass.setChecked(Hawk.get(Info.IsRemanber, false));
         rService = App.getRService();
@@ -171,6 +173,20 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 //        String phone_locale = config.locale.getCountry();
 //        Lg.e("当前手机语言：", phone_locale);
 //        changeAppLanguage();
+//        App.getRService().doIOAction("StorageIO", "storage", new MySubscribe<CommonResponse>() {
+//            @Override
+//            public void onNext(CommonResponse commonResponse) {
+//                super.onNext(commonResponse);
+//                DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+//                Lg.e("得到仓库",dBean.storage.size());
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                super.onError(e);
+//            }
+//        });
+        AppStatisticalUtil.upDataStatis(mContext,"LoginActivity");
 
     }
 
@@ -180,32 +196,64 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         Lg.e("Login___onResume");
         //获取用户数据，并且设置默认值
         spinner.setAutoSelection(Info.AutoLogin, Hawk.get(Info.AutoLogin, ""));
+        mTvVersion.setText("Cloud Ver:" + Info.getAppNo());
         DataService.updateTime(mContext);
         DataService.updateRegisterMaxNum(mContext);
         DownLoadUseTime();
+        AppVersionUtil.CheckVersion(mContext);
         //检查是否存在注册码
         RegisterUtil.checkHasRegister();
         //下载app版本号
-        RegisterUtil.downLoadVersion();
+//        RegisterUtil.downLoadVersion();
+//        RegisterUtil.downLoadVersionExplain();
         //上传手机信息IMIE到注册表
         BaseUtilService.updateRegisterMsg(mContext,gson.toJson(
                 new RegisterBean(
                         Hawk.get(Config.PDA_IMIE,""),
                         Build.MODEL+"-IMEI码:"+Hawk.get(Config.PDA_MsgAndIMIE,""),
-                        Info.TestNo,getTimeLong(true))));
+                        Info.getAppNo(),getTimeLong(true))));
 //        Lg.e("本地版本号：",Info.TestNo);
 //        Lg.e("网络版本号：",Hawk.get(Config.Apk_Version, ""));
         //若网络版本比本地版本高，提示新版本
-        if (!"".equals(Hawk.get(Config.Apk_Version, ""))) {
-            if (Double.parseDouble(Hawk.get(Config.Apk_Version, "0")) > Double.parseDouble(Info.TestNo)) {
-                tvVersTip.setVisibility(View.VISIBLE);
-                tvVersTip.setText("有新版本"+Hawk.get(Config.Apk_Version,"0")+"，点击这里进行更新");
-            }else{
-                tvVersTip.setVisibility(View.GONE);
-            }
-        }else{
-            Lg.e("kong");
-        }
+//        if (!"".equals(Hawk.get(Config.Apk_Version, ""))) {
+//            if (Double.parseDouble(Hawk.get(Config.Apk_Version, "0")) > Double.parseDouble(Info.getAppNo())) {
+//                tvVersTip.setVisibility(View.VISIBLE);
+//                tvVersTip.setText("有新版本"+Hawk.get(Config.Apk_Version,"0")+"，点击这里进行更新");
+//                //发送更新提示广播
+//                Intent intent = new Intent("com.fangzuo.version");
+//                intent.putExtra("version",Hawk.get(Config.Apk_Version,"0"));
+//                sendBroadcast(intent);
+//                new AlertDialog.Builder(mContext)
+//                        .setTitle("更新版本")
+//                        .setMessage("请确保本地数据已完全上传后,及时进行程序更新,避免影响做单")
+//                        .setPositiveButton("下载并更新", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                DownLoad(Config.getApk_Url());
+//                            }
+//                        })
+//                        .setNeutralButton("取消", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Toast.showText(mContext,"请及时更新程序，避免影响做单");
+//                            }
+//                        })
+//                        .create().show();
+//            }else{
+//                tvVersTip.setVisibility(View.GONE);
+//            }
+//        }else{
+//            Lg.e("kong");
+//        }
+//        Lg.e("加密",DesUtils.base64Encrypt("123"));
+//        Lg.e("解密",DesUtils.base64Decode(DesUtils.base64Encrypt("123")));
+
+//Lg.e("精度",DoubleUtil.CutTo0("6.457"));
+//Lg.e("精度",DoubleUtil.CutTo0("6.44"));
+//Lg.e("精度",DoubleUtil.CutTo0("6.95"));
+
+
+
     }
 
     //获取配置文件中的时间数据
@@ -217,12 +265,12 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 LoadingUtil.dismiss();
                 if (!commonResponse.state) return;
                 UseTimeBean bean = gson.fromJson(commonResponse.returnJson, UseTimeBean.class);
-                if (Integer.parseInt(getTime(false)) < Integer.parseInt(bean.nowTime)) {
+                if (Integer.parseInt(getTime(false)) < MathUtil.toInt(bean.nowTime)) {
                     Toast.showText(mContext, getString(R.string.error_time_getting));
                     Hawk.put(Config.SaveTime, bean);
                     return;
                 } else {
-                    if (Integer.parseInt(getTime(false)) > Integer.parseInt(dealTime(bean.endTime))) {
+                    if (Integer.parseInt(getTime(false)) > MathUtil.toInt(dealTime(bean.endTime))) {
                         Toast.showText(mContext, getString(R.string.error_app_past_time));
                         Hawk.put(Config.SaveTime, bean);
                         return;
@@ -277,11 +325,11 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
             return false;
         } else {
             UseTimeBean bean = Hawk.get(Config.SaveTime);
-            if (Integer.parseInt(getTime(false)) < Integer.parseInt(bean.nowTime)) {
+            if (Integer.parseInt(getTime(false)) < MathUtil.toInt(bean.nowTime)) {
                 Toast.showText(mContext, getString(R.string.error_time_getting));
                 return false;
             } else {
-                if (Integer.parseInt(getTime(false)) > Integer.parseInt(dealTime(bean.endTime))) {
+                if (Integer.parseInt(getTime(false)) > MathUtil.toInt(dealTime(bean.endTime))) {
                     Toast.showText(mContext, getString(R.string.error_app_past_time));
                     return false;
                 } else {
@@ -307,7 +355,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                         .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DownLoad(Config.Apk_Url);
+                                DownLoad(Config.getApk_Url());
                             }
                         })
                         .create().show();
@@ -334,16 +382,19 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                User user = (User) spinner.getAdapter().getItem(i);
-                userName = user.FName;
-                userID = user.FUserID;
-                userPass = user.FPassWord;
-                ShareUtil.getInstance(mContext).setUserName(userName);
-                ShareUtil.getInstance(mContext).setUserID(userID);
+                user = (User) spinner.getAdapter().getItem(i);
+                Lg.e("选中用户",user);
+                ShareUtil.getInstance(mContext).setUserName(user.FNameERP);
+//                ShareUtil.getInstance(mContext).setUserID(user.FUserID);
                 //设置下次默认选择的用户
-                Hawk.put(Info.AutoLogin, userName);
+                Hawk.put(Info.AutoLogin, user.FName);
                 //设置该用户密码
-                mEtPassword.setText(Hawk.get(userName, ""));
+                mEtPassword.setText(Hawk.get(user.FName, ""));
+                if ("Administrator".equals(user.FNameERP)){
+                    Hawk.put(Config.User_Permit,"1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33-34-35-36-37-38-39-40-41-44-43-44-45-46-47-48-49-50-51-52-55-54-55-56-57-58-59-60-61-62-66-64-66-66-67-68-69-70-71-72-77-74-77-77-77-78-79-201-202-203-204-205-206-207-208-209-210-211-212-213-214-215-216-217");
+                }else{
+                    Hawk.put(Config.User_Permit,user.FPermit);
+                }
             }
 
 
@@ -382,23 +433,34 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
             Toast.showText(mContext, getString(R.string.error_check_fail));
             return;
         }
+        if (null==user){
+            Toast.showText(mContext, "请选择登陆用户信息");
+            return;
+        }
 
         if (Hawk.get(Config.Cloud_ID, "").equals("")) {
             Toast.showText(mContext, getString(R.string.error_check_accout));
             return;
         }
-        if ("".equals(userName)) {
+        if ("".equals(user.FName)) {
             Toast.showText(mContext, getString(R.string.error_choose_user));
             return;
         }
-//        startNewActivity(HomeActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
+        if ("".equals(user.FNameERP)) {
+            Toast.showText(mContext, "当前用户对应的ERP登陆数据有误");
+            return;
+        }
 
+        if (!mEtPassword.getText().toString().equals(user.FPassWord)) {
+            Toast.showText(mContext, "登陆密码错误，请重试");
+            return;
+        }
         LoadingUtil.showDialog(mContext, getString(R.string.loading_checking));
         //组装登录数据
         JSONArray jParas = new JSONArray();
         jParas.put(Hawk.get(Config.Cloud_ID, ""));// 帐套Id
-        jParas.put(userName);// 用户名
-        jParas.put(mEtPassword.getText().toString());// 密码
+        jParas.put(user.FNameERP);// 用户名
+        jParas.put(user.FPassWordERP);// 密码
         jParas.put(2052);// 语言T
         App.CloudService().doIOActionLogin(Config.C_Login, jParas.toString(), new ToSubscribe<BackDataLogin>() {
             @Override
@@ -406,20 +468,24 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                 try {
 //                    BackDataLogin bean = JsonCreater.gson.fromJson(string, BackDataLogin.class);
                     if (bean.getLoginResultType() == 1 || bean.getLoginResultType() == -5) {
-                        ShareUtil.getInstance(mContext).setUserName(userName);
-                        Hawk.put(Info.user_name, userName);
-                        Hawk.put(Info.user_pwd, mEtPassword.getText().toString());
+                        ShareUtil.getInstance(mContext).setUserName(user.FNameERP);
+                        Hawk.put(Info.user_name, user.FNameERP);
+                        Hawk.put(Info.user_pwd, user.FPassWordERP);
                         Hawk.put(Info.user_org, bean.getContext().getCurrentOrganizationInfo().getName());
                         Hawk.put(Info.user_id, bean.getContext().getUserId() + "");
                         Hawk.put(Info.user_data, bean.getContext().getDataCenterName() + "");
 //                    ShareUtil.getInstance(mContext).setUserID(userID);
                         if (isRemPass.isChecked()) {
 //                        保存该用户的密码
-                            Hawk.put(userName, mEtPassword.getText().toString());
+                            Hawk.put(user.FName, mEtPassword.getText().toString());
                         } else {
-                            Hawk.put(userName, "");
+                            Hawk.put(user.FName, "");
                         }
-                        startNewActivity(HomeActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
+                        if (Hawk.get(Config.PDA_Project_Type, "2").equals("1")){
+                            startNewActivity(HomeActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
+                        }else{
+                            startNewActivity(HomeP2Activity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
+                        }
                         LoadingUtil.dismiss();
                     } else {
                         LoadingUtil.dismiss();

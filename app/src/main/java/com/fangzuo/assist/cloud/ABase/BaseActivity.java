@@ -30,17 +30,16 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fangzuo.assist.cloud.Activity.Crash.App;
+import com.fangzuo.assist.cloud.Beans.BlueToothBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Service.BaseUtilService;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
-import com.fangzuo.assist.cloud.Utils.CommonUtil;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.MediaPlayer;
@@ -52,6 +51,7 @@ import com.fangzuo.greendao.gen.T_DetailDao;
 import com.fangzuo.greendao.gen.T_mainDao;
 import com.google.gson.Gson;
 import com.nineoldandroids.view.ViewHelper;
+import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -61,6 +61,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import zpSDK.zpSDK.zpBluetoothPrinter;
 
 /**
  * Created by NB on 2017/8/1.
@@ -328,7 +330,7 @@ public abstract class BaseActivity extends FragmentActivity {
                 int year = datePickerDialog.getDatePicker().getYear();
                 int month = datePickerDialog.getDatePicker().getMonth();
                 int day = datePickerDialog.getDatePicker().getDayOfMonth();
-                date = year + "-" + ((month < 10) ? "0" + (month + 1) : (month + 1)) + "-" + ((day < 10) ? "0" + day : day);
+                date = year + "-" + ((month < 9) ? "0" + (month + 1) : (month + 1)) + "-" + ((day < 10) ? "0" + day : day);
                 Toast.showText(mContext, date);
                 v.setText(date);
                 datePickerDialog.dismiss();
@@ -347,7 +349,7 @@ public abstract class BaseActivity extends FragmentActivity {
             if (null!=mCaptureManager)mCaptureManager.onResume();
         }
         //超过10分钟后，自动重新登陆
-        if (MathUtil.MoreTime(10)){
+        if (MathUtil.MoreTime(8)){
             BaseUtilService.reLogin(mContext);
         }
 
@@ -590,6 +592,30 @@ public abstract class BaseActivity extends FragmentActivity {
         }
     }
 
+    public zpBluetoothPrinter getBtPrint(Context context){
+        zpBluetoothPrinter zpSDK=new zpBluetoothPrinter(context);
+        try {
+            BlueToothBean bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
+            if (bean.address.equals("")) {
+                Toast.showText(context,"打印机初始化失败，请检查是否已配置打印机");
+                return null;
+//                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
+            } else {
+                //当打印机已经连上，就不需要再次连接
+                if (!zpSDK.connect(bean.address)) {
+                    return zpSDK;
+//                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
+                } else {
+                    Toast.showText(context,"打印机连接失败,请重试");
+                    return null;
+//                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "OK"));
+                }
+//                }
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
 
 

@@ -11,7 +11,7 @@ import com.fangzuo.assist.cloud.Dao.PDSub;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.WaveHouse;
 import com.fangzuo.assist.cloud.R;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.StorageDao;
 import com.fangzuo.greendao.gen.WaveHouseDao;

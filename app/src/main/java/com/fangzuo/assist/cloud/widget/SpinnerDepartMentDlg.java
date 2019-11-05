@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.DepartmentSpAdapter;
-import com.fangzuo.assist.cloud.Adapter.DepartmentSpAdapter;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Dao.Org;
@@ -26,12 +25,11 @@ import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.fangzuo.greendao.gen.DepartmentDao;
-import com.fangzuo.greendao.gen.StorageDao;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
@@ -254,12 +252,25 @@ public class SpinnerDepartMentDlg extends RelativeLayout {
         container.clear();
         if (check) {
 //当为生产单据时，过滤
-            if (activityTag== Config.ProductInStoreActivity||activityTag==Config.ProductGetActivity||
-                    activityTag==Config.TbGetActivity ||activityTag==Config.TbGet2Activity ||
-                    activityTag==Config.TbGet3Activity||activityTag==Config.TbInActivity ||
-                    activityTag==Config.TbIn2Activity ||activityTag==Config.TbIn3Activity ||
-                    activityTag==Config.GbGetActivity ||activityTag==Config.GbInActivity ||
-                    activityTag==Config.DhInActivity || activityTag== Config.DhIn2Activity ) {
+            if (activityTag== Config.ProductInStoreActivity||activityTag==Config.ProductGetActivity||activityTag==Config.ProductGet4P2Activity||
+                    activityTag==Config.P1PdProductGet2CprkActivity||activityTag==Config.ChangeInActivity|| activityTag==Config.TbGetActivity ||
+                    activityTag==Config.TbGet2Activity ||activityTag==Config.DryingGetActivity||activityTag==Config.ProductGet4BoxActivity||
+                    activityTag==Config.ChangeGetActivity|| activityTag==Config.TbGet3Activity||activityTag==Config.TbInActivity ||
+                    activityTag==Config.WorkOrgGet4P2Activity ||activityTag==Config.P1PdProductGet2Cprk2Activity || activityTag==Config.TbIn2Activity ||
+                    activityTag==Config.TbIn3Activity ||activityTag==Config.WorkOrgIn4P2Activity || activityTag==Config.GbGetActivity ||
+                    activityTag==Config.GbInActivity ||activityTag==Config.BoxReBoxP1Activity ||activityTag==Config.BoxReAddP1Activity ||
+                    activityTag==Config.DhInActivity || activityTag== Config.DhIn2Activity || activityTag== Config.ChangeLvGetActivity ||
+                    activityTag== Config.ChangeModelGetActivity|| activityTag== Config.SplitBoxGetActivity|| activityTag== Config.ChangeLvInActivity||
+                    activityTag== Config.ChangeModelInActivity|| activityTag== Config.SplitBoxInActivity|| activityTag== Config.ZbCheJianInActivity||
+                    activityTag== Config.ZbCheJianHunInActivity|| activityTag== Config.ZbCheJianDiGetActivity||activityTag== Config.Bg1CheJianInActivity||
+                    activityTag== Config.Bg2CheJianInActivity|| activityTag== Config.Bg1CheJianHunInActivity||activityTag== Config.Bg2CheJianHunInActivity
+                    || activityTag== Config.Bg1CheJianDiGetActivity||activityTag== Config.Bg2CheJianDiGetActivity||activityTag== Config.CpWgInActivity
+                    || activityTag== Config.CpWgHunInActivity|| activityTag== Config.SplitBoxHunInActivity|| activityTag== Config.SplitBoxDiGetActivity
+                    || activityTag== Config.Tb1HunInActivity|| activityTag== Config.Tb2HunInActivity|| activityTag== Config.Tb3HunInActivity
+                    || activityTag== Config.Tb1DiGetActivity|| activityTag== Config.Tb2DiGetActivity|| activityTag== Config.Tb3DiGetActivity
+                    || activityTag== Config.GbDiGetActivity|| activityTag== Config.GbHunInActivity|| activityTag== Config.ZbCheJianDiZGetActivity
+                    || activityTag== Config.BoxReAddP2Activity|| activityTag== Config.ProductGet4BoxP2Activity
+                    ) {
                 for (int i = 0; i < listData.size(); i++) {
                     if (listData.get(i).FOrg.equals(autoOrg)) {
                         if (listData.get(i).FISSTOCK.equals("1")){

@@ -19,7 +19,7 @@ import com.fangzuo.assist.cloud.Dao.StoreMan;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.greendao.gen.DaoSession;
@@ -47,6 +47,7 @@ public class SpinnerStoreMan extends RelativeLayout {
     private String employeeId = "";
     private String employeeName = "";
     private String employeeNumber = "";
+    private StoreMan obj;
     public static final String Name = "name";
     public static final String Id = "id";
     public static final String Number = "number";
@@ -123,6 +124,7 @@ public class SpinnerStoreMan extends RelativeLayout {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 StoreMan employee = (StoreMan) adapter.getItem(i);
+                obj = employee;
                 employeeId = employee.FID;
                 employeeName = employee.FName;
                 employeeNumber = employee.FNumber;
@@ -236,6 +238,9 @@ public class SpinnerStoreMan extends RelativeLayout {
         return employeeNumber == null ? "" : employeeNumber;
     }
 
+    public StoreMan getDataNumberObj() {
+        return obj;
+    }
     /**
      * @param saveKeyStr 用于保存的key
      * @param string     自动设置的z值
@@ -257,6 +262,7 @@ public class SpinnerStoreMan extends RelativeLayout {
     }
 
     public void setAuto(String saveKeyStr,String autoStr, Org org) {
+//        Lg.e("key;"+saveKeyStr,autoStr);
         employeeId = "";
         employeeName = "";
         employeeNumber = "";
@@ -325,6 +331,7 @@ public class SpinnerStoreMan extends RelativeLayout {
         if ("".equals(autoString) && !"".equals(saveKeyString)) {
             autoString = Hawk.get(saveKeyString, "");
         }
+//        Lg.e("key得到：",autoString);
         if (container.size() > 0) {
             mSp.setAdapter(adapter);
             adapter.notifyDataSetChanged();

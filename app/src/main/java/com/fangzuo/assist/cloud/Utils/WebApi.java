@@ -33,6 +33,7 @@ public class WebApi {
     public static final String PDUPLOAD = "PDUpload";
     public static final String PUSHDOWNLIST = "PushDownList";
     public static final String PUSHDOWNDLLIST = "PushDownloadList";
+    public static final String GetPGetData = "GetPGetData";
     public static final String PUSHDOWNSOUPLOAD = "PushDownSOUpload";
     public static final String PUSHDOWNSLUPLOAD = "PushDownSLUpload";
     public static final String PUSHDOWNPOUPLOAD = "PushDownPOUpload";
@@ -60,9 +61,12 @@ public class WebApi {
     public static final String SEARCHJHSEARCHLIKE = "jhSearchLike";
     public static final String S2Product = "S2Product";
     public static final String CodeOnlyDelete = "CodeCheckDelete";
+    public static final String CodeOnlyDelete4All = "CodeOnlyDelete4All";
     public static final String DetailTableDeleteAll = "DetailTableDeleteAll";
+    public static final String DeleteBoxCodeAll = "DeleteBoxCodeAll";
     public static final String CodeCheckForIn = "CodeCheckForIn";
     public static final String CodeCheckForOut = "CodeCheckForOut";
+    public static final String CodeCheckForOut4Box = "CodeCheckForOut4Box";
     public static final String CodeCheckForOutForDB = "CodeCheckForOutForDB";
     public static final String CodeCheckInsertForIn = "CodeCheckInsertForIn";
     public static final String CodeCheckInsertForOut = "CodeCheckInsertForOut";
@@ -73,14 +77,20 @@ public class WebApi {
 
     public static final String PYUpload = "PYUpload";
     public static final String PKUpload = "PKUpload";
+    public static final String BoxReAddUpload = "BoxReAddUpload";
     public static final String PrISUpload = "PrISUpload";
     public static final String PGUpload = "PGUpload";
     public static final String OtherInUpload = "OtherInUpload";
     public static final String OtherOutUpload = "OtherOutUpload";
     public static final String DBUpload = "DBUpload";
+    public static final String DBBoxUpload = "DBBoxUpload";
     public static final String SaleOutUpload = "SaleOutUpload";
+    public static final String SaleOutBoxUpload = "SaleOutBoxUpload";
     public static final String BackMsg2SaleBackUpload = "BackMsg2SaleBackUpload";
     public static final String CgOrder2WgrkUpload = "CgOrder2WgrkUpload";
+    public static final String CgOrder2WgrkBoxUpload = "CgOrder2WgrkBoxUpload";
+    public static final String P2ProductionInStoreUpload = "P2ProductionInStoreUpload";
+    public static final String P1PG2CprkUpload = "P1PG2CprkUpload";
 
     public static final String AuxSignFirstCheck = "AuxSignFirstCheck";
     public static final String AuxSignSecCheck = "AuxSignSecCheck";
@@ -88,9 +98,16 @@ public class WebApi {
     public static final String ActualModelSecCheck = "ActualModelSecCheck";
 
     public static final String PrintData = "PrintData";
+    public static final String PrintData4P1 = "PrintData4P1";
+    public static final String PrintData4PackagReAdd = "PrintData4PackagReAdd";
+    public static final String PrintData4FlInStore = "PrintData4FlInStore";
+    public static final String PrintData4Package = "PrintData4Package";
+    public static final String PrintData4Package2 = "PrintData4Package2";
+    public static final String PrintData4P2 = "PrintData4P2";
     public static final String HuozhuByOrg = "HuozhuByOrg";
 
     public static final String PrintOutCheck = "PrintOutCheck";
+    public static final String PrintOutCheck4P2 = "PrintOutCheck4P2";
     public static final String PrintOutForPD = "PrintOutForPD";
     public static final String PrintBeforeData = "PrintBeforeData";
     public static final String PrintBeforeDataForCreateCode = "PrintBeforeDataForCreateCode";
@@ -100,5 +117,33 @@ public class WebApi {
     public static final String RegisterDelete = "RegisterDelete";
     public static final String RegisterGetNum = "RegisterGetNum";
     public static final String RegisterUpdateMsg = "RegisterUpdateMsg";
+
+
+    public static final String getBoxCodeAndBatch = "getBoxCodeAndBatch";
+    public static final String doPackingUpload = "doPackingUpload";
+    public static final String GetWortPrintData = "GetWortPrintData";
+    public static final String GetBoxPrintData = "GetBoxPrintData";
+    public static final String PrintOutCheck4BoxCode = "PrintOutCheck4BoxCode";
+    public static final String PrintOutCheck4BoxCode4P1List = "PrintOutCheck4BoxCode4P1List";
+    public static final String CodeCheckForOut4P2 = "CodeCheckForOut4P2";
+    public static final String CodeCheckForDryingOut4P2 = "CodeCheckForDryingOut4P2";
+    public static final String CodeCheckForBoxOut4P1 = "CodeCheckForBoxOut4P1";
+    public static final String CodeCheckForOutForDB4P2 = "CodeCheckForOutForDB4P2";
+    public static final String GetSplitBoxData = "GetSplitBoxData";
+    public static final String getSplitBoxCode = "getSplitBoxCode";
+    public static final String doSplitingUpload = "doSplitingUpload";
+    public static final String doSplitingP1Upload = "doSplitingP1Upload";
+    public static final String CodeCheckInsertForOutDrying = "CodeCheckInsertForOutDrying";
+    public static final String CodeCheckInsertForOutBox = "CodeCheckInsertForOutBox";
+    public static final String CodeCheckInsertForDBOutBox = "CodeCheckInsertForDBOutBox";
+    public static final String CodeOnlyDelete4Drying = "CodeOnlyDelete4Drying";
+    public static final String CodeOnlyDelete4Box = "CodeOnlyDelete4Box";
+    public static final String DryingGetUpload = "DryingGetUpload";
+    public static final String PGet4BOxUpload = "PGet4BOxUpload";
+    public static final String DB4P1BoxUpload = "DB4P1BoxUpload";
+    public static final String GetDryingGetUploadData = "GetDryingGetUploadData";
+    public static final String GetPGet4BoxUploadData = "GetPGet4BoxUploadData";
+    public static final String CodeCheckForBoxReBox4P1 = "CodeCheckForBoxReBox4P1";
+    public static final String doReBoxP1Upload = "doReBoxP1Upload";
 
 }

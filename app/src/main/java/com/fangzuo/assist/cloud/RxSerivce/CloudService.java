@@ -6,6 +6,7 @@ import android.util.Log;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.BackDataLogin;
+import com.fangzuo.assist.cloud.Beans.SearchBackData;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.Info;
@@ -74,7 +75,10 @@ public class CloudService {
     public void doIOAction(String io, String data,ToSubscribe<BackData> mySubscribe) {
         toSubscribe(request.actionIO(io, getMap(data)), mySubscribe);
     }
-
+    //执行接口
+    public void doIOActionSearch(String io, String data,ToSubscribe<SearchBackData> mySubscribe) {
+        toSubscribe(request.actionIOSearch(io, getMap(data)), mySubscribe);
+    }
 
 
     /**

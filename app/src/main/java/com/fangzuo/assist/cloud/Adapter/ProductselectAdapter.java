@@ -10,7 +10,8 @@ import android.widget.TextView;
 import com.fangzuo.assist.cloud.Dao.BarCode;
 import com.fangzuo.assist.cloud.Dao.InStorageNum;
 import com.fangzuo.assist.cloud.R;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.greendao.gen.InStorageNumDao;
 
 import java.util.List;
@@ -62,7 +63,7 @@ public class ProductselectAdapter extends BaseAdapter {
 
         for(int j =0;j<list.size();j++){
             try{
-                qty+=Double.parseDouble(list.get(j).FQty);
+                qty+= MathUtil.toD(list.get(j).FQty);
             }catch (Exception e){
                 e.printStackTrace();
                 qty+=0;

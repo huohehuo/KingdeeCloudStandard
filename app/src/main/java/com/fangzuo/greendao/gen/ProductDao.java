@@ -61,6 +61,11 @@ public class ProductDao extends AbstractDao<Product, Void> {
         public final static Property FMnemoniccode = new Property(34, String.class, "FMnemoniccode", false, "FMNEMONICCODE");
         public final static Property FOrg = new Property(35, String.class, "FOrg", false, "FORG");
         public final static Property FMASTERID = new Property(36, String.class, "FMASTERID", false, "FMASTERID");
+        public final static Property FStr1 = new Property(37, String.class, "FStr1", false, "FSTR1");
+        public final static Property FStr2 = new Property(38, String.class, "FStr2", false, "FSTR2");
+        public final static Property FStr3 = new Property(39, String.class, "FStr3", false, "FSTR3");
+        public final static Property FStr4 = new Property(40, String.class, "FStr4", false, "FSTR4");
+        public final static Property FStr5 = new Property(41, String.class, "FStr5", false, "FSTR5");
     }
 
 
@@ -112,7 +117,12 @@ public class ProductDao extends AbstractDao<Product, Void> {
                 "\"FMODEL\" TEXT," + // 33: FModel
                 "\"FMNEMONICCODE\" TEXT," + // 34: FMnemoniccode
                 "\"FORG\" TEXT," + // 35: FOrg
-                "\"FMASTERID\" TEXT);"); // 36: FMASTERID
+                "\"FMASTERID\" TEXT," + // 36: FMASTERID
+                "\"FSTR1\" TEXT," + // 37: FStr1
+                "\"FSTR2\" TEXT," + // 38: FStr2
+                "\"FSTR3\" TEXT," + // 39: FStr3
+                "\"FSTR4\" TEXT," + // 40: FStr4
+                "\"FSTR5\" TEXT);"); // 41: FStr5
     }
 
     /** Drops the underlying database table. */
@@ -309,6 +319,31 @@ public class ProductDao extends AbstractDao<Product, Void> {
         if (FMASTERID != null) {
             stmt.bindString(37, FMASTERID);
         }
+ 
+        String FStr1 = entity.getFStr1();
+        if (FStr1 != null) {
+            stmt.bindString(38, FStr1);
+        }
+ 
+        String FStr2 = entity.getFStr2();
+        if (FStr2 != null) {
+            stmt.bindString(39, FStr2);
+        }
+ 
+        String FStr3 = entity.getFStr3();
+        if (FStr3 != null) {
+            stmt.bindString(40, FStr3);
+        }
+ 
+        String FStr4 = entity.getFStr4();
+        if (FStr4 != null) {
+            stmt.bindString(41, FStr4);
+        }
+ 
+        String FStr5 = entity.getFStr5();
+        if (FStr5 != null) {
+            stmt.bindString(42, FStr5);
+        }
     }
 
     @Override
@@ -499,6 +534,31 @@ public class ProductDao extends AbstractDao<Product, Void> {
         if (FMASTERID != null) {
             stmt.bindString(37, FMASTERID);
         }
+ 
+        String FStr1 = entity.getFStr1();
+        if (FStr1 != null) {
+            stmt.bindString(38, FStr1);
+        }
+ 
+        String FStr2 = entity.getFStr2();
+        if (FStr2 != null) {
+            stmt.bindString(39, FStr2);
+        }
+ 
+        String FStr3 = entity.getFStr3();
+        if (FStr3 != null) {
+            stmt.bindString(40, FStr3);
+        }
+ 
+        String FStr4 = entity.getFStr4();
+        if (FStr4 != null) {
+            stmt.bindString(41, FStr4);
+        }
+ 
+        String FStr5 = entity.getFStr5();
+        if (FStr5 != null) {
+            stmt.bindString(42, FStr5);
+        }
     }
 
     @Override
@@ -545,7 +605,12 @@ public class ProductDao extends AbstractDao<Product, Void> {
             cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33), // FModel
             cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34), // FMnemoniccode
             cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35), // FOrg
-            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36) // FMASTERID
+            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36), // FMASTERID
+            cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37), // FStr1
+            cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38), // FStr2
+            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39), // FStr3
+            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40), // FStr4
+            cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41) // FStr5
         );
         return entity;
     }
@@ -589,6 +654,11 @@ public class ProductDao extends AbstractDao<Product, Void> {
         entity.setFMnemoniccode(cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34));
         entity.setFOrg(cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35));
         entity.setFMASTERID(cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36));
+        entity.setFStr1(cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37));
+        entity.setFStr2(cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38));
+        entity.setFStr3(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
+        entity.setFStr4(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
+        entity.setFStr5(cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41));
      }
     
     @Override

@@ -122,7 +122,7 @@
                         <com.fangzuo.assist.cloud.widget.TextViewTitle
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:TextView_Title_one="仓库"
+                            app:TextView_Title_one="@string/storage"
                             app:TextView_Title_size="10sp"
                             app:TextView_Title_two="仓位" />
 

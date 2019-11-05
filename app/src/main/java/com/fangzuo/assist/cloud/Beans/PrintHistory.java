@@ -34,9 +34,25 @@ public class PrintHistory {
     public String FAuxSign;
     public String FActualModel;
 
+    public String FLevel;//等级
+    public String FYmLenght;//原木长度
+    public String FYmDiameter;//原木直径
+    public String FBLenght;//板长
+    public String FBWide;//板宽
+    public String FBThick;//板厚
+    public String FVolume;//体积
+    public String FCeng;//体积
+    public String FWidth;//体积
+    public String FProject;//区分单据类型 0 是水版 1为原木（立方米版本）,2或者其他为原木英尺版本
+    public String F_TypeID;//区分单据类型 0 是水版 1为原木(英尺版本) todo//早期版本0 是水版 1为原木（立方米版本）,2或者其他为原木英尺版本，0711西安已统一为0水板1原木
+    public String F_Plies;//层数
+
     public void setProduct(Product product){
         this.FName = product.FName;
         this.FModel = product.FModel;
+    }
+    public void setProject(String pro){
+        this.FProject = pro;
     }
     public void setData(Product product, Unit unit, Unit unitAux, String num, String num2, String wave,
                         String not, String huoquan, String barcode, String batch, String date, String title,String auxSign,String actualModel){
@@ -103,6 +119,44 @@ public class PrintHistory {
         this.FActualModel = bean.FActualModel;
     }
 
+    public void setPrintHistory4P2(PrintHistory bean) {
+        this.FTitle = bean.FTitle;
+        this.FHuoquan = bean.FHuoquan;
+        this.FBarCode = bean.FBarCode;
+        this.FBatch = bean.FBatch;
+        this.FName = bean.FName;
+        this.FModel = bean.FModel;
+        this.FNum = bean.FNum;
+        this.FNum2 = bean.FNum2;
+        this.FUnit = bean.FUnit;
+        this.FBaseUnit = bean.FBaseUnit;
+        this.FBaseUnitID = bean.FBaseUnitID;
+        this.FStoreUnit = bean.FStoreUnit;
+        this.FUnitAux = bean.FUnitAux;
+        this.FNot = bean.FNot;
+        this.FPrintMan = bean.FPrintMan;
+        this.FNumber = bean.FNumber;
+        this.FStorage = bean.FStorage;
+        this.FWaveHouse = bean.FWaveHouse;
+        this.FSaveIn = bean.FSaveIn;
+        this.FCheck = bean.FCheck;
+        this.FDate = bean.FDate;
+        this.FMaterialid = bean.FMaterialid;
+        this.FAuxSign = bean.FAuxSign;
+        this.FActualModel = bean.FActualModel;
+        this.FProject = bean.FProject;
+        this.FLevel = bean.FLevel;
+        this.FYmLenght = bean.FYmLenght;
+        this.FYmDiameter = bean.FYmDiameter;
+        this.FBLenght = bean.FBLenght;
+        this.FBWide = bean.FBWide;
+        this.FBThick = bean.FBThick;
+        this.FVolume = bean.FVolume;
+        this.FCeng = bean.FCeng;
+        this.FWidth = bean.FWidth;
+        this.F_TypeID = bean.F_TypeID;
+        this.F_Plies = bean.F_Plies;
+    }
 
 
 
@@ -116,11 +170,12 @@ public class PrintHistory {
 
 
 
-    @Generated(hash = 1316777742)
-    public PrintHistory(String FTitle, String FHuoquan, String FBarCode, String FBatch, String FName, String FModel,
-            String FNum, String FNum2, String FUnit, String FBaseUnit, String FBaseUnitID, String FStoreUnit,
-            String FUnitAux, String FNot, String FPrintMan, String FNumber, String FStorage, String FWaveHouse,
-            String FSaveIn, String FCheck, String FDate, String FMaterialid, String FAuxSign, String FActualModel) {
+    @Generated(hash = 668199552)
+    public PrintHistory(String FTitle, String FHuoquan, String FBarCode, String FBatch, String FName, String FModel, String FNum, String FNum2,
+            String FUnit, String FBaseUnit, String FBaseUnitID, String FStoreUnit, String FUnitAux, String FNot, String FPrintMan,
+            String FNumber, String FStorage, String FWaveHouse, String FSaveIn, String FCheck, String FDate, String FMaterialid,
+            String FAuxSign, String FActualModel, String FLevel, String FYmLenght, String FYmDiameter, String FBLenght, String FBWide,
+            String FBThick, String FVolume, String FCeng, String FWidth, String FProject, String F_TypeID, String F_Plies) {
         this.FTitle = FTitle;
         this.FHuoquan = FHuoquan;
         this.FBarCode = FBarCode;
@@ -145,6 +200,18 @@ public class PrintHistory {
         this.FMaterialid = FMaterialid;
         this.FAuxSign = FAuxSign;
         this.FActualModel = FActualModel;
+        this.FLevel = FLevel;
+        this.FYmLenght = FYmLenght;
+        this.FYmDiameter = FYmDiameter;
+        this.FBLenght = FBLenght;
+        this.FBWide = FBWide;
+        this.FBThick = FBThick;
+        this.FVolume = FVolume;
+        this.FCeng = FCeng;
+        this.FWidth = FWidth;
+        this.FProject = FProject;
+        this.F_TypeID = F_TypeID;
+        this.F_Plies = F_Plies;
     }
     @Generated(hash = 915761306)
     public PrintHistory() {
@@ -292,5 +359,77 @@ public class PrintHistory {
     }
     public void setFStorage(String FStorage) {
         this.FStorage = FStorage;
+    }
+    public String getFLevel() {
+        return this.FLevel;
+    }
+    public void setFLevel(String FLevel) {
+        this.FLevel = FLevel;
+    }
+    public String getFYmLenght() {
+        return this.FYmLenght;
+    }
+    public void setFYmLenght(String FYmLenght) {
+        this.FYmLenght = FYmLenght;
+    }
+    public String getFYmDiameter() {
+        return this.FYmDiameter;
+    }
+    public void setFYmDiameter(String FYmDiameter) {
+        this.FYmDiameter = FYmDiameter;
+    }
+    public String getFBLenght() {
+        return this.FBLenght;
+    }
+    public void setFBLenght(String FBLenght) {
+        this.FBLenght = FBLenght;
+    }
+    public String getFBWide() {
+        return this.FBWide;
+    }
+    public void setFBWide(String FBWide) {
+        this.FBWide = FBWide;
+    }
+    public String getFBThick() {
+        return this.FBThick;
+    }
+    public void setFBThick(String FBThick) {
+        this.FBThick = FBThick;
+    }
+    public String getFVolume() {
+        return this.FVolume;
+    }
+    public void setFVolume(String FVolume) {
+        this.FVolume = FVolume;
+    }
+    public String getFProject() {
+        return this.FProject;
+    }
+    public void setFProject(String FProject) {
+        this.FProject = FProject;
+    }
+    public String getFCeng() {
+        return this.FCeng;
+    }
+    public void setFCeng(String FCeng) {
+        this.FCeng = FCeng;
+    }
+    public String getFWidth() {
+        return this.FWidth;
+    }
+    public void setFWidth(String FWidth) {
+        this.FWidth = FWidth;
+    }
+    public String getF_TypeID() {
+        return this.F_TypeID;
+    }
+    public void setF_TypeID(String F_TypeID) {
+        this.F_TypeID = F_TypeID;
+    }
+    public String getF_Plies() {
+        return this.F_Plies;
+    }
+    public void setF_Plies(String F_Plies) {
+        this.F_Plies = F_Plies;
     }
 }

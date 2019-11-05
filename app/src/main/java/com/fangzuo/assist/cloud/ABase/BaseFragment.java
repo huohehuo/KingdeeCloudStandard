@@ -119,7 +119,7 @@ public abstract class BaseFragment extends Fragment {
                 int year = datePickerDialog.getDatePicker().getYear();
                 int month = datePickerDialog.getDatePicker().getMonth();
                 int day = datePickerDialog.getDatePicker().getDayOfMonth();
-                date = year + "-" + ((month < 10) ? "0" + (month + 1) : (month + 1)) + "-" + ((day < 10) ? "0" + day : day);
+                date = year + "-" + ((month < 9) ? "0" + (month + 1) : (month + 1)) + "-" + ((day < 10) ? "0" + day : day);
                 Toast.showText(mContext, date);
                 v.setText(date);
                 datePickerDialog.dismiss();

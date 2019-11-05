@@ -18,7 +18,7 @@ import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.WebApi;
@@ -175,7 +175,7 @@ public class SpinnerHuozhu extends RelativeLayout {
         adapter.notifyDataSetChanged();
         if (container.size()>0){
             for (int j = 0; j < container.size(); j++) {
-                if (container.get(j).FNumber.equals(autoString)
+                if (container.get(j).FNumber.equals(autoString)|| container.get(j).FOrgID.equals(autoString)
                         || container.get(j).FName.equals(autoString)) {
                     mSp.setSelection(j);
 //                autoString = null;

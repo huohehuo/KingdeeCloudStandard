@@ -44,7 +44,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_height="30dp"/>
                         <TextView
-                            android:text="服务器配置"
+                            android:text="@string/server_set"
                             android:layout_gravity="center"
                             android:layout_marginLeft="88dp"
                             android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_height="30dp"/>
                         <TextView
-                            android:text="下载配置"
+                            android:text="@string/down_set"
                             android:layout_gravity="center"
                             android:layout_marginLeft="88dp"
                             android:layout_width="wrap_content"
@@ -104,7 +104,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_height="30dp"/>
                         <TextView
-                            android:text="网络测试"
+                            android:text="@string/net_set"
                             android:layout_gravity="center"
                             android:layout_marginLeft="88dp"
                             android:layout_width="wrap_content"
@@ -151,7 +151,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_height="30dp"/>
                         <TextView
-                            android:text="WIFI设置"
+                            android:text="@string/Wifi_set"
                             android:layout_gravity="center"
                             android:layout_marginLeft="88dp"
                             android:layout_width="wrap_content"
@@ -181,7 +181,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_height="30dp"/>
                         <TextView
-                            android:text="声音设置"
+                            android:text="@string/voice_set"
                             android:layout_gravity="center"
                             android:layout_marginLeft="88dp"
                             android:layout_width="wrap_content"
@@ -211,7 +211,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_height="30dp"/>
                         <TextView
-                            android:text="打印配置与测试"
+                            android:text="@string/print_set"
                             android:layout_gravity="center"
                             android:layout_marginLeft="88dp"
                             android:layout_width="wrap_content"
@@ -251,14 +251,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
                         <ImageView
-                            android:background="@mipmap/getnewversion"
+                            android:background="@mipmap/update"
                             android:layout_gravity="center"
                             android:layout_width="30dp"
                             android:layout_marginLeft="10dp"
                             android:layout_height="30dp"/>
                         <TextView
                             android:id="@+id/tv_version"
-                            android:text="更新版本"
+                            android:text="@string/updata_app"
                             android:layout_gravity="center"
                             android:layout_marginLeft="88dp"
                             android:layout_width="wrap_content"
@@ -301,7 +301,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_height="30dp"/>
                         <TextView
-                            android:text="语言设置"
+                            android:text="@string/language_set"
                             android:layout_gravity="center"
                             android:layout_marginLeft="88dp"
                             android:layout_width="wrap_content"

@@ -198,6 +198,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     }
                     final List<T_main> mains = t_mainDao.queryBuilder().where(
                             T_mainDao.Properties.Activity.eq(activity),
+                            T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                             T_mainDao.Properties.FID.eq(pushDownMain.FID)
                     ).build().list();
                     for (int i = 0; i < mains.size(); i++) {
@@ -209,14 +210,19 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                                 super.onNext(commonResponse);
                                 t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
                                         T_DetailDao.Properties.Activity.eq(activity),
+                                        T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID()),
                                         T_DetailDao.Properties.FOrderId.eq(mains.get(pos).FOrderId)
                                 ).build().list());
                                 for (int i = 0; i < mains.size(); i++) {
                                     List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
-                                            PushDownSubDao.Properties.FBillNo.eq(mains.get(i).FBillNo)).build().list();
+                                            PushDownSubDao.Properties.FBillNo.eq(mains.get(i).FBillNo),
+                                            PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                                    ).build().list();
                                     pushDownSubDao.deleteInTx(pushDownSubs);
                                     List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
-                                            PushDownMainDao.Properties.FBillNo.eq(mains.get(i).FBillNo)).build().list();
+                                            PushDownMainDao.Properties.FBillNo.eq(mains.get(i).FBillNo),
+                                            PushDownMainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+                                    ).build().list();
                                     pushDownMainDao.deleteInTx(pushDownMains);
                                 }
                             }
@@ -235,7 +241,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     MediaPlayer.getInstance(mContext).ok();
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));//上传成功，解锁表头
                     Toast.showText(mContext, "上传成功");
-                    DataModel.submitAndAudit(mContext,Config.PdSaleOrder2SaleOutActivity,listOrder,tag);
+                    DataModel.submitOnly(mContext,Config.PdSaleOrder2SaleOutActivity,listOrder,tag);
 //                btnBackorder.setClickable(true);
                 } else {
                     LoadingUtil.dismiss();
@@ -249,6 +255,12 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     delete.setTitle("上传错误");
                     delete.setMessage(builder.toString());
                     delete.setPositiveButton("确定", null);
+                    delete.setNegativeButton("反馈信息", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DataService.pushBackJson(mContext, FragmentSaleOutDetailForPD.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
+                        }
+                    });
                     delete.create().show();
                 }
 
@@ -516,7 +528,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             lvPushsub.setAdapter(pushDownSubListAdapter);
             pushDownSubListAdapter.notifyDataSetChanged();
         } else {
-            Toast.showText(mContext, "未查询到数据");
+            Toast.showText(mContext, getString(R.string.find_nothing));
         }
     }
 
@@ -586,7 +598,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             }
 
             if (flag) {
-                Toast.showText(mContext, "商品不存在");
+                Toast.showText(mContext, getString(R.string.product_nothing));
                 MediaPlayer.getInstance(mContext).error();
 
             }
@@ -734,6 +746,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             String timesecond = CommonUtil.getTimesecond();
             T_main main = new T_main();//--------------------------------------表头-----------------
             main.activity = activity;
+            main.FAccountID = CommonUtil.getAccountID();
             main.FBillerID = Hawk.get(Info.user_id, "");
             main.FBarcode = barcode;
             main.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
@@ -758,6 +771,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
 
             T_Detail detail = new T_Detail();//--------------------------------明细-----------------
             detail.activity = activity;
+            detail.FAccountID = CommonUtil.getAccountID();
             detail.FBillerID = Hawk.get(Info.user_id, "");
             detail.FBarcode = barcode;
             detail.IMIE = BasicShareUtil.getInstance(mContext).getIMIE();
@@ -770,7 +784,8 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             detail.FRemainInStockQty = pushDownSub.FQty;
             detail.FTaxPrice = pushDownSub.FTaxPrice;
             detail.FRealQty = num;
-            detail.FIsFree = false;
+            detail.FIsGift = pushDownSub.FIsGift;
+            detail.FIsFree = "1".equals(pushDownSub.FIsGift);
             detail.FProductNo = edPurchaseNo.getText().toString();
             detail.FBatch = edPihao.getText().toString();
             detail.AuxSign = spAuxsign.getDataNumber();
@@ -872,7 +887,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                 break;
             case R.id.btn_checkorder:
                 Bundle bundle = new Bundle();
-                bundle.putString("fid", pushDownMain.FID);
+                bundle.putString("fid", pushDownMain==null?"":pushDownMain.FID);
                 bundle.putInt("activity", activity);
                 startNewActivity(activityPager, ReViewPDActivity.class,
                         R.anim.activity_fade_in, R.anim.activity_fade_out, false, bundle);

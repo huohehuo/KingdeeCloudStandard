@@ -264,7 +264,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
             View v = LayoutInflater.from(mContext).inflate(R.layout.ipport, null);
             final EditText mEdIp = v.findViewById(R.id.ed_ip);
             final EditText mEdPort = v.findViewById(R.id.ed_port);
-            if (Info.DATABASESETTING.equals("K3DBConfigerRY")){
+            if (App.DataBaseSetting.equals("K3DBConfigerRY")){
                 mEdIp.setText("47.106.179.214");
                 mEdPort.setText("8080");
             }else{

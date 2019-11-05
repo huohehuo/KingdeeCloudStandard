@@ -103,7 +103,7 @@ public class RegisterUtil {
                 super.onNext(commonResponse);
                 if (!commonResponse.state) return;
                 Lg.e("注册信息数量：", commonResponse.returnJson);
-                if (Integer.parseInt(commonResponse.returnJson) < Integer.parseInt(Hawk.get(Config.PDA_RegisterMaxNum,"5"))) {
+                if (MathUtil.toInt(commonResponse.returnJson) < MathUtil.toInt(Hawk.get(Config.PDA_RegisterMaxNum,"5"))) {
                     Lg.e("符合用户注册最低数量,当前"+commonResponse.returnJson);
                     App.getRService().doIOAction(WebApi.RegisterCheck, lastRegister, new MySubscribe<CommonResponse>() {
                         @Override
@@ -192,7 +192,44 @@ public class RegisterUtil {
             String target = Environment.getExternalStorageDirectory()
                     + "/ScanAppVision"+".txt";
             HttpUtils utils = new HttpUtils();
-            utils.download(Config.Apk_Version, target, new RequestCallBack<File>() {
+            utils.download(Config.getApk_Version(), target, new RequestCallBack<File>() {
+                @Override
+                public void onLoading(long total, long current,
+                                      boolean isUploading) {
+                    super.onLoading(total, current, isUploading);
+//                    System.out.println("下载进度:" + current + "/" + total);
+//                    pDialog.setProgress((int) (current*100/total));
+                }
+
+                @Override
+                public void onSuccess(ResponseInfo<File> arg0) {
+//                    pDialog.dismiss();
+                    Lg.e("下载版本文件成功");
+                    Lg.e("下载的文件数据："+arg0.result);
+                    CommonUtil.getString4Version();
+
+                }
+
+                @Override
+                public void onFailure(com.lidroid.xutils.exception.HttpException arg0, String arg1) {
+                    Lg.e("下载版本文件失败");
+//                    pDialog.dismiss();
+//                    Toast.showText(mContext, "下载失败");
+                }
+            });
+        }
+    }
+
+    //下载版本号数据文件
+    public static void downLoadVersionExplain() {
+        LoadingUtil.dismiss();
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+
+            String target = Environment.getExternalStorageDirectory()
+                    + "/ScanAppVisionExplain"+".txt";
+            HttpUtils utils = new HttpUtils();
+            utils.download("http://148.70.108.65:8080/AppFile/Cloud/version_explain.txt", target, new RequestCallBack<File>() {
                 @Override
                 public void onLoading(long total, long current,
                                       boolean isUploading) {
@@ -219,7 +256,6 @@ public class RegisterUtil {
             });
         }
     }
-
 
 
 }

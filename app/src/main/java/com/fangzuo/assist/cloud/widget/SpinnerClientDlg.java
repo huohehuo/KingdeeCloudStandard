@@ -9,38 +9,28 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.ClientRyAdapter;
-import com.fangzuo.assist.cloud.Adapter.ClientSpAdapter;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.SearchBean;
 import com.fangzuo.assist.cloud.Dao.Client;
-import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
-import com.fangzuo.assist.cloud.Utils.JsonCreater;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.WebApi;
-import com.fangzuo.greendao.gen.ClientDao;
 import com.fangzuo.greendao.gen.DaoSession;
 import com.google.gson.Gson;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
-import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SpinnerClientDlg extends RelativeLayout {
 
@@ -236,7 +226,7 @@ public class SpinnerClientDlg extends RelativeLayout {
             public void onItemClick(int position) {
                 Client storage = adapter.getAllData().get(position);
                 Lg.e("点击客户：",storage);
-                employeeId = storage.FItemID;
+                employeeId = storage.FMASTERID;
                 employeeName = storage.FName;
                 employeeNumber = storage.FNumber;
                 editText.setText(employeeName);

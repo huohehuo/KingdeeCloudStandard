@@ -86,19 +86,19 @@ public class SettingMenuActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        tvTitle.setText("设置");
-        if (!"".equals(Hawk.get(Config.Apk_Version, ""))) {
-            if (Double.parseDouble(Hawk.get(Config.Apk_Version, "0")) > Double.parseDouble(Info.TestNo)) {
-                tvVerApp.setTextColor(Color.RED);
-                tvVersion.setTextColor(Color.RED);
-                tvVersion.setText("新版本");
-                tvVerApp.setText("new app:" + Hawk.get(Config.Apk_Version, "0"));
-            } else {
+        tvTitle.setText(R.string.set);
+//        if (!"".equals(Hawk.get(Config.Apk_Version, ""))) {
+//            if (Double.parseDouble(Hawk.get(Config.Apk_Version, "0")) > Double.parseDouble(Info.getAppNo())) {
+//                tvVerApp.setTextColor(Color.RED);
+//                tvVersion.setTextColor(Color.RED);
+//                tvVersion.setText(R.string.new_version);
+//                tvVerApp.setText("new app:" + Hawk.get(Config.Apk_Version, "0"));
+//            } else {
 //                tvVerApp.setTextColor(Color.BLACK);
 //                tvVersion.setTextColor(Color.BLACK);
-                tvVerApp.setText("app:" + Info.TestNo);
-            }
-        }
+                tvVerApp.setText("app:" + Info.getAppNo());
+//            }
+//        }
         App.getRService().doIOAction(WebApi.ServiceVersion, "", new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
@@ -127,11 +127,11 @@ public class SettingMenuActivity extends BaseActivity {
             @Override
             public boolean onLongClick(View v) {
                 new AlertDialog.Builder(mContext)
-                        .setTitle("是否下载更新文件")
-                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.if_down_update_file)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DownLoad(Config.Apk_Url);
+                                DownLoad(Config.getApk_Url());
                             }
                         })
                         .create().show();
@@ -184,8 +184,8 @@ public class SettingMenuActivity extends BaseActivity {
                 intentIntegrator.initiateScan();
                 break;
             case R.id.ll_language:
-                LoadingUtil.showAlter(mContext, "功能暂未开放");
-//                        startActivity(new Intent(mContext, LanguageActivity.class));
+//                LoadingUtil.showAlter(mContext, "功能暂未开放");
+                        startActivity(new Intent(mContext, LanguageActivity.class));
                 break;
         }
     }
@@ -198,7 +198,7 @@ public class SettingMenuActivity extends BaseActivity {
 
             pDialog = new ProgressDialog(mContext);
             pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pDialog.setTitle("下载中");
+            pDialog.setTitle(getString(R.string.downing));
             pDialog.setCanceledOnTouchOutside(false);
             pDialog.show();
             String target = Environment.getExternalStorageDirectory()
@@ -251,7 +251,7 @@ public class SettingMenuActivity extends BaseActivity {
                 @Override
                 public void onFailure(HttpException arg0, String arg1) {
                     pDialog.dismiss();
-                    Toast.showText(mContext, "下载失败");
+                    Toast.showText(mContext, getString(R.string.down_fail));
                 }
             });
         } else {

@@ -28,6 +28,7 @@ public class ClientDao extends AbstractDao<Client, Void> {
         public final static Property FName = new Property(1, String.class, "FName", false, "FNAME");
         public final static Property FNumber = new Property(2, String.class, "FNumber", false, "FNUMBER");
         public final static Property FOrg = new Property(3, String.class, "FOrg", false, "FORG");
+        public final static Property FMASTERID = new Property(4, String.class, "FMASTERID", false, "FMASTERID");
     }
 
 
@@ -46,7 +47,8 @@ public class ClientDao extends AbstractDao<Client, Void> {
                 "\"FITEM_ID\" TEXT," + // 0: FItemID
                 "\"FNAME\" TEXT," + // 1: FName
                 "\"FNUMBER\" TEXT," + // 2: FNumber
-                "\"FORG\" TEXT);"); // 3: FOrg
+                "\"FORG\" TEXT," + // 3: FOrg
+                "\"FMASTERID\" TEXT);"); // 4: FMASTERID
     }
 
     /** Drops the underlying database table. */
@@ -78,6 +80,11 @@ public class ClientDao extends AbstractDao<Client, Void> {
         if (FOrg != null) {
             stmt.bindString(4, FOrg);
         }
+ 
+        String FMASTERID = entity.getFMASTERID();
+        if (FMASTERID != null) {
+            stmt.bindString(5, FMASTERID);
+        }
     }
 
     @Override
@@ -103,6 +110,11 @@ public class ClientDao extends AbstractDao<Client, Void> {
         if (FOrg != null) {
             stmt.bindString(4, FOrg);
         }
+ 
+        String FMASTERID = entity.getFMASTERID();
+        if (FMASTERID != null) {
+            stmt.bindString(5, FMASTERID);
+        }
     }
 
     @Override
@@ -116,7 +128,8 @@ public class ClientDao extends AbstractDao<Client, Void> {
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // FItemID
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // FName
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // FNumber
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // FOrg
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // FOrg
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // FMASTERID
         );
         return entity;
     }
@@ -127,6 +140,7 @@ public class ClientDao extends AbstractDao<Client, Void> {
         entity.setFName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setFNumber(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setFOrg(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setFMASTERID(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }
     
     @Override

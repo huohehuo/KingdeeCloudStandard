@@ -5,13 +5,15 @@ import android.content.Intent;
 import android.content.Context;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
-import com.fangzuo.assist.cloud.Activity.HomeActivity;
 import com.fangzuo.assist.cloud.Beans.BackDataLogin;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
+import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.RxSerivce.ToSubscribe;
 import com.fangzuo.assist.cloud.Utils.Config;
+import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
+import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
@@ -92,6 +94,10 @@ public class BaseUtilService extends IntentService {
             public void onNext(BackDataLogin bean) {
                 try {
                     if (bean.getLoginResultType() == 1 || bean.getLoginResultType() == -5) {
+                        Hawk.put(Info.user_org, bean.getContext().getCurrentOrganizationInfo().getName());
+                        Hawk.put(Info.user_id, bean.getContext().getUserId() + "");
+                        Hawk.put(Info.user_data, bean.getContext().getDataCenterName() + "");
+                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Updata_Account,"更新主页的数据中心名称"));
 //                        Toast.showText(App.getContext(),"重登录成功");
 //                        Lg.e("登录成功：");
                     } else {

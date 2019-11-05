@@ -1,6 +1,7 @@
 package com.fangzuo.assist.cloud.Activity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,14 +12,12 @@ import android.view.View;
 import com.fangzuo.assist.cloud.ABase.BaseActivity;
 import com.fangzuo.assist.cloud.Adapter.MenuFragmentAdapter;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
-import com.fangzuo.assist.cloud.Fragment.PurchaseFragment;
-import com.fangzuo.assist.cloud.Fragment.SaleFragment;
+import com.fangzuo.assist.cloud.Fragment.P1OneFragment;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.ShareUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
-import com.fangzuo.assist.cloud.Utils.UpdataLocData;
 import com.fangzuo.assist.cloud.databinding.ActivityHomeBinding;
 import com.orhanobut.hawk.Hawk;
 
@@ -54,15 +53,20 @@ public class HomeActivity extends BaseActivity {
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         initBar();
-        setDrawerLeftEdgeSize(this, binding.drawerLayout, 0.2f);//设置抽屉滑动响应范围
-        binding.tvUser.setText("当前用户:"+ ShareUtil.getInstance(mContext).getUserName());
-        binding.tvData.setText("数据中心:"+ Hawk.get(Info.user_data,""));
+        setDrawerLeftEdgeSize(this, binding.drawerLayout, 0.1f);//设置抽屉滑动响应范围
+        binding.tvUser.setText(getString(R.string.this_user)+ ShareUtil.getInstance(mContext).getUserName());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        binding.tvData.setText(getString(R.string.data_center)+ Hawk.get(Info.user_data,""));
     }
 
     @Override
     protected void initData() {
         FragmentManager fm = getSupportFragmentManager();
-        PurchaseFragment purchaseFragment = new PurchaseFragment();
+        P1OneFragment purchaseFragment = new P1OneFragment();
 //        SaleFragment saleFragment = new SaleFragment();
 //        StorageFragment storageFragment = new StorageFragment();
         ArrayList<Fragment> fragments = new ArrayList<>();
@@ -74,11 +78,26 @@ public class HomeActivity extends BaseActivity {
         binding.viewPager.setCurrentItem(0);
         binding.tabBottom.ivPurchase.setImageResource(R.mipmap.purchase);
         binding.tabBottom.tvPurchase.setTextColor(getResources().getColor(R.color.bottombartv));
-        binding.tvAbout.setText("测试号:"+ Info.TestNo);
+        binding.tvAbout.setText(getString(R.string.version_no)+ Info.getAppNo());
     }
 
     @Override
     protected void initListener() {
+        binding.ivUpdata.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new AlertDialog.Builder(mContext)
+                        .setTitle("是否进入回执调试")
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startNewActivity(BackJsonActivity.class,0,0,false, null);
+                            }
+                        })
+                        .create().show();
+                return true;
+            }
+        });
         binding.ivUpdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

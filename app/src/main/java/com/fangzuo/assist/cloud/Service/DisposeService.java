@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.fangzuo.assist.cloud.Activity.Crash.App;
-import com.fangzuo.assist.cloud.Utils.GreenDaoManager;
+import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.greendao.gen.DaoSession;
 
 /**

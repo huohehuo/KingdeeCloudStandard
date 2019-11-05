@@ -12,12 +12,15 @@ public class Client {
     public String FName;
     public String FNumber;
     public String FOrg;
-    @Generated(hash = 2108592217)
-    public Client(String FItemID, String FName, String FNumber, String FOrg) {
+    public String FMASTERID;
+    @Generated(hash = 226389966)
+    public Client(String FItemID, String FName, String FNumber, String FOrg,
+            String FMASTERID) {
         this.FItemID = FItemID;
         this.FName = FName;
         this.FNumber = FNumber;
         this.FOrg = FOrg;
+        this.FMASTERID = FMASTERID;
     }
     @Generated(hash = 1485887936)
     public Client() {
@@ -45,6 +48,12 @@ public class Client {
     }
     public void setFOrg(String FOrg) {
         this.FOrg = FOrg;
+    }
+    public String getFMASTERID() {
+        return this.FMASTERID;
+    }
+    public void setFMASTERID(String FMASTERID) {
+        this.FMASTERID = FMASTERID;
     }
 
 
