@@ -291,7 +291,13 @@ public class  HomeP2Activity extends BaseActivity {
             case Config.DBInKiln4P2Activity://调拨入窑
                 PagerForActivity.start(mContext, Config.DBInKiln4P2Activity);
                 break;
-                //------------------------------------------------------------------------成品车间
+            case Config.ProductGet4BoxP2Activity://码拍领料
+                PagerForActivity.start(mContext, Config.ProductGet4BoxP2Activity);
+                break;
+            case Config.BoxReAddP2Activity://混包新增
+                PagerForActivity.start(mContext, Config.BoxReAddP2Activity);
+                break;
+            //------------------------------------------------------------------------成品车间
             case Config.CpGetActivityDlg://成品加工领料
                 // 创建对话框构建器
                 builder = new AlertDialog.Builder(this);

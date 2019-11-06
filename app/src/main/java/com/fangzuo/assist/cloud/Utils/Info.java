@@ -16,9 +16,9 @@ public class Info {
 //    public static final String DATABASESETTING = "K3DBConfigerRY";
     public static String getAppNo(){
         if ("1".equals(Hawk.get(Config.PDA_Project_Type,"1"))){
-            return "6.50";
+            return "6.51";
         }else{
-            return "1.677";
+            return "1.680";
         }
     }
     public static final int RegisterNo = 155;

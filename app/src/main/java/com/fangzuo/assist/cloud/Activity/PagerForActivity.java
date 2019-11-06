@@ -39,6 +39,7 @@ import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrGet4P1BoxMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrGetDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrGetMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentPrisDhDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentProductGet4P14P2BoxDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentProductGet4P1BoxDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOut4PDBoxMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOut4PDMain;
@@ -309,7 +310,7 @@ public class PagerForActivity extends BaseActivity {
             case Config.ProductGet4BoxP2Activity:
                 binding.topActivity.tvTitle.setText("码拍领料");//生产领料单
                 fragments.add(new FragmentPrGet4P1BoxMain());
-                fragments.add(new FragmentProductGet4P1BoxDetail());
+                fragments.add(new FragmentProductGet4P14P2BoxDetail());//与FragmentProductGet4P1BoxDetail(一期的)区别：查物料不需要org
                 break;
 
             /*-----------------------------------------------------------------一期单据----------------------------------------------*/

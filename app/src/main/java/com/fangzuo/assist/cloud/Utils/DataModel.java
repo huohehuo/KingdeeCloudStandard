@@ -1610,6 +1610,30 @@ public class DataModel {
             }
         });
     }
+    //20191106一期复制过来的单据，特意修改条件:无需org
+    public static void getProductForId4P2(String barCode){
+        App.getRService().doIOAction(WebApi.S2Product4P2, new Gson().toJson(new SearchBean(SearchBean.product_for_id, new Gson().toJson(new SearchBean.S2Product(barCode,"")))), new MySubscribe<CommonResponse>() {
+            @Override
+            public void onNext(CommonResponse commonResponse) {
+                super.onNext(commonResponse);
+                if (!commonResponse.state)return;
+                final DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                LoadingUtil.dismiss();
+                if (dBean.products.size()>0){
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Product,dBean.products.get(0)));
+                }else{
+                    Toast.showText(App.getContext(),"查无此物料信息");
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                LoadingUtil.dismiss();
+            }
+        });
+    }
+
     //通过扫码时，通过条码查找物料
     public static void getProductForScan(String barCode, Org org){
         App.getRService().doIOAction(WebApi.S2Product, new Gson().toJson(new SearchBean(SearchBean.product_for_barcode, new Gson().toJson(new SearchBean.S2Product(barCode,org==null?"":org.FOrgID)))), new MySubscribe<CommonResponse>() {

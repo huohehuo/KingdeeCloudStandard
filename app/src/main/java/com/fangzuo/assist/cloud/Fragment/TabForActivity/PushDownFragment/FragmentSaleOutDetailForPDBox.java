@@ -240,7 +240,8 @@ public class FragmentSaleOutDetailForPDBox extends BaseFragment {
                     MediaPlayer.getInstance(mContext).ok();
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));//上传成功，解锁表头
                     Toast.showText(mContext, "上传成功");
-                    DataModel.submitAndAudit(mContext,Config.PdSaleOrder2SaleOutActivity,listOrder,tag);
+                    DataModel.submitOnly(mContext,Config.PdSaleOrder2SaleOutActivity,listOrder,tag);
+//                    DataModel.submitAndAudit(mContext,Config.PdSaleOrder2SaleOutActivity,listOrder,tag);
 //                btnBackorder.setClickable(true);
                 } else {
                     LoadingUtil.dismiss();

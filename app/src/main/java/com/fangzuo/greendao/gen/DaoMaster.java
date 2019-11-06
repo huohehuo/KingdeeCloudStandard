@@ -23,25 +23,33 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void createAllTables(Database db, boolean ifNotExists) {
         AuxSignSecCheckBeanDao.createTable(db, ifNotExists);
         PrintHistoryDao.createTable(db, ifNotExists);
+        WortPrintDataDao.createTable(db, ifNotExists);
         BarCodeDao.createTable(db, ifNotExists);
         BibieDao.createTable(db, ifNotExists);
         BibieTableDao.createTable(db, ifNotExists);
         BuyerDao.createTable(db, ifNotExists);
         ClientDao.createTable(db, ifNotExists);
+        CountOffBeanDao.createTable(db, ifNotExists);
         DepartmentDao.createTable(db, ifNotExists);
+        DryingGetDataDao.createTable(db, ifNotExists);
         EmployeeDao.createTable(db, ifNotExists);
         GetGoodsDepartmentDao.createTable(db, ifNotExists);
         InStorageNumDao.createTable(db, ifNotExists);
         InStoreTypeDao.createTable(db, ifNotExists);
+        NumberBeanDao.createTable(db, ifNotExists);
         OrgDao.createTable(db, ifNotExists);
         PayTypeDao.createTable(db, ifNotExists);
         PDMainDao.createTable(db, ifNotExists);
         PDSubDao.createTable(db, ifNotExists);
+        PGetDataDao.createTable(db, ifNotExists);
         PriceMethodDao.createTable(db, ifNotExists);
+        PrintErrorHistoryDao.createTable(db, ifNotExists);
         ProductDao.createTable(db, ifNotExists);
         PurchaseMethodDao.createTable(db, ifNotExists);
         PushDownMainDao.createTable(db, ifNotExists);
         PushDownSubDao.createTable(db, ifNotExists);
+        ReBoxBeanDao.createTable(db, ifNotExists);
+        RemarkDataDao.createTable(db, ifNotExists);
         SaleManDao.createTable(db, ifNotExists);
         StorageDao.createTable(db, ifNotExists);
         StoreManDao.createTable(db, ifNotExists);
@@ -53,39 +61,39 @@ public class DaoMaster extends AbstractDaoMaster {
         WanglaikemuDao.createTable(db, ifNotExists);
         WaveHouseDao.createTable(db, ifNotExists);
         YuandanTypeDao.createTable(db, ifNotExists);
-        RemarkDataDao.createTable(db, ifNotExists);
-        CountOffBeanDao.createTable(db, ifNotExists);
-        NumberBeanDao.createTable(db, ifNotExists);
-        WortPrintDataDao.createTable(db, ifNotExists);
-        DryingGetDataDao.createTable(db, ifNotExists);
-        PGetDataDao.createTable(db, ifNotExists);
-        ReBoxBeanDao.createTable(db, ifNotExists);
-        PrintErrorHistoryDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
         AuxSignSecCheckBeanDao.dropTable(db, ifExists);
         PrintHistoryDao.dropTable(db, ifExists);
+        WortPrintDataDao.dropTable(db, ifExists);
         BarCodeDao.dropTable(db, ifExists);
         BibieDao.dropTable(db, ifExists);
         BibieTableDao.dropTable(db, ifExists);
         BuyerDao.dropTable(db, ifExists);
         ClientDao.dropTable(db, ifExists);
+        CountOffBeanDao.dropTable(db, ifExists);
         DepartmentDao.dropTable(db, ifExists);
+        DryingGetDataDao.dropTable(db, ifExists);
         EmployeeDao.dropTable(db, ifExists);
         GetGoodsDepartmentDao.dropTable(db, ifExists);
         InStorageNumDao.dropTable(db, ifExists);
         InStoreTypeDao.dropTable(db, ifExists);
+        NumberBeanDao.dropTable(db, ifExists);
         OrgDao.dropTable(db, ifExists);
         PayTypeDao.dropTable(db, ifExists);
         PDMainDao.dropTable(db, ifExists);
         PDSubDao.dropTable(db, ifExists);
+        PGetDataDao.dropTable(db, ifExists);
         PriceMethodDao.dropTable(db, ifExists);
+        PrintErrorHistoryDao.dropTable(db, ifExists);
         ProductDao.dropTable(db, ifExists);
         PurchaseMethodDao.dropTable(db, ifExists);
         PushDownMainDao.dropTable(db, ifExists);
         PushDownSubDao.dropTable(db, ifExists);
+        ReBoxBeanDao.dropTable(db, ifExists);
+        RemarkDataDao.dropTable(db, ifExists);
         SaleManDao.dropTable(db, ifExists);
         StorageDao.dropTable(db, ifExists);
         StoreManDao.dropTable(db, ifExists);
@@ -97,14 +105,6 @@ public class DaoMaster extends AbstractDaoMaster {
         WanglaikemuDao.dropTable(db, ifExists);
         WaveHouseDao.dropTable(db, ifExists);
         YuandanTypeDao.dropTable(db, ifExists);
-        RemarkDataDao.dropTable(db, ifExists);
-        CountOffBeanDao.dropTable(db, ifExists);
-        NumberBeanDao.dropTable(db, ifExists);
-        WortPrintDataDao.dropTable(db, ifExists);
-        DryingGetDataDao.dropTable(db, ifExists);
-        PGetDataDao.dropTable(db, ifExists);
-        ReBoxBeanDao.dropTable(db, ifExists);
-        PrintErrorHistoryDao.dropTable(db, ifExists);
     }
 
     /**
@@ -125,25 +125,33 @@ public class DaoMaster extends AbstractDaoMaster {
         super(db, SCHEMA_VERSION);
         registerDaoClass(AuxSignSecCheckBeanDao.class);
         registerDaoClass(PrintHistoryDao.class);
+        registerDaoClass(WortPrintDataDao.class);
         registerDaoClass(BarCodeDao.class);
         registerDaoClass(BibieDao.class);
         registerDaoClass(BibieTableDao.class);
         registerDaoClass(BuyerDao.class);
         registerDaoClass(ClientDao.class);
+        registerDaoClass(CountOffBeanDao.class);
         registerDaoClass(DepartmentDao.class);
+        registerDaoClass(DryingGetDataDao.class);
         registerDaoClass(EmployeeDao.class);
         registerDaoClass(GetGoodsDepartmentDao.class);
         registerDaoClass(InStorageNumDao.class);
         registerDaoClass(InStoreTypeDao.class);
+        registerDaoClass(NumberBeanDao.class);
         registerDaoClass(OrgDao.class);
         registerDaoClass(PayTypeDao.class);
         registerDaoClass(PDMainDao.class);
         registerDaoClass(PDSubDao.class);
+        registerDaoClass(PGetDataDao.class);
         registerDaoClass(PriceMethodDao.class);
+        registerDaoClass(PrintErrorHistoryDao.class);
         registerDaoClass(ProductDao.class);
         registerDaoClass(PurchaseMethodDao.class);
         registerDaoClass(PushDownMainDao.class);
         registerDaoClass(PushDownSubDao.class);
+        registerDaoClass(ReBoxBeanDao.class);
+        registerDaoClass(RemarkDataDao.class);
         registerDaoClass(SaleManDao.class);
         registerDaoClass(StorageDao.class);
         registerDaoClass(StoreManDao.class);
@@ -155,14 +163,6 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(WanglaikemuDao.class);
         registerDaoClass(WaveHouseDao.class);
         registerDaoClass(YuandanTypeDao.class);
-        registerDaoClass(RemarkDataDao.class);
-        registerDaoClass(CountOffBeanDao.class);
-        registerDaoClass(NumberBeanDao.class);
-        registerDaoClass(WortPrintDataDao.class);
-        registerDaoClass(DryingGetDataDao.class);
-        registerDaoClass(PGetDataDao.class);
-        registerDaoClass(ReBoxBeanDao.class);
-        registerDaoClass(PrintErrorHistoryDao.class);
     }
 
     public DaoSession newSession() {

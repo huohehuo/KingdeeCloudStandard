@@ -60,6 +60,7 @@ public class WebApi {
     public static final String CLIENTSEARCHLIKE = "ClientSearchLike";
     public static final String SEARCHJHSEARCHLIKE = "jhSearchLike";
     public static final String S2Product = "S2Product";
+    public static final String S2Product4P2 = "S2Product4P2";
     public static final String CodeOnlyDelete = "CodeCheckDelete";
     public static final String CodeOnlyDelete4All = "CodeOnlyDelete4All";
     public static final String DetailTableDeleteAll = "DetailTableDeleteAll";
