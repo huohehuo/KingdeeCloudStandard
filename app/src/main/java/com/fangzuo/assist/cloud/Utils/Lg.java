@@ -17,6 +17,7 @@ public class Lg {
                 }
             }
         }catch (Exception e){
+            Lg.e("打印错误",e.getMessage());
 
         }
 
@@ -31,7 +32,7 @@ public class Lg {
                 }
             }
         }catch (Exception e){
-
+            Lg.e("打印错误",e.getMessage());
         }
 
     }
@@ -45,6 +46,7 @@ public class Lg {
                 }
             }
         }catch (Exception e){
+            Lg.e("打印错误",e.getMessage());
 
         }
 

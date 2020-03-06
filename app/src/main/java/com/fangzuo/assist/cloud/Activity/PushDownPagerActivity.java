@@ -146,6 +146,12 @@ public class PushDownPagerActivity extends BaseActivity {
             case 30:
                 string = "码拍入窑";//生产领料单下推产品入库单(重新装箱)
                 break;
+            case 33:
+                string = "外购烘干板入库";//外购烘干板入库
+                break;
+            case 35:
+                string = "内部采购单";//外购烘干板入库
+                break;
 
         }
         if (!"".equals(string)){

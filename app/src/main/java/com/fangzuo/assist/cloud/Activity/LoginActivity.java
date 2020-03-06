@@ -186,7 +186,19 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
 //                super.onError(e);
 //            }
 //        });
+
         AppStatisticalUtil.upDataStatis(mContext,"LoginActivity");
+
+//
+//        Lg.e("100/0.00236",MathUtil.div("100","0.00236"));
+//        Lg.e("100/0.00236",(MathUtil.toD("42372.88136")*0.00236)+"");
+//        Lg.e("42372.8813559322*0.00236计算1",MathUtil.D2save5(MathUtil.mul("42372.88136","0.00236")));
+//        Lg.e("42372.8813559322*0.00236计算2",MathUtil.D2save5(42372.88136*0.00236));
+//        Lg.e("42372.8813559322*0.00236计算3",MathUtil.D2save5((MathUtil.toD("42372.88136")*0.00236))+"");
+//        Lg.e("42372.8813559322*0.00236计算4",MathUtil.D2save5_33("42372.88136"));
+//        Lg.e("42372.8813559322*0.00236计算",MathUtil.D2save5(MathUtil.mul(beans.get(j).FRealQty,"0.00236")));
+
+
 
     }
 
@@ -462,6 +474,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         jParas.put(user.FNameERP);// 用户名
         jParas.put(user.FPassWordERP);// 密码
         jParas.put(2052);// 语言T
+        Lg.e("拼接",jParas.toString());
         App.CloudService().doIOActionLogin(Config.C_Login, jParas.toString(), new ToSubscribe<BackDataLogin>() {
             @Override
             public void onNext(BackDataLogin bean) {

@@ -57,8 +57,8 @@ public class ReViewPDActivity extends BaseActivity {
     private List<T_main> list_main;
     private ReViewPDAdapter adapter;
     private List<Boolean> isCheck;
-    private zpBluetoothPrinter zpSDK;
-    private BlueToothBean bean;
+//    private zpBluetoothPrinter zpSDK;
+//    private BlueToothBean bean;
     boolean isOkPrint=false;
 
     @Override
@@ -82,7 +82,7 @@ public class ReViewPDActivity extends BaseActivity {
             case EventBusInfoCode.Print_Out://打印
                 PrintHistory data = (PrintHistory) event.postEvent;
                 try {
-                    CommonUtil.doPrint(zpSDK,data,"1");
+                    CommonUtil.doPrint(mContext,data,"1");
                 } catch (Exception e) {
 //                    e.printStackTrace();
                     LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
@@ -106,8 +106,8 @@ public class ReViewPDActivity extends BaseActivity {
         Lg.e("得到数据："+fid);
         //当为产品入库时，初始化打印机并连接
         if (activity == Config.PdBackMsg2SaleBackActivity) {
-            zpSDK = new zpBluetoothPrinter(this);
-            bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
+//            zpSDK = new zpBluetoothPrinter(this);
+//            bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
             linkBluePrint();
         } else {
             binding.tvPrint.setVisibility(View.GONE);
@@ -185,10 +185,10 @@ public class ReViewPDActivity extends BaseActivity {
         binding.tvPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isOkPrint){
-                    LoadingUtil.showDialog(mContext,"正在重连打印机...");
-                    linkBluePrint();
-                }else{
+//                if (!isOkPrint){
+//                    LoadingUtil.showDialog(mContext,"正在重连打印机...");
+//                    linkBluePrint();
+//                }else{
                     new AlertDialog.Builder(mContext)
                             .setTitle("是否补打单据？")
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
@@ -198,7 +198,7 @@ public class ReViewPDActivity extends BaseActivity {
                                 }
                             })
                             .create().show();
-                }
+//                }
 //                startNewActivity(PrintHistoryActivity.class, R.anim.activity_slide_left_in, R.anim.activity_slide_left_out, false, null);
 
             }
@@ -208,20 +208,20 @@ public class ReViewPDActivity extends BaseActivity {
     //连接蓝牙打印机
     private void linkBluePrint() {
 //        LoadingUtil.showDialog(mContext,"正在连接打印机...");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (bean.address.equals("")) {
-                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
-                } else {
-                    if (!zpSDK.connect(bean.address)) {
-                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
-                    } else {
-                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "OK"));
-                    }
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (bean.address.equals("")) {
+//                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
+//                } else {
+//                    if (!zpSDK.connect(bean.address)) {
+//                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
+//                    } else {
+//                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "OK"));
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
     //获取列表相对应的打印数据
@@ -445,11 +445,11 @@ public class ReViewPDActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         Lg.e("ReView：","OnPause");
-        if (activity==Config.PdBackMsg2SaleBackActivity){
-            try {
-                zpSDK.disconnect();
-            }catch (Exception e){}
-        }
+//        if (activity==Config.PdBackMsg2SaleBackActivity){
+//            try {
+//                zpSDK.disconnect();
+//            }catch (Exception e){}
+//        }
     }
 
 

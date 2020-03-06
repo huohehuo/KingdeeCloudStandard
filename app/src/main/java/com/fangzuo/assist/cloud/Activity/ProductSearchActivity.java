@@ -11,18 +11,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.ABase.BaseActivity;
+import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.SearchAdapter;
+import com.fangzuo.assist.cloud.Adapter.SearchBatchAdapter;
 import com.fangzuo.assist.cloud.Adapter.SearchClientAdapter;
 import com.fangzuo.assist.cloud.Adapter.SearchSupplierAdapter;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
 import com.fangzuo.assist.cloud.Beans.SearchBean;
+import com.fangzuo.assist.cloud.Dao.BatchDataBean;
 import com.fangzuo.assist.cloud.Dao.Client;
 import com.fangzuo.assist.cloud.Dao.GetGoodsDepartment;
 import com.fangzuo.assist.cloud.Dao.Product;
 import com.fangzuo.assist.cloud.Dao.Suppliers;
 import com.fangzuo.assist.cloud.R;
+import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
@@ -72,6 +76,7 @@ public class ProductSearchActivity extends BaseActivity {
     private List<Suppliers> suppliersList;
     private List<Client> itemAllClient;
     private List<Client> itemClient;
+    private List<BatchDataBean> batchDataBeans;
     private List<GetGoodsDepartment> goodsDepartmentList;
     private List<GetGoodsDepartment> goodsDepartmentAllList;
     private String FIsPurchase="";//允许采购
@@ -105,6 +110,7 @@ public class ProductSearchActivity extends BaseActivity {
         if (where == Info.SearchClientDetail) title.setText("查询结果(客户)");
         if (where == Info.SEARCHCLIENT) title.setText("查询结果(客户)");
         if (where == Info.SEARCHJH) title.setText("查询结果(交货单位)");
+        if (where == Info.Search_Pihao) title.setText("查询结果(批号)");
 
     }
 
@@ -311,6 +317,33 @@ public class ProductSearchActivity extends BaseActivity {
 //                }
 //            }
         //交货单位
+        }else if (where == Info.Search_Pihao){
+//            model.setVisibility(View.GONE);
+//            name.setVisibility(View.GONE);
+            App.getRService().doIOAction("GetBatchData", searchString, new MySubscribe<CommonResponse>() {
+                @Override
+                public void onNext(CommonResponse commonResponse) {
+                    super.onNext(commonResponse);
+                    if (!commonResponse.state)return;
+                    pg.setVisibility(View.GONE);
+                    DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
+                    batchDataBeans = dBean.batchDataBeans;
+                    if (batchDataBeans.size() > 0) {
+                        SearchBatchAdapter ada2 = new SearchBatchAdapter(mContext, batchDataBeans);
+                        lvResult.setAdapter(ada2);
+                        ada2.notifyDataSetChanged();
+                    } else {
+                        Toast.showText(mContext, "无数据");
+                        setResult(-9998, null);
+                        onBackPressed();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                }
+            });
         }
 //        else if (where == Info.SEARCHJH) {
 //            model.setText("编号");
@@ -393,6 +426,10 @@ public class ProductSearchActivity extends BaseActivity {
                     mIntent.putExtras(b);
                     setResult(Info.SEARCHFORRESULTJH, mIntent);
                     onBackPressed();
+                }else if (where == Info.Search_Pihao){
+                    EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Search_Pihao,batchDataBeans.get(i)));
+                    onBackPressed();
+
                 }
 
             }
@@ -429,6 +466,11 @@ public class ProductSearchActivity extends BaseActivity {
             case Config.Bg2CheJianInActivity://挑板入库
             case Config.ChangeModelInActivity://挑板入库
             case Config.SplitBoxInActivity://挑板入库
+            case Config.ZbIn1Activity://挑板入库
+            case Config.ZbIn2Activity://挑板入库
+            case Config.ZbIn3Activity://挑板入库
+            case Config.ZbIn4Activity://挑板入库
+            case Config.ZbIn5Activity://挑板入库
             case Config.GbInActivity://改版入库
             case Config.DhInActivity://到货入库
             case Config.DhIn2Activity://到货入库

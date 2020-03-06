@@ -26,12 +26,19 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
 //    public MarkAdapter(Context context, List<MarkBean> objects) {
 //        super(context, objects);
 //    }
+
     @Override
     public int getViewType(int position) {
         if (null==(getAllData().get(position).getFYmLenght())){//当原木长为空时，为一期项目布局
             return 1;
         }else{
-            return 2;
+            if ("33".equals(getAllData().get(position).getF_TypeID())){
+                return 3;
+            }else if ("1006703".equals(getAllData().get(position).getF_TypeID())){
+                return 4;
+            }else{
+                return 2;
+            }
         }
     }
     @Override
@@ -39,6 +46,12 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
         if (viewType==2){
             Lg.e("二期布局");
             return new MarkHolder4P2(parent);
+        }else if (viewType == 3){
+            Lg.e("二期布局");
+            return new MarkHolder4P2_33(parent);
+        }else if (viewType ==4){
+            Lg.e("二期布局");
+            return new MarkHolder4P2_hgbrk2(parent);
         }else{
             Lg.e("一期布局");
             return new MarkHolder(parent);
@@ -213,8 +226,127 @@ public class PrintHistoryAdapter extends RecyclerArrayAdapter<PrintHistory> {
 
         }
     }
+    //二期单据33
+    class MarkHolder4P2_33 extends BaseViewHolder<PrintHistory> {
+
+        private TextView huoquan;
+        private TextView batch;
+        private TextView name;
+        private TextView model;
+        private TextView num;
+
+        public MarkHolder4P2_33(ViewGroup parent) {
+            super(parent, R.layout.item_print_history_p2_33);
+            huoquan =   $(R.id.tv_huoquan);
+            batch =     $(R.id.tv_batch);
+            name =      $(R.id.tv_name);
+            model =     $(R.id.tv_model);
+            num =       $(R.id.tv_num);
+
+        }
+
+        @Override
+        public void setData(PrintHistory data) {
+            super.setData(data);
+            huoquan.setText(LocDataUtil.getRemark(data.getFHuoquan(),"number").FNote);
+            batch.setText(data.getFBatch());
+            name.setText(data.getFName());
+            model.setText(data.getFModel());
+            num.setText(data.getFNum());
 
 
+
+//            name.setTextColor(App.getInstance().getColor(R.color.black));
+//        //3、为集合添加值
+//            isClicks = new ArrayList<>();
+//            for(int i = 0;i<PrintHistory.size();i++){
+//                isClicks.add(false);
+//            }
+//            name.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    name.setTextColor(App.getInstance().getColor(R.color.cpb_blue));
+//                }
+//            });
+
+//            num.setText(data.getFavour().get__op());
+
+//            favour.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Toast.makeText(App.getContext(), "喜欢+1", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+
+//            Glide.with(getContext())
+//                    .load(data.getBg_pic())
+//                    .placeholder(R.drawable.dog)
+//                    .centerCrop()
+//                    .into(img_bg);
+
+        }
+    }
+
+    //二期单据33
+    class MarkHolder4P2_hgbrk2 extends BaseViewHolder<PrintHistory> {
+
+        private TextView huoquan;
+        private TextView batch;
+        private TextView name;
+        private TextView model;
+        private TextView num;
+
+        public MarkHolder4P2_hgbrk2(ViewGroup parent) {
+            super(parent, R.layout.item_print_history_p2_33);
+            huoquan =   $(R.id.tv_huoquan);
+            batch =     $(R.id.tv_batch);
+            name =      $(R.id.tv_name);
+            model =     $(R.id.tv_model);
+            num =       $(R.id.tv_num);
+
+        }
+
+        @Override
+        public void setData(PrintHistory data) {
+            super.setData(data);
+            huoquan.setText(LocDataUtil.getRemark(data.getFHuoquan(),"number").FNote);
+            batch.setText(data.getFBatch());
+            name.setText(data.getFName());
+            model.setText(data.getFModel());
+            num.setText(data.getFVolume());
+
+
+
+//            name.setTextColor(App.getInstance().getColor(R.color.black));
+//        //3、为集合添加值
+//            isClicks = new ArrayList<>();
+//            for(int i = 0;i<PrintHistory.size();i++){
+//                isClicks.add(false);
+//            }
+//            name.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    name.setTextColor(App.getInstance().getColor(R.color.cpb_blue));
+//                }
+//            });
+
+//            num.setText(data.getFavour().get__op());
+
+//            favour.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Toast.makeText(App.getContext(), "喜欢+1", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+
+//            Glide.with(getContext())
+//                    .load(data.getBg_pic())
+//                    .placeholder(R.drawable.dog)
+//                    .centerCrop()
+//                    .into(img_bg);
+
+        }
+    }
 //    //纯文字布局
 //    class MainHolderForTxt extends BaseViewHolder<PlanBean> {
 //

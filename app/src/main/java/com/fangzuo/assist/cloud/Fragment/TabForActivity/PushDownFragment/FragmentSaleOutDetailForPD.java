@@ -765,7 +765,9 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             main.FNot = activityPager.getNote();
             main.FCustomerID = pushDownMain.FSupplyID;
             main.F_FFF_Text = activityPager.getFOrderNo();
-//            main.setClient(activityPager.getClient());
+            main.F_FFF_Text = activityPager.getFOrderNo();
+            main.FFieldMan = pushDownMain.FFieldMan;
+            //            main.setClient(activityPager.getClient());
             long insert1 = t_mainDao.insert(main);
 
 

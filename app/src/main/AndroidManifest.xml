@@ -184,6 +184,12 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustUnspecified" />
         <activity
+            android:name=".Activity.ReViewDataActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustUnspecified" />
+        <activity
             android:name=".Activity.ReViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
@@ -261,6 +267,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ReViewPDActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ReViewPD_1_35Activity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.PDActivity"
@@ -388,7 +397,16 @@
         <activity android:name=".Activity.ReViewReAddActivity" />
         <activity android:name=".Activity.ReViewPD31Activity" />
         <activity android:name=".Activity.ReView4DBBoxActivity" />
-        <activity android:name=".Activity.ReViewPD4FLActivity"></activity>
+        <activity android:name=".Activity.ReViewPD4FLActivity" />
+        <activity
+            android:name=".Activity.AttrsPagerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustUnspecified" />
+        <activity android:name=".Activity.ReViewPDAP2_33Activity" />
+        <activity android:name=".Activity.ReViewPDAP2_33_Cy2Activity" />
+        <activity android:name=".Activity.CheckCy2Activity"></activity>
     </application>
 
 </manifest>

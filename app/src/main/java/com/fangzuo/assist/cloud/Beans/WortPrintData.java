@@ -49,8 +49,9 @@ public class WortPrintData {
 	public String FHuozhuNumber;//货主编码
 	public String FStorageNumber;//货主编码
 	public String FOrgNumber;//库存组织编码
+	public String FAveLenght;
 
-	@Generated(hash = 1754679523)
+	@Generated(hash = 1724786945)
 	public WortPrintData(Long FIndex, String FID, String FEntryID, String FItemID,
 			String FUnitID, String FDCStockID, String FDCSPID, String FSTOCKORGID,
 			String FOWNERID, String FBoxCode, String FSplitBoxCode, String FDate,
@@ -59,7 +60,8 @@ public class WortPrintData {
 			String FQtySplit, String FM2Split, String FQtySum, String FM2, String FM2Sum,
 			String FVolSum, String FTip, String FWide, String FMaker, String FPrintNum,
 			String FFBaoNum, String FLev, String FCarNo, String FFBaoNo, String FType,
-			String FHuozhuNumber, String FStorageNumber, String FOrgNumber) {
+			String FHuozhuNumber, String FStorageNumber, String FOrgNumber,
+			String FAveLenght) {
 		this.FIndex = FIndex;
 		this.FID = FID;
 		this.FEntryID = FEntryID;
@@ -100,6 +102,7 @@ public class WortPrintData {
 		this.FHuozhuNumber = FHuozhuNumber;
 		this.FStorageNumber = FStorageNumber;
 		this.FOrgNumber = FOrgNumber;
+		this.FAveLenght = FAveLenght;
 	}
 	@Generated(hash = 2003884253)
 	public WortPrintData() {
@@ -343,6 +346,12 @@ public class WortPrintData {
 	}
 	public void setFOrgNumber(String FOrgNumber) {
 		this.FOrgNumber = FOrgNumber;
+	}
+	public String getFAveLenght() {
+		return this.FAveLenght;
+	}
+	public void setFAveLenght(String FAveLenght) {
+		this.FAveLenght = FAveLenght;
 	}
 
 	

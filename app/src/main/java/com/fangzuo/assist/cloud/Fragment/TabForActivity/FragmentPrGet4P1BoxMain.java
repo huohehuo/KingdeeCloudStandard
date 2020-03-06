@@ -154,7 +154,7 @@ public class FragmentPrGet4P1BoxMain extends BaseFragment {
         tvDate.setText(CommonUtil.getTime(true));
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
         spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_pg)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgCreate_pg)+activityPager.getActivityMain(),""));
-        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_pg)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgSend_pg)+activityPager.getActivityMain(),""));
+        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_pg)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgSend_pg)+activityPager.getActivityMain(),""),activityPager.getActivity(),0);
         spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_pg)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgHuozhu_pg)+activityPager.getActivityMain(),""));
 //        spGetman.setAuto(getString(R.string.spBuyer_pg)+activityPager.getActivityMain(), "",activityPager.getOrgOut());
         spDepartment.setAuto(getString(R.string.spDepartmentCreate_pg)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spDepartmentCreate_pg)+activityPager.getActivityMain(),""),activityPager.getOrgIn(),activityPager.getActivity());

@@ -82,6 +82,20 @@ public class P1OneFragment extends BaseFragment {
         items_bg1chejian =new ArrayList<>();
         items_bg2chejian =new ArrayList<>();
         items_cpwg =new ArrayList<>();
+        items_zbin =new ArrayList<>();
+        items_zbget =new ArrayList<>();
+        items_nw_cgrk =new ArrayList<>();
+        items_zbget.add("简单生产领料1");
+        items_zbget.add("简单生产领料2");
+        items_zbget.add("简单生产领料3");
+        items_zbget.add("简单生产领料4");
+        items_zbget.add("简单生产领料5");
+        items_zbin.add("简单生产入库1");
+        items_zbin.add("简单生产入库2");
+        items_zbin.add("简单生产入库3");
+        items_zbin.add("简单生产入库4");
+        items_zbin.add("简单生产入库5");
+
     }
 
     @Override
@@ -98,6 +112,8 @@ public class P1OneFragment extends BaseFragment {
         ryData.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         adapter.addAll(GetSettingList.getPurchaseList(aa));
         dealSecMenu(aa);
+        items_nw_cgrk.add("外部采购单");
+        items_nw_cgrk.add("内部采购单");
     }
 
     private AlertDialog.Builder builder;
@@ -117,6 +133,9 @@ public class P1OneFragment extends BaseFragment {
     List<String> items_bg1chejian    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
     List<String> items_bg2chejian    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
     List<String> items_cpwg    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
+    List<String> items_zbin    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
+    List<String> items_zbget    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
+    List<String> items_nw_cgrk    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
 //    String[] items_dc   = new String[]{"代存出库", "代存入库"};
 //    String[] items_db = new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单", "VMI调拨申请单下推直接调拨单"};
 //    String[] items_in_out = new String[]{"样板出库", "第三方货物入库","第三方货物出库","出库申请单下推其他出库单"};
@@ -157,15 +176,39 @@ public class P1OneFragment extends BaseFragment {
                         PushDownPagerActivity.start(getActivity(),30);
                         break;
                     case Config.PdCgOrder2WgrkActivity://实际是采购订单下推外购入库
-                        PushDownPagerActivity.start(getActivity(),1);
+//                        PushDownPagerActivity.start(getActivity(),1);
+                        // 创建对话框构建器
+                        builder = new AlertDialog.Builder(getActivity());
+                        // 设置参数
+                        builder.setAdapter(
+                                new ArrayAdapter<String>(getActivity(),
+                                        R.layout.item_choose, R.id.textView, items_nw_cgrk),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        switch (items_nw_cgrk.get(which)) {
+                                            case "外部采购单":
+                                                PushDownPagerActivity.start(getActivity(),1);
+                                                break;
+                                            case "内部采购单":
+                                                PushDownPagerActivity.start(getActivity(),35);
+                                                break;
+                                        }
+                                    }
+                                });
+                        builder.create().show();
+                        break;
+                    case Config.PdCgOrder2WgrkNEIActivity://实际是采购订单下推外购入库
+                        PushDownPagerActivity.start(getActivity(),35);
                         break;
                     case Config.FLInStoreP1Activity://方料入库
                         PushDownPagerActivity.start(getActivity(),32);
                         break;
-                    case Config.DBClientActivity://方料入库
+                    case Config.DBClientActivity://调拨(客户在途)
                         PagerForActivity.start(mContext, Config.DBClientActivity);
                         break;
-                    case Config.DBStorageActivity://方料入库
+                    case Config.DBStorageActivity://调拨(在途仓库)
                         PagerForActivity.start(mContext, Config.DBStorageActivity);
                         break;
 
@@ -624,7 +667,48 @@ public class P1OneFragment extends BaseFragment {
                                 });
                         builder.create().show();
                         break;
-
+                    case Config.ZbGetActivity://整包领料(通用)
+                        builder = new AlertDialog.Builder(getActivity());
+                        // 设置参数
+                        builder.setAdapter(
+                                new ArrayAdapter<String>(getActivity(),
+                                        R.layout.item_choose, R.id.textView, items_zbget),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        switch (items_zbget.get(which)) {//"盘亏入库", "VMI盘亏入库"
+                                            case "简单生产领料1":PagerForActivity.start(mContext, Config.ZbGet1Activity);break;
+                                            case "简单生产领料2":PagerForActivity.start(mContext, Config.ZbGet2Activity);break;
+                                            case "简单生产领料3":PagerForActivity.start(mContext, Config.ZbGet3Activity);break;
+                                            case "简单生产领料4":PagerForActivity.start(mContext, Config.ZbGet4Activity);break;
+                                            case "简单生产领料5":PagerForActivity.start(mContext, Config.ZbGet5Activity);break;
+                                        }
+                                    }
+                                });
+                        builder.create().show();
+                        break;
+                    case Config.ZbInActivity://整包入库(通用)
+                        builder = new AlertDialog.Builder(getActivity());
+                        // 设置参数
+                        builder.setAdapter(
+                                new ArrayAdapter<String>(getActivity(),
+                                        R.layout.item_choose, R.id.textView, items_zbin),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        switch (items_zbin.get(which)) {
+                                            case "简单生产入库1":PagerForActivity.start(mContext, Config.ZbIn1Activity);break;
+                                            case "简单生产入库2":PagerForActivity.start(mContext, Config.ZbIn2Activity);break;
+                                            case "简单生产入库3":PagerForActivity.start(mContext, Config.ZbIn3Activity);break;
+                                            case "简单生产入库4":PagerForActivity.start(mContext, Config.ZbIn4Activity);break;
+                                            case "简单生产入库5":PagerForActivity.start(mContext, Config.ZbIn5Activity);break;
+                                        }
+                                    }
+                                });
+                        builder.create().show();
+                        break;
 //                    case "代存业务":
 //                        builder = new AlertDialog.Builder(getActivity());
 //                        // 设置参数

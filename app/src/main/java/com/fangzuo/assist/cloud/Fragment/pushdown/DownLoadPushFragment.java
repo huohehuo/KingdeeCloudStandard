@@ -4,6 +4,7 @@ package com.fangzuo.assist.cloud.Fragment.pushdown;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.device.ScanDevice;
 import android.os.Bundle;
 import android.os.Handler;
@@ -124,9 +125,11 @@ public class DownLoadPushFragment extends BaseFragment {
         pushDownSubDao = daosession.getPushDownSubDao();
 
         if (tag == 1) activity = Config.PdCgOrder2WgrkActivity;
+        if (tag == 35) activity = Config.PdCgOrder2WgrkNEIActivity;
         if (tag == 32) activity = Config.FLInStoreP1Activity;
         if (tag == 2) activity = Config.PdSaleOrder2SaleOutActivity;
         if (tag == 31) activity = Config.PdSaleOrder2SaleOut4BoxActivity;
+        if (tag == 34) activity = Config.PdSaleOrder2SaleOut4BoxP2Activity;
         if (tag == 21) activity = Config.PdSaleOrder2SaleOut2Activity;
         if (tag == 6) activity = Config.PdBackMsg2SaleBackActivity;
         if (tag == 25) activity = Config.P2ProductionInStoreActivity;
@@ -135,6 +138,7 @@ public class DownLoadPushFragment extends BaseFragment {
         if (tag == 28) activity = Config.P1PdCgrk2ProductGetActivity;
         if (tag == 29) activity = Config.P1PdProductGet2CprkActivity;
         if (tag == 30) activity = Config.P1PdProductGet2Cprk2Activity;
+        if (tag == 33) activity = Config.WgDryingInStoreActivity;
 
 //        if (tag == 1) {
             //供应商信息绑定
@@ -386,7 +390,7 @@ public class DownLoadPushFragment extends BaseFragment {
             Log.e("finterid", i + "");
             Log.e("finterid2", finalI + "");
             DownLoadSubListBean dBean = new DownLoadSubListBean();
-            if (tag==25 || tag == 26|| tag == 27|| tag == 28|| tag == 29|| tag == 30){
+            if (tag==25 || tag == 26|| tag == 27|| tag == 28|| tag == 29|| tag == 30|| tag == 33){
                 dBean.interID = downloadIDs.get(i).FID;
             }else{
                 dBean.interID = downloadIDs.get(i).FBillNo;
@@ -436,6 +440,7 @@ public class DownLoadPushFragment extends BaseFragment {
                             }
                             Toast.showText(mContext, getString(R.string.down_successful));
                             LoadingUtil.dismiss();
+                            checkLocList();
                         }
 
                         @Override
@@ -577,6 +582,7 @@ public class DownLoadPushFragment extends BaseFragment {
                     lvPushdownDownload.setAdapter(pushDownListAdapter);
                     pushDownListAdapter.notifyDataSetChanged();
                 }
+                checkLocList();
             }
 
             @Override
@@ -607,5 +613,25 @@ public class DownLoadPushFragment extends BaseFragment {
 //
 //            }
 //        });
+    }
+    //标出本地已下载的单据
+    private void checkLocList() {
+        try{
+            ArrayList<String> list = new ArrayList<>();
+            String SQL;
+            if (tag == 1 || tag ==35){
+                SQL= "SELECT FBILL_NO FROM PUSH_DOWN_MAIN WHERE 1=1 and TAG in (1,35)";
+            }else{
+               SQL = "SELECT FBILL_NO FROM PUSH_DOWN_MAIN WHERE 1=1 and TAG="+tag;
+            }
+            Lg.e("SQL:"+SQL);
+            Cursor cursor = GreenDaoManager.getmInstance(mContext).getDaoSession().getDatabase().rawQuery(SQL, null);
+            while (cursor.moveToNext()) {
+                list.add(cursor.getString(cursor.getColumnIndex("FBILL_NO")));
+            }
+            Lg.e("得到本地单据",list);
+            pushDownListAdapter.setDownList(list);
+        }catch (Exception e){}
+
     }
 }

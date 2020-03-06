@@ -99,12 +99,16 @@ public class WebApi {
     public static final String ActualModelSecCheck = "ActualModelSecCheck";
 
     public static final String PrintData = "PrintData";
+    public static final String PrintData35 = "PrintData35";
     public static final String PrintData4P1 = "PrintData4P1";
     public static final String PrintData4PackagReAdd = "PrintData4PackagReAdd";
     public static final String PrintData4FlInStore = "PrintData4FlInStore";
     public static final String PrintData4Package = "PrintData4Package";
     public static final String PrintData4Package2 = "PrintData4Package2";
     public static final String PrintData4P2 = "PrintData4P2";
+    public static final String PrintData4P21 = "PrintData4P21";
+    public static final String PrintData4P2_33 = "PrintData4P2_33";
+    public static final String PrintData4P2_33_Cy2 = "PrintData4P2_33_Cy2";
     public static final String HuozhuByOrg = "HuozhuByOrg";
 
     public static final String PrintOutCheck = "PrintOutCheck";

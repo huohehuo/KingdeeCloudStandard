@@ -69,6 +69,7 @@ public class ReViewP24WortAdapter extends BaseAdapter implements View.OnClickLis
         viewHolder.tvLenght.setText("总长:" + detail.get(i).FCfLenghtAny+"  MM");
         viewHolder.tvThick.setText("厚:" + detail.get(i).FCfThick+"  MM");
         viewHolder.tvWide.setText("宽:" + detail.get(i).FCfWide+"  MM");
+        viewHolder.tvAveLenght.setText("平均材长:" + MathUtil.D2saveInt(MathUtil.toD(detail.get(i).FStr1)/MathUtil.toD(detail.get(i).FCfQtySum)));
         if (detail.get(i).FIsInBox==1){
             viewHolder.tvIsBox.setText("已装箱");
             viewHolder.tvIsBox.setTextColor(viewHolder.red);
@@ -107,6 +108,8 @@ public class ReViewP24WortAdapter extends BaseAdapter implements View.OnClickLis
         CheckBox cbIscheck;
         @BindView(R.id.productname)
         TextView productname;
+        @BindView(R.id.tv_ave_lenght)
+        TextView tvAveLenght;
         @BindView(R.id.tv_pihao)
         TextView tvPihao;
         @BindView(R.id.tv_sum)

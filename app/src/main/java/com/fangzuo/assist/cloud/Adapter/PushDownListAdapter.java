@@ -25,6 +25,7 @@ public class PushDownListAdapter extends BaseAdapter {
     Context context;
     List<PushDownMain> items;
     private ArrayList<Boolean> isCheck;
+    private ArrayList<String> strings;
 
     public PushDownListAdapter(Context context, List<PushDownMain> items, ArrayList<Boolean> isCheck) {
         this.context = context;
@@ -61,12 +62,37 @@ public class PushDownListAdapter extends BaseAdapter {
         viewHolder.cbIscheck.setChecked(isCheck.get(i));
         viewHolder.tvCode.setText(items.get(i).FBillNo);
         viewHolder.tvSupplier.setText(items.get(i).FSupply);
-        if ("29".equals(items.get(i).tag+"")){
+        if ("29".equals(items.get(i).tag+"") || "33".equals(items.get(i).tag+"") ){
             viewHolder.tvCarNo.setVisibility(View.VISIBLE);
             viewHolder.tvCarNo.setText("车厢柜号："+items.get(i).FCarBoxNo);
         }
+        if ("27".equals(items.get(i).tag+"")){
+            viewHolder.tvCj.setVisibility(View.VISIBLE);
+            viewHolder.tvCarNo.setVisibility(View.VISIBLE);
+            viewHolder.tvCarNo.setText("车厢柜号："+(items.get(i).FCarBoxNo));
+            viewHolder.tvCj.setText("生产车间："+items.get(i).FWordShop);
+        }
+        if ("35".equals(items.get(i).tag+"")){
+            viewHolder.tvCj.setVisibility(View.VISIBLE);
+            viewHolder.tvCj.setText("采购组织："+items.get(i).FDept);
+        }
         viewHolder.tvDate.setText(items.get(i).FDate);
+        if (null!=strings && strings.size()>0){
+            for (int j = 0; j < strings.size(); j++) {
+                if (strings.get(j).equals(items.get(i).FBillNo)){
+                    viewHolder.tvDowned.setText("已下载");
+                    break;
+                }else{
+                    viewHolder.tvDowned.setText("");
+                }
+            }
+        }
         return view;
+    }
+    //标识已有单据
+    public void setDownList(ArrayList<String> list){
+        strings = list;
+        notifyDataSetChanged();
     }
 
     static class ViewHolder {
@@ -80,6 +106,10 @@ public class PushDownListAdapter extends BaseAdapter {
         TextView tvDate;
         @BindView(R.id.tv_car_no)
         TextView tvCarNo;
+        @BindView(R.id.tv_cj)
+        TextView tvCj;
+        @BindView(R.id.tv_down)
+        TextView tvDowned;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

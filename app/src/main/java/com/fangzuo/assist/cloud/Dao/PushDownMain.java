@@ -51,6 +51,7 @@ public class PushDownMain {
     public String FPassNo;
     public String FFreight;
     public String FYaoNo;            //
+    public String FFieldMan;
 
     public String FStr1;
     public String FStr2;
@@ -58,15 +59,15 @@ public class PushDownMain {
     public String FStr4;
     public String FStr5;
 
-    @Generated(hash = 2108922542)
+    @Generated(hash = 1938902929)
     public PushDownMain(Long id, String FID, String FBillNo, String FDate, String FSupplyID, String FSupply,
             String FSaleOrgID, String FStoreOrgID, String FSettleOrgId, String FSaleManID, String FSaleDeptID,
             String FNot, int tag, String FBillTypeName, String FAccountID, String FDept, String FDeptID,
             String FClient, String FClientID, String FAppOrgID, String FHuozhuInType, String FHuozhuOutType,
             String FDbType, String FOrderNo, String FWordShopID, String FWordShop, String FStoreManID,
             String FStockerGroupID, String FCreateOrgID, String FHuoZhuID, String FWlCompany, String FCarBoxNo,
-            String FPassNo, String FFreight, String FYaoNo, String FStr1, String FStr2, String FStr3,
-            String FStr4, String FStr5) {
+            String FPassNo, String FFreight, String FYaoNo, String FFieldMan, String FStr1, String FStr2,
+            String FStr3, String FStr4, String FStr5) {
         this.id = id;
         this.FID = FID;
         this.FBillNo = FBillNo;
@@ -102,6 +103,7 @@ public class PushDownMain {
         this.FPassNo = FPassNo;
         this.FFreight = FFreight;
         this.FYaoNo = FYaoNo;
+        this.FFieldMan = FFieldMan;
         this.FStr1 = FStr1;
         this.FStr2 = FStr2;
         this.FStr3 = FStr3;
@@ -360,6 +362,12 @@ public class PushDownMain {
     }
     public void setFYaoNo(String FYaoNo) {
         this.FYaoNo = FYaoNo;
+    }
+    public String getFFieldMan() {
+        return this.FFieldMan;
+    }
+    public void setFFieldMan(String FFieldMan) {
+        this.FFieldMan = FFieldMan;
     }
 
 //    public String FName;

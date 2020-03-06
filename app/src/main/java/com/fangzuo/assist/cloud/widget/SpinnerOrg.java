@@ -17,6 +17,7 @@ import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.Asynchttp;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
@@ -115,7 +116,7 @@ public class SpinnerOrg extends RelativeLayout {
             });
         }
 //        else {
-        OrgDao employeeDao = daoSession.getOrgDao();
+            OrgDao employeeDao = daoSession.getOrgDao();
             List<Org> employees = employeeDao.loadAll();
             container.addAll(employees);
             adapter.notifyDataSetChanged();
@@ -204,6 +205,105 @@ public class SpinnerOrg extends RelativeLayout {
             }
         }
     }
+    public void setAutoSelection(String saveKeyStr,String string,int activity,int type) {
+        saveKeyString =saveKeyStr;
+        autoString = string;
+        if ("".equals(string) && !"".equals(saveKeyStr)){
+            autoString = Hawk.get(saveKeyString,"");
+        }
+        if (checkFilter(activity)){
+            if (type==0){//过滤条件：包含“事业部” 和“亿森”
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Org org = container.get(i);
+                    if(!org.FName.contains("事业部")&&!org.FName.contains("亿森")) {
+//                        Lg.e("删除组织",org);
+                        container.remove(org);
+                    }else{
+                        Lg.e("保留组织",org);
+                    }
+                }
+            }
+        }
+//        adapter = new OrgSpAdapter(context, container);
+        mSp.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        for (int j = 0; j < adapter.getCount(); j++) {
+            if (((Org) adapter.getItem(j)).FNumber.equals(autoString)|| ((Org) adapter.getItem(j)).FOrgID.equals(autoString)
+                    || ((Org) adapter.getItem(j)).FName.equals(autoString)) {
+                mSp.setSelection(j);
+//                autoString = null;
+                break;
+            }
+        }
+    }
+
+
+    private boolean checkFilter(int activity){
+        boolean should = false;
+        switch (activity){
+            case Config.CpWgInActivity:
+            case Config.CpWgHunInActivity:
+            case Config.Bg2CheJianInActivity:
+            case Config.Bg2CheJianHunInActivity:
+            case Config.Bg2CheJianDiGetActivity:
+            case Config.Bg1CheJianInActivity:
+            case Config.Bg1CheJianHunInActivity:
+            case Config.Bg1CheJianDiGetActivity:
+            case Config.ZbCheJianInActivity:
+            case Config.ZbCheJianHunInActivity:
+            case Config.ZbCheJianDiGetActivity:
+            case Config.ZbCheJianDiZGetActivity:
+            case Config.SplitBoxGetActivity:
+            case Config.SplitBoxDiGetActivity:
+            case Config.SplitBoxInActivity:
+            case Config.ZbIn1Activity:
+            case Config.ZbIn2Activity:
+            case Config.ZbIn3Activity:
+            case Config.ZbIn4Activity:
+            case Config.ZbIn5Activity:
+            case Config.SplitBoxHunInActivity:
+            case Config.ChangeModelGetActivity:
+            case Config.ChangeModelInActivity:
+            case Config.ChangeLvGetActivity:
+            case Config.ChangeLvInActivity:
+            case Config.ChangeGetActivity:
+            case Config.ChangeInActivity:
+            case Config.GbHunInActivity:
+            case Config.GbInActivity:
+            case Config.GbDiGetActivity:
+            case Config.GbGetActivity:
+            case Config.Tb3HunInActivity:
+            case Config.Tb3DiGetActivity:
+            case Config.TbIn3Activity:
+            case Config.TbGet3Activity:
+            case Config.Tb2HunInActivity:
+            case Config.Tb2DiGetActivity:
+            case Config.TbIn2Activity:
+            case Config.TbGet2Activity:
+            case Config.Tb1HunInActivity:
+            case Config.Tb1DiGetActivity:
+            case Config.TbInActivity:
+            case Config.TbGetActivity:
+            case Config.ZbGet1Activity:
+            case Config.ZbGet2Activity:
+            case Config.ZbGet3Activity:
+            case Config.ZbGet4Activity:
+            case Config.ZbGet5Activity:
+            case Config.DhInActivity:
+            case Config.DhIn2Activity:
+            case Config.DBClientActivity:
+            case Config.DBStorageActivity:
+                should = true;
+                break;
+        }
+        return should;
+    }
+
+
+
+
+
+
 
     public OrgSpAdapter getAdapter() {
         return adapter;

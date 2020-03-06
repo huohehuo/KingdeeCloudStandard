@@ -150,9 +150,11 @@ public class ChooseFragment extends BaseFragment {
 //        }
         initList();
         if (tag == 1) activity = Config.PdCgOrder2WgrkActivity;
+        if (tag == 35) activity = Config.PdCgOrder2WgrkNEIActivity;
         if (tag == 32) activity = Config.FLInStoreP1Activity;
         if (tag == 2) activity = Config.PdSaleOrder2SaleOutActivity;
         if (tag == 31) activity = Config.PdSaleOrder2SaleOut4BoxActivity;
+        if (tag == 34) activity = Config.PdSaleOrder2SaleOut4BoxP2Activity;
         if (tag == 21) activity = Config.PdSaleOrder2SaleOut2Activity;
         if (tag == 22) activity = Config.PdDbApply2DBActivity;
         if (tag == 23) activity = Config.PdDbApply2DB4VMIActivity;
@@ -163,6 +165,7 @@ public class ChooseFragment extends BaseFragment {
         if (tag == 28) activity = Config.P1PdCgrk2ProductGetActivity;
         if (tag == 29) activity = Config.P1PdProductGet2CprkActivity;
         if (tag == 30) activity = Config.P1PdProductGet2Cprk2Activity;
+        if (tag == 33) activity = Config.WgDryingInStoreActivity;
     }
 
     @Override
@@ -205,7 +208,11 @@ public class ChooseFragment extends BaseFragment {
             Log.e("ChooseFragment", "跳转数据：" + container.toString());
             switch (tag) {
                 case 1://采购订单下推外购入库单
-                    PagerForActivity.start(mContext, Config.PdCgOrder2WgrkActivity, container);
+                    PagerForActivity.start(mContext, Config.PdCgOrder2WgrkActivity, container,1);
+//                    intent = new Intent(mContext, PdCgOrder2WgrkActivity.class);
+                    break;
+                case 35://采购订单下推外购入库单
+                    PagerForActivity.start(mContext, Config.PdCgOrder2WgrkNEIActivity, container,35);
 //                    intent = new Intent(mContext, PdCgOrder2WgrkActivity.class);
                     break;
                 case 32://方料入库
@@ -214,14 +221,15 @@ public class ChooseFragment extends BaseFragment {
                     break;
                 case 2://销售订单下推销售出库单
                     PagerForActivity.start(mContext, Config.PdSaleOrder2SaleOutActivity, container);
-//                    intent = new Intent(mContext, PdSaleOrder2SaleOutActivity.class);
                     break;
                 case 31://销售订单下推销售出库单
                     PagerForActivity.start(mContext, Config.PdSaleOrder2SaleOut4BoxActivity, container);
                     break;
+                case 34://销售订单下推销售出库单
+                    PagerForActivity.start(mContext, Config.PdSaleOrder2SaleOut4BoxP2Activity, container);
+                    break;
                 case 21://VMI销售订单下推销售出库单
                     PagerForActivity.start(mContext, Config.PdSaleOrder2SaleOut2Activity, container);
-//                    intent = new Intent(mContext, PdSaleOrder2SaleOutActivity.class);
                     break;
                 case 6://退货通知单下推销售退货单
                     PagerForActivity.start(mContext, Config.PdBackMsg2SaleBackActivity, container);
@@ -261,6 +269,10 @@ public class ChooseFragment extends BaseFragment {
                     break;
                 case 27://简单生产入库
                     PagerForActivity.start(mContext, Config.P2ProductionInStore2Activity, container);
+//                    intent = new Intent(mContext, PdBackMsg2SaleBackActivity.class);
+                    break;
+                case 33://简单生产入库
+                    PagerForActivity.start(mContext, Config.WgDryingInStoreActivity, container);
 //                    intent = new Intent(mContext, PdBackMsg2SaleBackActivity.class);
                     break;
 
@@ -516,6 +528,7 @@ public class ChooseFragment extends BaseFragment {
                     Lg.e("删除请求成功");
                     for (int i = 0; i < downloadIDs.size(); i++) {
                         List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
+                                PushDownSubDao.Properties.FStr1.eq(tag+""),
                                 PushDownSubDao.Properties.FID.eq(downloadIDs.get(i).FID),
                                 PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
                         ).build().list();
@@ -525,10 +538,12 @@ public class ChooseFragment extends BaseFragment {
                         }
                         //删掉与该单据相关的明细
                         t_detailDao.deleteInTx(t_detailDao.queryBuilder().where(
+                                T_DetailDao.Properties.Activity.eq(activity),
                                 T_DetailDao.Properties.FID.eq(downloadIDs.get(i).FID),
                                 T_DetailDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
                         ).build().list());
                         t_mainDao.deleteInTx(t_mainDao.queryBuilder().where(
+                                T_mainDao.Properties.Activity.eq(activity),
                                 T_mainDao.Properties.FID.eq(downloadIDs.get(i).FID),
                                 T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
                         ).build().list());
@@ -557,6 +572,7 @@ public class ChooseFragment extends BaseFragment {
             Lg.e("downLoadIDs",downloadIDs);
             for (int i = 0; i < downloadIDs.size(); i++) {
                 List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
+                        PushDownSubDao.Properties.FStr1.eq(tag+""),
                         PushDownSubDao.Properties.FID.eq(downloadIDs.get(i).FID),
                         PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
                 ).build().list();
@@ -568,7 +584,11 @@ public class ChooseFragment extends BaseFragment {
 //                        T_DetailDao.Properties.FID.eq(downloadIDs.get(i).FID)).build().list());
 //                daosession.getT_mainDao().deleteInTx(daosession.getT_mainDao().queryBuilder().where(
 //                        T_mainDao.Properties.FIndex.eq(downloadIDs.get(i).FID)).build().list());
-                pushDownMainDao.deleteInTx(pushDownMainDao.queryBuilder().where(PushDownMainDao.Properties.FBillNo.eq(downloadIDs.get(i).FBillNo)).build().list());
+                pushDownMainDao.deleteInTx(
+                        pushDownMainDao.queryBuilder().where(
+                                PushDownMainDao.Properties.Tag.eq(tag),
+                                PushDownMainDao.Properties.FBillNo.eq(downloadIDs.get(i).FBillNo)
+                        ).build().list());
                 if (tag == 30){
                     pGetDataDao.deleteInTx(pGetDataDao.queryBuilder().where(
                             PGetDataDao.Properties.FID.eq(downloadIDs.get(i).FID),

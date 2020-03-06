@@ -435,13 +435,25 @@ public class JsonDealUtils {
 //                    addObject(jsonAr,"FBaseUnitId","FNumber",beans.get(j).FUnitID);
 //                    addObject(jsonAr,"FSecUnitId","FNumber",beans.get(j).FUnitID);
 //                    addObject(jsonAr,"FExtAuxUnitId","FNumber",beans.get(j).FUnitID);
-                    jsonAr.put("FRealQty",beans.get(j).FRealQty);
+                    if (beans.get(j).activity==Config.WgDryingInStoreActivity || beans.get(j).activity==Config.WgDryingInStoreCy2Activity ){
+//                        jsonAr.put("FRealQty",MathUtil.D2save5(MathUtil.toD(beans.get(j).FRealQty)*0.00236)+"");
+//                        jsonAr.put("FRealQty",MathUtil.D2save5(MathUtil.mul(beans.get(j).FRealQty,"0.00236")));
+                        Lg.e("凭借1",beans.get(j).FRealQty);
+                        Lg.e("凭借2",MathUtil.D2save5_33(beans.get(j).FRealQty)+"");
+                        jsonAr.put("FRealQty",MathUtil.D2save5_33(beans.get(j).FRealQty));
+                    }else{
+                        jsonAr.put("FRealQty",beans.get(j).FRealQty);
+                    }
 //                    jsonAr.put("FBaseRealQty",beans.get(j).FRealQty);
                     jsonAr.put("FProductNo",beans.get(j).FProductNo);
                     jsonAr.put("F_FFF_Decimal",beans.get(j).FYmLenght);
                     jsonAr.put("F_FFF_Decimal1",beans.get(j).FYmDiameter);
                     jsonAr.put("F_FFF_Integer3",beans.get(j).FBWide);
-                    jsonAr.put("F_FFF_Integer4",beans.get(j).FBThick);
+                    if (beans.get(j).activity == Config.ProductInStore4P2MpActivity){
+                        jsonAr.put("F_FFF_Integer4",MathUtil.Cut0(beans.get(j).FBThick));
+                    }else{
+                        jsonAr.put("F_FFF_Integer4",beans.get(j).FBThick);
+                    }
                     jsonAr.put("F_FFF_Integer5",beans.get(j).FBLenght);
                     jsonAr.put("F_FFF_Text1",beans.get(j).FLevel);
                     addObject(jsonAr,"FStockId","FNumber",beans.get(j).FStorageId);
@@ -1144,6 +1156,7 @@ public class JsonDealUtils {
                 addObject(inObject,"FCustomerID","FNumber",mains.get(i).FCustomerID);
                 addObject(inObject,"FSaleDeptID","FNumber",mains.get(i).FPurchaseDeptId);
                 addObject(inObject,"FSalesManID","FNumber",mains.get(i).FPurchaserId);
+                inObject.put("F_FFF_Combo",mains.get(i).FFieldMan);
                 inObject.put("FDate",mains.get(i).FDate);
                 inObject.put("FNote",mains.get(i).FNot);
                 inObject.put("F_FFF_Text1",Hawk.get(Info.AutoLogin,""));
@@ -1588,6 +1601,7 @@ public class JsonDealUtils {
                 JSONObject inObject = new JSONObject();
                 inObject.put("FBillNo","");
                 inObject.put("FDate",mains.get(i).FDate);
+                inObject.put("F_FFF_Combo",mains.get(i).FFieldMan);
                 inObject.put("F_FFF_Remarks",mains.get(i).FNot);
                 inObject.put("F_FFF_Text",Hawk.get(Info.AutoLogin,""));
 //                inObject.put("FOrderNo",mains.get(i).FSoorDerno);
@@ -1629,7 +1643,7 @@ public class JsonDealUtils {
                     }
                     jsonAr.put("FRealQty",beans.get(j).FRealQty);
                     addObject(jsonAr,"FStockId","FNumber",beans.get(j).FStorageId);
-                    addObject(jsonAr,"FStockstatusId","FNumber",beans.get(j).FStorageId);
+//                    addObject(jsonAr,"FStockstatusId","FNumber",beans.get(j).FStorageId);
                     jsonAr.put("FIsFree",beans.get(j).FIsFree);
                     jsonAr.put("FSOEntryId",beans.get(j).FSOEntryId);
                     jsonAr.put("FSrcBillTypeID","SAL_RETURNNOTICE");

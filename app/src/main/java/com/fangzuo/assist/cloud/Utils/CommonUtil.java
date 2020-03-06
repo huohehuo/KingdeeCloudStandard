@@ -142,7 +142,135 @@ public class CommonUtil {
         }).start();
 
     }
+    //水版打印   1228 烘干版入库修改
+    public static void doPrint4P2Shuiban2(final zpBluetoothPrinter zpSDK, final PrintHistory bean, final String times) throws Exception{
+        Lg.e("打印数据:"+times,bean);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+//        zpBluetoothPrinter zpSDK=new zpBluetoothPrinter(context);
+                if(!zpSDK.connect(Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", "")).address))
+                {
+                    Toast.showText(App.getContext(),"打印机连接失败------");
+                    return;
+                }
+                if (null== zpSDK)return;
+                int size=4;
+                int size2=3;
+                int lineSize=3;
+                int printNum = Integer.parseInt(null==times?"1":times);
+//        int printNum = Integer.parseInt(Hawk.get(Config.PrintNum,"2"));
+                for (int i = 0; i < printNum; i++) {
 
+                    zpSDK.pageSetup(668, 900);
+//            zpSDK.drawBox(1,1,1,668,888);
+                    zpSDK.drawText(0, 5, "______________________________________________", 2, 0, 0, false, false);
+                    zpSDK.drawText(200, 50, "物料标签", size, 0, 1, false, false);
+                    zpSDK.drawText(0, 90, "______________________________________________", 2, 0, 0, false, false);
+                    /*左边*/
+//            zpSDK.drawText(10, 220, "品名:", size, 0, 0, false, false);
+//            zpSDK.drawText(10, 170, "批号:", size, 0, 0, false, false);
+                    zpSDK.drawText(10, 220, "货主:", size, 0, 0, false, false);
+                    zpSDK.drawText(10, 280, "规格:", size, 0, 0, false, false);
+//                    zpSDK.drawText(10, 340, "测量宽:", size, 0, 0, false, false);
+                    zpSDK.drawText(10, 400, "总层数:", size, 0, 0, false, false);
+                    zpSDK.drawText(10, 460, "总体积:", size, 0, 0, false, false);
+                    /*右边数值*/
+                    zpSDK.drawText(10, 124, bean.FName,size, 0, 0, false, false);
+                    zpSDK.drawText(10, 174, bean.FBatch,size, 0, 0, false, false);
+                    zpSDK.drawText(160, 224, bean.FHuoquan==null?"":bean.FHuoquan,size, 0, 0, false, false);
+                    //处理规格过长的情况，现在是最多有三个规格
+                    String model = bean.FModel;
+                    int numfx=0;
+                    String[] spl =model.split("");
+                    Lg.e("切割数组",spl);
+                    for (int f = 0; f < spl.length; f++) {
+                        if ("/".equals(spl[f])){
+                            numfx++;
+                        }
+                    }
+                    if (numfx==0){
+                        zpSDK.drawText(160, 284,model,size, 0, 0, false, false);
+                    }else if (numfx == 1){
+                        if (model.length()>17){
+                            zpSDK.drawText(160, 284, model.substring(0,17),size, 0, 0, false, false);
+                            zpSDK.drawText(10, 340, model.substring(17,model.length()),size, 0, 0, false, false);
+                        }else{
+                            zpSDK.drawText(160, 284, model.substring(0,model.length()/2),size, 0, 0, false, false);
+                            zpSDK.drawText(10, 340, model.substring(model.length()/2,model.length()),size, 0, 0, false, false);
+                        }
+                    }else{
+                        if (model.length()>24){
+                            zpSDK.drawText(160, 284, model.substring(0,24),size2, 0, 0, false, false);
+                            zpSDK.drawText(10, 340, model.substring(24,model.length()),size2, 0, 0, false, false);
+                        }else{
+                            zpSDK.drawText(160, 284, model.substring(0,20),size2, 0, 0, false, false);
+                            zpSDK.drawText(10, 340, model.substring(20,model.length()),size2, 0, 0, false, false);
+                        }
+
+                    }
+
+//                    zpSDK.drawText(500, 284, "MM",size, 0, 0, false, false);
+//                    String wide = bean.FBWide==null?"":bean.FBWide;
+//                    if (wide.length()>19){
+//                        if (wide.length()<38){
+//                            zpSDK.drawText(180, 344, wide.substring(0,19),size2, 0, 0, false, false);
+//                            zpSDK.drawText(180, 368, wide.substring(19,wide.length()),size2, 0, 0, false, false);
+//                        }else{
+//                            zpSDK.drawText(180, 344, wide.substring(0,19),size2, 0, 0, false, false);
+//                            zpSDK.drawText(180, 368, wide.substring(19,38),size2, 0, 0, false, false);
+//                            zpSDK.drawText(180, 392, wide.substring(38,wide.length()),size2, 0, 0, false, false);
+//                        }
+//                    }else{
+//                        zpSDK.drawText(180, 344, wide,size2, 0, 0, false, false);
+//                    }
+////            zpSDK.drawText(300, 344, bean.FBWide==null?"":bean.FBWide,size2, 0, 0, false, false);
+//                    zpSDK.drawText(500, 344, "MM",size2, 0, 0, false, false);
+                    zpSDK.drawText(175, 404, bean.FCeng==null?"":bean.FCeng,size, 0, 0, false, false);
+//            zpSDK.drawText(450, 404, bean.FUnitAux==null?"":bean.FUnitAux,size2, 0, 0, false, false);
+                    zpSDK.drawText(175, 464, bean.FVolume==null?"":bean.FVolume,size, 0, 0, false, false);
+                    zpSDK.drawText(500, 464, "M3",size, 0, 0, false, false);
+                    zpSDK.drawText(10, 500, "______________________________________________", 2, 0, 0, false, false);
+                    zpSDK.drawQrCode(10, 560, bean.FBarCode, 0, 11, 0);
+                    zpSDK.drawText(300, 560, "仓位:",size2, 0, 0, false, false);
+                    zpSDK.drawText(380, 560, bean.FWaveHouse==null?"":bean.FWaveHouse,size2, 0, 0, false, false);
+                    zpSDK.drawText(300, 640, "录入:",size2, 0, 0, false, false);
+//            zpSDK.drawText(380, 640, bean.FSaveIn==null?"":bean.FSaveIn,size2, 0, 0, false, false);
+                    zpSDK.drawText(380, 640, Hawk.get(Info.AutoLogin,""),size2, 0, 0, false, false);
+                    zpSDK.drawText(300, 720, "审核:",size2, 0, 0, false, false);
+                    zpSDK.drawText(380, 720, bean.FCheck==null?"":bean.FCheck,size2, 0, 0, false, false);
+                    zpSDK.drawText(300, 790, "日期:",size2, 0, 0, false, false);
+                    zpSDK.drawText(380, 790, bean.FDate,size2, 0, 0, false, false);
+                    zpSDK.drawText(10, 850, "______________________________________________", 2, 0, 0, false, false);
+
+                    zpSDK.print(0, 1);
+                    zpSDK.printerStatus();
+                    int a=zpSDK.GetStatus();
+                    Lg.e("打印机状态",a);
+//                    if(a==-1)
+//                    { //"获取状态异常------";
+//                        Toast.showText(App.getContext(),"获取状态异常---请重连打印机");
+//                    }
+//                    if(a==1)
+//                    {//"缺纸----------";
+//                        Toast.showTextLong(App.getContext(),"打印机缺少纸张---请添加纸张后再操作");
+//                    }
+//                    if(a==2)
+//                    {
+//                        //"开盖----------";
+//                        Toast.showText(App.getContext(),"请勿打开盖子-----");
+//                    }
+//                    if(a==0)
+//                    {
+//                        //"打印机正常-------";
+//                        Toast.showText(App.getContext(),"打印成功");
+//                    }
+                }
+                zpSDK.disconnect();
+            }
+        }).start();
+
+    }
     //原木打印
     public static void doPrint4P2(final zpBluetoothPrinter zpSDK, final PrintHistory bean, final String times) throws Exception {
         Lg.e("打印数据:" + times, bean);
@@ -481,6 +609,13 @@ public class CommonUtil {
     //刨光打印
     public static void doPrint4P2Wort(Context context,List<WortPrintData> bean, String times) throws Exception{
         Lg.e("打印数据:"+times,bean);
+        //算出平均材长
+        double aveL =0.0;
+        String aveLenght="";
+        for (int i = 0; i < bean.size(); i++) {
+            aveL+=MathUtil.mul(bean.get(i).FLenght+"",bean.get(i).FQty);
+        }
+        aveLenght = MathUtil.D2saveInt(aveL/MathUtil.toD(bean.get(0).FQtySum))+"";
         zpBluetoothPrinter zpSDK=new zpBluetoothPrinter(context);
         if(!zpSDK.connect(Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", "")).address))
         {
@@ -506,10 +641,11 @@ public class CommonUtil {
             zpSDK.drawText(10, 174, "名称:", size, 0, 0, false, false);
             zpSDK.drawText(10, 228, "总长:", size, 0, 0, false, false);
             zpSDK.drawText(500, 228, "MM", size, 0, 0, false, false);
-            zpSDK.drawText(10, 288, "宽:", size, 0, 0, false, false);
-            zpSDK.drawText(500, 288, "MM", size, 0, 0, false, false);
-            zpSDK.drawText(10, 348, "厚度:", size, 0, 0, false, false);
-            zpSDK.drawText(500, 348, "MM", size, 0, 0, false, false);
+            zpSDK.drawText(10, 282, "宽:", size, 0, 0, false, false);
+            zpSDK.drawText(500, 282, "MM", size, 0, 0, false, false);
+            zpSDK.drawText(10, 336, "厚度:", size, 0, 0, false, false);
+            zpSDK.drawText(500, 336, "MM", size, 0, 0, false, false);
+            zpSDK.drawText(10, 390, "平均材长:", size, 0, 0, false, false);
             zpSDK.drawText(10, 444, "PCS:", size, 0, 0, false, false);
             zpSDK.drawText(10, 504, "M2:", size, 0, 0, false, false);
             /*右边数值*/
@@ -523,6 +659,7 @@ public class CommonUtil {
                 zpSDK.drawText(156, 284, split[1],size, 0, 0, false, false);
                 zpSDK.drawText(156, 344, split[2],size, 0, 0, false, false);
             }
+            zpSDK.drawText(225, 390, aveLenght,size, 0, 0, false, false);
             zpSDK.drawText(156, 444, MathUtil.Cut0(bean.get(0).FQtySum),size, 0, 0, false, false);
             zpSDK.drawText(156, 504, bean.get(0).FM2Sum,size, 0, 0, false, false);
 
@@ -586,9 +723,202 @@ public class CommonUtil {
         zpSDK.disconnect();
     }
 
+    public static void doPrint433(final Context context, final PrintHistory bean, final String times) throws Exception{
+        Lg.e("打印数据:"+times,bean);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                zpBluetoothPrinter zpSDK=new zpBluetoothPrinter(context);
+                if(!zpSDK.connect(Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", "")).address))
+                {
+                    Toast.showText(context,"打印机连接失败------");
+                    Lg.e("打印失败....");
+//                    printHistoryDao.insertInTx(new PrintErrorHistory(bean.get(0).FBoxCode,CommonUtil.getTimeLong(true),"0"));
+                    return;
+                }
+                int size=4;
+                int size2=3;
+                int lineSize=3;
+                int printNum = Integer.parseInt(null==times?"1":times);
+                //        int printNum = Integer.parseInt(Hawk.get(Config.PrintNum,"2"));
+                for (int i = 0; i < printNum; i++) {
+                    zpSDK.pageSetup(668, 900);
+                    zpSDK.drawText(0, 5, "______________________________________________", 2, 0, 0, false, false);
+
+                    zpSDK.drawText(230, 50, "物料标签", size, 0, 1, false, false);
+                    zpSDK.drawText(0, 90, "______________________________________________", 2, 0, 0, false, false);
+                    zpSDK.drawText(10, 120, "货主:", size, 0, 0, false, false);
+                    zpSDK.drawText(160, 124, bean.FHuoquan==null?"":bean.FHuoquan,size2, 0, 0, false, false);
+                    zpSDK.drawText(10, 180, "名称:", size, 0, 0, false, false);
+                    zpSDK.drawText(160, 184, bean.FName,size2, 0, 0, false, false);
+                    zpSDK.drawText(10, 230, "批号:", size, 0, 0, false, false);
+                    zpSDK.drawText(160, 234, bean.FBatch,size2, 0, 0, false, false);
+                    zpSDK.drawText(10, 290, "规格:", size, 0, 0, false, false);
+                    zpSDK.drawText(160, 294, bean.FModel,size2, 0, 0, false, false);
+                    zpSDK.drawText(10, 350, "M3:", size, 0, 0, false, false);
+                    zpSDK.drawText(160, 354, bean.FNum==null?"":bean.FNum,size2, 0, 0, false, false);
+//                    zpSDK.drawText(450, 344, bean.FUnit==null?"":bean.FUnit,size2, 0, 0, false, false);
+//                    zpSDK.drawText(10, 400, "数量2:", size, 0, 0, false, false);
+//                    zpSDK.drawText(230, 404, bean.FNum2==null?"":bean.FNum2,size2, 0, 0, false, false);
+//                    zpSDK.drawText(450, 404, bean.FUnitAux==null?"":bean.FUnitAux,size2, 0, 0, false, false);
+//                    zpSDK.drawText(10, 460, "辅助标识:", size, 0, 0, false, false);
+//                    zpSDK.drawText(360, 464, bean.FAuxSign==null?"":bean.FAuxSign,size2, 0, 0, false, false);
+                    zpSDK.drawText(10, 500, "______________________________________________", 2, 0, 0, false, false);
+                    zpSDK.drawQrCode(10, 560, bean.FBarCode, 0, 11, 0);
+                    zpSDK.drawText(300, 560, "仓位:",size2, 0, 0, false, false);
+                    zpSDK.drawText(380, 560, bean.FWaveHouse==null?"":bean.FWaveHouse,size2, 0, 0, false, false);
+                    zpSDK.drawText(300, 640, "录入:",size2, 0, 0, false, false);
+                    //            zpSDK.drawText(380, 640, bean.FSaveIn==null?"":bean.FSaveIn,size2, 0, 0, false, false);
+                    zpSDK.drawText(380, 640, Hawk.get(Info.AutoLogin,""),size2, 0, 0, false, false);
+                    zpSDK.drawText(300, 720, "审核:",size2, 0, 0, false, false);
+                    zpSDK.drawText(380, 720, bean.FCheck==null?"":bean.FCheck,size2, 0, 0, false, false);
+                    zpSDK.drawText(300, 790, "日期:",size2, 0, 0, false, false);
+                    zpSDK.drawText(380, 790, bean.FDate,size2, 0, 0, false, false);
+                    zpSDK.drawText(10, 850, "______________________________________________", 2, 0, 0, false, false);
+
+                    zpSDK.print(0, 1);
+                    //            zpSDK.printerStatus();
+                    //            int a=zpSDK.GetStatus();
+                    //            Lg.e("打印机状态",a);
+                    //            if(a==-1)
+                    //            { //"获取状态异常------";
+                    //                Toast.showText(App.getContext(),"获取状态异常---请重连打印机");
+                    //            }
+                    //            if(a==1)
+                    //            {//"缺纸----------";
+                    //                Toast.showTextLong(App.getContext(),"打印机缺少纸张---请添加纸张后再操作");
+                    //            }
+                    //            if(a==2)
+                    //            {
+                    //                //"开盖----------";
+                    //                Toast.showText(App.getContext(),"请勿打开盖子-----");
+                    //            }
+                    //            if(a==0)
+                    //            {
+                    //                //"打印机正常-------";
+                    //                Toast.showText(App.getContext(),"打印机正常-----");
+                    //            }
+                }
+                zpSDK.disconnect();
+
+            }
+        }).start();
+
+//        }
+//            zpSDK.drawBarCode(8, 540, "12345678901234567", 128, true, 3, 60);
+//              zpSDK.drawGraphic(90, 70, 0, 0, bmp);
+//            zpSDK.drawQrCode(350, 48, "111111111", 0, 6, 0);
+//            zpSDK.drawText(90, 48+100, "400-8800-", 2
+//                    , 0, 0, false, false);
+//            zpSDK.drawText(100, 48+100+56, "株洲      张贺", 4, 0, 0, false, false);
+//            zpSDK.drawText(250, 48+100+56+56, "经由  株洲", 2, 0, 0, false, false);
+
+//            zpSDK.drawText(100, 48+100+56+56+80, "2015110101079-01-01   广州", 2, 0, 0, false, false);
+//            zpSDK.drawText(100, 48+100+56+56+80+80, "2015-11-01  23:00    卡班", 2, 0, 0, false, false);
+
+//            zpSDK.drawBarCode(124,48+100+56+56+80+80+80 , "12345678901234567", 128, false, 3, 60);
+//            zpSDK.print(0, 0);
+    }
 
 
     /*------------------------------------------------一期打印*/
+
+    public static void doPrint(final Context context, final PrintHistory bean, final String times) throws Exception{
+        Lg.e("打印数据:"+times,bean);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+            zpBluetoothPrinter zpSDK=new zpBluetoothPrinter(context);
+                if(!zpSDK.connect(Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", "")).address))
+                {
+                    Toast.showText(context,"打印机连接失败------");
+                    Lg.e("打印失败....");
+//                    printHistoryDao.insertInTx(new PrintErrorHistory(bean.get(0).FBoxCode,CommonUtil.getTimeLong(true),"0"));
+                    return;
+                }
+            int size=4;
+            int size2=3;
+            int lineSize=3;
+            int printNum = Integer.parseInt(null==times?"1":times);
+    //        int printNum = Integer.parseInt(Hawk.get(Config.PrintNum,"2"));
+            for (int i = 0; i < printNum; i++) {
+                zpSDK.pageSetup(668, 900);
+                zpSDK.drawText(0, 5, "______________________________________________", 2, 0, 0, false, false);
+
+                zpSDK.drawText(230, 50, "物料标签", size, 0, 1, false, false);
+                zpSDK.drawText(0, 90, "______________________________________________", 2, 0, 0, false, false);
+                zpSDK.drawText(10, 120, "货主:", size, 0, 0, false, false);
+                zpSDK.drawText(160, 124, bean.FHuoquan==null?"":bean.FHuoquan,size2, 0, 0, false, false);
+                zpSDK.drawText(10, 170, "批号:", size, 0, 0, false, false);
+                zpSDK.drawText(160, 174, bean.FBatch,size2, 0, 0, false, false);
+                zpSDK.drawText(10, 220, "品名:", size, 0, 0, false, false);
+                zpSDK.drawText(160, 224, bean.FName,size2, 0, 0, false, false);
+                zpSDK.drawText(10, 280, "规格:", size, 0, 0, false, false);
+                zpSDK.drawText(160, 284, bean.FModel,size2, 0, 0, false, false);
+                zpSDK.drawText(10, 340, "数量1:", size, 0, 0, false, false);
+                zpSDK.drawText(230, 344, bean.FNum==null?"":bean.FNum,size2, 0, 0, false, false);
+                zpSDK.drawText(450, 344, bean.FUnit==null?"":bean.FUnit,size2, 0, 0, false, false);
+                zpSDK.drawText(10, 400, "数量2:", size, 0, 0, false, false);
+                zpSDK.drawText(230, 404, bean.FNum2==null?"":bean.FNum2,size2, 0, 0, false, false);
+                zpSDK.drawText(450, 404, bean.FUnitAux==null?"":bean.FUnitAux,size2, 0, 0, false, false);
+                zpSDK.drawText(10, 460, "辅助标识:", size, 0, 0, false, false);
+                zpSDK.drawText(360, 464, bean.FAuxSign==null?"":bean.FAuxSign,size2, 0, 0, false, false);
+                zpSDK.drawText(10, 500, "______________________________________________", 2, 0, 0, false, false);
+                zpSDK.drawQrCode(10, 560, bean.FBarCode, 0, 11, 0);
+                zpSDK.drawText(300, 560, "仓位:",size2, 0, 0, false, false);
+                zpSDK.drawText(380, 560, bean.FWaveHouse==null?"":bean.FWaveHouse,size2, 0, 0, false, false);
+                zpSDK.drawText(300, 640, "录入:",size2, 0, 0, false, false);
+    //            zpSDK.drawText(380, 640, bean.FSaveIn==null?"":bean.FSaveIn,size2, 0, 0, false, false);
+                zpSDK.drawText(380, 640, Hawk.get(Info.AutoLogin,""),size2, 0, 0, false, false);
+                zpSDK.drawText(300, 720, "审核:",size2, 0, 0, false, false);
+                zpSDK.drawText(380, 720, bean.FCheck==null?"":bean.FCheck,size2, 0, 0, false, false);
+                zpSDK.drawText(300, 790, "日期:",size2, 0, 0, false, false);
+                zpSDK.drawText(380, 790, bean.FDate,size2, 0, 0, false, false);
+                zpSDK.drawText(10, 850, "______________________________________________", 2, 0, 0, false, false);
+
+                zpSDK.print(0, 1);
+    //            zpSDK.printerStatus();
+    //            int a=zpSDK.GetStatus();
+    //            Lg.e("打印机状态",a);
+    //            if(a==-1)
+    //            { //"获取状态异常------";
+    //                Toast.showText(App.getContext(),"获取状态异常---请重连打印机");
+    //            }
+    //            if(a==1)
+    //            {//"缺纸----------";
+    //                Toast.showTextLong(App.getContext(),"打印机缺少纸张---请添加纸张后再操作");
+    //            }
+    //            if(a==2)
+    //            {
+    //                //"开盖----------";
+    //                Toast.showText(App.getContext(),"请勿打开盖子-----");
+    //            }
+    //            if(a==0)
+    //            {
+    //                //"打印机正常-------";
+    //                Toast.showText(App.getContext(),"打印机正常-----");
+    //            }
+            }
+            zpSDK.disconnect();
+
+        }
+    }).start();
+
+//        }
+//            zpSDK.drawBarCode(8, 540, "12345678901234567", 128, true, 3, 60);
+//              zpSDK.drawGraphic(90, 70, 0, 0, bmp);
+//            zpSDK.drawQrCode(350, 48, "111111111", 0, 6, 0);
+//            zpSDK.drawText(90, 48+100, "400-8800-", 2
+//                    , 0, 0, false, false);
+//            zpSDK.drawText(100, 48+100+56, "株洲      张贺", 4, 0, 0, false, false);
+//            zpSDK.drawText(250, 48+100+56+56, "经由  株洲", 2, 0, 0, false, false);
+
+//            zpSDK.drawText(100, 48+100+56+56+80, "2015110101079-01-01   广州", 2, 0, 0, false, false);
+//            zpSDK.drawText(100, 48+100+56+56+80+80, "2015-11-01  23:00    卡班", 2, 0, 0, false, false);
+
+//            zpSDK.drawBarCode(124,48+100+56+56+80+80+80 , "12345678901234567", 128, false, 3, 60);
+//            zpSDK.print(0, 0);
+    }
     public static void doPrint(zpBluetoothPrinter zpSDK, PrintHistory bean,String times) throws Exception{
         Lg.e("打印数据:"+times,bean);
         if (null== zpSDK)return;
@@ -1632,42 +1962,53 @@ public class CommonUtil {
     批次条码:大于16小于20位
                批次和备注  11位到空格是批次*/
 
-    /*if (CommonUtil.ScanBack(code).size()>0){
-            List<String> list = CommonUtil.ScanBack(code);
+    /*        List<String> list = CommonUtil.ScanBack(code);
+    if (list.size()>0){
             edNum.setText(list.get(1));
             ScanBarCode(list.get(0));
         }*/
     public static List<String> ScanBack(String code) {
         List<String> list = new ArrayList<>();
-        if (code.contains("/")) {
-            String[] split = code.split("/", 3);
-            Log.e("code:", split.length + "");
-            if (split.length == 3) {
-                String fcode = split[0];
-                if (fcode.length() > 12) {
-                    try {
-                        String barcode = fcode.substring(0, 12);
-                        list.add(barcode);
-                        String num = fcode.substring(12, fcode.length());
-                        list.add(num);
-                        list.add(split[1]);
-                        return list;
-                    } catch (Exception e) {
-                        Toast.showText(App.getContext(), "条码有误");
-                        return new ArrayList<>();
-                    }
-                } else {
-                    Toast.showText(App.getContext(), "条码有误");
-                    return new ArrayList<>();
-                }
-            } else {
-                Toast.showText(App.getContext(), "条码有误");
-                return new ArrayList<>();
-            }
-        } else {
-            Toast.showText(App.getContext(), "条码有误");
-            return new ArrayList<>();
+        if (code.length()>=26){
+            list.add(code.substring(2,16));
+            list.add((MathUtil.toD(code.substring(21,26))/100)+"");
+        }else{
+            Toast.showText(App.getContext(), "条码长度有误");
         }
+        Lg.e("返回解析",list);
+        return list;
+
+
+//
+//        if (code.contains("/")) {
+//            String[] split = code.split("/", 3);
+//            Log.e("code:", split.length + "");
+//            if (split.length == 3) {
+//                String fcode = split[0];
+//                if (fcode.length() > 12) {
+//                    try {
+//                        String barcode = fcode.substring(0, 12);
+//                        list.add(barcode);
+//                        String num = fcode.substring(12, fcode.length());
+//                        list.add(num);
+//                        list.add(split[1]);
+//                        return list;
+//                    } catch (Exception e) {
+//                        Toast.showText(App.getContext(), "条码有误");
+//                        return new ArrayList<>();
+//                    }
+//                } else {
+//                    Toast.showText(App.getContext(), "条码有误");
+//                    return new ArrayList<>();
+//                }
+//            } else {
+//                Toast.showText(App.getContext(), "条码有误");
+//                return new ArrayList<>();
+//            }
+//        } else {
+//            Toast.showText(App.getContext(), "条码有误");
+//            return new ArrayList<>();
+//        }
 
 //        List<String> list = new ArrayList<>();
 //        if (code.length()>22){
@@ -1922,6 +2263,7 @@ public class CommonUtil {
         }
         return lineTxt;
     }
+
     //解密加密的时间
     public static String dealTime(String timemd){
 //        Lg.e("加密的日期："+timemd);

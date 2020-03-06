@@ -14,6 +14,7 @@ public class EventBusInfoCode {
     public static final String Supplier_Hz_Detail = "Supplier_Hz_Detail";
     public static final String Client = "Client";
     public static final String Client_Detail = "Client_Detail";
+    public static final String Search_Pihao = "Search_Pihao";
     public static final String DOWNLOADOK = "9998";
 
     public static final String DownData_OK = "99988";
@@ -41,6 +42,8 @@ public class EventBusInfoCode {
     public static final String UpdataWaveHouse = "UpdataWaveHouse";
     public static final String UpdataViewForDBInStorage = "UpdataViewForDBInStorage";
     public static final String UpdataList = "UpdataList";
+    public static final String AutoAdd433 = "AutoAdd433";
+    public static final String AutoAdd433Ok = "AutoAdd433Ok";
 
     public static final String Print_Check = "Print_Check";
     public static final String Print_Out = "Print_Out";

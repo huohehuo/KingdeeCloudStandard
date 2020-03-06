@@ -152,6 +152,8 @@ public class FragmentWortInStore4P2Detail extends BaseFragment {
     AppCompatTextView tvM2Sum;
     @BindView(R.id.ed_batch_remark)
     EditText edBatchRermark;
+    @BindView(R.id.tv_ave_lenght)
+    TextView tvAveLenght;
     private FragmentActivity mContext;
     private PagerForActivity activityPager;
     Unbinder unbinder;
@@ -220,7 +222,12 @@ public class FragmentWortInStore4P2Detail extends BaseFragment {
                 Lg.e("截取长度", split);
                 if (split.length == 7) {
                     cfThick = MathUtil.toInt(split[4])+"";
-                    cfWide = MathUtil.toInt(split[5])+"";
+                    if (split[6].contains(".")){
+                        String[] splitCode = split[6].split("\\.", 2);
+                        cfWide = split[5]+"."+splitCode[0];
+                    }else{
+                        cfWide = split[5]+"";
+                    }
                 }
                 Lg.e("得到厚度", cfThick);
                 Lg.e("得到宽度", cfWide);
@@ -785,6 +792,14 @@ public class FragmentWortInStore4P2Detail extends BaseFragment {
                 T_DetailDao.Properties.FBoxCodeOrder.eq(boxcodeOrder)
         ).orderAsc(T_DetailDao.Properties.FCfLenght).build().list();
         adapter.addAll(list);
+        //算出平均材长
+        double aveL =0.0;
+        double avePcs =0.0;
+        for (int i = 0; i < list.size(); i++) {
+            aveL+=MathUtil.mul(list.get(i).FCfLenght+"",list.get(i).FCfQty);
+            avePcs+=MathUtil.toD(list.get(i).FCfQty);
+        }
+        tvAveLenght.setText(MathUtil.D2saveInt(aveL/avePcs)+"");
 //        for (int i = 0; i < list.size(); i++) {
 ////            int number = list.get(i).FCountNumber;
 ////            if (i > 0 && list.get(i).FCountNumber == list.get(i - 1).FCountNumber) {
@@ -1071,6 +1086,7 @@ public class FragmentWortInStore4P2Detail extends BaseFragment {
             detail.setBaseUnit(spUnitJiben.getDataObject());
             detail.setStoreUnit(spUnitStore.getDataObject());
             detail.FLevel = "";
+            detail.FStr1 = MathUtil.mul(cfLenght,edNum.getText().toString())+"";
 //            detail.FYmLenght = edLenght.getText().toString();
             detail.FYmDiameter = "0";
 //            detail.FBLenght = edLenght.getText().toString();

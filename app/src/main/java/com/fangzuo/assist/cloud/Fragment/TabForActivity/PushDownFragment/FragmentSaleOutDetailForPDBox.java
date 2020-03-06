@@ -284,6 +284,7 @@ public class FragmentSaleOutDetailForPDBox extends BaseFragment {
                     autoAuxSing = codeCheckBackDataBean.FAuxsign;
                     autoStorage = codeCheckBackDataBean.FStockID;
                     scanOfHuozhuNumber = codeCheckBackDataBean.FHuoZhuNumber;
+                    spUnit.setAuto(codeCheckBackDataBean.FUnitID, SpinnerUnit.Id);
                     LoadingUtil.showDialog(mContext, "正在查找物料信息");
                     DataModel.getProductForNumber(codeCheckBackDataBean.FItemID, activityPager.getOrgOut());
                 } else {
@@ -729,7 +730,7 @@ public class FragmentSaleOutDetailForPDBox extends BaseFragment {
         tvModel.setText(product.FModel);
         tvCode.setText(product.FNumber);
         //带出物料的默认值
-        spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
+//        spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
         spWhichStorage.setAuto("",autoStorage, activityPager.getOrgOut());
@@ -894,6 +895,7 @@ public class FragmentSaleOutDetailForPDBox extends BaseFragment {
             main.FNot = activityPager.getNote();
             main.FCustomerID = pushDownMain.FSupplyID;
             main.F_FFF_Text = activityPager.getFOrderNo();
+            main.FFieldMan = pushDownMain.FFieldMan;
 //            main.setClient(activityPager.getClient());
             long insert1 = t_mainDao.insert(main);
 

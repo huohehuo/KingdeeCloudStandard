@@ -69,13 +69,28 @@
                 android:textColor="@color/black"
                 android:text="总长:"
                 android:textSize="18sp" />
-            <TextView
-                android:id="@+id/tv_model2"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="宽:"
-                android:textSize="18sp" />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_model2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="宽:"
+                    android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/tv_ave_lenght"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="平均材长:"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tv_model3"
                 android:layout_width="match_parent"

@@ -133,6 +133,35 @@ public class MathUtil {
         return bd1.divide
                 (bd2,scale,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
+    public static double div(String d1,String d2){
+        //  当然在此之前，你要判断分母是否为0，
+        //  为0你可以根据实际需求做相应的处理
+        BigDecimal bd1 = new BigDecimal(d1);
+        BigDecimal bd2 = new BigDecimal(d2);
+        return bd1.divide
+                (bd2,20,BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+    /**
+     * double 乘法
+     * @param d1
+     * @param d2
+     * @return
+     */
+    public static double mul(double d1,double d2){
+        BigDecimal bd1 = new BigDecimal(Double.toString(d1));
+        BigDecimal bd2 = new BigDecimal(Double.toString(d2));
+        return bd1.multiply(bd2).doubleValue();
+    }
+    public static double mul(String d1,String d2){
+        if (null == d1 || "".equals(d1))d1="0";
+        if (null == d2 || "".equals(d2))d2="0";
+        BigDecimal bd1 = new BigDecimal(d1);
+        BigDecimal bd2 = new BigDecimal(d2);
+        return bd1.multiply(bd2).doubleValue();
+    }
+
+
+
     //是否为数字
     public static boolean isNumeric(String str) {
         //Pattern pattern = Pattern.compile("-?[0-9]+.?[0-9]+");//这个有问题，一位的整数不能通过
@@ -154,6 +183,14 @@ public class MathUtil {
     public static double D2save4(Double d){
         return Double.parseDouble(String.format("%.4f", d));
     }
+    public static double D2save5(Double d){
+        return Double.parseDouble(String.format("%.5f", d));
+    }
+    public static double D2save5_33(String d){
+
+        return Double.parseDouble(String.format("%.5f", MathUtil.toD(d)*0.00236));
+    }
+
     //保留一位小数（四舍五入
     public static double D2save1(Double d){
         return Double.parseDouble(String.format("%.1f", d));
@@ -162,6 +199,18 @@ public class MathUtil {
     public static double D2save0(Double d){
         return Double.parseDouble(String.format("%f", d));
     }
+
+    /*Math.ceil()执行向上舍入，即它总是将数值向上舍入为最接近的整数；
+Math.floor()执行向下舍入，即它总是将数值向下舍入为最接近的整数；
+Math.round()执行标准舍入，即它总是将数值四舍五入为最接近的整数。*/
+//    //四舍五入取整
+//    public static double D2saveInt(Double d){
+//        return Math.round(d);
+//    }
+    public static String D2saveInt(Double d){
+        return Cut0(Math.round(d)+"");
+    }
+
     //去掉末尾为.0的数
     public static String cutZero(String num){
         String string;
@@ -207,7 +256,7 @@ public class MathUtil {
     }
     //英尺版的体积计算公式 材积=[((直径-4)/4)^2*长度]/1000*5
     //((直径-4)/4)^2*长度
-    public static Double getVoleum2(String length,String diameter){
+    public static Double  getVoleum2(String length,String diameter){
         Double num = 0.0;
         Double one=(MathUtil.toD(diameter)-4)/4;
         Lg.e("getVolem2:one",one);
@@ -249,4 +298,10 @@ public class MathUtil {
 //    public static String dealVoleumForPrint(String vol){
 //        return (MathUtil.toD(vol)/1000000)+"";
 //    }
+
+    //获取 外购烘干板入库 33 的计算方式
+    public static String getWgBf(String lenght,String wide,String num){
+        Lg.e("转换前",(MathUtil.toD(lenght)*MathUtil.toD(wide)*MathUtil.toD(num))/12);
+        return MathUtil.D2save5((MathUtil.toD(lenght)*MathUtil.toD(wide)*MathUtil.toD(num))/12)+"";
+    }
 }

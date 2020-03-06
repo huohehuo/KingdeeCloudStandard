@@ -243,7 +243,11 @@ public class SpinnerDepartMent extends RelativeLayout {
         }
     }
 
-
+//    private int type=1000;
+//    public void setAuto(String saveKeyStr, String autoStr, Org org, int activityT,int filtertype) {
+//        type=filtertype;
+//        setAuto(saveKeyStr,autoStr,org,activityT);
+//    }
     public void setAuto(String saveKeyStr, String autoStr, Org org, int activityT) {
         Lg.e("部门过滤",autoStr);
         Id="";
@@ -328,29 +332,7 @@ public class SpinnerDepartMent extends RelativeLayout {
         Lg.e("得到部门"+listData.size()+check,listData);
         if (check) {
             //当为生产单据时，过滤
-            if (activityTag== Config.ProductInStoreActivity||activityTag==Config.ProductGetActivity||activityTag==Config.ProductGet4P2Activity||
-                    activityTag==Config.P1PdProductGet2CprkActivity||activityTag==Config.ChangeInActivity|| activityTag==Config.TbGetActivity ||
-                    activityTag==Config.TbGet2Activity ||activityTag==Config.ProductInStore4P2Activity||activityTag==Config.BoxReAddP1Activity||
-                    activityTag==Config.ChangeGetActivity|| activityTag==Config.TbGet3Activity||activityTag==Config.TbInActivity ||
-                    activityTag==Config.DryingInStoreActivity||activityTag==Config.P1PdProductGet2Cprk2Activity|| activityTag==Config.TbIn2Activity ||
-                    activityTag==Config.TbIn3Activity ||activityTag==Config.ShuiBanGetActivity||activityTag==Config.ShuiBanGet2Activity||
-                    activityTag==Config.GbGetActivity ||activityTag==Config.GbInActivity ||activityTag==Config.DryingGetActivity||
-                    activityTag==Config.ProductGet4BoxActivity|| activityTag==Config.P2ProductionInStoreActivity ||activityTag==Config.P2ProductionInStore2Activity ||
-                    activityTag==Config.WorkOrgIn4P2Activity || activityTag==Config.P2PdCgrk2ProductGetActivity ||activityTag==Config.P1PdCgrk2ProductGetActivity ||
-                    activityTag==Config.WortInStore4P2Activity ||activityTag==Config.WorkOrgGet4P2Activity || activityTag==Config.DhInActivity ||
-                    activityTag== Config.DhIn2Activity || activityTag== Config.ProductInStore4P2MpActivity|| activityTag== Config.BoxReBoxP1Activity ||
-                    activityTag== Config.OutKilnGetActivity|| activityTag== Config.ChangeLvGetActivity || activityTag== Config.ChangeModelGetActivity||
-                    activityTag== Config.SplitBoxGetActivity|| activityTag== Config.ChangeLvInActivity|| activityTag== Config.ChangeModelInActivity||
-                    activityTag== Config.SplitBoxInActivity|| activityTag== Config.ZbCheJianInActivity|| activityTag== Config.ZbCheJianHunInActivity||
-                    activityTag== Config.ZbCheJianDiGetActivity || activityTag== Config.Bg1CheJianInActivity|| activityTag== Config.Bg2CheJianInActivity||
-                    activityTag== Config.Bg1CheJianHunInActivity|| activityTag== Config.Bg2CheJianHunInActivity||activityTag== Config.CpWgHunInActivity||
-                    activityTag== Config.Bg1CheJianDiGetActivity|| activityTag== Config.Bg2CheJianDiGetActivity|| activityTag== Config.CpWgInActivity
-                    || activityTag== Config.SplitBoxHunInActivity|| activityTag== Config.SplitBoxDiGetActivity|| activityTag== Config.Tb1HunInActivity
-                    || activityTag== Config.Tb1DiGetActivity|| activityTag== Config.Tb2DiGetActivity|| activityTag== Config.Tb3DiGetActivity
-                    || activityTag== Config.Tb2HunInActivity|| activityTag== Config.Tb3HunInActivity|| activityTag== Config.GbDiGetActivity
-                    || activityTag== Config.GbHunInActivity|| activityTag== Config.ZbCheJianDiZGetActivity|| activityTag== Config.BoxReAddP2Activity
-                    || activityTag== Config.ProductGet4BoxP2Activity
-                    ) {
+            if (checkIfInOut(activityTag)) {
                 for (int i = 0; i < listData.size(); i++) {
                     if (listData.get(i).FOrg.equals(autoOrg)) {
                         if (listData.get(i).FISSTOCK.equals("1")){
@@ -369,6 +351,9 @@ public class SpinnerDepartMent extends RelativeLayout {
         } else {
             container.addAll(listData);
         }
+        //处理不同单据的再过滤条件
+        dealFilter();
+
         Lg.e("sp过滤后部门"+container.size(),container);
         if ("".equals(autoString)){
             autoString = Hawk.get(saveKeyString,"");
@@ -377,8 +362,9 @@ public class SpinnerDepartMent extends RelativeLayout {
             mSp.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             for (int j = 0; j < container.size(); j++) {
-                if (container.get(j).FName.equals(autoString)|| container.get(j).FItemID.equals(autoString)
-                        || container.get(j).FNumber.equals(autoString)) {
+                if (container.get(j).FName.equals(autoString)||
+                        container.get(j).FItemID.equals(autoString) ||
+                        container.get(j).FNumber.equals(autoString)) {
                     mSp.setSelection(j);
                     break;
                 }
@@ -415,5 +401,244 @@ public class SpinnerDepartMent extends RelativeLayout {
             return null;
         }
     }
+    //是否是出入库单据的过滤条件
+    private boolean checkIfInOut(int activityTag){
+        boolean isInOut=false;
+        switch (activityTag){
+            case Config.ProductInStoreActivity:
+            case Config.ProductGetActivity:
+            case Config.ProductGet4P24PihaoActivity:
+            case Config.ProductGet4P2Activity:
+            case Config.P1PdProductGet2CprkActivity:
+            case Config.ChangeInActivity:
+            case Config.TbGetActivity:
+            case Config.TbGet2Activity:
+            case Config.ProductGet4BoxP2Activity:
+            case Config.Tb1DiGetActivity:
+            case Config.Tb2HunInActivity:
+            case Config.GbHunInActivity:
+            case Config.Tb2DiGetActivity:
+            case Config.Tb3HunInActivity:
+            case Config.ZbCheJianDiZGetActivity:
+            case Config.Tb3DiGetActivity:
+            case Config.GbDiGetActivity:
+            case Config.BoxReAddP2Activity:
+            case Config.ZbCheJianDiGetActivity:
+            case Config.Bg1CheJianHunInActivity:
+            case Config.Bg1CheJianDiGetActivity:
+            case Config.Bg1CheJianInActivity:
+            case Config.Bg2CheJianHunInActivity:
+            case Config.Bg2CheJianDiGetActivity:
+            case Config.ProductInStore4P2Activity:
+            case Config.BoxReAddP1Activity:
+            case Config.ChangeGetActivity:
+            case Config.TbGet3Activity:
+            case Config.TbInActivity :
+            case Config.ZbIn1Activity :
+            case Config.ZbIn2Activity :
+            case Config.ZbIn3Activity :
+            case Config.ZbIn4Activity :
+            case Config.ZbIn5Activity :
+            case Config.WgDryingInStoreActivity:
+            case Config.WgDryingInStoreCy2Activity:
+            case Config.DryingInStoreActivity:
+            case Config.DryingInStore2Activity:
+            case Config.P1PdProductGet2Cprk2Activity:
+            case Config.TbIn2Activity :
+            case Config.TbIn3Activity :
+            case Config.ShuiBanGetActivity:
+            case Config.ShuiBanGet2Activity:
+            case Config.GbGetActivity :
+            case Config.GbInActivity :
+            case Config.DryingGetActivity:
+            case Config.ProductGet4BoxActivity:
+            case Config.P2ProductionInStoreActivity:
+            case Config.P2ProductionInStore2Activity:
+            case Config.WorkOrgIn4P2Activity:
+            case Config.P2PdCgrk2ProductGetActivity:
+            case Config.P1PdCgrk2ProductGetActivity:
+            case Config.WortInStore4P2Activity:
+            case Config.WorkOrgGet4P2Activity:
+            case Config.DhInActivity:
+            case Config.DhIn2Activity:
+            case Config.ProductInStore4P2MpActivity:
+            case Config.BoxReBoxP1Activity:
+            case Config.OutKilnGetActivity:
+            case Config.ChangeLvGetActivity:
+            case Config.ChangeModelGetActivity:
+            case Config.SplitBoxGetActivity:
+            case Config.ZbGet1Activity:
+            case Config.ZbGet2Activity:
+            case Config.ZbGet3Activity:
+            case Config.ZbGet4Activity:
+            case Config.ZbGet5Activity:
+            case Config.ChangeLvInActivity:
+            case Config.ChangeModelInActivity:
+            case Config.SplitBoxInActivity:
+            case Config.ZbCheJianInActivity:
+            case Config.ZbCheJianHunInActivity:
+            case Config.Bg2CheJianInActivity:
+            case Config.CpWgHunInActivity:
+            case Config.CpWgInActivity:
+            case Config.SplitBoxDiGetActivity:
+            case Config.Tb1HunInActivity:
+                isInOut = true;
+                break;
+        }
+
+        return isInOut;
+    }
+
+    //过滤条件
+    private void dealFilter(){
+        switch (activityTag){
+            case Config.CpWgInActivity:
+            case Config.CpWgHunInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Department department = container.get(i);
+                    if(!department.FName.contains("采购")) {
+//                        Lg.e("删除车间",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留车间",department);
+                    }
+                }
+                break;
+            case Config.Bg2CheJianDiGetActivity:
+            case Config.Bg2CheJianHunInActivity:
+            case Config.Bg2CheJianInActivity:
+            case Config.Bg1CheJianDiGetActivity:
+            case Config.Bg1CheJianHunInActivity:
+            case Config.Bg1CheJianInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Department department = container.get(i);
+                    if(!department.FName.contains("车间")) {
+//                        Lg.e("删除车间",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留车间",department);
+                    }
+                }
+                break;
+            case Config.ZbCheJianDiZGetActivity://纵刨车间-底领料(整包)
+            case Config.ZbCheJianDiGetActivity://纵刨车间-底领料(混包)
+            case Config.ZbCheJianHunInActivity://纵刨车间-混包入库
+            case Config.ZbCheJianInActivity://纵刨车间-整包入库
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Department department = container.get(i);
+                    if(!department.FName.contains("车间") && !department.FName.contains("部")) {
+//                        Lg.e("删除车间",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留车间",department);
+                    }
+                }
+                break;
+            case Config.SplitBoxGetActivity:
+            case Config.SplitBoxDiGetActivity:
+            case Config.SplitBoxInActivity:
+            case Config.SplitBoxHunInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Department department = container.get(i);
+                    if(!department.FName.contains("理货")) {
+//                        Lg.e("删除车间",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留车间",department);
+                    }
+                }
+                break;
+            case Config.GbGetActivity:
+            case Config.GbInActivity:
+            case Config.GbDiGetActivity:
+            case Config.GbHunInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Department department = container.get(i);
+                    if(!department.FName.contains("改板")) {
+//                        Lg.e("删除车间",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留车间",department);
+                    }
+                }
+                break;
+            case Config.Tb3HunInActivity:
+            case Config.Tb3DiGetActivity:
+            case Config.TbIn3Activity:
+            case Config.TbGet3Activity:
+            case Config.Tb2HunInActivity:
+            case Config.Tb2DiGetActivity:
+            case Config.TbIn2Activity:
+            case Config.TbGet2Activity:
+            case Config.Tb1HunInActivity:
+            case Config.Tb1DiGetActivity:
+            case Config.TbInActivity:
+            case Config.TbGetActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Department department = container.get(i);
+                    if(!department.FName.contains("挑板")) {
+//                        Lg.e("删除车间",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留车间",department);
+                    }
+                }
+                break;
+            case Config.ChangeModelInActivity:
+            case Config.ChangeModelGetActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Department department = container.get(i);
+                    if(!department.FName.contains("规格调整")) {
+//                        Lg.e("删除车间",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留车间",department);
+                    }
+                }
+                break;
+            case Config.ChangeLvGetActivity:
+            case Config.ChangeLvInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Department department = container.get(i);
+                    if(!department.FName.contains("等级调整")) {
+//                        Lg.e("删除车间",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留车间",department);
+                    }
+                }
+                break;
+            case Config.ChangeGetActivity:
+            case Config.ChangeInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Department department = container.get(i);
+                    if(!department.FName.contains("批号调整")) {
+//                        Lg.e("删除车间",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留车间",department);
+                    }
+                }
+                break;
+            case Config.DhInActivity:
+            case Config.DhIn2Activity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Department department = container.get(i);
+                    if(!department.FName.contains("到货")) {
+//                        Lg.e("删除车间",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留车间",department);
+                    }
+                }
+                break;
+
+            default:
+                //        adapter = new OrgSpAdapter(context, container);
+                    mSp.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+        }
+    }
+
 
 }

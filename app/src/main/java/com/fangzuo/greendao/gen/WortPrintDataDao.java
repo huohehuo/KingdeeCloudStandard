@@ -64,6 +64,7 @@ public class WortPrintDataDao extends AbstractDao<WortPrintData, Long> {
         public final static Property FHuozhuNumber = new Property(37, String.class, "FHuozhuNumber", false, "FHUOZHU_NUMBER");
         public final static Property FStorageNumber = new Property(38, String.class, "FStorageNumber", false, "FSTORAGE_NUMBER");
         public final static Property FOrgNumber = new Property(39, String.class, "FOrgNumber", false, "FORG_NUMBER");
+        public final static Property FAveLenght = new Property(40, String.class, "FAveLenght", false, "FAVE_LENGHT");
     }
 
 
@@ -118,7 +119,8 @@ public class WortPrintDataDao extends AbstractDao<WortPrintData, Long> {
                 "\"FTYPE\" TEXT," + // 36: FType
                 "\"FHUOZHU_NUMBER\" TEXT," + // 37: FHuozhuNumber
                 "\"FSTORAGE_NUMBER\" TEXT," + // 38: FStorageNumber
-                "\"FORG_NUMBER\" TEXT);"); // 39: FOrgNumber
+                "\"FORG_NUMBER\" TEXT," + // 39: FOrgNumber
+                "\"FAVE_LENGHT\" TEXT);"); // 40: FAveLenght
     }
 
     /** Drops the underlying database table. */
@@ -330,6 +332,11 @@ public class WortPrintDataDao extends AbstractDao<WortPrintData, Long> {
         if (FOrgNumber != null) {
             stmt.bindString(40, FOrgNumber);
         }
+ 
+        String FAveLenght = entity.getFAveLenght();
+        if (FAveLenght != null) {
+            stmt.bindString(41, FAveLenght);
+        }
     }
 
     @Override
@@ -535,6 +542,11 @@ public class WortPrintDataDao extends AbstractDao<WortPrintData, Long> {
         if (FOrgNumber != null) {
             stmt.bindString(40, FOrgNumber);
         }
+ 
+        String FAveLenght = entity.getFAveLenght();
+        if (FAveLenght != null) {
+            stmt.bindString(41, FAveLenght);
+        }
     }
 
     @Override
@@ -584,7 +596,8 @@ public class WortPrintDataDao extends AbstractDao<WortPrintData, Long> {
             cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36), // FType
             cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37), // FHuozhuNumber
             cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38), // FStorageNumber
-            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39) // FOrgNumber
+            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39), // FOrgNumber
+            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40) // FAveLenght
         );
         return entity;
     }
@@ -631,6 +644,7 @@ public class WortPrintDataDao extends AbstractDao<WortPrintData, Long> {
         entity.setFHuozhuNumber(cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37));
         entity.setFStorageNumber(cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38));
         entity.setFOrgNumber(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
+        entity.setFAveLenght(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
      }
     
     @Override

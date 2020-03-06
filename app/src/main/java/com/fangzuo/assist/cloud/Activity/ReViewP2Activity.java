@@ -68,7 +68,11 @@ public class ReViewP2Activity extends BaseActivity {
             case EventBusInfoCode.Print_Out://打印
                 PrintHistory data = (PrintHistory) event.postEvent;
                 try {
-                    CommonUtil.doPrint4P2Shuiban(zpSDK,data,"1");
+                    if (activity == Config.DryingInStore2Activity){
+                        CommonUtil.doPrint4P2Shuiban2(zpSDK,data,"1");
+                    }else{
+                        CommonUtil.doPrint4P2Shuiban(zpSDK,data,"1");
+                    }
                 } catch (Exception e) {
 //                    e.printStackTrace();
                     App.getInstance().connectPrint();
@@ -93,7 +97,7 @@ public class ReViewP2Activity extends BaseActivity {
         //当为产品入库时，初始化打印机并连接
 
         if (activity == Config.ProductInStoreActivity||activity==Config.ProductInStore4P2Activity||activity==Config.WorkOrgIn4P2Activity
-                ||activity==Config.DryingInStoreActivity||activity==Config.ProductInStore4P2MpActivity) {
+                ||activity==Config.DryingInStoreActivity||activity==Config.ProductInStore4P2MpActivity||activity==Config.DryingInStore2Activity) {
             zpSDK = App.getInstance().getZpk();
         } else {
             binding.tvPrint.setVisibility(View.GONE);
@@ -118,7 +122,7 @@ public class ReViewP2Activity extends BaseActivity {
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));
         }
         Lg.e("列表数据：" + gson.toJson(list));
-        if (activity==Config.ProductInStore4P2Activity || activity==Config.DryingInStoreActivity || activity==Config.ProductInStore4P2MpActivity ){
+        if (activity==Config.ProductInStore4P2Activity || activity==Config.DryingInStoreActivity|| activity==Config.DryingInStore2Activity  || activity==Config.ProductInStore4P2MpActivity ){
             adapter4SB = new ReViewPDAP2ForShuibanAdapter(mContext, list, isCheck);
             binding.lvResult.setAdapter(adapter4SB);
             adapter4SB.notifyDataSetChanged();
@@ -144,7 +148,7 @@ public class ReViewP2Activity extends BaseActivity {
             }
 
             binding.productcategory.setText("已添加数量:" + products.size() + "个");
-            if (activity==Config.ProductInStore4P2Activity ||activity==Config.DryingInStoreActivity||activity==Config.ProductInStore4P2MpActivity){//水版
+            if (activity==Config.ProductInStore4P2Activity ||activity==Config.DryingInStoreActivity||activity==Config.DryingInStore2Activity||activity==Config.ProductInStore4P2MpActivity){//水版
                 binding.tvStorenum.setVisibility(View.GONE);
                 binding.productnum.setText("基本数量:" + num +"立方米");
             }else{
@@ -193,7 +197,7 @@ public class ReViewP2Activity extends BaseActivity {
                 } else {
                     isCheck.set(i, true);
                 }
-                if (activity == Config.ProductInStore4P2Activity || activity == Config.DryingInStoreActivity|| activity == Config.ProductInStore4P2MpActivity
+                if (activity == Config.ProductInStore4P2Activity || activity == Config.DryingInStoreActivity|| activity == Config.DryingInStore2Activity|| activity == Config.ProductInStore4P2MpActivity
                         ){
                     adapter4SB.notifyDataSetChanged();
                 }else{

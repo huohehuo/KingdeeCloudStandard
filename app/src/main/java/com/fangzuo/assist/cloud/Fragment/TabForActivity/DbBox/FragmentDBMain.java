@@ -166,10 +166,10 @@ public class FragmentDBMain extends BaseFragment {
         spDbDirection.setData(Info.Type_DB_direction);
         spDbDirection.setEnable(false);
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-        spOrgOut.setAutoSelection(getString(R.string.spOrgOut_db)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgOut_db)+activityPager.getActivityMain(), ""));
+        spOrgOut.setAutoSelection(getString(R.string.spOrgOut_db)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgOut_db)+activityPager.getActivityMain(), ""),activityPager.getActivity(),0);
         spOrgHuozhuOut.setAutoSelection(getString(R.string.spOrgHuozhuOut_db)+activityPager.getActivityMain(),activityPager.getOrgOut(), Hawk.get(getString(R.string.spOrgHuozhuOut_db)+activityPager.getActivityMain(), ""));
 
-        spOrgIn.setAutoSelection(getString(R.string.spOrgIn_db)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgIn_db)+activityPager.getActivityMain(), ""));
+        spOrgIn.setAutoSelection(getString(R.string.spOrgIn_db)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgIn_db)+activityPager.getActivityMain(), ""),activityPager.getActivity(),0);
         spOrgHuozhuIn.setAutoSelection(getString(R.string.spOrgHuozhuIn_db)+activityPager.getActivityMain(),activityPager.getOrgIn(), Hawk.get(getString(R.string.spOrgHuozhuIn_db)+activityPager.getActivityMain(), ""));
 
         spStoreman.setAuto(getString(R.string.spStoreman_db)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spStoreman_db)+activityPager.getActivityMain(),""), activityPager.getOrgOut());
@@ -232,7 +232,7 @@ public class FragmentDBMain extends BaseFragment {
                 Lg.e("a调出组织：",(Org) spOrgOut.getAdapter().getItem(i));
                 spOrgHuozhuOut.setAutoSelection(getString(R.string.spOrgHuozhuOut_db)+activityPager.getActivityMain(), activityPager.getOrgOut(),"");
                 spStoreman.setAuto(getString(R.string.spStoreman_db)+activityPager.getActivityMain(), "", activityPager.getOrgOut());
-                spOrgIn.setAutoSelection("", activityPager.getOrgOut().FName);
+                spOrgIn.setAutoSelection("", activityPager.getOrgOut().FName,activityPager.getActivity(),0);
 
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
             }

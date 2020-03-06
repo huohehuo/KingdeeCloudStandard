@@ -77,7 +77,11 @@ public class PushDownSubListAdapter extends BaseAdapter {
             view.setBackgroundColor(viewHolder.white);
         }
 
-        viewHolder.billNo.setText("订单号:"+items.get(i).FBillNo);
+        if (null != items.get(i).FStr1 && "35".equals(items.get(i).FStr1)){
+            viewHolder.billNo.setText("批号:"+items.get(i).FBatchNo);
+        }else{
+            viewHolder.billNo.setText("订单号:"+items.get(i).FBillNo);
+        }
         viewHolder.numyanshou.setText("订单数量:"+items.get(i).FQty);
         viewHolder.productId.setText("物料名称:"+ items.get(i).FName);
         viewHolder.tvModel.setText("规格型号:"+ items.get(i).FModel);

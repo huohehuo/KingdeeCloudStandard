@@ -1,6 +1,7 @@
 package com.fangzuo.assist.cloud.Beans;
 
 
+import com.fangzuo.assist.cloud.Dao.BatchDataBean;
 import com.fangzuo.assist.cloud.Dao.Bibie;
 import com.fangzuo.assist.cloud.Dao.Buyer;
 import com.fangzuo.assist.cloud.Dao.Client;
@@ -62,6 +63,7 @@ public class DownloadReturnBean {
 	public ArrayList<WortPrintData> wortPrintDatas;
 	public ArrayList<DryingGetData> dryingGetDatas;
 	public ArrayList<PGetData> pGetDatas;
+	public ArrayList<BatchDataBean> batchDataBeans;
 
 
 

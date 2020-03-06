@@ -110,6 +110,11 @@ public class ReViewActivity extends BaseActivity {
                 ||activity==Config.DhIn2Activity||activity==Config.TbIn2Activity||activity==Config.TbIn3Activity||activity==Config.P1PdProductGet2Cprk2Activity
                 ||activity==Config.SplitBoxInActivity||activity==Config.ZbCheJianInActivity||activity==Config.Bg1CheJianInActivity||activity==Config.Bg2CheJianInActivity
                 ||activity==Config.CpWgInActivity
+                ||activity==Config.ZbIn1Activity
+                ||activity==Config.ZbIn2Activity
+                ||activity==Config.ZbIn3Activity
+                ||activity==Config.ZbIn4Activity
+                ||activity==Config.ZbIn5Activity
                 ) {
             zpSDK = new zpBluetoothPrinter(this);
             bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
@@ -527,6 +532,11 @@ public class ReViewActivity extends BaseActivity {
                 ||activity==Config.DhIn2Activity||activity==Config.TbIn2Activity||activity==Config.TbIn3Activity||activity==Config.P1PdProductGet2Cprk2Activity||activity==Config.ChangeModelInActivity
                 ||activity==Config.SplitBoxInActivity||activity==Config.ZbCheJianInActivity||activity==Config.Bg1CheJianInActivity||activity==Config.Bg2CheJianInActivity
                 ||activity==Config.CpWgInActivity
+                ||activity==Config.ZbIn1Activity
+                ||activity==Config.ZbIn2Activity
+                ||activity==Config.ZbIn3Activity
+                ||activity==Config.ZbIn4Activity
+                ||activity==Config.ZbIn5Activity
                 ){
             try {
                 zpSDK.disconnect();

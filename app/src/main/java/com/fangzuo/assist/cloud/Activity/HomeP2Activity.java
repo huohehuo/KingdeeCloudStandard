@@ -238,6 +238,17 @@ public class  HomeP2Activity extends BaseActivity {
 //                        PushDownSearchActivity.start(getActivity(),1);
                 PushDownPagerActivity.start(mContext, 25);
                 break;
+            case Config.PdSaleOrder2SaleOut4BoxP2Activity://简单生产入库-弃用
+//                        PushDownSearchActivity.start(getActivity(),1);
+                PushDownPagerActivity.start(mContext, 34);
+                break;
+            case Config.WgDryingInStoreActivity://外购烘干板入库
+//                        PushDownSearchActivity.start(getActivity(),1);
+                PushDownPagerActivity.start(mContext, 33);
+                break;
+            case Config.WgDryingInStoreCy2Activity://挑板入库单
+                PagerForActivity.start(mContext, Config.WgDryingInStoreCy2Activity);
+                break;
             case Config.P2ProductionInStore2Activity://简单生产入库
 //                        PushDownSearchActivity.start(getActivity(),1);
                 PushDownPagerActivity.start(mContext, 27);
@@ -248,6 +259,9 @@ public class  HomeP2Activity extends BaseActivity {
                 break;
             case Config.ProductGet4P2Activity://原木领料
                 PagerForActivity.start(mContext, Config.ProductGet4P2Activity);
+                break;
+            case Config.ProductGet4P24PihaoActivity://原木领料
+                PagerForActivity.start(mContext, Config.ProductGet4P24PihaoActivity);
                 break;
             case Config.ShuiBanGetActivity://水板板材拆托-水板领料
                 PagerForActivity.start(mContext, Config.ShuiBanGetActivity);
@@ -270,12 +284,19 @@ public class  HomeP2Activity extends BaseActivity {
             case Config.DryingInStoreActivity://烘干板入库
                 PagerForActivity.start(mContext, Config.DryingInStoreActivity);
                 break;
+            case Config.DryingInStore2Activity://烘干板入库
+                PagerForActivity.start(mContext, Config.DryingInStore2Activity);
+                break;
             case Config.WortInStore4P2Activity://刨光干板入库
                 PagerForActivity.start(mContext, Config.WortInStore4P2Activity);
+                break;
+            case Config.DBCopy2P2Activity://组织间调拨/箱码  复制与一期20191121
+                PagerForActivity.start(mContext, Config.DBCopy2P2Activity);
                 break;
             case Config.PrintHistory4P2Activity://条码补打
                 PrintHistory4P2Activity.start(mContext);
                 break;
+
             case Config.PrintBoxCodeActivity://箱码补打
                 PrintBoxCodeActivity.start(mContext);
                 break;

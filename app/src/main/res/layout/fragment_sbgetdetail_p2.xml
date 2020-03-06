@@ -502,6 +502,7 @@
                         app:TextView_Title_size="@dimen/size_detail" />
                     <EditText
                         android:id="@+id/ed_num"
+                        android:enabled="false"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="6"

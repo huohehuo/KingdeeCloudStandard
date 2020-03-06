@@ -94,7 +94,7 @@ public class FragmentPrisTBMain extends BaseFragment {
             case EventBusInfoCode.UpdataStorage:
                 String id = (String) event.postEvent;
                 Lg.e("更改仓库数据" + id);
-                spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_tb) + activityPager.getActivityMain(), id, activityPager.getOrgOut());
+                spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_tb) + activityPager.getActivityMain(), id, activityPager.getOrgOut(),activityPager.getActivity());
                 break;
             case EventBusInfoCode.Lock_Main://是否锁住表头
                 String lock = (String) event.postEvent;
@@ -224,7 +224,7 @@ public class FragmentPrisTBMain extends BaseFragment {
                 Hawk.put(Info.OrgOut + activityPager.getActivityMain(), activityPager.getOrgOut().FName);
                 spStoreman.setAuto(Info.StoreMan + activityPager.getActivityMain(), autoMan, activityPager.getOrgOut());
                 spOrgCreate.setAutoSelection(Info.HuoZhu + activityPager.getActivityMain(), activityPager.getOrgOut(), "");
-                spWhichStorage.setAuto(Info.Storage + activityPager.getActivityMain(), autoStorage, activityPager.getOrgOut());
+                spWhichStorage.setAuto(Info.Storage + activityPager.getActivityMain(), autoStorage, activityPager.getOrgOut(),activityPager.getActivity());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
             }
         });
@@ -299,14 +299,14 @@ public class FragmentPrisTBMain extends BaseFragment {
             edFfOrder.setText(list.get(0).F_FFF_Text);
             edNot.setText(list.get(0).FNot);
             activityPager.setOrgOut(LocDataUtil.getOrg(list.get(0).FStockOrgId,"number"));
-            spOrgIn.setAutoSelection(Info.OrgOut + activityPager.getActivityMain(), list.get(0).FStockOrgId);//仓库，仓管员，部门都以组织id来过滤
+            spOrgIn.setAutoSelection(Info.OrgOut + activityPager.getActivityMain(), list.get(0).FStockOrgId,activityPager.getActivity(),0);//仓库，仓管员，部门都以组织id来过滤
             autoStorage = list.get(0).FStorage;
             autoMan = list.get(0).FStockerNumber;
             autoHuozhu = list.get(0).FOwnerIdHead;
             autoDep = list.get(0).FDepartmentNumber;
-            spWhichStorage.setAuto(Info.Storage + activityPager.getActivityMain(), "", activityPager.getOrgOut());
+            spWhichStorage.setAuto(Info.Storage + activityPager.getActivityMain(), "", activityPager.getOrgOut(),activityPager.getActivity());
         } else {
-            spOrgIn.setAutoSelection(Info.OrgOut + activityPager.getActivityMain(), Hawk.get(Info.OrgOut + activityPager.getActivityMain(), ""));//仓库，仓管员，部门都以组织id来过滤
+            spOrgIn.setAutoSelection(Info.OrgOut + activityPager.getActivityMain(), Hawk.get(Info.OrgOut + activityPager.getActivityMain(), ""),activityPager.getActivity(),0);//仓库，仓管员，部门都以组织id来过滤
             autoStorage = Hawk.get(Info.Storage + activityPager.getActivityMain(), "");
             autoMan = Hawk.get(Info.StoreMan + activityPager.getActivityMain(), "");
 //            autoHuozhu=list.get(0).FOwnerIdHead;

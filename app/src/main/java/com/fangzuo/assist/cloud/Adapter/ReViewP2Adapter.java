@@ -61,8 +61,12 @@ public class ReViewP2Adapter extends BaseAdapter implements View.OnClickListener
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        if (detail.get(i).activity==Config.DB4P2Activity ||detail.get(i).activity==Config.ShuiBanGetActivity||detail.get(i).activity==Config.OutKilnGetActivity||detail.get(i).activity==Config.ShuiBanGet2Activity
-                ||detail.get(i).activity==Config.ShuiBanDB4P2Activity||detail.get(i).activity==Config.DBInKiln4P2Activity){
+        if (detail.get(i).activity==Config.DB4P2Activity ||
+                detail.get(i).activity==Config.ShuiBanGetActivity||
+                detail.get(i).activity==Config.OutKilnGetActivity||
+                detail.get(i).activity==Config.ShuiBanGet2Activity ||
+                detail.get(i).activity==Config.ShuiBanDB4P2Activity ||
+                detail.get(i).activity==Config.DBInKiln4P2Activity){
             viewHolder.llOne.setVisibility(View.GONE);
             viewHolder.llTwo.setVisibility(View.VISIBLE);
             viewHolder.productname.setText("物料名称:" + detail.get(i).FProductName);

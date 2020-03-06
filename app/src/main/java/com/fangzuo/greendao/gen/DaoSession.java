@@ -41,6 +41,7 @@ import com.fangzuo.assist.cloud.Dao.SaleMan;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.Dao.StoreMan;
 import com.fangzuo.assist.cloud.Dao.Suppliers;
+import com.fangzuo.assist.cloud.Dao.TempDetil;
 import com.fangzuo.assist.cloud.Dao.T_Detail;
 import com.fangzuo.assist.cloud.Dao.T_main;
 import com.fangzuo.assist.cloud.Dao.Unit;
@@ -82,6 +83,7 @@ import com.fangzuo.greendao.gen.SaleManDao;
 import com.fangzuo.greendao.gen.StorageDao;
 import com.fangzuo.greendao.gen.StoreManDao;
 import com.fangzuo.greendao.gen.SuppliersDao;
+import com.fangzuo.greendao.gen.TempDetilDao;
 import com.fangzuo.greendao.gen.T_DetailDao;
 import com.fangzuo.greendao.gen.T_mainDao;
 import com.fangzuo.greendao.gen.UnitDao;
@@ -132,6 +134,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig storageDaoConfig;
     private final DaoConfig storeManDaoConfig;
     private final DaoConfig suppliersDaoConfig;
+    private final DaoConfig tempDetilDaoConfig;
     private final DaoConfig t_DetailDaoConfig;
     private final DaoConfig t_mainDaoConfig;
     private final DaoConfig unitDaoConfig;
@@ -173,6 +176,7 @@ public class DaoSession extends AbstractDaoSession {
     private final StorageDao storageDao;
     private final StoreManDao storeManDao;
     private final SuppliersDao suppliersDao;
+    private final TempDetilDao tempDetilDao;
     private final T_DetailDao t_DetailDao;
     private final T_mainDao t_mainDao;
     private final UnitDao unitDao;
@@ -284,6 +288,9 @@ public class DaoSession extends AbstractDaoSession {
         suppliersDaoConfig = daoConfigMap.get(SuppliersDao.class).clone();
         suppliersDaoConfig.initIdentityScope(type);
 
+        tempDetilDaoConfig = daoConfigMap.get(TempDetilDao.class).clone();
+        tempDetilDaoConfig.initIdentityScope(type);
+
         t_DetailDaoConfig = daoConfigMap.get(T_DetailDao.class).clone();
         t_DetailDaoConfig.initIdentityScope(type);
 
@@ -338,6 +345,7 @@ public class DaoSession extends AbstractDaoSession {
         storageDao = new StorageDao(storageDaoConfig, this);
         storeManDao = new StoreManDao(storeManDaoConfig, this);
         suppliersDao = new SuppliersDao(suppliersDaoConfig, this);
+        tempDetilDao = new TempDetilDao(tempDetilDaoConfig, this);
         t_DetailDao = new T_DetailDao(t_DetailDaoConfig, this);
         t_mainDao = new T_mainDao(t_mainDaoConfig, this);
         unitDao = new UnitDao(unitDaoConfig, this);
@@ -379,6 +387,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(Storage.class, storageDao);
         registerDao(StoreMan.class, storeManDao);
         registerDao(Suppliers.class, suppliersDao);
+        registerDao(TempDetil.class, tempDetilDao);
         registerDao(T_Detail.class, t_DetailDao);
         registerDao(T_main.class, t_mainDao);
         registerDao(Unit.class, unitDao);
@@ -422,6 +431,7 @@ public class DaoSession extends AbstractDaoSession {
         storageDaoConfig.clearIdentityScope();
         storeManDaoConfig.clearIdentityScope();
         suppliersDaoConfig.clearIdentityScope();
+        tempDetilDaoConfig.clearIdentityScope();
         t_DetailDaoConfig.clearIdentityScope();
         t_mainDaoConfig.clearIdentityScope();
         unitDaoConfig.clearIdentityScope();
@@ -561,6 +571,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public SuppliersDao getSuppliersDao() {
         return suppliersDao;
+    }
+
+    public TempDetilDao getTempDetilDao() {
+        return tempDetilDao;
     }
 
     public T_DetailDao getT_DetailDao() {

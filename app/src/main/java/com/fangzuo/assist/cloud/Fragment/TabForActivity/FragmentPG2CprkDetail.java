@@ -23,7 +23,6 @@ import com.fangzuo.assist.cloud.Activity.PagerForActivity;
 import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
 import com.fangzuo.assist.cloud.Activity.ReViewActivity;
 import com.fangzuo.assist.cloud.Activity.ReViewP14BoxActivity;
-import com.fangzuo.assist.cloud.Activity.ReViewP24WortActivity;
 import com.fangzuo.assist.cloud.Adapter.PushDownSubP14PG2CprkListAdapter;
 import com.fangzuo.assist.cloud.Adapter.PushDownSubP14PG2CprkListAdapterRy;
 import com.fangzuo.assist.cloud.Adapter.PushDownSubP1ListAdapter;

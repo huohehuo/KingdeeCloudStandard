@@ -106,6 +106,10 @@ public class PrintHistory4P2Activity extends BaseActivity {
 //                if (Hawk.get(Config.PDA_Project_Type,"1").equals("2")){
                     if ("0".equals(adapter.getAllData().get(position).F_TypeID)){
                         showMsg4P2Shuiban(adapter.getAllData().get(position));
+                    }else if ("33".equals(adapter.getAllData().get(position).F_TypeID)){
+                        showMsg4P2_33(adapter.getAllData().get(position));
+                    }else if ("1006703".equals(adapter.getAllData().get(position).F_TypeID)){
+                        showMsg4P22(adapter.getAllData().get(position));
                     }else{
                         showMsg4P2(adapter.getAllData().get(position));
                     }
@@ -262,6 +266,71 @@ public class PrintHistory4P2Activity extends BaseActivity {
 
     //展示打印数据(二期)区分立方米版本和英尺版本
     private PrintHistory data;
+    private void showMsg4P22(final PrintHistory print){
+        data = new PrintHistory();
+        data.setPrintHistory4P2(print);
+        if (null==data.FDate || "".equals(data.FDate)){
+            data.FDate = getTime(true);
+        }
+
+        String huozhuNote= LocDataUtil.getRemark(data.FHuoquan,"number").FNote;
+        data.FHuoquan=huozhuNote;
+        Lg.e("打印信息123：",data);
+        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+        ab.setTitle(R.string.msg_print);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.show_print_history_p2_hgbrk2, null);
+        TextView huoquan     = v.findViewById(R.id.tv_huoquan);
+        TextView batch       = v.findViewById(R.id.tv_batch);
+        TextView name        = v.findViewById(R.id.tv_name);
+        TextView model       = v.findViewById(R.id.tv_model);
+        TextView vol       = v.findViewById(R.id.tv_vol);
+        TextView wavehouse   = v.findViewById(R.id.tv_wavehouse);
+        TextView date        = v.findViewById(R.id.tv_date);
+        TextView btn        = v.findViewById(R.id.btn_print);
+        huoquan.setText(data.getFHuoquan());
+        batch.setText(data.getFBatch());
+        name.setText(data.getFName());
+        model.setText(data.getFModel());
+        vol.setText(data.getFVolume());
+//        if ("1".equals(data.F_TypeID)){//原木（立方米版本）
+//            num.setText(data.getFYmLenght()+"  "+data.getFUnit());
+//            num2.setText(data.getFYmDiameter()+"  厘米(cm)");
+//            note.setText(data.getFVolume());
+//        }else{//原木入库（英尺版本）
+//        String val = DoubleUtil.mul(MathUtil.toD(data.getFVolume()),200)+"";
+//        data.FVolume = MathUtil.Cut0(val);
+//        data.FYmLenght = MathUtil.Cut0(data.getFYmLenght());
+//        data.FYmDiameter = MathUtil.Cut0(data.getFYmDiameter());
+//        }
+        wavehouse.setText(data.getFWaveHouse());
+        date.setText(data.getFDate());
+        ab.setView(v);
+        final AlertDialog alertDialog = ab.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    CommonUtil.doPrint4P2Shuiban2(zpSDK,data,"1");
+                } catch (Exception e) {
+//                    e.printStackTrace();
+                    LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
+                }
+                alertDialog.dismiss();
+            }
+        });
+//                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                        getProductOL(dBean, i);
+//                        default_unitID = dBean.products.get(i).FUnitID;
+//                        chooseUnit(default_unitID);
+//                        alertDialog.dismiss();
+//                        }
+//                        });
+    }
+
     private void showMsg4P2(final PrintHistory print){
         data = new PrintHistory();
         data.setPrintHistory4P2(print);
@@ -365,7 +434,7 @@ public class PrintHistory4P2Activity extends BaseActivity {
         huoquan.setText(data.getFHuoquan());
         batch.setText(data.getFBatch());
         name.setText(data.getFName());
-        model.setText(MathUtil.Cut0(data.getFYmLenght())+"x"+MathUtil.Cut0(data.getFBWide())+"x"+MathUtil.Cut0(data.getFBThick()));
+        model.setText(MathUtil.Cut0(data.getFYmLenght())+"x"+MathUtil.Cut0(data.getFBWide())+"x"+MathUtil.toD(data.getFBThick()));
         data.FModel=model.getText().toString();
         data.FBWide = data.FWidth;
         wide.setText(data.FBWide);
@@ -382,6 +451,58 @@ public class PrintHistory4P2Activity extends BaseActivity {
             public void onClick(View v) {
                 try {
                     CommonUtil.doPrint4P2Shuiban(zpSDK,data,"1");
+                } catch (Exception e) {
+//                    e.printStackTrace();
+                    LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));
+                }
+                alertDialog.dismiss();
+            }
+        });
+//                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                        getProductOL(dBean, i);
+//                        default_unitID = dBean.products.get(i).FUnitID;
+//                        chooseUnit(default_unitID);
+//                        alertDialog.dismiss();
+//                        }
+//                        });
+    }
+
+    //展示打印数据(二期水版入库)
+    private void showMsg4P2_33(final PrintHistory print){
+        data = new PrintHistory();
+        data.setPrintHistory4P2(print);
+        if (null==data.FDate || "".equals(data.FDate)){
+            data.FDate = getTime(true);
+        }
+
+        String huozhuNote= LocDataUtil.getRemark(data.FHuoquan,"number").FNote;
+        data.FHuoquan=huozhuNote;
+        Lg.e("打印信息：",data);
+        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+        ab.setTitle(R.string.msg_print);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.show_print_history_p2_33, null);
+        TextView huoquan     = v.findViewById(R.id.tv_huoquan);
+        TextView batch       = v.findViewById(R.id.tv_batch);
+        TextView name        = v.findViewById(R.id.tv_name);
+        TextView model       = v.findViewById(R.id.tv_model);
+        TextView wide         = v.findViewById(R.id.tv_num);
+        TextView btn        = v.findViewById(R.id.btn_print);
+        huoquan.setText(data.getFHuoquan());
+        batch.setText(data.getFBatch());
+        name.setText(data.getFName());
+        model.setText(data.getFModel());
+        wide.setText(data.getFNum());
+        ab.setView(v);
+        final AlertDialog alertDialog = ab.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    CommonUtil.doPrint433(mContext,data,"1");
                 } catch (Exception e) {
 //                    e.printStackTrace();
                     LoadingUtil.showAlter(mContext,getString(R.string.error_print),getString(R.string.check_print));

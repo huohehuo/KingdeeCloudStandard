@@ -135,8 +135,10 @@ public class Config {
     public static final int SaleOrderActivity                       =10031;//销售订单
     public static final int PurchaseOrderActivity                   =10032;//采购订单
     public static final int PdCgOrder2WgrkActivity                  =10033;//采购订单下推外购入库单
+    public static final int PdCgOrder2WgrkNEIActivity               =1003302;//内部采购单--采购订单下推外购入库单
     public static final int PdSaleOrder2SaleOutActivity             =10034;//销售订单下推销售出库单
     public static final int PdSaleOrder2SaleOut4BoxActivity         =100342;//销售订单下推销售出库单
+    public static final int PdSaleOrder2SaleOut4BoxP2Activity       =10034202;//销售订单下推销售出库单
     public static final int PdSaleOrder2SaleOut2Activity            =100341;//VMI销售订单下推销售出库单
     public static final int PdSaleOrder2SaleBackActivity            =10035;//销售订单下推销售退货单
     public static final int PdSaleOut2SaleBackActivity              =10036;//销售出库单下推销售退货单
@@ -146,15 +148,16 @@ public class Config {
     public static final int Db2FDoutActivity                        =10040;//调拨申请单下推分布式调出单
     public static final int PDActivity                              =10041;//盘点单
     public static final int DBActivity                              =10042;//组织内调拨单
+    public static final int DBCopy2P2Activity                       =100422;//组织内调拨单  复制与一期20191121
     public static final int DB2Activity                             =100421;//跨组织调拨单
     public static final int DgInActivity                            =10044;//到柜入库
     public static final int SimpleInActivity                        =10045;//简单生产入库
     public static final int TbGetActivity                           =10046;//挑板领料1
     public static final int TbGet2Activity                          =100462;//挑板领料2
     public static final int TbGet3Activity                          =100463;//挑板领料3
-    public static final int TbInActivity                            =10047;//挑板入库
-    public static final int TbIn2Activity                           =100472;//挑板入库
-    public static final int TbIn3Activity                           =100473;//挑板入库
+    public static final int TbInActivity                            =10047;//挑板入库1
+    public static final int TbIn2Activity                           =100472;//挑板入库2
+    public static final int TbIn3Activity                           =100473;//挑板入库3
     public static final int GbGetActivity                           =10048;//改板领料
     public static final int GbInActivity                            =10049;//改板入库
     public static final int DcOutActivity                           =10050;//代存出库
@@ -224,6 +227,18 @@ public class Config {
     public static final int Tb3DiGetActivity                       =100710207;//挑板领料3(混包)--码拍领料/生产领料单
     public static final int GbDiGetActivity                        =100710208;//改板领料(混包)---码拍领料/生产领料单
     public static final int GbHunInActivity                        =10079006;//改板入库(混包)--混包新增
+    public static final int ZbInActivity                            =10047009;//一级选择--挑板入库1
+    public static final int ZbIn1Activity                            =10047010;//简单生产入库--挑板入库1
+    public static final int ZbIn2Activity                            =10047011;//简单生产入库--挑板入库1
+    public static final int ZbIn3Activity                            =10047012;//简单生产入库--挑板入库1
+    public static final int ZbIn4Activity                            =10047013;//简单生产入库--挑板入库1
+    public static final int ZbIn5Activity                            =10047014;//简单生产入库--挑板入库1
+    public static final int ZbGetActivity                          =10046006;//一级选择--挑板领料1
+    public static final int ZbGet1Activity                          =10046007;//简单生产领料--挑板领料1
+    public static final int ZbGet2Activity                          =10046008;//简单生产领料--挑板领料1
+    public static final int ZbGet3Activity                          =10046009;//简单生产领料--挑板领料1
+    public static final int ZbGet4Activity                          =10046010;//简单生产领料--挑板领料1
+    public static final int ZbGet5Activity                          =10046011;//简单生产领料--挑板领料1
 
 
 
@@ -232,12 +247,16 @@ public class Config {
     public static final int P2ProductionInStore2Activity            =1006202;//简单生产入库（二期）
     public static final int P2PdCgrk2ProductGetActivity             =10063;//采购入库单下推简单生产领料（二期）
     public static final int ProductGet4P2Activity                   =1002702;//原木领料
+    public static final int ProductGet4P24PihaoActivity             =1002704;//原木领料
     public static final int ProductInStore4P2Activity               =1002602;//水板板材入库--水板入库
     public static final int ProductInStore4P2MpActivity             =1002603;//水板板材码拍(copy水板板材入库)
     public static final int WortInStore4P2Activity                  =10064;//刨光干板入库
     public static final int PrintBoxCodeActivity                    =10065;//箱码补打
     public static final int DB4P2Activity                           =10066;//板材调拨-水板调拨
     public static final int DryingInStoreActivity                   =10067;//烘干板入库
+    public static final int DryingInStore2Activity                   =1006703;//烘干板入库
+    public static final int WgDryingInStoreActivity                 =1006702;//外购烘干板入库
+    public static final int WgDryingInStoreCy2Activity              =100670202;//挑板入库单(copy)外购烘干板入库
     public static final int ShuiBanGetActivity                      =10068;//水板拆托出库（水板领料)
     public static final int ShuiBanGet2Activity                     =1006803;//烘干板领料（水板拆托出库)
     public static final int OutKilnGetActivity                      =1006802;//出窑领料(copy水板拆托出库)
@@ -254,7 +273,7 @@ public class Config {
     public static final int SupplierGet4P2Activity                  =1005502;//供应商领料(copy一期第三方货物出库)
     public static final int WorkOrgIn4P2Activity                    =1002604;//业务组织入库(copy一期简单生产入库)
     public static final int SupplierIn4P2Activity                   =1005402;//供应商入库(copy一期第三方货物入库)
-    public static final int ProductGet4BoxP2Activity                 =1007103;//码拍领料/生产领料单
+    public static final int ProductGet4BoxP2Activity                =1007103;//码拍领料/生产领料单
     public static final int BoxReAddP2Activity                      =10079012;//混包新增
 
 

@@ -179,8 +179,8 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
     private String mainSaleOrg = "";//表头带出
     private String mainSettleOrg = "";//表头带出
     private Org mainStoreOrg;//表头带出
-    private zpBluetoothPrinter zpSDK;
-    private BlueToothBean bean;
+//    private zpBluetoothPrinter zpSDK;
+//    private BlueToothBean bean;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(ClassEvent event) {
@@ -357,7 +357,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    checkPrint(false);
+//                                    checkPrint(false);
                                 }
                             }).start();
                         }
@@ -410,8 +410,8 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
         mCaptureManager = new ScanManager(activityPager, zxingBarcodeScanner);
         mCaptureManager.initializeFromIntent(activityPager.getIntent(), activityPager.getSavedInstanceState());
         activityPager.setScanManager(mCaptureManager);
-        zpSDK = new zpBluetoothPrinter(mContext);
-        bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
+//        zpSDK = new zpBluetoothPrinter(mContext);
+//        bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
         spUnitJiben.setEnabled(false);
         spUnitStore.setEnabled(false);
     }
@@ -750,7 +750,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
                             LocDataUtil.getOrg(pushDownSub.FHuoZhuNumber,"number").FNote, barcode, batch, CommonUtil.getTime(true), "",spAuxsign.getDataNumber(),spActualmodel.getDataNumber());
                     daoSession.getPrintHistoryDao().insert(printHistory);
                     try {
-                        CommonUtil.doPrint(zpSDK, printHistory,activityPager.getPrintNum());
+                        CommonUtil.doPrint(mContext, printHistory,activityPager.getPrintNum());
                     } catch (Exception e) {
                     }
                     //-----END
@@ -826,6 +826,7 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             main.FNot = activityPager.getNote();
             main.FCustomerID = pushDownMain.FSupplyID;
             main.F_FFF_Text = activityPager.getFOrderNo();
+            main.FFieldMan = pushDownMain.FFieldMan;
 //            main.setClient(activityPager.getClient());
             long insert1 = t_mainDao.insert(main);
 
@@ -896,19 +897,19 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
         EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
 
     }
-    //检测打印机连接状态
-    private void checkPrint(boolean check) {
-        if (bean.address.equals("")) {
-            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
-        } else {
-            if (!zpSDK.connect(bean.address)) {
-                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
-
-            } else {
-                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "OK"));
-            }
-        }
-    }
+//    //检测打印机连接状态
+//    private void checkPrint(boolean check) {
+//        if (bean.address.equals("")) {
+//            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
+//        } else {
+//            if (!zpSDK.connect(bean.address)) {
+//                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "NOOK"));
+//
+//            } else {
+//                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Print_Check, "OK"));
+//            }
+//        }
+//    }
     //执行完单，PDA单据编号+1
     public void finishOrder() {
 //        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
@@ -982,12 +983,12 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
         getList();
         //执行该方法时，Fragment处于活动状态，用户可与之交互。
         Lg.e("onResume");//执行该方法时，Fragment处于活动状态，用户可与之交互。
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                checkPrint(false);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                checkPrint(false);
+//            }
+//        }).start();
     }
 
     @Override
@@ -1002,10 +1003,10 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
         super.onPause();
         //执行该方法时，Fragment处于暂停状态，但依然可见，用户不能与之交互
         Lg.e("onPause");
-        try {
-            if (null != zpSDK) zpSDK.disconnect();
-        } catch (Exception e) {
-        }
+//        try {
+//            if (null != zpSDK) zpSDK.disconnect();
+//        } catch (Exception e) {
+//        }
     }
 
     @Override
@@ -1025,11 +1026,11 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
             EventBusUtil.unregister(this);
         } catch (Exception e) {
         }
-        try {
-            zpSDK.disconnect();
-        } catch (Exception e) {
-
-        }
+//        try {
+//            zpSDK.disconnect();
+//        } catch (Exception e) {
+//
+//        }
     }
 
     @Override

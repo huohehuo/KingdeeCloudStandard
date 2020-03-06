@@ -85,7 +85,7 @@ public class ReViewReAddAdapter extends BaseAdapter implements View.OnClickListe
 //                viewHolder.productxh.setText("物料名:" + detail.get(i).FProductName);
         viewHolder.num.setText("采购数量:" + detail.get(i).FRemainInStockQty + detail.get(i).FUnit);
         viewHolder.unit.setText("单位:" + detail.get(i).FUnit);
-        if (detail.get(i).activity== Config.DBActivity||detail.get(i).activity== Config.DB2Activity||
+        if (detail.get(i).activity== Config.DBActivity||detail.get(i).activity== Config.DB2Activity||detail.get(i).activity== Config.DBCopy2P2Activity||
                 detail.get(i).activity== Config.DBClientActivity||detail.get(i).activity== Config.DBStorageActivity||
                 detail.get(i).activity== Config.PdDbApply2DBActivity||detail.get(i).activity== Config.PdDbApply2DB4VMIActivity){
             viewHolder.storage.setVisibility(View.GONE);

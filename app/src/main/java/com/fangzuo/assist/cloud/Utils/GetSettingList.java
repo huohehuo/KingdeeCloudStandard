@@ -82,6 +82,8 @@ public class GetSettingList {
             }
         }
 
+        backItems.add(new SettingList("217","整包领料(通用)",Config.ZbGetActivity,R.mipmap.sellinout));
+        backItems.add(new SettingList("218","整包入库(通用)",Config.ZbInActivity,R.mipmap.sellinout));
 
         return backItems;
 
@@ -130,15 +132,20 @@ public class GetSettingList {
             items.add(new SettingList(App.getContext().getResources().getString(R.string.print_tips),Config.PrintHistory4P2Activity,R.mipmap.printmain));
             items.add(new SettingList("","码拍领料",Config.ProductGet4BoxP2Activity,R.mipmap.chuku));//0917生产领料单
             items.add(new SettingList("","混包新增",Config.BoxReAddP2Activity,R.mipmap.chuku));//0917生产领料单
+            items.add(new SettingList("","组织间调拨/箱码",Config.DBCopy2P2Activity,R.mipmap.chuku));//组织间调拨/箱码  复制与一期20191121
+            items.add(new SettingList("","原木领料2",Config.ProductGet4P24PihaoActivity,R.mipmap.chuku));
 
         }else if (type==2){
             items.add(new SettingList("水板调拨",Config.ShuiBanDB4P2Activity,R.mipmap.diaobo));
             items.add(new SettingList("水板拆托出库",Config.ShuiBanGetActivity,R.mipmap.chuku));
             items.add(new SettingList("",1,0));
             items.add(new SettingList("烘干板入库",Config.DryingInStoreActivity,R.mipmap.ruku));
+            items.add(new SettingList("烘干板入库2",Config.DryingInStore2Activity,R.mipmap.ruku));
             items.add(new SettingList("水板板材码拍",Config.ProductInStore4P2MpActivity,R.mipmap.ruku));
             items.add(new SettingList("调拨入窑",Config.DBInKiln4P2Activity,R.mipmap.chuku));
             items.add(new SettingList("出窑领料",Config.OutKilnGetActivity,R.mipmap.chuku));
+            items.add(new SettingList("外购烘干板入库",Config.WgDryingInStoreActivity,R.mipmap.chuku));
+            items.add(new SettingList("挑板入库单",Config.WgDryingInStoreCy2Activity,R.mipmap.ruku));
         }else if (type==3){
             items.add(new SettingList("烘干板领料",Config.ShuiBanGet2Activity,R.mipmap.chuku));
             items.add(new SettingList("刨光板码托",Config.DryingGetActivity,R.mipmap.chuku));
@@ -146,6 +153,7 @@ public class GetSettingList {
             items.add(new SettingList(App.getContext().getResources().getString(R.string.wort_instore),Config.WortInStore4P2Activity,R.mipmap.ruku));
             items.add(new SettingList(App.getContext().getResources().getString(R.string.boxcode_print),Config.PrintBoxCodeActivity,R.mipmap.printmain));
             items.add(new SettingList("拆箱",Config.SplitBoxP2Activity,R.mipmap.diaobo));
+            items.add(new SettingList("销售订单下推销售出库(箱码)",Config.PdSaleOrder2SaleOut4BoxP2Activity,R.mipmap.diaobo));
         }else{
             items.add(new SettingList("成品加工领料",Config.CpGetActivityDlg,R.mipmap.sellinout));
             items.add(new SettingList("成品加工入库",Config.CpInActivityDlg,R.mipmap.sellinout));

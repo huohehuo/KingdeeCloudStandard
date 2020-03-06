@@ -382,6 +382,11 @@ public class ProductCheckActivity extends BaseActivity implements ProductRyAdapt
             case Config.ChangeLvInActivity://挑板入库
             case Config.ChangeModelInActivity://挑板入库
             case Config.SplitBoxInActivity://挑板入库
+            case Config.ZbIn1Activity://挑板入库
+            case Config.ZbIn2Activity://挑板入库
+            case Config.ZbIn3Activity://挑板入库
+            case Config.ZbIn4Activity://挑板入库
+            case Config.ZbIn5Activity://挑板入库
             case Config.TbIn2Activity://挑板入库
             case Config.TbIn3Activity://挑板入库
             case Config.GbInActivity://改版入库

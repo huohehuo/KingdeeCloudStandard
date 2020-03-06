@@ -22,6 +22,7 @@ import com.fangzuo.assist.cloud.Activity.PagerForActivity;
 import com.fangzuo.assist.cloud.Activity.PrintOutTestActivity;
 import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
 import com.fangzuo.assist.cloud.Activity.ReViewPDActivity;
+import com.fangzuo.assist.cloud.Activity.ReViewPD_1_35Activity;
 import com.fangzuo.assist.cloud.Adapter.PushDownSubListAdapter;
 import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.BlueToothBean;
@@ -96,7 +97,7 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
     @BindView(R.id.sl_all)
     ScrollView slAll;
     //    private int activity = Config.PdSaleOrder2SaleOutActivity;
-    private int tag = 2;
+//    private int tag = 2;
     @BindView(R.id.zxing_barcode_scanner)
     DecoratedBarcodeView zxingBarcodeScanner;
     //    @BindView(R.id.cb_scaning)
@@ -237,11 +238,13 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
                                 ).build().list());
                                 for (int i = 0; i < mains.size(); i++) {
                                     List<PushDownSub> pushDownSubs = pushDownSubDao.queryBuilder().where(
+                                            PushDownSubDao.Properties.FStr1.eq(tag+""),
                                             PushDownSubDao.Properties.FBillNo.eq(mains.get(i).FBillNo),
                                             PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
                                     ).build().list();
                                     pushDownSubDao.deleteInTx(pushDownSubs);
                                     List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
+                                            PushDownMainDao.Properties.Tag.eq(tag),
                                             PushDownMainDao.Properties.FBillNo.eq(mains.get(i).FBillNo),
                                             PushDownMainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
                                     ).build().list();
@@ -414,8 +417,14 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
         bean = Hawk.get(Config.OBJ_BLUETOOTH, new BlueToothBean("", ""));
         spUnitJiben.setEnabled(false);
         spUnitStore.setEnabled(false);
+        //当为内部采购单时，数量不可改动
+        if (activity == Config.PdCgOrder2WgrkNEIActivity){
+            edNum.setClickable(false);
+            edNum.setEnabled(false);
+        }
     }
 
+    private int tag;
     @Override
     protected void initData() {
         s2Product = new SearchBean.S2Product();
@@ -425,10 +434,13 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
 
         container = new ArrayList<>();
         fidcontainer = activityPager.getIntent().getExtras().getStringArrayList("fid");
+        tag = activityPager.getIntent().getExtras().getInt("tag");
 //        ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+fidcontainer.get(0));//单据编号
         getList();
         List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
-                PushDownMainDao.Properties.FBillNo.eq(fidcontainer.get(0))).build().list();
+                PushDownMainDao.Properties.Tag.eq(tag),
+                PushDownMainDao.Properties.FBillNo.eq(fidcontainer.get(0))
+        ).build().list();
         if (pushDownMains.size() > 0) {
             Lg.e("表头：", pushDownMains.get(0));
             pushDownMain = pushDownMains.get(0);
@@ -520,6 +532,9 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
                 pushDownSub = (PushDownSub) pushDownSubListAdapter.getItem(i);
                 Lg.e("点击明细:", pushDownSub);
                 VibratorUtil.Vibrate(mContext,Info.VibratorTime);
+                if (activity == Config.PdCgOrder2WgrkNEIActivity){
+                    edNum.setText(pushDownSub.FQty);
+                }
                 if (BasicShareUtil.getInstance(mContext).getIsOL()) {
                     s2Product.likeOr = pushDownSub.FNumber;
                     s2Product.FOrg = mainBuyOrg == null ? "" : mainBuyOrg.FOrgID;
@@ -577,7 +592,9 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
         pushDownMainDao = daoSession.getPushDownMainDao();
         for (int i = 0; i < fidcontainer.size(); i++) {
             List<PushDownSub> list = pushDownSubDao.queryBuilder().where(
-                    PushDownSubDao.Properties.FBillNo.eq(fidcontainer.get(i))).build().list();
+                    PushDownSubDao.Properties.FStr1.eq(tag+""),
+                    PushDownSubDao.Properties.FBillNo.eq(fidcontainer.get(i))
+            ).build().list();
             container.addAll(list);
         }
         if (container.size() > 0) {
@@ -723,10 +740,18 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
 //        DataModel.codeOnlyInsert(WebApi.CodeCheckInsertForOut, gson.toJson(bean));
 //        Addorder();
         LoadingUtil.showDialog(mContext, "正在获取条码数据...");
-        String pdata = product.FMaterialid + "|" + unit.FMeasureUnitID + "|" + edNum.getText().toString().trim()
-                + "|" + spActualmodel.getDataNumber() + "|" + spAuxsign.getDataNumber() + "|" + edPurchaseNo.getText().toString()
-                + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + storage.FNumber + "|" + mainSettleOrg.FNumber;
-        App.getRService().doIOAction(WebApi.PrintData, pdata, new MySubscribe<CommonResponse>() {
+        String pdata;
+        //当为内部采购单时，多一位
+        if (activity == Config.PdCgOrder2WgrkNEIActivity){
+            pdata = product.FMaterialid + "|" + unit.FMeasureUnitID + "|" + edNum.getText().toString().trim()
+                    + "|" + spActualmodel.getDataNumber() + "|" + spAuxsign.getDataNumber() + "|" + edPurchaseNo.getText().toString()
+                    + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + storage.FNumber + "|" + mainSettleOrg.FNumber+ "|" + pushDownSub.FBatchNo;
+        }else{
+            pdata = product.FMaterialid + "|" + unit.FMeasureUnitID + "|" + edNum.getText().toString().trim()
+                    + "|" + spActualmodel.getDataNumber() + "|" + spAuxsign.getDataNumber() + "|" + edPurchaseNo.getText().toString()
+                    + "|" + BasicShareUtil.getInstance(mContext).getIMIE() + "|" + storage.FNumber + "|" + mainSettleOrg.FNumber;
+        }
+        App.getRService().doIOAction(activity == Config.PdCgOrder2WgrkNEIActivity?WebApi.PrintData35:WebApi.PrintData, pdata, new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
                 super.onNext(commonResponse);
@@ -971,7 +996,8 @@ public class FragmentCgOrder2WgrkDetail extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("fid", pushDownMain.FID);
                 bundle.putInt("activity", activity);
-                startNewActivity(activityPager, ReViewPDActivity.class,
+                bundle.putInt("tag", tag);
+                startNewActivity(activityPager, ReViewPD_1_35Activity.class,
                         R.anim.activity_fade_in, R.anim.activity_fade_out, false, bundle);
                 break;
         }

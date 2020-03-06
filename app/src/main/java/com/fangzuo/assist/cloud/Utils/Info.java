@@ -16,9 +16,9 @@ public class Info {
 //    public static final String DATABASESETTING = "K3DBConfigerRY";
     public static String getAppNo(){
         if ("1".equals(Hawk.get(Config.PDA_Project_Type,"1"))){
-            return "6.51";
+            return "6.59";
         }else{
-            return "1.680";
+            return "1.708";
         }
     }
     public static final int RegisterNo = 155;
@@ -34,6 +34,7 @@ public class Info {
     public static final int SearchClientDetail = 77791;
     public static final int SEARCHCLIENT = 7779;
     public static final int SEARCHJH = 7770;
+    public static final int Search_Pihao = 7771;
 
     public static final int Scan_Pic = 111;//用于识别照片二维码的返回值
 
@@ -124,6 +125,7 @@ public class Info {
         String backString="";
         switch (activity){
             case Config.PdCgOrder2WgrkActivity:
+            case Config.PdCgOrder2WgrkNEIActivity:
             case Config.FLInStoreP1Activity:
             case Config.PurchaseInStoreActivity://采购入库
                 backString=FormID_PIS;
@@ -133,6 +135,9 @@ public class Info {
             case Config.WorkOrgIn4P2Activity://产品入库
             case Config.ProductInStore4P2MpActivity://产品入库
             case Config.DryingInStoreActivity://产品入库
+            case Config.DryingInStore2Activity://产品入库
+            case Config.WgDryingInStoreActivity://产品入库
+            case Config.WgDryingInStoreCy2Activity://产品入库
             case Config.WortInStore4P2Activity://产品入库
             case Config.ProductInStore4P2Activity://产品入库
             case Config.P2ProductionInStoreActivity://产品入库
@@ -159,6 +164,11 @@ public class Info {
             case Config.ChangeLvInActivity://挑板入库
             case Config.ChangeModelInActivity://挑板入库
             case Config.SplitBoxInActivity://挑板入库
+            case Config.ZbIn1Activity://挑板入库
+            case Config.ZbIn2Activity://挑板入库
+            case Config.ZbIn3Activity://挑板入库
+            case Config.ZbIn4Activity://挑板入库
+            case Config.ZbIn5Activity://挑板入库
             case Config.TbIn2Activity://挑板入库
             case Config.TbIn3Activity://挑板入库
             case Config.GbInActivity://改版入库
@@ -185,12 +195,18 @@ public class Info {
             case Config.P2PdCgrk2ProductGetActivity://生产领料
             case Config.P1PdCgrk2ProductGetActivity://生产领料
             case Config.ProductGet4P2Activity://生产领料
+            case Config.ProductGet4P24PihaoActivity://生产领料
             case Config.ProductGetActivity://生产领料
             case Config.TbGetActivity://挑板领料
             case Config.ChangeGetActivity://挑板领料
             case Config.ChangeLvGetActivity://挑板领料
             case Config.ChangeModelGetActivity://挑板领料
             case Config.SplitBoxGetActivity://挑板领料
+            case Config.ZbGet1Activity://挑板领料
+            case Config.ZbGet2Activity://挑板领料
+            case Config.ZbGet3Activity://挑板领料
+            case Config.ZbGet4Activity://挑板领料
+            case Config.ZbGet5Activity://挑板领料
             case Config.ZbCheJianDiZGetActivity://挑板领料
             case Config.TbGet2Activity://挑板领料
             case Config.TbGet3Activity://挑板领料
@@ -200,6 +216,7 @@ public class Info {
             case Config.SaleOutActivity://销售出库
             case Config.PdSaleOrder2SaleOutActivity:
             case Config.PdSaleOrder2SaleOut4BoxActivity:
+            case Config.PdSaleOrder2SaleOut4BoxP2Activity:
             case Config.PdSaleOrder2SaleOut2Activity:
             case Config.PdSendMsg2SaleOutActivity:
                 backString=FormID_SaleOut;
@@ -243,6 +260,7 @@ public class Info {
             case Config.PdDbApply2DBActivity://调拨单
             case Config.PdDbApply2DB4VMIActivity://调拨单
             case Config.DBActivity://调拨单
+            case Config.DBCopy2P2Activity://调拨单
             case Config.DBClientActivity://调拨单
             case Config.DBStorageActivity://调拨单
             case Config.DB2Activity://调拨单
@@ -267,6 +285,7 @@ public class Info {
         String backString="";
         switch (activity){
             case Config.PdCgOrder2WgrkActivity://采购订单下推外购入库单
+            case Config.PdCgOrder2WgrkNEIActivity://采购订单下推外购入库单
             case Config.FLInStoreP1Activity://采购订单下推外购入库单
             case Config.PurchaseInStoreActivity:
                 backString=BT_PIS;
@@ -276,6 +295,9 @@ public class Info {
             case Config.WorkOrgIn4P2Activity://产品入库
             case Config.ProductInStore4P2MpActivity://产品入库
             case Config.DryingInStoreActivity://产品入库
+            case Config.DryingInStore2Activity://产品入库
+            case Config.WgDryingInStoreActivity://产品入库
+            case Config.WgDryingInStoreCy2Activity://产品入库
             case Config.WortInStore4P2Activity://产品入库
             case Config.ProductInStore4P2Activity://产品入库
             case Config.P2ProductionInStoreActivity://产品入库
@@ -302,6 +324,11 @@ public class Info {
             case Config.ChangeLvInActivity://挑板入库
             case Config.ChangeModelInActivity://挑板入库
             case Config.SplitBoxInActivity://挑板入库
+            case Config.ZbIn1Activity://挑板入库
+            case Config.ZbIn2Activity://挑板入库
+            case Config.ZbIn3Activity://挑板入库
+            case Config.ZbIn4Activity://挑板入库
+            case Config.ZbIn5Activity://挑板入库
             case Config.TbIn2Activity://挑板入库
             case Config.TbIn3Activity://挑板入库
             case Config.GbInActivity://改版入库
@@ -327,6 +354,7 @@ public class Info {
             case Config.ShuiBanGetActivity://生产领料
             case Config.P2PdCgrk2ProductGetActivity://生产领料
             case Config.P1PdCgrk2ProductGetActivity://生产领料
+            case Config.ProductGet4P24PihaoActivity://生产领料
             case Config.ProductGet4P2Activity://生产领料
             case Config.ProductGetActivity://生产领料
             case Config.TbGetActivity://挑板领料
@@ -334,6 +362,11 @@ public class Info {
             case Config.ChangeLvGetActivity://挑板领料
             case Config.ChangeModelGetActivity://挑板领料
             case Config.SplitBoxGetActivity://挑板领料
+            case Config.ZbGet1Activity://挑板领料
+            case Config.ZbGet2Activity://挑板领料
+            case Config.ZbGet3Activity://挑板领料
+            case Config.ZbGet4Activity://挑板领料
+            case Config.ZbGet5Activity://挑板领料
             case Config.ZbCheJianDiZGetActivity://挑板领料
             case Config.TbGet2Activity://挑板领料
             case Config.TbGet3Activity://挑板领料
@@ -343,6 +376,7 @@ public class Info {
             case Config.SaleOutActivity:
             case Config.PdSaleOrder2SaleOutActivity:
             case Config.PdSaleOrder2SaleOut4BoxActivity:
+            case Config.PdSaleOrder2SaleOut4BoxP2Activity:
             case Config.PdSaleOrder2SaleOut2Activity:
             case Config.PdSendMsg2SaleOutActivity:
                 backString=BT_SaleOut;
@@ -385,6 +419,7 @@ public class Info {
             case Config.PdDbApply2DBActivity://调拨单
             case Config.PdDbApply2DB4VMIActivity://调拨单
             case Config.DBActivity://调拨单
+            case Config.DBCopy2P2Activity://调拨单
             case Config.DBClientActivity://调拨单
             case Config.DBStorageActivity://调拨单
             case Config.DB2Activity://调拨单

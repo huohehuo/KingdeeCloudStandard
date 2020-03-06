@@ -397,6 +397,7 @@ public class ProductCheck4P2Activity extends BaseActivity implements ProductRyAd
             case Config.OutKilnGetActivity://生产领料
             case Config.ShuiBanGetActivity://生产领料
             case Config.ProductGet4P2Activity://生产领料
+            case Config.ProductGet4P24PihaoActivity://生产领料
             case Config.ProductGetActivity://生产领料
             case Config.TbGetActivity://挑板领料
             case Config.TbGet2Activity://挑板领料

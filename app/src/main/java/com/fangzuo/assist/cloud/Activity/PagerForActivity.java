@@ -48,12 +48,18 @@ import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentDB4P2Main;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentDryingGet4P2Detail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentDryingGet4P2Main;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentPrGet4P2Detail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentPrGet4P2PihaoDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentPris4P2Detail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentPris4P2Detail101;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentPris4P2Detail2;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentPris4P2Detail4SBBCRK;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentPris4P2Main;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentPris4P2WortMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentSbGet4P2Detail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentWortInStore4P2Detail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.PushDownFragment.FragmentP2ProductionInStore2Detail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.PushDownFragment.FragmentP2WgDryingISCy2Detail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.PushDownFragment.FragmentP2WgDryingISDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PDBox.FragmentPKDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PDBox.FragmentPYingDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PDBox.FragmentPYingMain;
@@ -75,6 +81,8 @@ import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOutMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentCgOrder2WgrkBoxDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentCgOrder2WgrkDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentCgOrder2WgrkMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentCgOrder2WgrkNeiDetail;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentCgOrder2WgrkNeiMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentDbApply2DBDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentDbApply2DBMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.PushDownFragment.FragmentP2PdCgrk2ProductionGetDetail;
@@ -94,6 +102,8 @@ import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.FragmentYb
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentBackMsg2SaleBackDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentBackMsg2SaleBackMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentSaleOutDetailForPD;
+import com.fangzuo.assist.cloud.Fragment.pushdown.AttrsCy2Fragment;
+import com.fangzuo.assist.cloud.Fragment.pushdown.AttrsCy3Fragment;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
@@ -209,11 +219,18 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentPrGet4P2Main());
                 fragments.add(new FragmentPrGet4P2Detail());
                 break;
+            case Config.ProductGet4P24PihaoActivity:
+                binding.topActivity.tvTitle.setText("原木领料2");
+                fragments.add(new FragmentPrGet4P2Main());
+                fragments.add(new FragmentPrGet4P2PihaoDetail());
+                break;
+
+
             case Config.ProductInStore4P2Activity:
 //                connectPrint();
                 binding.topActivity.tvTitle.setText("水板板材入库");
                 fragments.add(new FragmentPris4P2Main());
-                fragments.add(new FragmentPris4P2Detail());
+                fragments.add(new FragmentPris4P2Detail4SBBCRK());
                 break;
             case Config.P2PdCgrk2ProductGetActivity://采购入库单下推简单生产领料单
                 binding.topActivity.tvTitle.setText(getString(R.string.p2_cgrk2production_get));
@@ -241,7 +258,7 @@ public class PagerForActivity extends BaseActivity {
 //                connectPrint();
                 binding.topActivity.tvTitle.setText("水板板材码拍");
                 fragments.add(new FragmentPris4P2Main());
-                fragments.add(new FragmentPris4P2Detail());
+                fragments.add(new FragmentPris4P2Detail101());
                 break;
             case Config.DryingInStoreActivity:
 //                connectPrint();
@@ -249,12 +266,29 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentPris4P2Main());
                 fragments.add(new FragmentPris4P2Detail());
                 break;
+            case Config.DryingInStore2Activity:
+//                connectPrint();
+                binding.topActivity.tvTitle.setText("烘干板入库2");
+                fragments.add(new FragmentPris4P2Main());
+                fragments.add(new FragmentPris4P2Detail2());
+                break;
+            case Config.WgDryingInStoreActivity:
+                binding.topActivity.tvTitle.setText("外购烘干板入库");
+                fragments.add(new FragmentPris4P2Main());
+                fragments.add(new FragmentP2WgDryingISDetail());
+                break;
+            case Config.WgDryingInStoreCy2Activity:
+                binding.topActivity.tvTitle.setText("挑板入库单");
+                fragments.add(new FragmentPris4P2Main());
+                fragments.add(new AttrsCy2Fragment());
+                break;
                 /*刨光车间*/
             case Config.ShuiBanGet2Activity:
                 binding.topActivity.tvTitle.setText("烘干板领料");
                 fragments.add(new FragmentPrGet4P2Main());
                 fragments.add(new FragmentSbGet4P2Detail());
                 break;
+
             case Config.DryingGetActivity:
                 binding.topActivity.tvTitle.setText("刨光板码托");
                 fragments.add(new FragmentDryingGet4P2Main());
@@ -450,6 +484,11 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentDBMain());
                 fragments.add(new FragmentDBBoxDetail());
                 break;
+            case Config.DBCopy2P2Activity:
+                binding.topActivity.tvTitle.setText("组织间调拨/箱码");
+                fragments.add(new FragmentDBMain());
+                fragments.add(new FragmentDBBoxDetail());
+                break;
             case Config.DBClientActivity:
                 binding.topActivity.tvTitle.setText("调拨(客户在途)");
                 fragments.add(new FragmentDBMain());
@@ -485,6 +524,11 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentSaleOut4PDBoxMain());
                 fragments.add(new FragmentSaleOutDetailForPDBox());
                 break;
+            case Config.PdSaleOrder2SaleOut4BoxP2Activity:
+                binding.topActivity.tvTitle.setText("销售订单下推销售出库(箱码)");//复制到2期，基本不变
+                fragments.add(new FragmentSaleOut4PDBoxMain());
+                fragments.add(new FragmentSaleOutDetailForPDBox());
+                break;
             case Config.PdSaleOrder2SaleOut2Activity:
                 binding.topActivity.tvTitle.setText("VMI销售订单下推销售出库单");
                 fragments.add(new FragmentSaleOut4PDMain());
@@ -507,6 +551,31 @@ public class PagerForActivity extends BaseActivity {
                 break;
             case Config.ChangeModelGetActivity:
                 binding.topActivity.tvTitle.setText("调整领料(整包)");
+                fragments.add(new FragmentTbGetMain());
+                fragments.add(new FragmentPrGetDetail());
+                break;
+            case Config.ZbGet1Activity:
+                binding.topActivity.tvTitle.setText("简单生产领料1");
+                fragments.add(new FragmentTbGetMain());
+                fragments.add(new FragmentPrGetDetail());
+                break;
+            case Config.ZbGet2Activity:
+                binding.topActivity.tvTitle.setText("简单生产领料2");
+                fragments.add(new FragmentTbGetMain());
+                fragments.add(new FragmentPrGetDetail());
+                break;
+            case Config.ZbGet3Activity:
+                binding.topActivity.tvTitle.setText("简单生产领料3");
+                fragments.add(new FragmentTbGetMain());
+                fragments.add(new FragmentPrGetDetail());
+                break;
+            case Config.ZbGet4Activity:
+                binding.topActivity.tvTitle.setText("简单生产领料4");
+                fragments.add(new FragmentTbGetMain());
+                fragments.add(new FragmentPrGetDetail());
+                break;
+            case Config.ZbGet5Activity:
+                binding.topActivity.tvTitle.setText("简单生产领料5");
                 fragments.add(new FragmentTbGetMain());
                 fragments.add(new FragmentPrGetDetail());
                 break;
@@ -575,6 +644,31 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentPrisTBMain());
                 fragments.add(new FragmentPrisTBDetail());
                 break;
+            case Config.ZbIn1Activity:
+                binding.topActivity.tvTitle.setText("简单生产入库1");
+                fragments.add(new FragmentPrisTBMain());
+                fragments.add(new FragmentPrisTBDetail());
+                break;
+            case Config.ZbIn2Activity:
+                binding.topActivity.tvTitle.setText("简单生产入库2");
+                fragments.add(new FragmentPrisTBMain());
+                fragments.add(new FragmentPrisTBDetail());
+                break;
+            case Config.ZbIn3Activity:
+                binding.topActivity.tvTitle.setText("简单生产入库3");
+                fragments.add(new FragmentPrisTBMain());
+                fragments.add(new FragmentPrisTBDetail());
+                break;
+            case Config.ZbIn4Activity:
+                binding.topActivity.tvTitle.setText("简单生产入库4");
+                fragments.add(new FragmentPrisTBMain());
+                fragments.add(new FragmentPrisTBDetail());
+                break;
+            case Config.ZbIn5Activity:
+                binding.topActivity.tvTitle.setText("简单生产入库5");
+                fragments.add(new FragmentPrisTBMain());
+                fragments.add(new FragmentPrisTBDetail());
+                break;
             case Config.TbInActivity:
                 binding.topActivity.tvTitle.setText("挑板入库1(整包)");
                 fragments.add(new FragmentPrisTBMain());
@@ -634,6 +728,11 @@ public class PagerForActivity extends BaseActivity {
                 binding.topActivity.tvTitle.setText("采购订单下推外购入库");
                 fragments.add(new FragmentCgOrder2WgrkMain());
                 fragments.add(new FragmentCgOrder2WgrkDetail());
+                break;
+            case Config.PdCgOrder2WgrkNEIActivity://PDA显示的是采购入库
+                binding.topActivity.tvTitle.setText("内部采购单");
+                fragments.add(new FragmentCgOrder2WgrkNeiMain());
+                fragments.add(new FragmentCgOrder2WgrkNeiDetail());
                 break;
             case Config.FLInStoreP1Activity://方料入库
                 binding.topActivity.tvTitle.setText("方料入库");
@@ -1033,6 +1132,13 @@ public class PagerForActivity extends BaseActivity {
         Intent intent = new Intent(context,PagerForActivity.class);
         intent.putExtra("activity",activity);
         intent.putStringArrayListExtra("fid", fid);
+        context.startActivity(intent);
+    }
+    public static void start(Context context, int activity, ArrayList<String> fid,int tag){
+        Intent intent = new Intent(context,PagerForActivity.class);
+        intent.putExtra("activity",activity);
+        intent.putStringArrayListExtra("fid", fid);
+        intent.putExtra("tag", tag);
         context.startActivity(intent);
     }
     /**

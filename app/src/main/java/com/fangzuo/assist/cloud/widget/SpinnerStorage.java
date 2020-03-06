@@ -13,11 +13,13 @@ import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.StorageSpAdapter;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
+import com.fangzuo.assist.cloud.Dao.Department;
 import com.fangzuo.assist.cloud.Dao.Org;
 import com.fangzuo.assist.cloud.Dao.Storage;
 import com.fangzuo.assist.cloud.R;
 import com.fangzuo.assist.cloud.RxSerivce.MySubscribe;
 import com.fangzuo.assist.cloud.Utils.BasicShareUtil;
+import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.GreedDaoUtil.GreenDaoManager;
 import com.fangzuo.assist.cloud.Utils.JsonCreater;
 import com.fangzuo.assist.cloud.Utils.Lg;
@@ -245,7 +247,11 @@ public class SpinnerStorage extends RelativeLayout {
         });
 
     }
-
+    private int activityTag=0;
+    public void setAuto(String key, String autoStr, Org org, int activityT) {
+        activityTag=activityT;
+        setAuto(key,autoStr,org);
+    }
     public void setAuto(String key,String autoStr, Org org) {
         Id="";
         Name="";
@@ -314,6 +320,8 @@ public class SpinnerStorage extends RelativeLayout {
         } else {
             container.addAll(listData);
         }
+        //处理不同单据的再过滤条件
+        dealFilter();
         if (container.size() > 0) {
             mSp.setAdapter(adapter);
             adapter.notifyDataSetChanged();
@@ -328,6 +336,164 @@ public class SpinnerStorage extends RelativeLayout {
             adapter.notifyDataSetChanged();
         }
 
+    }
+
+
+    //过滤条件
+    private void dealFilter(){
+        switch (activityTag){
+            case Config.CpWgInActivity:
+            case Config.CpWgHunInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Storage department = container.get(i);
+                    if(department.FName.contains("在途") || department.FName.contains("外存放")) {
+//                        Lg.e("删除仓库",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留仓库",department);
+                    }
+                }
+                break;
+//            case Config.Bg2CheJianDiGetActivity:
+            case Config.Bg2CheJianHunInActivity:
+            case Config.Bg2CheJianInActivity:
+//            case Config.Bg1CheJianDiGetActivity:
+            case Config.Bg1CheJianHunInActivity:
+            case Config.Bg1CheJianInActivity:
+//            case Config.ZbCheJianDiZGetActivity:
+//            case Config.ZbCheJianDiGetActivity:
+            case Config.ZbCheJianHunInActivity:
+            case Config.ZbCheJianInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Storage department = container.get(i);
+                    if(department.FName.contains("在途") || department.FName.contains("外存放")) {
+//                        Lg.e("删除仓库",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留仓库",department);
+                    }
+                }
+                break;
+//            case Config.SplitBoxGetActivity:
+//            case Config.SplitBoxDiGetActivity:
+            case Config.SplitBoxInActivity:
+            case Config.SplitBoxHunInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Storage department = container.get(i);
+                    if(department.FName.contains("在途") || department.FName.contains("外存放")) {
+//                        Lg.e("删除仓库",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留仓库",department);
+                    }
+                }
+                break;
+//            case Config.GbGetActivity:
+            case Config.GbInActivity:
+//            case Config.GbDiGetActivity:
+            case Config.GbHunInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Storage department = container.get(i);
+                    if(department.FName.contains("在途") || department.FName.contains("外存放")) {
+//                        Lg.e("删除仓库",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留仓库",department);
+                    }
+                }
+                break;
+            case Config.Tb3HunInActivity:
+//            case Config.Tb3DiGetActivity:
+            case Config.TbIn3Activity:
+//            case Config.TbGet3Activity:
+            case Config.Tb2HunInActivity:
+//            case Config.Tb2DiGetActivity:
+            case Config.TbIn2Activity:
+//            case Config.TbGet2Activity:
+            case Config.Tb1HunInActivity:
+//            case Config.Tb1DiGetActivity:
+            case Config.TbInActivity:
+            case Config.ZbIn1Activity:
+            case Config.ZbIn2Activity:
+            case Config.ZbIn3Activity:
+            case Config.ZbIn4Activity:
+            case Config.ZbIn5Activity:
+//            case Config.TbGetActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Storage department = container.get(i);
+                    if(department.FName.contains("在途") || department.FName.contains("外存放")) {
+//                        Lg.e("删除仓库",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留仓库",department);
+                    }
+                }
+                break;
+            case Config.ChangeModelInActivity:
+//            case Config.ChangeModelGetActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Storage department = container.get(i);
+                    if(department.FName.contains("在途") || department.FName.contains("外存放")) {
+//                        Lg.e("删除仓库",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留仓库",department);
+                    }
+                }
+                break;
+//            case Config.ChangeLvGetActivity:
+            case Config.ChangeLvInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Storage department = container.get(i);
+                    if(department.FName.contains("在途") || department.FName.contains("外存放")) {
+//                        Lg.e("删除仓库",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留仓库",department);
+                    }
+                }
+                break;
+//            case Config.ChangeGetActivity:
+            case Config.ChangeInActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Storage department = container.get(i);
+                    if(department.FName.contains("在途") || department.FName.contains("外存放")) {
+//                        Lg.e("删除仓库",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留仓库",department);
+                    }
+                }
+                break;
+            case Config.DhInActivity:
+            case Config.DhIn2Activity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Storage department = container.get(i);
+                    if(department.FName.contains("在途") || department.FName.contains("外存放")) {
+//                        Lg.e("删除仓库",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留仓库",department);
+                    }
+                }
+                break;
+            case Config.DBClientActivity:
+            case Config.DBStorageActivity:
+                for(int i = container.size()-1;i >= 0;i--) {
+                    Storage department = container.get(i);
+                    if(!department.FName.contains("东北发")) {
+//                        Lg.e("删除仓库",department);
+                        container.remove(department);
+                    }else{
+                        Lg.e("保留仓库",department);
+                    }
+                }
+                break;
+            default:
+                //        adapter = new OrgSpAdapter(context, container);
+                mSp.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+        }
     }
 
 

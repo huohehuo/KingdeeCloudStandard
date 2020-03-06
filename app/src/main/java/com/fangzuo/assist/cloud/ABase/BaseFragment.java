@@ -2,13 +2,17 @@ package com.fangzuo.assist.cloud.ABase;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,7 @@ import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.EventBusUtil;
 import com.fangzuo.assist.cloud.Utils.Info;
 import com.fangzuo.assist.cloud.Utils.Lg;
+import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.Toast;
 import com.fangzuo.assist.cloud.zxing.RGBLuminanceSource;
 import com.google.zxing.BinaryBitmap;
@@ -44,6 +49,7 @@ public abstract class BaseFragment extends Fragment {
     private static final String ACTION_DISPLAY_SCAN_RESULT = "techain.intent.action.DISPLAY_SCAN_RESULT";
     private FragmentActivity mContext;
     private String barcodeStr;
+    public String FFieldMan;
 
     public void onCreate(Bundle savedInstanceState) {//初始化Fragment
         FragmentActivity mContext = getActivity();
@@ -74,12 +80,35 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-    }
+//                G02A
+//        IntentFilter scanDataIntentFilter = new IntentFilter();
+//        scanDataIntentFilter.addAction(ACTION_DISPLAY_SCAN_RESULT);
+//        getActivity().registerReceiver(mScanDataReceiverForG02A, scanDataIntentFilter);
 
+
+        IntentFilter filter = new IntentFilter(CUSTOM_NAME);
+        getActivity().registerReceiver(receiver, filter);
+
+
+    }
+    /**
+     * 需要自定义的广播接收器
+     */
+    // 自定义扫描工具内开发者项内广播名称value；登录页面的时候自定义设置
+    public final static String CUSTOM_NAME = "com.example.chinaautoid";
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String barcode = intent.getStringExtra("scannerdata");
+            OnReceive(barcode);
+            Log.i("tag", "barcode:"+barcode);
+        }
+    };
     @Override
     public void onPause() {
         super.onPause();
-//        mContext.unregisterReceiver(mScanDataReceiver);
+        getActivity().unregisterReceiver(receiver);
+//        mContext.unregisterReceiver(mScanDataReceiverForG02A);
     }
     //onCreateView是创建的时候调用，onViewCreated是在onCreateView后被触发的事件，前后关系
     @Override
@@ -129,6 +158,39 @@ public abstract class BaseFragment extends Fragment {
         datePickerDialog.show();
         return date;
     }
+
+    public String datePickerWithData(final TextView v,String time) {
+        if (time.length()==10){
+            year = MathUtil.toInt(time.substring(0,4));
+            month = MathUtil.toInt(time.substring(5,7))-1;
+            day = MathUtil.toInt(time.substring(8,time.length()));
+        }
+        Lg.e("获取时间1"+year);
+        Lg.e("获取时间2"+month);
+        Lg.e("获取时间3"+day);
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+            }
+        }, year, month, day);
+        datePickerDialog.setButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                int year = datePickerDialog.getDatePicker().getYear();
+                int month = datePickerDialog.getDatePicker().getMonth();
+                int day = datePickerDialog.getDatePicker().getDayOfMonth();
+                date = year + "-" + ((month < 10) ? "0" + (month + 1) : (month + 1)) + "-" + ((day < 10) ? "0" + day : day);
+                Toast.showText(mContext, date);
+                v.setText(date);
+//                EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.ChangeTime,date));
+                datePickerDialog.dismiss();
+
+            }
+        });
+        datePickerDialog.show();
+        return date;
+    }
+
 
     public final void startNewActivity(Class<? extends Activity> target,
                                        Bundle mBundle) {
@@ -327,17 +389,17 @@ public abstract class BaseFragment extends Fragment {
 //            }
 //        }
 //    };
-//    //G02A
-//    private BroadcastReceiver mScanDataReceiverForG02A = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            String action = intent.getAction();
-//            if (action.equals(ACTION_DISPLAY_SCAN_RESULT)) {
-//                String str = intent.getStringExtra("decode_data");
-//                OnReceive(str);
-//            }
-//        }
-//    };
+    //G02A
+    private BroadcastReceiver mScanDataReceiverForG02A = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(ACTION_DISPLAY_SCAN_RESULT)) {
+                String str = intent.getStringExtra("decode_data");
+                OnReceive(str);
+            }
+        }
+    };
 //    //  M60
 //    private static final String ACTION_M60 = "com.mobilead.tools.action.scan_result";
 //    private BroadcastReceiver mScanDataReceiverForM60 = new BroadcastReceiver() {

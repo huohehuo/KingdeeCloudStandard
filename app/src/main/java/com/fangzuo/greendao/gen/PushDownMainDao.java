@@ -59,11 +59,12 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
         public final static Property FPassNo = new Property(32, String.class, "FPassNo", false, "FPASS_NO");
         public final static Property FFreight = new Property(33, String.class, "FFreight", false, "FFREIGHT");
         public final static Property FYaoNo = new Property(34, String.class, "FYaoNo", false, "FYAO_NO");
-        public final static Property FStr1 = new Property(35, String.class, "FStr1", false, "FSTR1");
-        public final static Property FStr2 = new Property(36, String.class, "FStr2", false, "FSTR2");
-        public final static Property FStr3 = new Property(37, String.class, "FStr3", false, "FSTR3");
-        public final static Property FStr4 = new Property(38, String.class, "FStr4", false, "FSTR4");
-        public final static Property FStr5 = new Property(39, String.class, "FStr5", false, "FSTR5");
+        public final static Property FFieldMan = new Property(35, String.class, "FFieldMan", false, "FFIELD_MAN");
+        public final static Property FStr1 = new Property(36, String.class, "FStr1", false, "FSTR1");
+        public final static Property FStr2 = new Property(37, String.class, "FStr2", false, "FSTR2");
+        public final static Property FStr3 = new Property(38, String.class, "FStr3", false, "FSTR3");
+        public final static Property FStr4 = new Property(39, String.class, "FStr4", false, "FSTR4");
+        public final static Property FStr5 = new Property(40, String.class, "FStr5", false, "FSTR5");
     }
 
 
@@ -114,11 +115,12 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
                 "\"FPASS_NO\" TEXT," + // 32: FPassNo
                 "\"FFREIGHT\" TEXT," + // 33: FFreight
                 "\"FYAO_NO\" TEXT," + // 34: FYaoNo
-                "\"FSTR1\" TEXT," + // 35: FStr1
-                "\"FSTR2\" TEXT," + // 36: FStr2
-                "\"FSTR3\" TEXT," + // 37: FStr3
-                "\"FSTR4\" TEXT," + // 38: FStr4
-                "\"FSTR5\" TEXT);"); // 39: FStr5
+                "\"FFIELD_MAN\" TEXT," + // 35: FFieldMan
+                "\"FSTR1\" TEXT," + // 36: FStr1
+                "\"FSTR2\" TEXT," + // 37: FStr2
+                "\"FSTR3\" TEXT," + // 38: FStr3
+                "\"FSTR4\" TEXT," + // 39: FStr4
+                "\"FSTR5\" TEXT);"); // 40: FStr5
     }
 
     /** Drops the underlying database table. */
@@ -302,29 +304,34 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
             stmt.bindString(35, FYaoNo);
         }
  
+        String FFieldMan = entity.getFFieldMan();
+        if (FFieldMan != null) {
+            stmt.bindString(36, FFieldMan);
+        }
+ 
         String FStr1 = entity.getFStr1();
         if (FStr1 != null) {
-            stmt.bindString(36, FStr1);
+            stmt.bindString(37, FStr1);
         }
  
         String FStr2 = entity.getFStr2();
         if (FStr2 != null) {
-            stmt.bindString(37, FStr2);
+            stmt.bindString(38, FStr2);
         }
  
         String FStr3 = entity.getFStr3();
         if (FStr3 != null) {
-            stmt.bindString(38, FStr3);
+            stmt.bindString(39, FStr3);
         }
  
         String FStr4 = entity.getFStr4();
         if (FStr4 != null) {
-            stmt.bindString(39, FStr4);
+            stmt.bindString(40, FStr4);
         }
  
         String FStr5 = entity.getFStr5();
         if (FStr5 != null) {
-            stmt.bindString(40, FStr5);
+            stmt.bindString(41, FStr5);
         }
     }
 
@@ -503,29 +510,34 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
             stmt.bindString(35, FYaoNo);
         }
  
+        String FFieldMan = entity.getFFieldMan();
+        if (FFieldMan != null) {
+            stmt.bindString(36, FFieldMan);
+        }
+ 
         String FStr1 = entity.getFStr1();
         if (FStr1 != null) {
-            stmt.bindString(36, FStr1);
+            stmt.bindString(37, FStr1);
         }
  
         String FStr2 = entity.getFStr2();
         if (FStr2 != null) {
-            stmt.bindString(37, FStr2);
+            stmt.bindString(38, FStr2);
         }
  
         String FStr3 = entity.getFStr3();
         if (FStr3 != null) {
-            stmt.bindString(38, FStr3);
+            stmt.bindString(39, FStr3);
         }
  
         String FStr4 = entity.getFStr4();
         if (FStr4 != null) {
-            stmt.bindString(39, FStr4);
+            stmt.bindString(40, FStr4);
         }
  
         String FStr5 = entity.getFStr5();
         if (FStr5 != null) {
-            stmt.bindString(40, FStr5);
+            stmt.bindString(41, FStr5);
         }
     }
 
@@ -572,11 +584,12 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
             cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32), // FPassNo
             cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33), // FFreight
             cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34), // FYaoNo
-            cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35), // FStr1
-            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36), // FStr2
-            cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37), // FStr3
-            cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38), // FStr4
-            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39) // FStr5
+            cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35), // FFieldMan
+            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36), // FStr1
+            cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37), // FStr2
+            cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38), // FStr3
+            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39), // FStr4
+            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40) // FStr5
         );
         return entity;
     }
@@ -618,11 +631,12 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
         entity.setFPassNo(cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32));
         entity.setFFreight(cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33));
         entity.setFYaoNo(cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34));
-        entity.setFStr1(cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35));
-        entity.setFStr2(cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36));
-        entity.setFStr3(cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37));
-        entity.setFStr4(cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38));
-        entity.setFStr5(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
+        entity.setFFieldMan(cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35));
+        entity.setFStr1(cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36));
+        entity.setFStr2(cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37));
+        entity.setFStr3(cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38));
+        entity.setFStr4(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
+        entity.setFStr5(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
      }
     
     @Override

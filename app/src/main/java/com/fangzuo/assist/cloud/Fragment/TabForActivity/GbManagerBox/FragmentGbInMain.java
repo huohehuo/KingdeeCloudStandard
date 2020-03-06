@@ -174,12 +174,12 @@ public class FragmentGbInMain extends BaseFragment {
         cbNum.setSaveKey(activityPager.getActivityMain()+"printnum");
         activityPager.setDate(tvDate.getText().toString());
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
-        spOrgIn.setAutoSelection(getString(R.string.spOrgIn_pris_gbin)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgIn_pris_gbin)+activityPager.getActivityMain(), ""));//仓库，仓管员，部门都以组织id来过滤
+        spOrgIn.setAutoSelection(getString(R.string.spOrgIn_pris_gbin)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgIn_pris_gbin)+activityPager.getActivityMain(), ""),activityPager.getActivity(),0);//仓库，仓管员，部门都以组织id来过滤
         spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_pris_gbin)+activityPager.getActivityMain(), activityPager.getOrgOut(),Hawk.get(getString(R.string.spOrgCreate_pris_gbin)+activityPager.getActivityMain(), ""));
 //        spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_pris_gbin)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgHuozhu_pris_gbin)+activityPager.getActivityMain(), ""));
         spStoreman.setAuto(getString(R.string.spStoreman_pris_gbin)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spStoreman_pris_gbin)+activityPager.getActivityMain(),""), activityPager.getOrgOut());
         spDepartmentGet.setAuto(getString(R.string.spDepartmentGet_pris_gbin)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spDepartmentGet_pris_gbin)+activityPager.getActivityMain(),""), activityPager.getOrgIn(), activityPager.getActivity());
-        spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_gbin)+activityPager.getActivityMain(),Hawk.get(getString(R.string.spWhichStorage_pris_gbin)+activityPager.getActivityMain(),""), activityPager.getOrgOut());
+        spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_gbin)+activityPager.getActivityMain(),Hawk.get(getString(R.string.spWhichStorage_pris_gbin)+activityPager.getActivityMain(),""), activityPager.getOrgOut(),activityPager.getActivity());
 //        binding.spOrgIn.setEnable(false);
 //        spOrgCreate.setEnable(false);
         cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
@@ -239,7 +239,7 @@ public class FragmentGbInMain extends BaseFragment {
                 Hawk.put(getString(R.string.spOrgIn_pris_gbin)+activityPager.getActivityMain(),activityPager.getOrgOut().FName);
                 spStoreman.setAuto(getString(R.string.spStoreMan_pis), Hawk.get(getString(R.string.spStoreman_pris_gbin)+activityPager.getActivityMain(),""), activityPager.getOrgOut());
                 spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_pris_gbin)+activityPager.getActivityMain(),activityPager.getOrgOut(), "");
-                spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_gbin)+activityPager.getActivityMain(),Hawk.get(getString(R.string.spWhichStorage_pris_gbin)+activityPager.getActivityMain(),""), activityPager.getOrgOut());
+                spWhichStorage.setAuto(getString(R.string.spWhichStorage_pris_gbin)+activityPager.getActivityMain(),Hawk.get(getString(R.string.spWhichStorage_pris_gbin)+activityPager.getActivityMain(),""), activityPager.getOrgOut(),activityPager.getActivity());
                 EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.UpdataView, ""));
 
             }

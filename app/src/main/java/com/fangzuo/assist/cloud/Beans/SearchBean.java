@@ -22,6 +22,9 @@ public class SearchBean {
         public String FIsSubContract;
         public String FIsAsset;
         public String FOrg;
+        public String FVal1;
+        public String FVal2;
+        public String FVal3;
 
         public S2Product(){}
         public S2Product(String string,String org){

@@ -400,66 +400,130 @@ public class DataModel {
     public static List<T_Detail> mergeDetailForPushDown(Context context,String orderID,int Activity,String fid){
         List<T_Detail> list = new ArrayList<>();
         DaoSession daoSession = GreenDaoManager.getmInstance(context).getDaoSession();
-        Cursor cursor = daoSession.getDatabase().rawQuery("SELECT " +
-                "FACCOUNT_ID," +
-                "FVOLUME," +
-                "FBTHICK," +
-                "FBWIDE," +
-                "FBLENGHT," +
-                "FYM_DIAMETER," +
-                "FYM_LENGHT," +
-                "FLEVEL," +
-                "FTAX_RATE," +
-                "FIS_GIFT," +
-                "ACTIVITY," +
-                "FORDER_ID," +
-                "FSTORAGE_ID," +
-                "FID," +
-                "FENTRY_ID," +
-                "FBACK_DATE," +
-                "FBACK_TYPE," +
-                "FTAX_PRICE," +
-                "FHUO_ZHU_NUMBER," +
-                "FPRODUCT_NO," +
-                "FSTORAGE_OUT_ID," +
-                "FSTORAGE_OUT," +
-                "FSTORAGE_IN_ID," +
-                "FSTORAGE_IN," +
-                "FWAVE_HOUSE_OUT_ID," +
-                "FWAVE_HOUSE_OUT," +
-                "FWAVE_HOUSE_IN_ID," +
-                "FWAVE_HOUSE_IN," +
-                "AUX_SIGN," +
-                "ACTUAL_MODEL," +
-                "FWORK_SHOP_ID1," +
-                "FSTORAGE_PDID," +
-                "FWAVE_HOUSE_ID," +
-                "FWAVE_HOUSE_PDID," +
-                "FSOENTRY_ID," +
-                "FBATCH," +
-                "FIS_FREE," +
-                "FREMAIN_IN_STOCK_UNIT_ID," +
-                "FPRICE_UNIT_ID," +
-                "FMATERIAL_ID," +
-                "FMATERIAL_ID_FOR_PD," +
-                "FUNIT_ID," +
-                "FUNIT_IDFOR_PD," +
-                "FBILL_NO," +
-                "FBILL_TYPE_ID," +
-                "FSTOCK_ORG_ID," +
-                "SUM(FREMAIN_IN_STOCK_QTY) AS FREMAIN_IN_STOCK_QTYALL," +
-                "SUM(FREAL_QTY) AS FREAL_QTYALL " +
-                "FROM T__DETAIL " +
-                "WHERE " +
-                "FORDER_ID = ? AND ACTIVITY = ? AND FACCOUNT_ID = ? AND FID = ?" +
-                "GROUP BY " +
-                "FORDER_ID," +
-                "FWORK_SHOP_ID1," +
-                "FSTORAGE_ID," +
-                "FWAVE_HOUSE_ID," +
-                "FBATCH," +
-                "FMATERIAL_ID," +
-                "FUNIT_ID ORDER BY FENTRY_ID", new String[]{orderID+"", Activity+"",CommonUtil.getAccountID(),fid});
+        Cursor cursor;
+        if (Activity == Config.WgDryingInStoreActivity ||Activity == Config.WgDryingInStoreCy2Activity ){
+            cursor = daoSession.getDatabase().rawQuery("SELECT " +
+                    "FACCOUNT_ID," +
+                    "FVOLUME," +
+                    "FBTHICK," +
+                    "FBWIDE," +
+                    "FBLENGHT," +
+                    "FYM_DIAMETER," +
+                    "FYM_LENGHT," +
+                    "FLEVEL," +
+                    "FTAX_RATE," +
+                    "FIS_GIFT," +
+                    "ACTIVITY," +
+                    "FORDER_ID," +
+                    "FSTORAGE_ID," +
+                    "FID," +
+                    "FENTRY_ID," +
+                    "FBACK_DATE," +
+                    "FBACK_TYPE," +
+                    "FTAX_PRICE," +
+                    "FHUO_ZHU_NUMBER," +
+                    "FPRODUCT_NO," +
+                    "FSTORAGE_OUT_ID," +
+                    "FSTORAGE_OUT," +
+                    "FSTORAGE_IN_ID," +
+                    "FSTORAGE_IN," +
+                    "FWAVE_HOUSE_OUT_ID," +
+                    "FWAVE_HOUSE_OUT," +
+                    "FWAVE_HOUSE_IN_ID," +
+                    "FWAVE_HOUSE_IN," +
+                    "AUX_SIGN," +
+                    "ACTUAL_MODEL," +
+                    "FWORK_SHOP_ID1," +
+                    "FSTORAGE_PDID," +
+                    "FWAVE_HOUSE_ID," +
+                    "FWAVE_HOUSE_PDID," +
+                    "FSOENTRY_ID," +
+                    "FBATCH," +
+                    "FIS_FREE," +
+                    "FREMAIN_IN_STOCK_UNIT_ID," +
+                    "FPRICE_UNIT_ID," +
+                    "FMATERIAL_ID," +
+                    "FMATERIAL_ID_FOR_PD," +
+                    "FUNIT_ID," +
+                    "FUNIT_IDFOR_PD," +
+                    "FBILL_NO," +
+                    "FBILL_TYPE_ID," +
+                    "FSTOCK_ORG_ID," +
+                    "SUM(FREMAIN_IN_STOCK_QTY) AS FREMAIN_IN_STOCK_QTYALL," +
+                    "FREAL_QTY AS FREAL_QTYALL " +  //此处原本为SUM汇总，但由于他会把五位小数点四舍五入成一位，所以去掉
+                    "FROM T__DETAIL " +
+                    "WHERE " +
+                    "FORDER_ID = ? AND ACTIVITY = ? AND FACCOUNT_ID = ? AND FID = ?" +
+                    "GROUP BY " +
+                    "FORDER_ID," +
+                    "FWORK_SHOP_ID1," +
+                    "FSTORAGE_ID," +
+                    "FWAVE_HOUSE_ID," +
+                    "FBATCH," +
+                    "FMATERIAL_ID," +
+                    "FUNIT_ID ORDER BY FENTRY_ID", new String[]{orderID+"", Activity+"",CommonUtil.getAccountID(),fid});
+        }else{
+            cursor = daoSession.getDatabase().rawQuery("SELECT " +
+                    "FACCOUNT_ID," +
+                    "FVOLUME," +
+                    "FBTHICK," +
+                    "FBWIDE," +
+                    "FBLENGHT," +
+                    "FYM_DIAMETER," +
+                    "FYM_LENGHT," +
+                    "FLEVEL," +
+                    "FTAX_RATE," +
+                    "FIS_GIFT," +
+                    "ACTIVITY," +
+                    "FORDER_ID," +
+                    "FSTORAGE_ID," +
+                    "FID," +
+                    "FENTRY_ID," +
+                    "FBACK_DATE," +
+                    "FBACK_TYPE," +
+                    "FTAX_PRICE," +
+                    "FHUO_ZHU_NUMBER," +
+                    "FPRODUCT_NO," +
+                    "FSTORAGE_OUT_ID," +
+                    "FSTORAGE_OUT," +
+                    "FSTORAGE_IN_ID," +
+                    "FSTORAGE_IN," +
+                    "FWAVE_HOUSE_OUT_ID," +
+                    "FWAVE_HOUSE_OUT," +
+                    "FWAVE_HOUSE_IN_ID," +
+                    "FWAVE_HOUSE_IN," +
+                    "AUX_SIGN," +
+                    "ACTUAL_MODEL," +
+                    "FWORK_SHOP_ID1," +
+                    "FSTORAGE_PDID," +
+                    "FWAVE_HOUSE_ID," +
+                    "FWAVE_HOUSE_PDID," +
+                    "FSOENTRY_ID," +
+                    "FBATCH," +
+                    "FIS_FREE," +
+                    "FREMAIN_IN_STOCK_UNIT_ID," +
+                    "FPRICE_UNIT_ID," +
+                    "FMATERIAL_ID," +
+                    "FMATERIAL_ID_FOR_PD," +
+                    "FUNIT_ID," +
+                    "FUNIT_IDFOR_PD," +
+                    "FBILL_NO," +
+                    "FBILL_TYPE_ID," +
+                    "FSTOCK_ORG_ID," +
+                    "SUM(FREMAIN_IN_STOCK_QTY) AS FREMAIN_IN_STOCK_QTYALL," +
+                    "SUM(FREAL_QTY) AS FREAL_QTYALL " +
+                    "FROM T__DETAIL " +
+                    "WHERE " +
+                    "FORDER_ID = ? AND ACTIVITY = ? AND FACCOUNT_ID = ? AND FID = ?" +
+                    "GROUP BY " +
+                    "FORDER_ID," +
+                    "FWORK_SHOP_ID1," +
+                    "FSTORAGE_ID," +
+                    "FWAVE_HOUSE_ID," +
+                    "FBATCH," +
+                    "FMATERIAL_ID," +
+                    "FUNIT_ID ORDER BY FENTRY_ID", new String[]{orderID+"", Activity+"",CommonUtil.getAccountID(),fid});
+        }
         while (cursor.moveToNext()){
             T_Detail t_detail = new T_Detail();
             t_detail.activity = cursor.getInt(cursor.getColumnIndex("ACTIVITY"));
@@ -527,7 +591,7 @@ public class DataModel {
         Cursor cursor = daoSession.getDatabase().rawQuery("SELECT " +
                 "FINDEX,FMATERIAL_ID,FCF_BOX_CODE,FBATCH,FBOX_CODE_ORDER,FCF_THICK,FCF_WIDE,FCF_LENGHT_ANY," +
                 "FPRODUCT_NAME,MODEL,ACTIVITY,FORDER_ID,IMIE,FINDEX,FIS_IN_BOX," +
-                "SUM(FCF_M2) AS FCF_M2_SUM,SUM(FCF_QTY) AS FCF_QTY_SUM " +
+                "SUM(FCF_M2) AS FCF_M2_SUM,SUM(FCF_QTY) AS FCF_QTY_SUM ,SUM(FSTR1) AS FSTR1 " +
                 "FROM T__DETAIL WHERE ACTIVITY = ? GROUP BY " +
                 "FORDER_ID,FCF_BOX_CODE ORDER BY FINDEX", new String[]{ Activity+""});
         while (cursor.moveToNext()){
@@ -548,6 +612,7 @@ public class DataModel {
             t_detail.FCfWide = cursor.getString(cursor.getColumnIndex("FCF_WIDE"));
             t_detail.FCfWide = cursor.getString(cursor.getColumnIndex("FCF_WIDE"));
             t_detail.FCfLenghtAny = cursor.getString(cursor.getColumnIndex("FCF_LENGHT_ANY"));
+            t_detail.FStr1 = cursor.getString(cursor.getColumnIndex("FSTR1"));
 //            t_detail.FStorageId = cursor.getString(cursor.getColumnIndex("FSTORAGE_ID"));
 //            t_detail.FWorkShopId1 = cursor.getString(cursor.getColumnIndex("FWORK_SHOP_ID1"));
 //            t_detail.FStoragePDId = cursor.getString(cursor.getColumnIndex("FSTORAGE_PDID"));

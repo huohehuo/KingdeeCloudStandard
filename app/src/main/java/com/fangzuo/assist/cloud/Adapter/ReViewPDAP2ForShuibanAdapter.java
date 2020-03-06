@@ -52,7 +52,7 @@ public class ReViewPDAP2ForShuibanAdapter extends BaseAdapter implements View.On
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Lg.e("先得到数据");
+//        Lg.e("先得到数据");
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.item_review_pd_p2_4_shuiban_list, null);
             viewHolder = new ViewHolder(view);
@@ -60,7 +60,7 @@ public class ReViewPDAP2ForShuibanAdapter extends BaseAdapter implements View.On
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        Lg.e("再布置");
+//        Lg.e("再布置");
 //        DaoSession daoSession = GreenDaoManager.getmInstance(context).getDaoSession();
 //        T_mainDao t_mainDao = daoSession.getT_mainDao();
 //        List<T_main> mains = t_mainDao.queryBuilder().where(

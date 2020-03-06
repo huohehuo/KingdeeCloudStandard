@@ -45,6 +45,7 @@ public class SpinnerUnit extends RelativeLayout {
     private String unitId = "";
     private String unitName = "";
     private String unitNumber = "";
+    private String UnitGroupID = "";
     private Unit thisunit;
     public static final String Name = "name";
     public static final String Id = "id";

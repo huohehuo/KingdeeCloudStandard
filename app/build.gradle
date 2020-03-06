@@ -27,7 +27,7 @@ android {
     }
 }
 greendao {
-    schemaVersion 84
+    schemaVersion 91
     daoPackage 'com.fangzuo.greendao.gen'
     targetGenDir 'src/main/java'
 }
@@ -76,5 +76,4 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
     //    implementation project(':suspendbuttonlayout')
     implementation files('libs/zp_cpcl_new.jar')
-
 }

@@ -157,7 +157,7 @@ public class FragmentGbGetMain extends BaseFragment {
         tvDate.setText(CommonUtil.getTime(true));
         //第一个参数用于保存上一个值，第二个为自动跳转到该默认值
         spOrgCreate.setAutoSelection(getString(R.string.spOrgCreate_gbget)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgCreate_gbget)+activityPager.getActivityMain(),""));
-        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_gbget)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgSend_gbget)+activityPager.getActivityMain(),""));
+        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_gbget)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgSend_gbget)+activityPager.getActivityMain(),""),activityPager.getActivity(),0);
         spOrgHuozhu.setAutoSelection(getString(R.string.spOrgHuozhu_gbget)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spOrgHuozhu_gbget)+activityPager.getActivityMain(),""));
 //        spGetman.setAuto(getString(R.string.spBuyer_gbget)+activityPager.getActivityMain(), "",activityPager.getOrgOut());
         spDepartment.setAuto(getString(R.string.spDepartmentCreate_gbget)+activityPager.getActivityMain(), Hawk.get(getString(R.string.spDepartmentCreate_gbget)+activityPager.getActivityMain(),""),activityPager.getOrgIn(),activityPager.getActivity());

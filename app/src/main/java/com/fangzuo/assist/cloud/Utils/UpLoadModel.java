@@ -153,10 +153,14 @@ public class UpLoadModel {
             case Config.ShuiBanGetActivity://水板板材拆托-水板领料
             case Config.ShuiBanGet2Activity://水板板材拆托-水板领料
             case Config.ProductGet4P2Activity://生产领料
+            case Config.ProductGet4P24PihaoActivity://生产领料
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonP2PrG(mains,details)));
                 break;
             case Config.ProductInStore4P2MpActivity://水版生产入库
             case Config.DryingInStoreActivity://水版生产入库
+            case Config.DryingInStore2Activity://水版生产入库
+            case Config.WgDryingInStoreActivity://水版生产入库
+            case Config.WgDryingInStoreCy2Activity://挑板入库单
             case Config.ProductInStore4P2Activity://水板板材入库--水版生产入库
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonP2PrIS_SuiBan(mains,details)));
                 break;
@@ -177,6 +181,7 @@ public class UpLoadModel {
                 break;
             case Config.FLInStoreP1Activity://采购订单下推外购入库单
             case Config.PdCgOrder2WgrkActivity://采购订单下推外购入库单
+            case Config.PdCgOrder2WgrkNEIActivity://采购订单下推外购入库单
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonCgOrder2Wgrk(mains,details)));
                 break;
             case Config.PurchaseOrderActivity://采购订单
@@ -201,6 +206,11 @@ public class UpLoadModel {
             case Config.BoxReBoxP1Activity://混包追加
             case Config.ProductInStoreActivity://产品入库
             case Config.TbInActivity://挑板入库
+            case Config.ZbIn1Activity://挑板入库
+            case Config.ZbIn2Activity://挑板入库
+            case Config.ZbIn3Activity://挑板入库
+            case Config.ZbIn4Activity://挑板入库
+            case Config.ZbIn5Activity://挑板入库
             case Config.ChangeInActivity://挑板入库
             case Config.ZbCheJianInActivity://挑板入库
             case Config.Bg1CheJianInActivity://挑板入库
@@ -224,6 +234,11 @@ public class UpLoadModel {
             case Config.ChangeLvGetActivity://挑板领料
             case Config.ChangeModelGetActivity://挑板领料
             case Config.SplitBoxGetActivity://挑板领料
+            case Config.ZbGet1Activity://挑板领料
+            case Config.ZbGet2Activity://挑板领料
+            case Config.ZbGet3Activity://挑板领料
+            case Config.ZbGet4Activity://挑板领料
+            case Config.ZbGet5Activity://挑板领料
             case Config.ZbCheJianDiZGetActivity://挑板领料
             case Config.TbGet2Activity://挑板领料
             case Config.TbGet3Activity://挑板领料
@@ -234,6 +249,7 @@ public class UpLoadModel {
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOut(mains,details)));
                 break;
             case Config.PdSaleOrder2SaleOut4BoxActivity://销售订单下推销售出库
+            case Config.PdSaleOrder2SaleOut4BoxP2Activity://销售订单下推销售出库
             case Config.PdSaleOrder2SaleOutActivity://销售订单下推销售出库
             case Config.PdSaleOrder2SaleOut2Activity://VMI销售订单下推销售出库
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOrder2SaleOut(mains,details)));
@@ -275,6 +291,7 @@ public class UpLoadModel {
                 DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonPD(mains,details)));
                 break;
             case Config.DBActivity://组织内调拨
+            case Config.DBCopy2P2Activity://组织内调拨
             case Config.DBClientActivity://组织内调拨
             case Config.DBStorageActivity://组织内调拨
             case Config.DB2Activity://跨组织调拨
