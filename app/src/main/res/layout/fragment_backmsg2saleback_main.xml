@@ -105,7 +105,6 @@
                     <!--app:manspinner_name="销售员:"-->
                     <!--app:manspinner_size="9sp" />-->
                 <com.fangzuo.assist.cloud.widget.SpinnerStoreMan
-                    android:visibility="gone"
                     android:id="@+id/sp_storeman"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

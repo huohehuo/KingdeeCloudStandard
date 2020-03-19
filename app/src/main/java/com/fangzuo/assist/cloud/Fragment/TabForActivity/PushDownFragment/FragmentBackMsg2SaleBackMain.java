@@ -183,7 +183,7 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
 //        spOrgSend.setAutoSelection(getString(R.string.spOrgSend_so), Hawk.get(getString(R.string.spOrgSend_so), ""));//仓库，仓管员，部门都以组织id来过滤
 //        spDepartmentSend.setAuto(getString(R.string.spDepartmentSend_so), Hawk.get(getString(R.string.spDepartmentSend_so), ""), activityPager.getOrgOut(), activityPager.getActivity());
 //        spDepartmentSale.setAuto(getString(R.string.spDepartmentSale_so), "", activityPager.getOrgOut(), activityPager.getActivity());
-//        spStoreman.setAuto(getString(R.string.spStoreman_so), Hawk.get(getString(R.string.spStoreman_so), ""), activityPager.getOrgOut());
+        spStoreman.setAuto(getString(R.string.spStoreman_so), Hawk.get(getString(R.string.spStoreman_so), ""), activityPager.getOrgOut());
 //        spSaleman.setAuto(getString(R.string.spSaleman_so), "", activityPager.getOrgOut());
 //        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
 

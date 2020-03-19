@@ -16,7 +16,7 @@ public class Info {
 //    public static final String DATABASESETTING = "K3DBConfigerRY";
     public static String getAppNo(){
         if ("1".equals(Hawk.get(Config.PDA_Project_Type,"1"))){
-            return "6.59";
+            return "6.60";
         }else{
             return "1.708";
         }

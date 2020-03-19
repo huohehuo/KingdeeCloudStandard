@@ -1596,7 +1596,7 @@ public class JsonDealUtils {
         JSONObject outOjbect = new JSONObject();
         try {
             outOjbect.put("IsEntryBatchFill","true");
-            JSONArray outOfModel = new JSONArray();//Model
+            JSONArray outOfModel = new JSONArray();//ModelFStockerId
             for (int i = 0; i < mains.size(); i++) {
                 JSONObject inObject = new JSONObject();
                 inObject.put("FBillNo","");
