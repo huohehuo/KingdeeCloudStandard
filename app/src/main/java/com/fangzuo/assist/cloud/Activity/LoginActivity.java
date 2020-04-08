@@ -156,7 +156,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         initBar();
         share = BasicShareUtil.getInstance(mContext);
         userDao = daoSession.getUserDao();
-        Hawk.put(Config.PDA_Project_Type, "1");//确定一期/二期项目;确定之后，将决定apk和版本号的下载地址，版本号
+        Hawk.put(Config.PDA_Project_Type, "2");//确定一期/二期项目;确定之后，将决定apk和版本号的下载地址，版本号
         getPermisssion();
 //        mTvVersion.setText("Cloud Ver:" + CommonUtil.getVersionName());
         mTvVersion.setText("Cloud Ver:" + Info.getAppNo());

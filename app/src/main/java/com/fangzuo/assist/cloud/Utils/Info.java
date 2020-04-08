@@ -18,7 +18,7 @@ public class Info {
         if ("1".equals(Hawk.get(Config.PDA_Project_Type,"1"))){
             return "6.60";
         }else{
-            return "1.708";
+            return "1.709";
         }
     }
     public static final int RegisterNo = 155;

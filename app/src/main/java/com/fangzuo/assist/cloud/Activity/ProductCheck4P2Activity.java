@@ -109,11 +109,13 @@ public class ProductCheck4P2Activity extends BaseActivity implements ProductRyAd
             protected void ItemSelected(AdapterView<?> parent, View view, int i, long id) {
                 type2 = (ProductTreeBeanList.ProductTreeBean) binding.spType2.getAdapter().getItem(i);
                 Hawk.put(Sc_type2,type2.FNumber);
-                binding.spTreeType.clear();treeType=null;
+                binding.spTreeType.clear();
+                treeType=null;
                 binding.spLv.clear();lv=null;
                 binding.spPly.clear();ply=null;
                 binding.spHt.clear();ht=null;
 //                binding.spWt.clear();wt=null;
+                Lg.e("分类2",type2);
                 binding.spTreeType.setAutoSelection(type2.FID,Hawk.get(Sc_treeType,""));
 //                if (!isFirstCheck)getProduct(type2.FNumber);
             }
@@ -128,6 +130,7 @@ public class ProductCheck4P2Activity extends BaseActivity implements ProductRyAd
                 binding.spPly.clear();ply=null;
                 binding.spHt.clear();ht=null;
 //                binding.spWt.clear();wt=null;
+                Lg.e("分类3",treeType);
                 binding.spLv.setAutoSelection(treeType.FID,Hawk.get(Sc_lv,""));
 //                if (!isFirstCheck)getProduct(treeType.FNumber);
             }
@@ -140,6 +143,7 @@ public class ProductCheck4P2Activity extends BaseActivity implements ProductRyAd
                 Hawk.put(Sc_lv,lv.FNumber);
                 binding.spPly.clear();ply=null;
                 binding.spHt.clear();ht=null;
+                Lg.e("分类4",lv);
                 getProduct(lv.FNumber);//不再去获得厚度宽度和长度，直接取等级这一级的number进行获取物料并且默认获取第一个物料
 //                binding.spWt.clear();wt=null;
 //                binding.spPly.setAutoSelection(lv.FID,Hawk.get(Sc_ply,""),"");
@@ -212,7 +216,7 @@ public class ProductCheck4P2Activity extends BaseActivity implements ProductRyAd
         productRyAdapter.clear();
         products.clear();
         productsForSearch.clear();
-        s2Product.likeOr = number;
+        s2Product.likeOr = number+".";//20200407 加点是因为避免得出类似 FB和FB2，导致最终取值始终是FB
         App.getRService().doIOAction(WebApi.ProductSearchForTree, gson.toJson(new SearchBean(SearchBean.product_for_like,gson.toJson(s2Product))), new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
