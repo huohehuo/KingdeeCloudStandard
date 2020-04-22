@@ -114,7 +114,11 @@ public class CommonUtil {
                     zpSDK.drawText(380, 790, bean.FDate,size2, 0, 0, false, false);
                     zpSDK.drawText(10, 850, "______________________________________________", 2, 0, 0, false, false);
 
-                    zpSDK.print(0, 1);
+                    if (!App.isLongPaper){
+                        zpSDK.print(0, 1);
+                    }else{
+                        zpSDK.print(0, 0);
+                    }
                     zpSDK.printerStatus();
                     int a=zpSDK.GetStatus();
                     Lg.e("打印机状态",a);
@@ -694,7 +698,11 @@ public class CommonUtil {
             zpSDK.drawText(300, 790, "日期:",size2, 0, 0, false, false);
             zpSDK.drawText(380, 790, getTime(true),size2, 0, 0, false, false);
             zpSDK.drawText(10, 850, "______________________________________________", 2, 0, 0, false, false);
-            zpSDK.print(0, 1);
+            if (!App.isLongPaper){
+                zpSDK.print(0, 1);
+            }else{
+                zpSDK.print(0, 0);
+            }
             zpSDK.pageSetup(668, 900);
             zpSDK.drawText(0, 55, "明细:",size2, 0, 0, false, false);
             zpSDK.drawText(0, 65, "______________________________________________", 2, 0, 0, false, false);
@@ -715,7 +723,11 @@ public class CommonUtil {
             zpSDK.drawText(90, print_x+8, "汇总:", 2, 0, 0, false, false);
             zpSDK.drawText(260, print_x+8, MathUtil.Cut0(bean.get(0).FQtySum), 2, 0, 0, false, false);
             zpSDK.drawText(420, print_x+8, bean.get(0).FM2Sum, 2, 0, 0, false, false);
-            zpSDK.print(0, 1);
+            if (!App.isLongPaper){
+                zpSDK.print(0, 1);
+            }else{
+                zpSDK.print(0, 0);
+            }
 
 
 

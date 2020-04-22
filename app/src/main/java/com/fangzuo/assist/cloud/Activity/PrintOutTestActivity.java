@@ -18,11 +18,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Adapter.BTAdapter;
 import com.fangzuo.assist.cloud.Beans.BlueToothBean;
 import com.fangzuo.assist.cloud.R;
@@ -54,6 +57,8 @@ public class PrintOutTestActivity extends AppCompatActivity {
     TextView tvTitle;
     @BindView(R.id.tv_right)
     TextView tvRight;
+    @BindView(R.id.cb_paper)
+    CheckBox cbPaper;
     private BroadcastReceiver broadcastReceiver = null;
     private IntentFilter intentFilter = null;
     PrintOutTestActivity mActivity;
@@ -74,6 +79,7 @@ public class PrintOutTestActivity extends AppCompatActivity {
 //        zpSDK = new zpBluetoothPrinter(this);
 
         tvTitle.setText(R.string.bluetooth_set);
+        cbPaper.setChecked(App.isLongPaper);
         btAdapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -173,6 +179,13 @@ public class PrintOutTestActivity extends AppCompatActivity {
     }
 
     private void initBroadcast() {
+        cbPaper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Hawk.put(Config.PaperSetting,b);
+                App.isLongPaper=b;
+            }
+        });
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

@@ -23,23 +23,27 @@
             android:text="@string/bluetooth_set"
             android:textSize="20dp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#58000000" />
+        <include layout="@layout/line_heng"/>
 
         <com.jude.easyrecyclerview.EasyRecyclerView
             android:id="@+id/ry_bluetooth"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
             app:recyclerClipToPadding="true"
             app:recyclerPaddingTop="8dp"
             app:scrollbarStyle="insideOverlay"
             app:scrollbars="none" />
 
+        <include layout="@layout/line_heng"/>
+    <CheckBox
+        android:id="@+id/cb_paper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="打印纸张类型是否为连续无断层"
+        android:textColor="@color/red" />
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/ll"
