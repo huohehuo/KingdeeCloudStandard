@@ -65,6 +65,8 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
         public final static Property FStr3 = new Property(38, String.class, "FStr3", false, "FSTR3");
         public final static Property FStr4 = new Property(39, String.class, "FStr4", false, "FSTR4");
         public final static Property FStr5 = new Property(40, String.class, "FStr5", false, "FSTR5");
+        public final static Property FPayType = new Property(41, String.class, "FPayType", false, "FPAY_TYPE");
+        public final static Property FAcPrd = new Property(42, String.class, "FAcPrd", false, "FAC_PRD");
     }
 
 
@@ -120,7 +122,9 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
                 "\"FSTR2\" TEXT," + // 37: FStr2
                 "\"FSTR3\" TEXT," + // 38: FStr3
                 "\"FSTR4\" TEXT," + // 39: FStr4
-                "\"FSTR5\" TEXT);"); // 40: FStr5
+                "\"FSTR5\" TEXT," + // 40: FStr5
+                "\"FPAY_TYPE\" TEXT," + // 41: FPayType
+                "\"FAC_PRD\" TEXT);"); // 42: FAcPrd
     }
 
     /** Drops the underlying database table. */
@@ -333,6 +337,16 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
         if (FStr5 != null) {
             stmt.bindString(41, FStr5);
         }
+ 
+        String FPayType = entity.getFPayType();
+        if (FPayType != null) {
+            stmt.bindString(42, FPayType);
+        }
+ 
+        String FAcPrd = entity.getFAcPrd();
+        if (FAcPrd != null) {
+            stmt.bindString(43, FAcPrd);
+        }
     }
 
     @Override
@@ -539,6 +553,16 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
         if (FStr5 != null) {
             stmt.bindString(41, FStr5);
         }
+ 
+        String FPayType = entity.getFPayType();
+        if (FPayType != null) {
+            stmt.bindString(42, FPayType);
+        }
+ 
+        String FAcPrd = entity.getFAcPrd();
+        if (FAcPrd != null) {
+            stmt.bindString(43, FAcPrd);
+        }
     }
 
     @Override
@@ -589,7 +613,9 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
             cursor.isNull(offset + 37) ? null : cursor.getString(offset + 37), // FStr2
             cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38), // FStr3
             cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39), // FStr4
-            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40) // FStr5
+            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40), // FStr5
+            cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41), // FPayType
+            cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42) // FAcPrd
         );
         return entity;
     }
@@ -637,6 +663,8 @@ public class PushDownMainDao extends AbstractDao<PushDownMain, Long> {
         entity.setFStr3(cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38));
         entity.setFStr4(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
         entity.setFStr5(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
+        entity.setFPayType(cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41));
+        entity.setFAcPrd(cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42));
      }
     
     @Override

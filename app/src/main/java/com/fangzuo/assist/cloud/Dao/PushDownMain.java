@@ -58,8 +58,10 @@ public class PushDownMain {
     public String FStr3;
     public String FStr4;
     public String FStr5;
+    public String FPayType;
+    public String FAcPrd;
 
-    @Generated(hash = 1938902929)
+    @Generated(hash = 615533574)
     public PushDownMain(Long id, String FID, String FBillNo, String FDate, String FSupplyID, String FSupply,
             String FSaleOrgID, String FStoreOrgID, String FSettleOrgId, String FSaleManID, String FSaleDeptID,
             String FNot, int tag, String FBillTypeName, String FAccountID, String FDept, String FDeptID,
@@ -67,7 +69,7 @@ public class PushDownMain {
             String FDbType, String FOrderNo, String FWordShopID, String FWordShop, String FStoreManID,
             String FStockerGroupID, String FCreateOrgID, String FHuoZhuID, String FWlCompany, String FCarBoxNo,
             String FPassNo, String FFreight, String FYaoNo, String FFieldMan, String FStr1, String FStr2,
-            String FStr3, String FStr4, String FStr5) {
+            String FStr3, String FStr4, String FStr5, String FPayType, String FAcPrd) {
         this.id = id;
         this.FID = FID;
         this.FBillNo = FBillNo;
@@ -109,6 +111,8 @@ public class PushDownMain {
         this.FStr3 = FStr3;
         this.FStr4 = FStr4;
         this.FStr5 = FStr5;
+        this.FPayType = FPayType;
+        this.FAcPrd = FAcPrd;
     }
     @Generated(hash = 92092905)
     public PushDownMain() {
@@ -368,6 +372,18 @@ public class PushDownMain {
     }
     public void setFFieldMan(String FFieldMan) {
         this.FFieldMan = FFieldMan;
+    }
+    public String getFPayType() {
+        return this.FPayType;
+    }
+    public void setFPayType(String FPayType) {
+        this.FPayType = FPayType;
+    }
+    public String getFAcPrd() {
+        return this.FAcPrd;
+    }
+    public void setFAcPrd(String FAcPrd) {
+        this.FAcPrd = FAcPrd;
     }
 
 //    public String FName;

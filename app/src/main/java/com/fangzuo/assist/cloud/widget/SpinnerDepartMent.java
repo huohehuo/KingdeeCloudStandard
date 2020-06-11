@@ -229,7 +229,7 @@ public class SpinnerDepartMent extends RelativeLayout {
     public void setAutoSelection(String saveKeyStr,String string) {
         saveKeyString =saveKeyStr;
         autoString = string;
-        Lg.e("自动"+T+autoString);
+//        Lg.e("自动"+T+autoString);
         if ("".equals(string)){
             autoString = Hawk.get(saveKeyString,"");
         }
@@ -249,7 +249,7 @@ public class SpinnerDepartMent extends RelativeLayout {
 //        setAuto(saveKeyStr,autoStr,org,activityT);
 //    }
     public void setAuto(String saveKeyStr, String autoStr, Org org, int activityT) {
-        Lg.e("部门过滤",autoStr);
+//        Lg.e("部门过滤",autoStr);
         Id="";
         Name="";
         Number="";
@@ -276,7 +276,7 @@ public class SpinnerDepartMent extends RelativeLayout {
             @Override
             public void onNext(CommonResponse commonResponse) {
                 DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
-                Lg.e("下载的部门总数",dBean.department.size());
+//                Lg.e("下载的部门总数",dBean.department.size());
                 if (dBean.department.size() > 0 && container.size()<=0){
                     DepartmentDao yuandanTypeDao = daoSession.getDepartmentDao();
                     yuandanTypeDao.deleteAll();
@@ -309,10 +309,10 @@ public class SpinnerDepartMent extends RelativeLayout {
     private List<Department> getLocData(String org) {
         DepartmentDao employeeDao = daoSession.getDepartmentDao();
         List<Department> employees;
-        Lg.e("部门所属组织",org);
+//        Lg.e("部门所属组织",org);
         if (activity instanceof ProductInStoreActivity || activity instanceof ProductGetActivity){
-            Lg.e("属于：ProductInStoreActivity过滤："+org);
-            Lg.e("过滤",org);
+//            Lg.e("属于：ProductInStoreActivity过滤："+org);
+//            Lg.e("过滤",org);
             employees= employeeDao.queryBuilder().where(
                     DepartmentDao.Properties.FISSTOCK.eq("1"),
                     DepartmentDao.Properties.FOrg.eq(org)
@@ -329,7 +329,7 @@ public class SpinnerDepartMent extends RelativeLayout {
 
     private void dealAuto(List<Department> listData, boolean check) {
         container.clear();
-        Lg.e("得到部门"+listData.size()+check,listData);
+//        Lg.e("得到部门"+listData.size()+check,listData);
         if (check) {
             //当为生产单据时，过滤
             if (checkIfInOut(activityTag)) {
@@ -354,7 +354,7 @@ public class SpinnerDepartMent extends RelativeLayout {
         //处理不同单据的再过滤条件
         dealFilter();
 
-        Lg.e("sp过滤后部门"+container.size(),container);
+//        Lg.e("sp过滤后部门"+container.size(),container);
         if ("".equals(autoString)){
             autoString = Hawk.get(saveKeyString,"");
         }
@@ -420,10 +420,14 @@ public class SpinnerDepartMent extends RelativeLayout {
             case Config.Tb2DiGetActivity:
             case Config.Tb3HunInActivity:
             case Config.ZbCheJianDiZGetActivity:
+            case Config.ZbCheJianDiZGetCp1Activity:
+            case Config.ZbCheJianDiZGetCp2Activity:
             case Config.Tb3DiGetActivity:
             case Config.GbDiGetActivity:
             case Config.BoxReAddP2Activity:
             case Config.ZbCheJianDiGetActivity:
+            case Config.ZbCheJianDiGetCp1Activity:
+            case Config.ZbCheJianDiGetCp2Activity:
             case Config.Bg1CheJianHunInActivity:
             case Config.Bg1CheJianDiGetActivity:
             case Config.Bg1CheJianInActivity:
@@ -476,7 +480,11 @@ public class SpinnerDepartMent extends RelativeLayout {
             case Config.ChangeModelInActivity:
             case Config.SplitBoxInActivity:
             case Config.ZbCheJianInActivity:
+            case Config.ZbCheJianInCp1Activity:
+            case Config.ZbCheJianInCp2Activity:
             case Config.ZbCheJianHunInActivity:
+            case Config.ZbCheJianHunInCp1Activity:
+            case Config.ZbCheJianHunInCp2Activity:
             case Config.Bg2CheJianInActivity:
             case Config.CpWgHunInActivity:
             case Config.CpWgInActivity:
@@ -521,9 +529,17 @@ public class SpinnerDepartMent extends RelativeLayout {
                 }
                 break;
             case Config.ZbCheJianDiZGetActivity://纵刨车间-底领料(整包)
+            case Config.ZbCheJianDiZGetCp1Activity://纵刨车间-底领料(整包)
+            case Config.ZbCheJianDiZGetCp2Activity://纵刨车间-底领料(整包)
             case Config.ZbCheJianDiGetActivity://纵刨车间-底领料(混包)
+            case Config.ZbCheJianDiGetCp1Activity://纵刨车间-底领料(混包)
+            case Config.ZbCheJianDiGetCp2Activity://纵刨车间-底领料(混包)
             case Config.ZbCheJianHunInActivity://纵刨车间-混包入库
+            case Config.ZbCheJianHunInCp1Activity://纵刨车间-混包入库
+            case Config.ZbCheJianHunInCp2Activity://纵刨车间-混包入库
             case Config.ZbCheJianInActivity://纵刨车间-整包入库
+            case Config.ZbCheJianInCp1Activity://纵刨车间-整包入库
+            case Config.ZbCheJianInCp2Activity://纵刨车间-整包入库
                 for(int i = container.size()-1;i >= 0;i--) {
                     Department department = container.get(i);
                     if(!department.FName.contains("车间") && !department.FName.contains("部")) {

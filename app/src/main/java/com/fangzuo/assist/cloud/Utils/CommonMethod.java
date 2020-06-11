@@ -84,7 +84,7 @@ public class CommonMethod {
         final StorageSpAdapter storageSpAdapter = new StorageSpAdapter(context, container);
         sp.setAdapter(storageSpAdapter);
         if(share.getIsOL()){
-            Log.e("CommonMethod:","getStorageSpinner联网");
+//            Log.e("CommonMethod:","getStorageSpinner联网");
             ArrayList<Integer> choose = new ArrayList<>();
             choose.add(6);
             String json = JsonCreater.DownLoadData(
@@ -99,7 +99,7 @@ public class CommonMethod {
             Asynchttp.post(context,share.getBaseURL()+WebApi.DOWNLOADDATA, json, new Asynchttp.Response() {
                 @Override
                 public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
-                    Log.e("CommonMethod:","getStorageSpinner获得联网数据：\n"+cBean.returnJson);
+//                    Log.e("CommonMethod:","getStorageSpinner获得联网数据：\n"+cBean.returnJson);
                     DownloadReturnBean dBean = JsonCreater.gson.fromJson(cBean.returnJson, DownloadReturnBean.class);
                     container.addAll(dBean.storage);
                     storageSpAdapter.notifyDataSetChanged();
@@ -126,11 +126,11 @@ public class CommonMethod {
 //                }
 //            });
         }else{
-            Log.e("CommonMethod:","getStorageSpinner不-联网");
+//            Log.e("CommonMethod:","getStorageSpinner不-联网");
             StorageDao storageDao = daoSession.getStorageDao();
             List<Storage> storages = storageDao.loadAll();
             container.addAll(storages);
-            Log.e("CommonMethod","获取到本地数据：\n"+container.toString());
+//            Log.e("CommonMethod","获取到本地数据：\n"+container.toString());
             storageSpAdapter.notifyDataSetChanged();
         }
         return storageSpAdapter;
@@ -166,7 +166,7 @@ public class CommonMethod {
             Asynchttp.post(context,share.getBaseURL()+WebApi.DOWNLOADDATA, json, new Asynchttp.Response() {
                 @Override
                 public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
-                    Log.e("CommonMethod:","getSaleMethodSpinner获得联网数据：\n"+cBean.returnJson);
+//                    Log.e("CommonMethod:","getSaleMethodSpinner获得联网数据：\n"+cBean.returnJson);
                     DownloadReturnBean dBean = JsonCreater.gson.fromJson(cBean.returnJson, DownloadReturnBean.class);
                     PurchaseMethodDao purchaseMethodDao = daoSession.getPurchaseMethodDao();
                     purchaseMethodDao.deleteAll();
@@ -441,7 +441,7 @@ public class CommonMethod {
         final WaveHouseSpAdapter waveHouseSpAdapter = new WaveHouseSpAdapter(context, waveHouses);
         sp.setAdapter(waveHouseSpAdapter);
         if(share.getIsOL()){
-            Log.e("CommonMethod:","getWaveHouseAdapter联网");
+//            Log.e("CommonMethod:","getWaveHouseAdapter联网");
             ArrayList<Integer> choose = new ArrayList<>();
             choose.add(4);
             String json = JsonCreater.DownLoadData(
@@ -456,7 +456,7 @@ public class CommonMethod {
             Asynchttp.post(context,share.getBaseURL()+WebApi.DOWNLOADDATA, json, new Asynchttp.Response() {
                 @Override
                 public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
-                    Log.e("CommonMethod:","getWaveHouseAdapter获得数据：\n"+cBean.returnJson);
+//                    Log.e("CommonMethod:","getWaveHouseAdapter获得数据：\n"+cBean.returnJson);
 
                     DownloadReturnBean dBean = JsonCreater.gson.fromJson(cBean.returnJson, DownloadReturnBean.class);
                     WaveHouseDao wavehouseDao = daoSession.getWaveHouseDao();
@@ -478,7 +478,7 @@ public class CommonMethod {
                 }
             });
         }else{
-            Log.e("CommonMethod:","getWaveHouseAdapter-不-联网");
+//            Log.e("CommonMethod:","getWaveHouseAdapter-不-联网");
             WaveHouseDao wavehousedao = daoSession.getWaveHouseDao();
             List<WaveHouse> waveHouseList = wavehousedao.queryBuilder().where(
                 WaveHouseDao.Properties.FSPID.eq(storage.FIsOpenWaveHouse)
@@ -486,10 +486,10 @@ public class CommonMethod {
 //            waveHouseList.add(new WaveHouse());
             if (waveHouseList.size()>0){
                 waveHouses.addAll(waveHouseList);
-               Log.e("CommonMethod:","获取到本地数据waveHouse:"+waveHouseList.toString());
+//               Log.e("CommonMethod:","获取到本地数据waveHouse:"+waveHouseList.toString());
                 waveHouseSpAdapter.notifyDataSetChanged();
             }else{
-                Log.e("CommonMethod:","无数据：waveHouse:");
+//                Log.e("CommonMethod:","无数据：waveHouse:");
 
             }
         }
@@ -513,7 +513,7 @@ public class CommonMethod {
             Asynchttp.post(context,share.getBaseURL()+WebApi.DOWNLOADDATA, json, new Asynchttp.Response() {
                 @Override
                 public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
-                    Log.e("CommonMethod:","联网获取单位："+cBean.returnJson);
+//                    Log.e("CommonMethod:","联网获取单位："+cBean.returnJson);
                     DownloadReturnBean dBean = JsonCreater.gson.fromJson(cBean.returnJson, DownloadReturnBean.class);
                     if(dBean!=null&&dBean.units!=null&&dBean.units.size()>0){
                         UnitDao unitDao = daoSession.getUnitDao();
@@ -534,7 +534,7 @@ public class CommonMethod {
         List<Unit> units = unitDao.queryBuilder().where(
                 UnitDao.Properties.FMeasureUnitID.eq(groupid)
         ).build().list();
-        Log.e("CommonMethod:","本地获取单位："+units.toString());
+//        Log.e("CommonMethod:","本地获取单位："+units.toString());
         UnitSpAdapter unitSpAdapter = new UnitSpAdapter(context, units);
         sp.setAdapter(unitSpAdapter);
         unitSpAdapter.notifyDataSetChanged();

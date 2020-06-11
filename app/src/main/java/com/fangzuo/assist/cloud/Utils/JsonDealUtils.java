@@ -1160,6 +1160,8 @@ public class JsonDealUtils {
                 inObject.put("FDate",mains.get(i).FDate);
                 inObject.put("FNote",mains.get(i).FNot);
                 inObject.put("F_FFF_Text1",Hawk.get(Info.AutoLogin,""));
+                inObject.put("F_FFF_Integer",mains.get(i).FAcPrd);//20200506账期
+                inObject.put("F_FFF_Combo1",mains.get(i).FPayType);//20200506支付方式
                 JSONObject stockObject = new JSONObject();
                 addObject(stockObject,"FSettleCurrID","FNUMBER",mains.get(i).FSettleCurrId);
 //                addObject(stockObject,"FOwnerSupplierID","FNUMBER",mains.get(i).FOwnerIdHead);
@@ -2309,6 +2311,30 @@ public class JsonDealUtils {
 //            inObject.put("Numbers",array);
             inObject.put("Number",org);
 //            inObject.put("Ids",ids);
+//                inObject.put("InterationFlags","");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Lg.e("解析错误："+e.toString());
+        }
+        return inObject.toString();
+    }
+
+    public static String JSon_View(String org,String ids){
+        JSONObject inObject = new JSONObject();
+        try {
+//                String[] strings = new String[1];
+//                strings[0]=id;
+//            inObject.put("CreateOrgId",org);
+//            JSONArray array = new JSONArray();//Model
+//            for (String string:id) {
+//                array.put(string);
+//            }
+//            inObject.put("Numbers",array);
+//            inObject.put("Number",org);
+            inObject.put("FormId","BD_Empinfo");
+            inObject.put("FieldKeys","FName");
+//            inObject.put("Id",ids);
 //                inObject.put("InterationFlags","");
 
         } catch (JSONException e) {

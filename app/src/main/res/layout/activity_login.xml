@@ -176,6 +176,7 @@
 
         </LinearLayout>
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_vers_tip"
             android:textSize="13sp"
             android:textColor="#cc4040"

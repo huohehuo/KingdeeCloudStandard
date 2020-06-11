@@ -128,12 +128,12 @@ public class FragmentSaleOut4PDMain extends BaseFragment {
                 }
                 break;
             case EventBusInfoCode.Main_Note://带出表头的备注信息
-                if (edNot.getText().toString().equals("")){
+//                if (edNot.getText().toString().equals("")){
                     edNot.setText((String) event.postEvent);
                     Lg.e("得到表头备注"+(String) event.postEvent);
-                    Hawk.put(Config.Note + activityPager.getActivityMain(), edNot.getText().toString());//保存客户数据
+//                    Hawk.put(Config.Note + activityPager.getActivityMain(), edNot.getText().toString());//保存客户数据
                     activityPager.setNote(edNot == null ? "" : edNot.getText().toString());
-                }
+//                }
                 break;
         }
     }
@@ -201,16 +201,16 @@ public class FragmentSaleOut4PDMain extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        List<T_main> list =activityPager.getT_mainDao().queryBuilder().where(
-//                T_mainDao.Properties.FOrderId.eq(CommonUtil.createOrderCode(activityPager.getActivity())),
-                T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
-                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
-        ).build().list();
-        if (list.size()>0){
-            Lg.e("得到本地备注"+list.get(0).FNot);
-//            edFfOrder.setText(list.get(0).F_FFF_Text);
-            edNot.setText(list.get(0).FNot);
-        }
+//        List<T_main> list =activityPager.getT_mainDao().queryBuilder().where(
+////                T_mainDao.Properties.FOrderId.eq(CommonUtil.createOrderCode(activityPager.getActivity())),
+//                T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
+//                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+//        ).build().list();
+//        if (list.size()>0){
+//            Lg.e("得到本地备注"+list.get(0).FNot);
+////            edFfOrder.setText(list.get(0).F_FFF_Text);
+//            edNot.setText(list.get(0).FNot);
+//        }
     }
 
     //在oncreateView之前使用 不要使用控件

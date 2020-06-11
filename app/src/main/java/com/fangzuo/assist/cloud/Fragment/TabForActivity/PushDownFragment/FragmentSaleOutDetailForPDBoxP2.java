@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,11 +19,12 @@ import com.fangzuo.assist.cloud.ABase.BaseFragment;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
 import com.fangzuo.assist.cloud.Activity.PagerForActivity;
 import com.fangzuo.assist.cloud.Activity.PushDownPagerActivity;
-import com.fangzuo.assist.cloud.Activity.ReViewPDActivity;
+import com.fangzuo.assist.cloud.Activity.ReViewPD31Activity;
 import com.fangzuo.assist.cloud.Adapter.PushDownSubListAdapter;
 import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.CodeCheckBackDataBean;
 import com.fangzuo.assist.cloud.Beans.CodeCheckBean;
+import com.fangzuo.assist.cloud.Beans.CommonBean;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.DownloadReturnBean;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
@@ -86,7 +86,7 @@ import butterknife.Unbinder;
 
 
 //选择单据信息Fragment（所属：PushDownPagerActivity);
-public class FragmentSaleOutDetailForPD extends BaseFragment {
+public class FragmentSaleOutDetailForPDBoxP2 extends BaseFragment {
     @BindView(R.id.sl_all)
     ScrollView slAll;
     //    private int activity = Config.PdSaleOrder2SaleOutActivity;
@@ -134,6 +134,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
     private CodeCheckBackDataBean codeCheckBackDataBean;
     protected boolean isOpenBatch = false;
     private List<String> listOrder;
+    private List<CodeCheckBackDataBean> codeCheckBackDataBeanList;
     private Gson gson;
     private DaoSession daoSession;
     private T_mainDao t_mainDao;
@@ -171,14 +172,9 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                 break;
             case EventBusInfoCode.ScanResult:
                 BarcodeResult res = (BarcodeResult) event.postEvent;
-//                if (cbScaning.isChecked()) {
-//                } else {
                 mCaptureManager.onPause();
                 zxingBarcodeScanner.setVisibility(View.GONE);
-//                }
-
                 OnReceive(res.getResult().getText());
-//                Toast.showText(mContext, "扫描结果：" + res.getResult().getText());
                 break;
             case EventBusInfoCode.Product:
                 product = (Product) event.postEvent;
@@ -204,7 +200,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     for (int i = 0; i < mains.size(); i++) {
                         final int pos = i;
                         String reString = mains.get(i).FBillerID + "|" + listOrder.get(i) + "|" + mains.get(i).FOrderId + "|" + mains.get(i).IMIE;
-                        App.getRService().doIOAction(WebApi.SaleOutUpload, reString, new MySubscribe<CommonResponse>() {
+                        App.getRService().doIOAction(WebApi.SaleOutBoxUpload, reString, new MySubscribe<CommonResponse>() {
                             @Override
                             public void onNext(CommonResponse commonResponse) {
                                 super.onNext(commonResponse);
@@ -242,6 +238,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock+"NO"));//上传成功，解锁表头
                     Toast.showText(mContext, "上传成功");
                     DataModel.submitOnly(mContext,Config.PdSaleOrder2SaleOutActivity,listOrder,tag);
+//                    DataModel.submitAndAudit(mContext,Config.PdSaleOrder2SaleOutActivity,listOrder,tag);
 //                btnBackorder.setClickable(true);
                 } else {
                     LoadingUtil.dismiss();
@@ -258,7 +255,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     delete.setNegativeButton("反馈信息", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            DataService.pushBackJson(mContext, FragmentSaleOutDetailForPD.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
+                            DataService.pushBackJson(mContext, FragmentSaleOutDetailForPDBoxP2.this.getClass().getSimpleName(), Hawk.get(Config.Company,""));
                         }
                     });
                     delete.create().show();
@@ -284,6 +281,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     autoAuxSing = codeCheckBackDataBean.FAuxsign;
                     autoStorage = codeCheckBackDataBean.FStockID;
                     scanOfHuozhuNumber = codeCheckBackDataBean.FHuoZhuNumber;
+                    spUnit.setAuto(codeCheckBackDataBean.FUnitID, SpinnerUnit.Id);
                     LoadingUtil.showDialog(mContext, "正在查找物料信息");
                     DataModel.getProductForNumber(codeCheckBackDataBean.FItemID, activityPager.getOrgOut());
                 } else {
@@ -291,14 +289,58 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     Toast.showText(mContext, codeCheckBackDataBean.FTip);
                 }
                 break;
+            case EventBusInfoCode.Code_Check_Box://条码检测
+                LoadingUtil.dismiss();
+                codeCheckBackDataBeanList = (List<CodeCheckBackDataBean>) event.postEvent;
+                Lg.e("箱码条码检测返回：",codeCheckBackDataBeanList);
+                if (codeCheckBackDataBeanList.get(0).FTip.equals("OK")) {
+                    if (!activityPager.getOrgOut().FNumber.equals(codeCheckBackDataBeanList.get(0).FStoreOrgNumber)){
+                        LoadingUtil.showAlter(mContext,"提示","箱码的库存组织("+LocDataUtil.getOrg(codeCheckBackDataBeanList.get(0).FStoreOrgNumber,"number").FName+")与所选表头不一致,请重新选择");
+//                        Toast.showText(mContext,"条码的货主("+LocDataUtil.getOrg(wortPrintDataList.get(0).FOWNERID,"id").FName+")与所选表头不一致,请重新选择");
+                        return;
+                    }
+
+                    edPihao.setText(codeCheckBackDataBeanList.get(0).FBatchNo);
+//                    edPurchaseNo.setText(codeCheckBackDataBean.FPurchaseNo);
+                    edNum.setText(codeCheckBackDataBeanList.get(0).FQty);
+                    autoActualModel = codeCheckBackDataBeanList.get(0).FActualmodel;
+                    autoAuxSing = codeCheckBackDataBeanList.get(0).FAuxsign;
+                    autoStorage = codeCheckBackDataBeanList.get(0).FStorageNumber;
+                    scanOfHuozhuNumber = codeCheckBackDataBeanList.get(0).FHuoZhuNumber;
+                    spUnit.setAuto(codeCheckBackDataBeanList.get(0).FUnitNumber, SpinnerUnit.Number);
+                    spWhichStorage.setAuto("",autoStorage, activityPager.getOrgOut());
+                    getAutoSelection4Box(codeCheckBackDataBeanList);//得出列表存在的角标
+
+//                    LoadingUtil.showDialog(mContext, "正在查找物料信息");
+//                    DataModel.getProductForNumber(codeCheckBackDataBean.FItemID, activityPager.getOrgOut());
+                } else {
+                    StringBuilder builder = new StringBuilder();
+                    for (CodeCheckBackDataBean codeCheckBackDataBean : codeCheckBackDataBeanList) {
+                        builder.append(codeCheckBackDataBean.FTip + "\n");
+                    }
+                    AlertDialog.Builder delete = new AlertDialog.Builder(activityPager);
+                    delete.setTitle("箱码查询错误");
+                    delete.setMessage(builder.toString());
+                    delete.setPositiveButton("确定", null);
+                    delete.create().show();
+//                    activityPager.ReSetScan(cbScaning);
+//                    Toast.showText(mContext, codeCheckBackDataBeanList.get(0).FTip);
+                }
+                break;
             case EventBusInfoCode.Code_Only_Insert://写入条码唯一临时表
                 codeCheckBackDataBean = (CodeCheckBackDataBean) event.postEvent;
                 if (codeCheckBackDataBean.FTip.equals("OK")) {
-                    Addorder();
+                    if (barcode.startsWith("ZZ")){
+                        doAutoInput();
+                    }else{
+                        Addorder();
+                    }
                 } else {
                     Toast.showText(mContext, codeCheckBackDataBean.FTip);
+
                 }
                 break;
+
             case EventBusInfoCode.UpdataView://由表头的数据决定是否更新明细数据
                 if (null != activityPager) {
                     spUnit.setAuto("", SpinnerUnit.Id);
@@ -309,7 +351,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
         }
     }
 
-    public FragmentSaleOutDetailForPD() {
+    public FragmentSaleOutDetailForPDBoxP2() {
         // Required empty public constructor
     }
 
@@ -323,7 +365,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_saleoutdetail_forpd, container, false);
+        View view = inflater.inflate(R.layout.fragment_saleoutdetail_forpdboxp2, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getActivity();
         EventBusUtil.register(this);
@@ -383,12 +425,10 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                 T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
                 T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
         ).build().list();
-        Lg.e("查找本地备注");
         if (list.size()>0){
             Lg.e("由本地得到备注"+list.get(0).FNot);
             EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Main_Note, list.get(0).FNot));
         }
-
     }
 
     //在oncreateView之前使用 不要使用控件
@@ -412,9 +452,16 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
     protected void OnReceive(String code) {
         barcode = code;
         LoadingUtil.showDialog(mContext, "正在检测条码...");
-        //查询条码唯一表
-        CodeCheckBean bean = new CodeCheckBean(code);
-        DataModel.codeCheck(WebApi.CodeCheckForOut, gson.toJson(bean));
+        if (code.startsWith("ZZ")){
+            //查询条码唯一表
+            CodeCheckBean bean = new CodeCheckBean();
+            bean.FBillNo = code;bean.FTypeID="1";bean.FID = pushDownMain.FID;
+            DataModel.codeCheck4Box(WebApi.CodeCheckForOut4Box, gson.toJson(bean));
+        }else{
+            //查询条码唯一表
+            CodeCheckBean bean = new CodeCheckBean(code);
+            DataModel.codeCheck(WebApi.CodeCheckForOut, gson.toJson(bean));
+        }
     }
 
 
@@ -428,11 +475,11 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                 Lg.e("选中仓库：", storage);
                 waveHouse = null;
                 spWavehouse.setAuto(mContext, storage, "");
-                if (activityPager.getActivity()==Config.PdSaleOrder2SaleOutActivity){//非VMI销售订单下推时，货主类型为业务组织，VMI时，为供应商，则查询库存方式不同，查的是供应商表
+//                if (activityPager.getActivity()==Config.PdSaleOrder2SaleOutActivity){//非VMI销售订单下推时，货主类型为业务组织，VMI时，为供应商，则查询库存方式不同，查的是供应商表
                     DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),LocDataUtil.getOrg(scanOfHuozhuNumber,"number"));
-                }else{
-                    DataModel.getStoreNum4SaleOrder2SaleOut(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,pushDownMain.FBillTypeName,activityPager.getOrgOut(),scanOfHuozhuNumber);
-                }
+//                }else{
+//                    DataModel.getStoreNum4SaleOrder2SaleOut(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,pushDownMain.FBillTypeName,activityPager.getOrgOut(),scanOfHuozhuNumber);
+//                }
 
             }
         });
@@ -450,6 +497,63 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             }
         });
 
+        lvPushsub.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+//                Lg.e("被点击");//可拦截列表点击事件
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Lg.e("点击");
+                        y1 = event.getY();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Lg.e("点击up");
+                        y2 = event.getY();
+                        Lg.e("得到坐标y1",y1);
+                        Lg.e("得到坐标y2",y2);
+                        Lg.e("得到坐标y22",y1-y2);
+                        if ( (y1-y2)>150){
+//                            int first = lvPushsub.getFirstVisiblePosition();
+                            int toselec;
+                            if (pos>=pushDownSubListAdapter.getCount()){
+                                toselec = pos-1;
+                            }else{
+                                pos++;
+                                toselec = pos;
+                            }
+                            Lg.e("相比负数："+pos);
+                            Lg.e("相比负数："+toselec);
+                            lvPushsub.setSelection(toselec);
+                        }else if ((y1-y2)<0){
+//                            int first = lvPushsub.getFirstVisiblePosition();
+                            int toselec;
+                            if (pos>0){
+                                pos--;
+                                toselec = pos;
+                            }else{
+                                toselec = pos;
+                            }
+                            Lg.e("相比正数："+pos);
+                            Lg.e("相比正数："+toselec);
+                            lvPushsub.setSelection(toselec);
+                        }
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+//                        if (event.getPointerCount() >= 2){
+//                            float offsetX = event.getX(0) - event.getX(1);//监听手机的PointerCount数量大于2时，获得两个点的坐标
+//                            float offsetY = event.getY(0) - event.getY(1);
+//                            Lg.e(">15");
+//                        }else{
+//                            Lg.e("<2");
+//
+//                        }
+//                        Lg.e("点击move");
+                        break;
+                }
+                return true;
+            }
+        });
+
         lvPushsub.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -464,10 +568,9 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                             super.onNext(commonResponse);
                             if (!commonResponse.state) return;
                             final DownloadReturnBean dBean = new Gson().fromJson(commonResponse.returnJson, DownloadReturnBean.class);
-                            Log.e("product.size", dBean.products.size() + "");
                             if (dBean.products.size() > 0) {
+                                Lg.e("product.size"+dBean.products.size(), dBean.products);
                                 product = dBean.products.get(0);
-                                Log.e("product.size", product + "");
                                 dealProduct();
                             } else {
                                 Toast.showText(mContext, "找不到物料数据");
@@ -480,50 +583,14 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                             Toast.showText(mContext, "列表物料:" + e.toString());
                         }
                     });
-//                    Asynchttp.post(mContext, getBaseUrl() + WebApi.S2Product, gson.toJson(new SearchBean(SearchBean.product_for_id,gson.toJson(s2Product))), new Asynchttp.Response() {
-//                        @Override
-//                        public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
-//                            final DownloadReturnBean dBean = new Gson().fromJson(cBean.returnJson, DownloadReturnBean.class);
-//                            Log.e("product.size", dBean.products.size() + "");
-//                            if (dBean.products.size() > 0) {
-//                                product = dBean.products.get(0);
-//                                Log.e("product.size", product + "");
-//                                dealProduct();
-//                            }else{
-//                                Toast.showText(mContext,"找不到物料数据");
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailed(String Msg, AsyncHttpClient client) {
-//                            Toast.showText(mContext, "列表物料:" + Msg);
-//                        }
-//                    });
                 }
-//                else {
-//                    ProductDao productDao = daoSession.getProductDao();
-//                    List<Product> products = productDao.queryBuilder().where(ProductDao.Properties.FMaterialid.eq(pushDownSub.FMaterialID)).build().list();
-//                    if (products.size() > 0) {
-//                        product = products.get(0);
-//                        dealProduct();
-//                    }else{
-//                        Toast.showText(mContext,"找不到物料数据");
-//                    }
-//                }
 
             }
         });
-//        lvPushsub.setOnTouchListener(new View.OnTouchListener() {
-//
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_MOVE) {
-//                    slAll.requestDisallowInterceptTouchEvent(true);
-//                }
-//                return false;
-//            }
-//        });
-
     }
+    private float y1;
+    private float y2;
+    private int pos=0;
 
     private void getList() {
         container.clear();
@@ -544,7 +611,51 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             Toast.showText(mContext, getString(R.string.find_nothing));
         }
     }
+    //箱码返回数据时
+    List<CommonBean> listSelection;//自动添加的列表数据
+    private int autoSize=0;//得到自动添加的角标数据的数量
+    private void getAutoSelection4Box(List<CodeCheckBackDataBean> list) {
+        listSelection = new ArrayList<>();
+        autoSize=0;
+        if (list != null) {
+            for (int j = 0; j < pushDownSubListAdapter.getCount(); j++) {
+                PushDownSub pushDownSub1 = (PushDownSub) pushDownSubListAdapter.getItem(j);
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).FNumber.equals(pushDownSub1.FNumber)){
+                        //存入与箱码相对应的列表数据：角标和数量
+                        listSelection.add(new CommonBean(j+"",list.get(i).FQty,true));
+                        autoSize++;
+                    }
+                }
+            }
+        } else {
+            Toast.showText(mContext, "箱码查询的信息为空");
+        }
+        checkBeforeAdd();
+    }
+    //根据自动添加的列表数据，自动点击列表添加数据
+    private CommonBean commonBean;
+    private void doAutoInput(){
+        Lg.e("doAutoInput",listSelection);
+        LoadingUtil.showDialog(mContext,"正在添加箱码数据");
+        if (listSelection.size()>0){
+            //        while (listSelection.size()>0){
+            commonBean = listSelection.get(0);
+            edNum.setText(commonBean.FStandby2);
+            int i= Integer.parseInt(commonBean.FStandby1);
+            lvPushsub.setSelection(i);
+            lvPushsub.performItemClick(lvPushsub.getChildAt(i), i, lvPushsub.getItemIdAtPosition(i));
+//        }
+        }else{
+            edPihao.setText("");
+            barcode="";
+            LoadingUtil.dismiss();
+            Toast.showText(mContext,"箱码数据添加完成");
+        }
 
+    }
+
+    //条码唯一时
     private void setProduct(Product product) {
         if (product != null) {
             boolean flag = true;
@@ -555,7 +666,6 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
 //                        flag = true;
 //                        continue;
 //                    } else {
-
 
                     /*判断条码带出在辅助标识是否为空，不为空就判断，接着判断单位；否则直接判断单位*/
                     if (null!=autoAuxSing && !"".equals(autoAuxSing)){
@@ -629,7 +739,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
         tvModel.setText(product.FModel);
         tvCode.setText(product.FNumber);
         //带出物料的默认值
-        spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
+//        spUnit.setAuto(product.FPurchaseUnitID, SpinnerUnit.Id);
 //        if (activityPager.isStorage()) {
 //            spWhichStorage.setAutoSelection("", product.FStockID);
         spWhichStorage.setAuto("",autoStorage, activityPager.getOrgOut());
@@ -642,28 +752,31 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             edPihao.setText("");
             isOpenBatch = false;
         }
-        if (activityPager.getActivity()==Config.PdSaleOrder2SaleOutActivity){//非VMI销售订单下推时，货主类型为业务组织，VMI时，为供应商，则查询库存方式不同，查的是供应商表
+//        if (activityPager.getActivity()==Config.PdSaleOrder2SaleOutActivity){//非VMI销售订单下推时，货主类型为业务组织，VMI时，为供应商，则查询库存方式不同，查的是供应商表
             DataModel.getStoreNum(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,activityPager.getOrgOut(),LocDataUtil.getOrg(scanOfHuozhuNumber,"number"));
-        }else{
-            DataModel.getStoreNum4SaleOrder2SaleOut(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,pushDownMain.FBillTypeName,activityPager.getOrgOut(),scanOfHuozhuNumber);
-        }
+//        }else{
+//            DataModel.getStoreNum4SaleOrder2SaleOut(product, storage, edPihao.getText().toString().trim(), mContext, tvStorenum,pushDownMain.FBillTypeName,activityPager.getOrgOut(),scanOfHuozhuNumber);
+//        }
 
         spAuxsign.getData(product.FMASTERID, autoAuxSing);
         spActualmodel.getData(product.FMASTERID, autoActualModel);
 
-        //自动添加
-        if (activityPager.getIsAuto().isChecked()) {
-            if (!checkBeforeAdd()) {
-//                activityPager.ReSetScan(cbScaning);
-            }
-        } else {
-//            activityPager.ReSetScan(cbScaning);
+//        //自动添加
+//        if (activityPager.getIsAuto().isChecked()) {
+//            if (!checkBeforeAdd()) {
+////                activityPager.ReSetScan(cbScaning);
+//            }
+//        } else {
+////            activityPager.ReSetScan(cbScaning);
+//        }
+        if (barcode.startsWith("ZZ")){
+            Addorder();
         }
     }
 
     //添加前检测
     private boolean checkBeforeAdd() {
-        if (product == null) {
+        if (!barcode.startsWith("ZZ") &&product == null) {
             Toast.showText(mContext, "请选择物料");
             MediaPlayer.getInstance(mContext).error();
             return false;
@@ -678,7 +791,12 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             MediaPlayer.getInstance(mContext).error();
             return false;
         }
-        if (pushDownSub == null) {
+        if (edPihao.getText().toString().equals("")) {
+            Toast.showText(mContext, "批号不能为空");
+            MediaPlayer.getInstance(mContext).error();
+            return false;
+        }
+        if (!barcode.startsWith("ZZ") &&pushDownSub == null) {
             Toast.showText(mContext, "请重新扫码");
             MediaPlayer.getInstance(mContext).error();
             return false;
@@ -706,21 +824,29 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
 //            Toast.showText(mContext, "大兄弟,您的数量超过我的想象");
 //            return false;
 //        }
-        if (MathUtil.toD(edNum.getText().toString())>MathUtil.toD(tvStorenum.getText().toString())){
+        if (!barcode.startsWith("ZZ") && MathUtil.toD(edNum.getText().toString())>MathUtil.toD(tvStorenum.getText().toString())){
             MediaPlayer.getInstance(mContext).error();
             Toast.showText(mContext, "添加数不能超过库存数");
             return false;
         }
-        if (edNum.getText().toString().trim().equals("") || "0".equals(edNum.getText().toString())) {
+        if (!barcode.startsWith("ZZ") && edNum.getText().toString().trim().equals("") || "0".equals(edNum.getText().toString())) {
             Toast.showText(mContext, "请输入数量");
             MediaPlayer.getInstance(mContext).error();
             return false;
         }//--------------------------------------------------
         ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+pushDownMain.FID+scanOfHuozhuNumber);//单据编号
 
-        //插入条码唯一临时表
-        CodeCheckBean bean = new CodeCheckBean(barcode, ordercode + "", edNum.getText().toString(), BasicShareUtil.getInstance(mContext).getIMIE());
-        DataModel.codeOnlyInsert(WebApi.CodeCheckInsertForOut, gson.toJson(bean));
+        if (!barcode.startsWith("ZZ")){
+            //插入条码唯一临时表
+            CodeCheckBean bean = new CodeCheckBean(barcode, ordercode + "", edNum.getText().toString(), BasicShareUtil.getInstance(mContext).getIMIE());
+            DataModel.codeOnlyInsert(WebApi.CodeCheckInsertForOut, gson.toJson(bean));
+        }else{
+            CodeCheckBean bean = new CodeCheckBean();
+            bean.FOrderID = ordercode+"";
+            bean.FPDAID = BasicShareUtil.getInstance(mContext).getIMIE();
+            bean.FBarCode = barcode;
+            DataModel.codeOnlyInsert(WebApi.CodeCheckInsertForOutBox, gson.toJson(bean));
+        }
 //        Addorder();
         return true;
     }
@@ -778,11 +904,8 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
             main.FNot = activityPager.getNote();
             main.FCustomerID = pushDownMain.FSupplyID;
             main.F_FFF_Text = activityPager.getFOrderNo();
-            main.F_FFF_Text = activityPager.getFOrderNo();
             main.FFieldMan = pushDownMain.FFieldMan;
-            main.FAcPrd = pushDownMain.FAcPrd;
-            main.FPayType = pushDownMain.FPayType;
-            //            main.setClient(activityPager.getClient());
+//            main.setClient(activityPager.getClient());
             long insert1 = t_mainDao.insert(main);
 
 
@@ -820,9 +943,29 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                 pushDownSubListAdapter.notifyDataSetChanged();
                 Lg.e("成功添加表头：" ,main);
                 Lg.e("成功添加明细：" ,detail);
-                MediaPlayer.getInstance(mContext).ok();
-                Toast.showText(mContext, "添加成功");
-                resetAll();
+                if (barcode.startsWith("ZZ")){
+                    if (listSelection.size()>0){
+                        product = null;
+                        pushDownSub = null;
+                        edNum.setText("");
+                        listSelection.remove(commonBean);
+                        doAutoInput();
+                        EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
+                    }else{
+                        product = null;
+                        pushDownSub = null;
+                        barcode = "";
+                        edPihao.setText("");
+                        edNum.setText("");
+                        MediaPlayer.getInstance(mContext).ok();
+                        Toast.showText(mContext, "箱码数据添加成功");
+                    }
+                }else{
+                    MediaPlayer.getInstance(mContext).ok();
+                    Toast.showText(mContext, "添加成功");
+                    resetAll();
+                }
+
             } else {
                 MediaPlayer.getInstance(mContext).error();
                 Toast.showText(mContext, "添加失败，请重试");
@@ -846,25 +989,7 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
         EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Lock_Main, Config.Lock));
     }
 
-    //执行完单，PDA单据编号+1
-    public void finishOrder() {
-//        AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
-//        ab.setTitle("确认使用完单");
-//        ab.setMessage("确认？");
-//        ab.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                ordercode++;
-//                Log.e("ordercode", ordercode + "");
-//                share.setOrderCode(activityPager.getActivity()+fidcontainer.get(0), ordercode);
-//            }
-//        });
-//        ab.setNegativeButton("取消", null);
-//        ab.create().show();
-
-    }
-
-    @OnClick({R.id.search, R.id.btn_add, R.id.btn_finishorder, R.id.btn_backorder, R.id.btn_checkorder})
+    @OnClick({R.id.search, R.id.btn_add, R.id.btn_backorder, R.id.btn_checkorder})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.search:
@@ -876,13 +1001,6 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                     zxingBarcodeScanner.setVisibility(View.VISIBLE);
                     mCaptureManager.decode();
                 }
-
-//                Bundle bundle1 = new Bundle();
-//                bundle1.putString("search", "");
-//                bundle1.putInt("where", Info.SEARCHPRODUCT);
-//                bundle1.putString("org", activityPager.getOrgOut(1));
-//                bundle1.putInt("activity", activity);
-//                startNewActivityForResult(activityPager, ProductSearchActivity.class, R.anim.activity_open, 0, Info.SEARCHFORRESULT, bundle1);
                 break;
             case R.id.btn_add:
                 checkBeforeAdd();
@@ -899,14 +1017,11 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
                         })
                         .create().show();
                 break;
-            case R.id.btn_finishorder:
-                finishOrder();
-                break;
             case R.id.btn_checkorder:
                 Bundle bundle = new Bundle();
                 bundle.putString("fid", pushDownMain==null?"":pushDownMain.FID);
                 bundle.putInt("activity", activity);
-                startNewActivity(activityPager, ReViewPDActivity.class,
+                startNewActivity(activityPager, ReViewPD31Activity.class,
                         R.anim.activity_fade_in, R.anim.activity_fade_out, false, bundle);
                 break;
         }
@@ -925,28 +1040,28 @@ public class FragmentSaleOutDetailForPD extends BaseFragment {
     public void onStart() {
         super.onStart();
         //执行该方法时，Fragment由不可见变为可见状态。
-//        Lg.e("onStart");
+        Lg.e("onStart");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         //执行该方法时，Fragment处于暂停状态，但依然可见，用户不能与之交互
-//        Lg.e("onPause");
+        Lg.e("onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
         //执行该方法时，Fragment完全不可见。
-//        Lg.e("onStop");
+        Lg.e("onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         //销毁Fragment。通常按Back键退出或者Fragment被回收时调用此方法
-//        Lg.e("onDestroy");
+        Lg.e("onDestroy");
 //        mCaptureManager.onDestroy();
         try {
             EventBusUtil.unregister(this);

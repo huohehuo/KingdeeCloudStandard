@@ -99,6 +99,8 @@ public class    T_main {
     public String FStr5;
 
     public String FFieldMan;
+    public String FPayType;
+    public String FAcPrd;
 
     public void setStorageOut(Storage storage){
         if (null==storage){
@@ -115,7 +117,7 @@ public class    T_main {
         this.FStorageIn= storage.FName;
     }
 
-    @Generated(hash = 1718949020)
+    @Generated(hash = 2061891121)
     public T_main(String FIndex, long FOrderId, String FAccountID, String FBarcode, String IMIE, String FBillNo, String FBillerID, int activity,
             String FSoorDerno, String FPriceTimePoint, String FStockOrgId, String FPurchaseOrgId, String FBillTypeID, String FOwnerTypeIdHead,
             String FOwnerIdHead, String FOwnerIdHeadNote, String FHuozhuId, String FOrgId, String FOwnerTypeIdHeadIn, String FOwnerIdHeadIn,
@@ -126,7 +128,7 @@ public class    T_main {
             String FBoxCode, String FBatch, long FBoxCodeOrder, String FStorageOutId, String FStorageOut, String FStorageInId,
             String FStorageIn, String FWaveHouseOutId, String FWaveHouseOut, String FWaveHouseInId, String FWaveHouseIn, String FWlCompany,
             String FCarBoxNo, String FPassNo, String FFreight, String FYaoNo, String FBaoNum, int FIsInBox, String FStr1, String FStr2,
-            String FStr3, String FStr4, String FStr5, String FFieldMan) {
+            String FStr3, String FStr4, String FStr5, String FFieldMan, String FPayType, String FAcPrd) {
         this.FIndex = FIndex;
         this.FOrderId = FOrderId;
         this.FAccountID = FAccountID;
@@ -198,6 +200,8 @@ public class    T_main {
         this.FStr4 = FStr4;
         this.FStr5 = FStr5;
         this.FFieldMan = FFieldMan;
+        this.FPayType = FPayType;
+        this.FAcPrd = FAcPrd;
     }
     public void setData(String FBillTypeID,String FStockOrgId,String FPurchaseOrgId){
         this.FPriceTimePoint = "";//定价时点
@@ -745,5 +749,17 @@ public class    T_main {
     }
     public void setFFieldMan(String FFieldMan) {
         this.FFieldMan = FFieldMan;
+    }
+    public String getFPayType() {
+        return this.FPayType;
+    }
+    public void setFPayType(String FPayType) {
+        this.FPayType = FPayType;
+    }
+    public String getFAcPrd() {
+        return this.FAcPrd;
+    }
+    public void setFAcPrd(String FAcPrd) {
+        this.FAcPrd = FAcPrd;
     }
 }

@@ -428,7 +428,8 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
 //        ordercode = CommonUtil.createOrderCode(activityPager.getActivity()+fidcontainer.get(0));//单据编号
         getList();
         List<PushDownMain> pushDownMains = pushDownMainDao.queryBuilder().where(
-                PushDownMainDao.Properties.FBillNo.eq(fidcontainer.get(0))).build().list();
+                PushDownMainDao.Properties.FBillNo.eq(fidcontainer.get(0))
+        ).build().list();
         if (pushDownMains.size() > 0) {
             Lg.e("表头：", pushDownMains.get(0));
             pushDownMain = pushDownMains.get(0);
@@ -456,6 +457,16 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
 //            Toast.showText(mContext, "表头数据获取失败");
         }
 
+        //如果本地存在该单据表头，则覆盖main中的备注
+        List<T_main> list =activityPager.getT_mainDao().queryBuilder().where(
+                T_mainDao.Properties.FBillNo.eq(pushDownMain.FBillNo),
+                T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
+                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+        ).build().list();
+        if (list.size()>0){
+            Lg.e("由本地得到备注"+list.get(0).FNot);
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Main_Note, list.get(0).FNot));
+        }
     }
 
     //在oncreateView之前使用 不要使用控件
@@ -577,7 +588,9 @@ public class FragmentBackMsg2SaleBackDetail extends BaseFragment {
         pushDownMainDao = daoSession.getPushDownMainDao();
         for (int i = 0; i < fidcontainer.size(); i++) {
             List<PushDownSub> list = pushDownSubDao.queryBuilder().where(
-                    PushDownSubDao.Properties.FBillNo.eq(fidcontainer.get(i))).build().list();
+                    PushDownSubDao.Properties.FBillNo.eq(fidcontainer.get(i)),
+                    PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+            ).build().list();
             container.addAll(list);
         }
         if (container.size() > 0) {

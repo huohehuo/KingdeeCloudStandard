@@ -152,7 +152,7 @@ public class SpinnerUnit extends RelativeLayout {
         unitName = "";
         unitNumber = "";
 //        final String UnitGroupID;
-        Lg.e(TGP+"setAuto:" + autoStr);
+//        Lg.e(TGP+"setAuto:" + autoStr);
 //        if (null==unitGroupIDTemp || "".equals(unitGroupIDTemp)){
 //            UnitGroupID = "";
 //            Lg.e("单位组不存在");
@@ -180,7 +180,7 @@ public class SpinnerUnit extends RelativeLayout {
             Asynchttp.post(context, share.getBaseURL() + WebApi.DOWNLOADDATA, json, new Asynchttp.Response() {
                 @Override
                 public void onSucceed(CommonResponse cBean, AsyncHttpClient client) {
-                    Lg.e("网络获得单位：",cBean);
+//                    Lg.e("网络获得单位：",cBean);
                     DownloadReturnBean dBean = JsonCreater.gson.fromJson(cBean.returnJson, DownloadReturnBean.class);
                     if (dBean != null && dBean.units != null && dBean.units.size() > 0) {
                         UnitDao unitDao = daoSession.getUnitDao();
@@ -211,11 +211,11 @@ public class SpinnerUnit extends RelativeLayout {
         unitName = "";
         unitNumber = "";
         thisunit = null;
-        Lg.e(TGP+"setAuto:" + autoStr);
+//        Lg.e(TGP+"setAuto:" + autoStr);
         autoString = autoStr;
 //        autoOrg = org==null?"":org.FOrgID;
         final List<Unit> listTemp =getLocData();
-        Lg.e("单位本地过滤：",listTemp);
+//        Lg.e("单位本地过滤：",listTemp);
         dealAuto(listTemp,type,false);
 
 //        if (share.getIsOL()) {
@@ -233,7 +233,7 @@ public class SpinnerUnit extends RelativeLayout {
         App.getRService().downloadData(json, new MySubscribe<CommonResponse>() {
             @Override
             public void onNext(CommonResponse commonResponse) {
-                Lg.e("网络获得单位：",commonResponse);
+//                Lg.e("网络获得单位：",commonResponse);
                 DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
                 if (dBean != null && dBean.units != null && dBean.units.size() > 0) {
                     UnitDao unitDao = daoSession.getUnitDao();

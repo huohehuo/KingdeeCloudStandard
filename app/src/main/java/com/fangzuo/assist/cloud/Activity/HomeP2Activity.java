@@ -315,6 +315,9 @@ public class  HomeP2Activity extends BaseActivity {
             case Config.ProductGet4BoxP2Activity://码拍领料
                 PagerForActivity.start(mContext, Config.ProductGet4BoxP2Activity);
                 break;
+            case Config.CpFloorOutActivity://成品地板出库单
+                PagerForActivity.start(mContext, Config.CpFloorOutActivity);
+                break;
             case Config.BoxReAddP2Activity://混包新增
                 PagerForActivity.start(mContext, Config.BoxReAddP2Activity);
                 break;

@@ -118,11 +118,11 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
                 }
                 break;
             case EventBusInfoCode.Main_Note://带出表头的备注信息
-                if (edNot.getText().toString().equals("")){
+//                if (edNot.getText().toString().equals("")){
                     edNot.setText((String) event.postEvent);
 //                    Hawk.put(Config.Note + activityPager.getActivityMain(), edNot.getText().toString());//保存客户数据
                     activityPager.setNote(edNot == null ? "" : edNot.getText().toString());
-                }
+//                }
                 break;
         }
     }
@@ -187,15 +187,15 @@ public class FragmentBackMsg2SaleBackMain extends BaseFragment {
 //        spSaleman.setAuto(getString(R.string.spSaleman_so), "", activityPager.getOrgOut());
 //        cbIsStorage.setChecked(Hawk.get(Info.Storage + activityPager.getActivity(), false));
 
-        List<T_main> list =activityPager.getT_mainDao().queryBuilder().where(
-//                T_mainDao.Properties.FOrderId.eq(CommonUtil.createOrderCode(activityPager.getActivity())),
-                T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
-                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
-        ).build().list();
-        if (list.size()>0){
-//            edFfOrder.setText(list.get(0).F_FFF_Text);
-            edNot.setText(list.get(0).FNot);
-        }
+//        List<T_main> list =activityPager.getT_mainDao().queryBuilder().where(
+////                T_mainDao.Properties.FOrderId.eq(CommonUtil.createOrderCode(activityPager.getActivity())),
+//                T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
+//                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+//        ).build().list();
+//        if (list.size()>0){
+////            edFfOrder.setText(list.get(0).F_FFF_Text);
+//            edNot.setText(list.get(0).FNot);
+//        }
     }
 
     //在oncreateView之前使用 不要使用控件

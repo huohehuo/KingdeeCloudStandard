@@ -136,7 +136,7 @@ public class ChooseFragment extends BaseFragment {
     @Override
     protected void initView() {
         isCheck = new ArrayList<>();
-        downloadIDs = new ArrayList<PushDownMain>();
+        downloadIDs = new ArrayList<>();
         container = new ArrayList<>();
         daosession = GreenDaoManager.getmInstance(mContext).getDaoSession();
 //        if (tag == 1) {
@@ -608,6 +608,7 @@ public class ChooseFragment extends BaseFragment {
 
     //查找本地数据
     private void Search() {
+        downloadIDs = new ArrayList<>();
 //        if (tag == 1) {
 //            //供应商信息绑定
 //            supplierID=spSupplier.getDataId();

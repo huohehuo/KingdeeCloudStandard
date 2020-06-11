@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.fangzuo.assist.cloud.ABase.BaseActivity;
 import com.fangzuo.assist.cloud.Activity.Crash.App;
+import com.fangzuo.assist.cloud.Beans.BackData;
 import com.fangzuo.assist.cloud.Beans.BackDataLogin;
 import com.fangzuo.assist.cloud.Beans.CommonResponse;
 import com.fangzuo.assist.cloud.Beans.EventBusEvent.ClassEvent;
@@ -40,6 +41,7 @@ import com.fangzuo.assist.cloud.Utils.CommonUtil;
 import com.fangzuo.assist.cloud.Utils.Config;
 import com.fangzuo.assist.cloud.Utils.EventBusInfoCode;
 import com.fangzuo.assist.cloud.Utils.Info;
+import com.fangzuo.assist.cloud.Utils.JsonDealUtils;
 import com.fangzuo.assist.cloud.Utils.Lg;
 import com.fangzuo.assist.cloud.Utils.MathUtil;
 import com.fangzuo.assist.cloud.Utils.RegisterUtil;
@@ -156,7 +158,7 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
         initBar();
         share = BasicShareUtil.getInstance(mContext);
         userDao = daoSession.getUserDao();
-        Hawk.put(Config.PDA_Project_Type, "2");//确定一期/二期项目;确定之后，将决定apk和版本号的下载地址，版本号
+        Hawk.put(Config.PDA_Project_Type, "1");//确定一期/二期项目;确定之后，将决定apk和版本号的下载地址，版本号
         getPermisssion();
 //        mTvVersion.setText("Cloud Ver:" + CommonUtil.getVersionName());
         mTvVersion.setText("Cloud Ver:" + Info.getAppNo());
@@ -226,43 +228,29 @@ public class LoginActivity extends BaseActivity implements EasyPermissions.Permi
                         Info.getAppNo(),getTimeLong(true))));
 //        Lg.e("本地版本号：",Info.TestNo);
 //        Lg.e("网络版本号：",Hawk.get(Config.Apk_Version, ""));
-        //若网络版本比本地版本高，提示新版本
-//        if (!"".equals(Hawk.get(Config.Apk_Version, ""))) {
-//            if (Double.parseDouble(Hawk.get(Config.Apk_Version, "0")) > Double.parseDouble(Info.getAppNo())) {
-//                tvVersTip.setVisibility(View.VISIBLE);
-//                tvVersTip.setText("有新版本"+Hawk.get(Config.Apk_Version,"0")+"，点击这里进行更新");
-//                //发送更新提示广播
-//                Intent intent = new Intent("com.fangzuo.version");
-//                intent.putExtra("version",Hawk.get(Config.Apk_Version,"0"));
-//                sendBroadcast(intent);
-//                new AlertDialog.Builder(mContext)
-//                        .setTitle("更新版本")
-//                        .setMessage("请确保本地数据已完全上传后,及时进行程序更新,避免影响做单")
-//                        .setPositiveButton("下载并更新", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                DownLoad(Config.getApk_Url());
-//                            }
-//                        })
-//                        .setNeutralButton("取消", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                Toast.showText(mContext,"请及时更新程序，避免影响做单");
-//                            }
-//                        })
-//                        .create().show();
-//            }else{
-//                tvVersTip.setVisibility(View.GONE);
-//            }
-//        }else{
-//            Lg.e("kong");
-//        }
+
 //        Lg.e("加密",DesUtils.base64Encrypt("123"));
 //        Lg.e("解密",DesUtils.base64Decode(DesUtils.base64Encrypt("123")));
 
 //Lg.e("精度",DoubleUtil.CutTo0("6.457"));
 //Lg.e("精度",DoubleUtil.CutTo0("6.44"));
 //Lg.e("精度",DoubleUtil.CutTo0("6.95"));
+
+//        String json = Info.getJson(JsonDealUtils.JSon_View("1","1"));//XSDD005287
+////        String json = JsonDealUtils.JSon_View("1","1");//XSDD005287
+//        App.CloudService().doIOAction(Config.C_Search, json, new ToSubscribe<BackData>() {
+//            @Override
+//            public void onNext(BackData backData) {
+//                super.onNext(backData);
+//                Lg.e("返回数据：",backData);
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                super.onError(e);
+//            }
+//        });
+
 
 
 

@@ -129,6 +129,8 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
         public final static Property FStr3 = new Property(102, String.class, "FStr3", false, "FSTR3");
         public final static Property FStr4 = new Property(103, String.class, "FStr4", false, "FSTR4");
         public final static Property FStr5 = new Property(104, String.class, "FStr5", false, "FSTR5");
+        public final static Property FPayType = new Property(105, String.class, "FPayType", false, "FPAY_TYPE");
+        public final static Property FAcPrd = new Property(106, String.class, "FAcPrd", false, "FAC_PRD");
     }
 
 
@@ -248,7 +250,9 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
                 "\"FSTR2\" TEXT," + // 101: FStr2
                 "\"FSTR3\" TEXT," + // 102: FStr3
                 "\"FSTR4\" TEXT," + // 103: FStr4
-                "\"FSTR5\" TEXT);"); // 104: FStr5
+                "\"FSTR5\" TEXT," + // 104: FStr5
+                "\"FPAY_TYPE\" TEXT," + // 105: FPayType
+                "\"FAC_PRD\" TEXT);"); // 106: FAcPrd
     }
 
     /** Drops the underlying database table. */
@@ -757,6 +761,16 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
         if (FStr5 != null) {
             stmt.bindString(105, FStr5);
         }
+ 
+        String FPayType = entity.getFPayType();
+        if (FPayType != null) {
+            stmt.bindString(106, FPayType);
+        }
+ 
+        String FAcPrd = entity.getFAcPrd();
+        if (FAcPrd != null) {
+            stmt.bindString(107, FAcPrd);
+        }
     }
 
     @Override
@@ -1259,6 +1273,16 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
         if (FStr5 != null) {
             stmt.bindString(105, FStr5);
         }
+ 
+        String FPayType = entity.getFPayType();
+        if (FPayType != null) {
+            stmt.bindString(106, FPayType);
+        }
+ 
+        String FAcPrd = entity.getFAcPrd();
+        if (FAcPrd != null) {
+            stmt.bindString(107, FAcPrd);
+        }
     }
 
     @Override
@@ -1373,7 +1397,9 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
             cursor.isNull(offset + 101) ? null : cursor.getString(offset + 101), // FStr2
             cursor.isNull(offset + 102) ? null : cursor.getString(offset + 102), // FStr3
             cursor.isNull(offset + 103) ? null : cursor.getString(offset + 103), // FStr4
-            cursor.isNull(offset + 104) ? null : cursor.getString(offset + 104) // FStr5
+            cursor.isNull(offset + 104) ? null : cursor.getString(offset + 104), // FStr5
+            cursor.isNull(offset + 105) ? null : cursor.getString(offset + 105), // FPayType
+            cursor.isNull(offset + 106) ? null : cursor.getString(offset + 106) // FAcPrd
         );
         return entity;
     }
@@ -1485,6 +1511,8 @@ public class T_DetailDao extends AbstractDao<T_Detail, String> {
         entity.setFStr3(cursor.isNull(offset + 102) ? null : cursor.getString(offset + 102));
         entity.setFStr4(cursor.isNull(offset + 103) ? null : cursor.getString(offset + 103));
         entity.setFStr5(cursor.isNull(offset + 104) ? null : cursor.getString(offset + 104));
+        entity.setFPayType(cursor.isNull(offset + 105) ? null : cursor.getString(offset + 105));
+        entity.setFAcPrd(cursor.isNull(offset + 106) ? null : cursor.getString(offset + 106));
      }
     
     @Override

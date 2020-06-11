@@ -165,7 +165,7 @@ public class SpinnerWaveHouse extends RelativeLayout {
         dealAuto(list,storage, type,false);
 
         if (share.getIsOL()) {
-            Log.e("CommonMethod:", "getWaveHouseAdapter联网");
+//            Log.e("CommonMethod:", "getWaveHouseAdapter联网");
             ArrayList<Integer> choose = new ArrayList<>();
             choose.add(4);
             String json = JsonCreater.DownLoadData(

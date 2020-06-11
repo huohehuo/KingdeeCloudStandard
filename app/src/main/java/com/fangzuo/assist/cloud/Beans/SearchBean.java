@@ -8,6 +8,9 @@ public class SearchBean {
     public String searchType;
     public String json;
 
+    public SearchBean(){
+    }
+
     public SearchBean(String searchType, String json){
         this.searchType=searchType;
         this.json = json;

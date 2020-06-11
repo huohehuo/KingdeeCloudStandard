@@ -279,7 +279,7 @@ public class SpinnerStorage extends RelativeLayout {
             @Override
             public void onNext(CommonResponse commonResponse) {
                 DownloadReturnBean dBean = JsonCreater.gson.fromJson(commonResponse.returnJson, DownloadReturnBean.class);
-                Lg.e("得到仓库数量",dBean.storage.size());
+//                Lg.e("得到仓库数量",dBean.storage.size());
                 if (dBean.storage.size() > 0 && container.size()<=0){
                     StorageDao yuandanTypeDao = daoSession.getStorageDao();
                     yuandanTypeDao.deleteAll();
@@ -363,7 +363,11 @@ public class SpinnerStorage extends RelativeLayout {
 //            case Config.ZbCheJianDiZGetActivity:
 //            case Config.ZbCheJianDiGetActivity:
             case Config.ZbCheJianHunInActivity:
+            case Config.ZbCheJianHunInCp1Activity:
+            case Config.ZbCheJianHunInCp2Activity:
             case Config.ZbCheJianInActivity:
+            case Config.ZbCheJianInCp1Activity:
+            case Config.ZbCheJianInCp2Activity:
                 for(int i = container.size()-1;i >= 0;i--) {
                     Storage department = container.get(i);
                     if(department.FName.contains("在途") || department.FName.contains("外存放")) {

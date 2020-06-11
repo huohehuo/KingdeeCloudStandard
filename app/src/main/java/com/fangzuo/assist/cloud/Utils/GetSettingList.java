@@ -67,6 +67,8 @@ public class GetSettingList {
             items.add(new SettingList("56","调拨(在途仓库)",Config.DBStorageActivity,R.mipmap.diaobo));
             items.add(new SettingList("213","拆包理货",Config.SplitBoxLv1,R.mipmap.sellinout));
             items.add(new SettingList("212","纵刨车间",Config.ZbChejianLv1,R.mipmap.sellinout));
+            items.add(new SettingList("212","平刨车间",Config.ZbChejianLv1Cp1,R.mipmap.sellinout));
+            items.add(new SettingList("212","旋切车间",Config.ZbChejianLv1Cp2,R.mipmap.sellinout));
             items.add(new SettingList("211","刨光二车间",Config.Bg2ChejianLv1,R.mipmap.sellinout));
             items.add(new SettingList("210","刨光一车间",Config.Bg1ChejianLv1,R.mipmap.sellinout));
             items.add(new SettingList("209","成品外购入库",Config.CpWgInLv1,R.mipmap.sellinout));
@@ -76,7 +78,7 @@ public class GetSettingList {
             //根据ary的值，遍历list符合的item并添加
             for (int j=0;j<ary.length;j++){
                 if (TextUtils.equals(items.get(i).tag,ary[j])){
-                    Lg.e("加入单据",items.get(i));
+//                    Lg.e("加入单据",items.get(i));
                     backItems.add(items.get(i));
                 }
             }
@@ -160,6 +162,7 @@ public class GetSettingList {
             items.add(new SettingList("标签补打",Config.PrintHistoryActivity,R.mipmap.printmain));
             items.add(new SettingList("期初补打",Config.PrintBeforeDataActivity,R.mipmap.printmain));
             items.add(new SettingList("样板出库",Config.YbOut4P2Activity,R.mipmap.chuku));
+            items.add(new SettingList("成品地板出库单",Config.CpFloorOutActivity,R.mipmap.chuku));
         }
 //            items.add(new SettingList(App.getContext().getResources().getString(R.string.p2_production_instore),Config.P2ProductionInStoreActivity,R.mipmap.printmain));
 

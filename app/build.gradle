@@ -27,7 +27,7 @@ android {
     }
 }
 greendao {
-    schemaVersion 91
+    schemaVersion 94
     daoPackage 'com.fangzuo.greendao.gen'
     targetGenDir 'src/main/java'
 }

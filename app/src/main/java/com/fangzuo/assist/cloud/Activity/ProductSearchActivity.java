@@ -461,6 +461,8 @@ public class ProductSearchActivity extends BaseActivity {
             case Config.ChangeInActivity://挑板入库
             case Config.ChangeLvInActivity://挑板入库
             case Config.ZbCheJianInActivity://挑板入库
+            case Config.ZbCheJianInCp1Activity://挑板入库
+            case Config.ZbCheJianInCp2Activity://挑板入库
             case Config.Bg1CheJianInActivity://挑板入库
             case Config.CpWgInActivity://挑板入库
             case Config.Bg2CheJianInActivity://挑板入库

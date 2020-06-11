@@ -16,9 +16,9 @@ public class Info {
 //    public static final String DATABASESETTING = "K3DBConfigerRY";
     public static String getAppNo(){
         if ("1".equals(Hawk.get(Config.PDA_Project_Type,"1"))){
-            return "6.60";
+            return "6.64";
         }else{
-            return "1.711";
+            return "1.721";
         }
     }
     public static final int RegisterNo = 155;
@@ -119,7 +119,24 @@ public class Info {
         jsonArray.put(json);
         return jsonArray.toString();
     }
-
+    public static String getJson(String activity,String json){
+        Lg.e("回单json:"+json);
+        //业务对象Id
+//        String formid = getFormID(activity);
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(activity);
+        jsonArray.put(json);
+        return jsonArray.toString();
+    }
+    public static String getJson(String json){
+        Lg.e("回单json:"+json);
+        //业务对象Id
+//        String formid = getFormID(activity);
+        JSONArray jsonArray = new JSONArray();
+//        jsonArray.put(activity);
+        jsonArray.put(json);
+        return jsonArray.toString();
+    }
     //根据activity获取相应的单据ID
     private static String getFormID(int activity){
         String backString="";
@@ -144,6 +161,8 @@ public class Info {
             case Config.P2ProductionInStore2Activity://产品入库
             case Config.BoxReAddP1Activity://产品入库
             case Config.ZbCheJianHunInActivity://产品入库
+            case Config.ZbCheJianHunInCp1Activity://产品入库
+            case Config.ZbCheJianHunInCp2Activity://产品入库
             case Config.SplitBoxHunInActivity://产品入库
             case Config.Tb1HunInActivity://产品入库
             case Config.Tb2HunInActivity://产品入库
@@ -158,6 +177,8 @@ public class Info {
             case Config.TbInActivity://挑板入库
             case Config.ChangeInActivity://挑板入库
             case Config.ZbCheJianInActivity://挑板入库
+            case Config.ZbCheJianInCp1Activity://挑板入库
+            case Config.ZbCheJianInCp2Activity://挑板入库
             case Config.Bg1CheJianInActivity://挑板入库
             case Config.CpWgInActivity://挑板入库
             case Config.Bg2CheJianInActivity://挑板入库
@@ -184,6 +205,8 @@ public class Info {
             case Config.ProductGet4BoxActivity://生产领料
             case Config.ProductGet4BoxP2Activity://生产领料
             case Config.ZbCheJianDiGetActivity://生产领料
+            case Config.ZbCheJianDiGetCp1Activity://生产领料
+            case Config.ZbCheJianDiGetCp2Activity://生产领料
             case Config.SplitBoxDiGetActivity://生产领料
             case Config.Tb1DiGetActivity://生产领料
             case Config.Tb2DiGetActivity://生产领料
@@ -208,6 +231,8 @@ public class Info {
             case Config.ZbGet4Activity://挑板领料
             case Config.ZbGet5Activity://挑板领料
             case Config.ZbCheJianDiZGetActivity://挑板领料
+            case Config.ZbCheJianDiZGetCp1Activity://挑板领料
+            case Config.ZbCheJianDiZGetCp2Activity://挑板领料
             case Config.TbGet2Activity://挑板领料
             case Config.TbGet3Activity://挑板领料
             case Config.GbGetActivity://改板领料
@@ -231,6 +256,7 @@ public class Info {
             case Config.OtherOutStoreActivity://其他出库
             case Config.YbOutActivity://样板出库
             case Config.HwOut3Activity://第三方货物出库
+            case Config.CpFloorOutActivity://第三方货物出库
                 backString=FormID_OtherOut;
                 break;
             case Config.SaleOrderActivity://销售订单
@@ -304,6 +330,8 @@ public class Info {
             case Config.P2ProductionInStore2Activity://产品入库
             case Config.BoxReAddP1Activity://产品入库
             case Config.ZbCheJianHunInActivity://产品入库
+            case Config.ZbCheJianHunInCp1Activity://产品入库
+            case Config.ZbCheJianHunInCp2Activity://产品入库
             case Config.SplitBoxHunInActivity://产品入库
             case Config.Tb1HunInActivity://产品入库
             case Config.Tb2HunInActivity://产品入库
@@ -318,6 +346,8 @@ public class Info {
             case Config.TbInActivity://挑板入库
             case Config.ChangeInActivity://挑板入库
             case Config.ZbCheJianInActivity://挑板入库
+            case Config.ZbCheJianInCp1Activity://挑板入库
+            case Config.ZbCheJianInCp2Activity://挑板入库
             case Config.Bg1CheJianInActivity://挑板入库
             case Config.CpWgInActivity://挑板入库
             case Config.Bg2CheJianInActivity://挑板入库
@@ -344,6 +374,8 @@ public class Info {
             case Config.ProductGet4BoxActivity://生产领料
             case Config.ProductGet4BoxP2Activity://生产领料
             case Config.ZbCheJianDiGetActivity://生产领料
+            case Config.ZbCheJianDiGetCp1Activity://生产领料
+            case Config.ZbCheJianDiGetCp2Activity://生产领料
             case Config.SplitBoxDiGetActivity://生产领料
             case Config.Tb1DiGetActivity://生产领料
             case Config.Tb2DiGetActivity://生产领料
@@ -368,6 +400,8 @@ public class Info {
             case Config.ZbGet4Activity://挑板领料
             case Config.ZbGet5Activity://挑板领料
             case Config.ZbCheJianDiZGetActivity://挑板领料
+            case Config.ZbCheJianDiZGetCp1Activity://挑板领料
+            case Config.ZbCheJianDiZGetCp2Activity://挑板领料
             case Config.TbGet2Activity://挑板领料
             case Config.TbGet3Activity://挑板领料
             case Config.GbGetActivity://改板领料
@@ -390,6 +424,7 @@ public class Info {
             case Config.OtherOutStoreActivity://其他出库
             case Config.YbOutActivity://样板出库
             case Config.HwOut3Activity://第三方货物出库
+            case Config.CpFloorOutActivity://第三方货物出库
                 backString=BT_OOS;
                 break;
             case Config.SaleOrderActivity:

@@ -250,9 +250,17 @@ public class SpinnerOrg extends RelativeLayout {
             case Config.Bg1CheJianHunInActivity:
             case Config.Bg1CheJianDiGetActivity:
             case Config.ZbCheJianInActivity:
+            case Config.ZbCheJianInCp1Activity:
+            case Config.ZbCheJianInCp2Activity:
             case Config.ZbCheJianHunInActivity:
+            case Config.ZbCheJianHunInCp1Activity:
+            case Config.ZbCheJianHunInCp2Activity:
             case Config.ZbCheJianDiGetActivity:
+            case Config.ZbCheJianDiGetCp1Activity:
+            case Config.ZbCheJianDiGetCp2Activity:
             case Config.ZbCheJianDiZGetActivity:
+            case Config.ZbCheJianDiZGetCp1Activity:
+            case Config.ZbCheJianDiZGetCp2Activity:
             case Config.SplitBoxGetActivity:
             case Config.SplitBoxDiGetActivity:
             case Config.SplitBoxInActivity:

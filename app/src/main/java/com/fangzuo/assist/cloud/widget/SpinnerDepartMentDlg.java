@@ -270,6 +270,10 @@ public class SpinnerDepartMentDlg extends RelativeLayout {
                     || activityTag== Config.Tb1DiGetActivity|| activityTag== Config.Tb2DiGetActivity|| activityTag== Config.Tb3DiGetActivity
                     || activityTag== Config.GbDiGetActivity|| activityTag== Config.GbHunInActivity|| activityTag== Config.ZbCheJianDiZGetActivity
                     || activityTag== Config.BoxReAddP2Activity|| activityTag== Config.ProductGet4BoxP2Activity
+                    || activityTag== Config.ZbCheJianInCp1Activity|| activityTag== Config.ZbCheJianInCp2Activity
+                    || activityTag== Config.ZbCheJianHunInCp1Activity|| activityTag== Config.ZbCheJianHunInCp2Activity
+                    || activityTag== Config.ZbCheJianDiGetCp1Activity|| activityTag== Config.ZbCheJianDiGetCp2Activity
+                    || activityTag== Config.ZbCheJianDiZGetCp1Activity|| activityTag== Config.ZbCheJianDiZGetCp2Activity
                     ) {
                 for (int i = 0; i < listData.size(); i++) {
                     if (listData.get(i).FOrg.equals(autoOrg)) {

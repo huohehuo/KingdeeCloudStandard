@@ -40,7 +40,7 @@ public class LocDataUtil {
 
 
     public static Unit getUnit(String unitid){
-        Lg.e("获取单位位置：",unitid);
+//        Lg.e("获取单位位置：",unitid);
 //        Lg.e("获取单位位置org：",org);
         if (null==unitid){
             return new Unit("","","","");
@@ -61,7 +61,7 @@ public class LocDataUtil {
 
     }
     public static Unit getUnit4Name(String unitid){
-        Lg.e("获取单位位置：",unitid);
+//        Lg.e("获取单位位置：",unitid);
 //        Lg.e("获取单位位置org：",org);
         if (null==unitid){
             return new Unit("","","","");

@@ -51,6 +51,7 @@ public class Config {
     public static final String C_StatusConvert ="Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.StatusConvert.common.kdsvc";
     public static final String C_Login =        "Kingdee.BOS.WebApi.ServicesStub.AuthService.ValidateUser.common.kdsvc";
     public static final String C_Delete =        "Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Delete.common.kdsvc";
+    public static final String C_Search =        "Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.ExecuteBillQuery.common.kdsvc";
 
 
     public static final String DATABASESETTING = "master";
@@ -204,10 +205,20 @@ public class Config {
     public static final int SplitBoxHunInActivity                   =10079005;//拆包入库(混包)--混包新增
     public static final int SplitBoxDiGetActivity                   =100710204;//拆包领料(混包)--码拍领料/生产领料单
     public static final int ZbChejianLv1                            =10085;//纵刨车间
+    public static final int ZbChejianLv1Cp1                         =1008501;//纵刨车间
+    public static final int ZbChejianLv1Cp2                         =1008502;//纵刨车间
     public static final int ZbCheJianInActivity                     =10047005;//整包入库---挑板入库1
+    public static final int ZbCheJianInCp1Activity                  =1004700501;//整包入库---挑板入库1
+    public static final int ZbCheJianInCp2Activity                  =1004700502;//整包入库---挑板入库1
     public static final int ZbCheJianHunInActivity                  =10079001;//混包入库--混包新增
+    public static final int ZbCheJianHunInCp1Activity               =1007900101;//混包入库--混包新增
+    public static final int ZbCheJianHunInCp2Activity               =1007900102;//混包入库--混包新增
     public static final int ZbCheJianDiGetActivity                  =100710201;//底领料(混包)--码拍领料/生产领料单
+    public static final int ZbCheJianDiGetCp1Activity               =1007102011;//底领料(混包)--码拍领料/生产领料单
+    public static final int ZbCheJianDiGetCp2Activity               =1007102012;//底领料(混包)--码拍领料/生产领料单
     public static final int ZbCheJianDiZGetActivity                 =10046005;//底领料(整包)---挑板领料1
+    public static final int ZbCheJianDiZGetCp1Activity              =100460051;//底领料(整包)---挑板领料1
+    public static final int ZbCheJianDiZGetCp2Activity              =100460052;//底领料(整包)---挑板领料1
     public static final int Bg1ChejianLv1                           =10086;//刨光一车间
     public static final int Bg1CheJianInActivity                    =10047006;//整包入库---挑板入库1
     public static final int Bg1CheJianHunInActivity                 =10079002;//混包入库--混包新增
@@ -276,6 +287,7 @@ public class Config {
     public static final int SupplierIn4P2Activity                   =1005402;//供应商入库(copy一期第三方货物入库)
     public static final int ProductGet4BoxP2Activity                =1007103;//码拍领料/生产领料单
     public static final int BoxReAddP2Activity                      =10079012;//混包新增
+    public static final int CpFloorOutActivity                      =10089;//成品地板出库单
 
 
     public static boolean isInStoreOrder(int activity){

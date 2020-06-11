@@ -64,6 +64,7 @@ public class DownloadReturnBean {
 	public ArrayList<DryingGetData> dryingGetDatas;
 	public ArrayList<PGetData> pGetDatas;
 	public ArrayList<BatchDataBean> batchDataBeans;
+	public ArrayList<FloorBean> floorBeans;
 
 
 

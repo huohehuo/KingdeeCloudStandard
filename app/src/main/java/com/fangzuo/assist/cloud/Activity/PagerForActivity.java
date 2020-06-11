@@ -43,6 +43,7 @@ import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentProductGet4P14P2
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentProductGet4P1BoxDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOut4PDBoxMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.FragmentSaleOut4PDMain;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.OtherInOutBox.FragmentCpFloorOutDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentDB4P2Detail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentDB4P2Main;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.FragmentDryingGet4P2Detail;
@@ -90,6 +91,7 @@ import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.PushDownFragment.Frag
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.PushDownFragment.FragmentP2ProductionInStoreDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.P2.PushDownFragment.FragmentP2ProductionInStoreMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentSaleOutDetailForPDBox;
+import com.fangzuo.assist.cloud.Fragment.TabForActivity.PushDownFragment.FragmentSaleOutDetailForPDBoxP2;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentTbGetMain;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentPrisTBDetail;
 import com.fangzuo.assist.cloud.Fragment.TabForActivity.TbManagerBox.FragmentPrisTBMain;
@@ -378,6 +380,16 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentBoxReAddMain());
                 fragments.add(new FragmentBoxReAddDetail());
                 break;
+            case Config.ZbCheJianHunInCp1Activity:
+                binding.topActivity.tvTitle.setText("混包入库");
+                fragments.add(new FragmentBoxReAddMain());
+                fragments.add(new FragmentBoxReAddDetail());
+                break;
+            case Config.ZbCheJianHunInCp2Activity:
+                binding.topActivity.tvTitle.setText("混包入库");
+                fragments.add(new FragmentBoxReAddMain());
+                fragments.add(new FragmentBoxReAddDetail());
+                break;
             case Config.Bg1CheJianHunInActivity:
                 binding.topActivity.tvTitle.setText("混包入库");
                 fragments.add(new FragmentBoxReAddMain());
@@ -440,6 +452,16 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentProductGet4P1BoxDetail());
                 break;
             case Config.ZbCheJianDiGetActivity:
+                binding.topActivity.tvTitle.setText("底领料(混包)");//生产领料单
+                fragments.add(new FragmentPrGet4P1BoxMain());
+                fragments.add(new FragmentProductGet4P1BoxDetail());
+                break;
+            case Config.ZbCheJianDiGetCp1Activity:
+                binding.topActivity.tvTitle.setText("底领料(混包)");//生产领料单
+                fragments.add(new FragmentPrGet4P1BoxMain());
+                fragments.add(new FragmentProductGet4P1BoxDetail());
+                break;
+            case Config.ZbCheJianDiGetCp2Activity:
                 binding.topActivity.tvTitle.setText("底领料(混包)");//生产领料单
                 fragments.add(new FragmentPrGet4P1BoxMain());
                 fragments.add(new FragmentProductGet4P1BoxDetail());
@@ -527,7 +549,7 @@ public class PagerForActivity extends BaseActivity {
             case Config.PdSaleOrder2SaleOut4BoxP2Activity:
                 binding.topActivity.tvTitle.setText("销售订单下推销售出库(箱码)");//复制到2期，基本不变
                 fragments.add(new FragmentSaleOut4PDBoxMain());
-                fragments.add(new FragmentSaleOutDetailForPDBox());
+                fragments.add(new FragmentSaleOutDetailForPDBoxP2());
                 break;
             case Config.PdSaleOrder2SaleOut2Activity:
                 binding.topActivity.tvTitle.setText("VMI销售订单下推销售出库单");
@@ -589,6 +611,16 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentTbGetMain());
                 fragments.add(new FragmentPrGetDetail());
                 break;
+            case Config.ZbCheJianDiZGetCp1Activity:
+                binding.topActivity.tvTitle.setText("底领料(整包)");
+                fragments.add(new FragmentTbGetMain());
+                fragments.add(new FragmentPrGetDetail());
+                break;
+            case Config.ZbCheJianDiZGetCp2Activity:
+                binding.topActivity.tvTitle.setText("底领料(整包)");
+                fragments.add(new FragmentTbGetMain());
+                fragments.add(new FragmentPrGetDetail());
+                break;
             case Config.TbGetActivity:
                 binding.topActivity.tvTitle.setText("挑板领料1(整包)");
                 fragments.add(new FragmentTbGetMain());
@@ -625,6 +657,16 @@ public class PagerForActivity extends BaseActivity {
                 fragments.add(new FragmentPrisTBDetail());
                 break;
             case Config.ZbCheJianInActivity:
+                binding.topActivity.tvTitle.setText("整包入库");
+                fragments.add(new FragmentPrisTBMain());
+                fragments.add(new FragmentPrisTBDetail());
+                break;
+            case Config.ZbCheJianInCp1Activity:
+                binding.topActivity.tvTitle.setText("整包入库");
+                fragments.add(new FragmentPrisTBMain());
+                fragments.add(new FragmentPrisTBDetail());
+                break;
+            case Config.ZbCheJianInCp2Activity:
                 binding.topActivity.tvTitle.setText("整包入库");
                 fragments.add(new FragmentPrisTBMain());
                 fragments.add(new FragmentPrisTBDetail());
@@ -789,6 +831,11 @@ public class PagerForActivity extends BaseActivity {
                 binding.topActivity.tvTitle.setText("其他出库");
                 fragments.add(new FragmentOOutMain());
                 fragments.add(new FragmentOOutDetail());
+                break;
+            case Config.CpFloorOutActivity:
+                binding.topActivity.tvTitle.setText("成品地板出库单");
+//                fragments.add(new FragmentOOutMain());
+                fragments.add(new FragmentCpFloorOutDetail());
                 break;
         }
         //设置pager

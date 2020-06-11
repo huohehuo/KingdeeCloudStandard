@@ -79,6 +79,8 @@ public class P1OneFragment extends BaseFragment {
         items_model =new ArrayList<>();
         items_splitbox   =new ArrayList<>();
         items_zbchejian  =new ArrayList<>();
+        items_zbchejian1  =new ArrayList<>();
+        items_zbchejian2  =new ArrayList<>();
         items_bg1chejian =new ArrayList<>();
         items_bg2chejian =new ArrayList<>();
         items_cpwg =new ArrayList<>();
@@ -130,6 +132,8 @@ public class P1OneFragment extends BaseFragment {
     List<String> items_model    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
     List<String> items_splitbox    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
     List<String> items_zbchejian    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
+    List<String> items_zbchejian1    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
+    List<String> items_zbchejian2    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
     List<String> items_bg1chejian    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
     List<String> items_bg2chejian    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
     List<String> items_cpwg    ;   /*= new String[]{"组织间调拨", "跨组织调拨", "调拨申请单下推直接调拨单"};*/
@@ -595,6 +599,62 @@ public class P1OneFragment extends BaseFragment {
                                 });
                         builder.create().show();
                         break;
+                    case Config.ZbChejianLv1Cp1://平刨车间
+                        builder = new AlertDialog.Builder(getActivity());
+                        // 设置参数
+                        builder.setAdapter(
+                                new ArrayAdapter<String>(getActivity(),
+                                        R.layout.item_choose, R.id.textView, items_zbchejian1),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        switch (items_zbchejian1.get(which)) {//"盘亏入库", "VMI盘亏入库"
+                                            case "整包入库":
+                                                PagerForActivity.start(mContext, Config.ZbCheJianInCp1Activity);
+                                                break;
+                                            case "混包入库":
+                                                PagerForActivity.start(mContext, Config.ZbCheJianHunInCp1Activity);
+                                                break;
+                                            case "底领料(混包)":
+                                                PagerForActivity.start(mContext, Config.ZbCheJianDiGetCp1Activity);
+                                                break;
+                                            case "底领料(整包)":
+                                                PagerForActivity.start(mContext, Config.ZbCheJianDiZGetCp1Activity);
+                                                break;
+                                        }
+                                    }
+                                });
+                        builder.create().show();
+                        break;
+                    case Config.ZbChejianLv1Cp2://旋切车间
+                        builder = new AlertDialog.Builder(getActivity());
+                        // 设置参数
+                        builder.setAdapter(
+                                new ArrayAdapter<String>(getActivity(),
+                                        R.layout.item_choose, R.id.textView, items_zbchejian2),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        switch (items_zbchejian2.get(which)) {//"盘亏入库", "VMI盘亏入库"
+                                            case "整包入库":
+                                                PagerForActivity.start(mContext, Config.ZbCheJianInCp2Activity);
+                                                break;
+                                            case "混包入库":
+                                                PagerForActivity.start(mContext, Config.ZbCheJianHunInCp2Activity);
+                                                break;
+                                            case "底领料(混包)":
+                                                PagerForActivity.start(mContext, Config.ZbCheJianDiGetCp2Activity);
+                                                break;
+                                            case "底领料(整包)":
+                                                PagerForActivity.start(mContext, Config.ZbCheJianDiZGetCp2Activity);
+                                                break;
+                                        }
+                                    }
+                                });
+                        builder.create().show();
+                        break;
                     case Config.Bg1ChejianLv1://刨光一车间
                         builder = new AlertDialog.Builder(getActivity());
                         // 设置参数
@@ -769,7 +829,7 @@ public class P1OneFragment extends BaseFragment {
 
     //处理二级菜单权限数据
     private void dealSecMenu(String[] ary){
-        Lg.e("赛选：",ary);
+//        Lg.e("赛选：",ary);
         for (int i=0; i<ary.length;i++){
             switch (ary[i]){
                 //成品外购入库
@@ -799,18 +859,26 @@ public class P1OneFragment extends BaseFragment {
                 case "47":
                     items_bg2chejian.add("底领料");
                     break;
-                //纵刨车间
+                //纵刨车间平刨车间旋切车间
                 case "48":
                     items_zbchejian.add("整包入库");
+                    items_zbchejian1.add("整包入库");
+                    items_zbchejian2.add("整包入库");
                     break;
                 case "49":
                     items_zbchejian.add("混包入库");
+                    items_zbchejian1.add("混包入库");
+                    items_zbchejian2.add("混包入库");
                     break;
                 case "50":
                     items_zbchejian.add("底领料(混包)");
+                    items_zbchejian1.add("底领料(混包)");
+                    items_zbchejian2.add("底领料(混包)");
                     break;
                 case "76":
                     items_zbchejian.add("底领料(整包)");
+                    items_zbchejian1.add("底领料(整包)");
+                    items_zbchejian2.add("底领料(整包)");
                     break;
 
                 //拆包理货

@@ -109,8 +109,8 @@ public class ReViewActivity extends BaseActivity {
                 ||activity==Config.SimpleInActivity||activity==Config.GbInActivity||activity==Config.DhInActivity||activity==Config.P1PdProductGet2CprkActivity
                 ||activity==Config.DhIn2Activity||activity==Config.TbIn2Activity||activity==Config.TbIn3Activity||activity==Config.P1PdProductGet2Cprk2Activity
                 ||activity==Config.SplitBoxInActivity||activity==Config.ZbCheJianInActivity||activity==Config.Bg1CheJianInActivity||activity==Config.Bg2CheJianInActivity
-                ||activity==Config.CpWgInActivity
-                ||activity==Config.ZbIn1Activity
+                ||activity==Config.CpWgInActivity||activity==Config.ZbCheJianInCp1Activity
+                ||activity==Config.ZbIn1Activity||activity==Config.ZbCheJianInCp2Activity
                 ||activity==Config.ZbIn2Activity
                 ||activity==Config.ZbIn3Activity
                 ||activity==Config.ZbIn4Activity
@@ -531,8 +531,8 @@ public class ReViewActivity extends BaseActivity {
                 ||activity==Config.SimpleInActivity||activity==Config.GbInActivity||activity==Config.DhInActivity||activity==Config.P1PdProductGet2CprkActivity||activity==Config.ChangeLvInActivity
                 ||activity==Config.DhIn2Activity||activity==Config.TbIn2Activity||activity==Config.TbIn3Activity||activity==Config.P1PdProductGet2Cprk2Activity||activity==Config.ChangeModelInActivity
                 ||activity==Config.SplitBoxInActivity||activity==Config.ZbCheJianInActivity||activity==Config.Bg1CheJianInActivity||activity==Config.Bg2CheJianInActivity
-                ||activity==Config.CpWgInActivity
-                ||activity==Config.ZbIn1Activity
+                ||activity==Config.CpWgInActivity||activity==Config.ZbCheJianInCp1Activity
+                ||activity==Config.ZbIn1Activity||activity==Config.ZbCheJianInCp2Activity
                 ||activity==Config.ZbIn2Activity
                 ||activity==Config.ZbIn3Activity
                 ||activity==Config.ZbIn4Activity

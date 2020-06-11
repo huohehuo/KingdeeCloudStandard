@@ -86,7 +86,7 @@ public class MyWaveHouseSpinner extends RelativeLayout {
 
         mSp.setAdapter(waveHouseSpAdapter);
         if(share.getIsOL()){
-            Log.e("CommonMethod:","getWaveHouseAdapter联网");
+//            Log.e("CommonMethod:","getWaveHouseAdapter联网");
             ArrayList<Integer> choose = new ArrayList<>();
             choose.add(4);
             String json = JsonCreater.DownLoadData(

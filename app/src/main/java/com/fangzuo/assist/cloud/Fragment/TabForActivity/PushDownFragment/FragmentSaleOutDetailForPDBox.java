@@ -310,6 +310,7 @@ public class FragmentSaleOutDetailForPDBox extends BaseFragment {
                     autoAuxSing = codeCheckBackDataBeanList.get(0).FAuxsign;
                     autoStorage = codeCheckBackDataBeanList.get(0).FStorageNumber;
                     scanOfHuozhuNumber = codeCheckBackDataBeanList.get(0).FHuoZhuNumber;
+                    spUnit.setAuto(codeCheckBackDataBeanList.get(0).FUnitNumber, SpinnerUnit.Number);
                     spWhichStorage.setAuto("",autoStorage, activityPager.getOrgOut());
                     getAutoSelection4Box(codeCheckBackDataBeanList);//得出列表存在的角标
 
@@ -420,6 +421,17 @@ public class FragmentSaleOutDetailForPDBox extends BaseFragment {
         } else {
             LoadingUtil.showAlter(mContext,"注意","表头数据获取失败，请重新下载单据...",false);
 //            Toast.showText(mContext, "表头数据获取失败");
+        }
+
+        //如果本地存在该单据表头，则覆盖main中的备注
+        List<T_main> list =activityPager.getT_mainDao().queryBuilder().where(
+                T_mainDao.Properties.FBillNo.eq(pushDownMain.FBillNo),
+                T_mainDao.Properties.Activity.eq(activityPager.getActivity()),
+                T_mainDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+        ).build().list();
+        if (list.size()>0){
+            Lg.e("由本地得到备注"+list.get(0).FNot);
+            EventBusUtil.sendEvent(new ClassEvent(EventBusInfoCode.Main_Note, list.get(0).FNot));
         }
 
     }
@@ -591,7 +603,9 @@ public class FragmentSaleOutDetailForPDBox extends BaseFragment {
         pushDownMainDao = daoSession.getPushDownMainDao();
         for (int i = 0; i < fidcontainer.size(); i++) {
             List<PushDownSub> list = pushDownSubDao.queryBuilder().where(
-                    PushDownSubDao.Properties.FBillNo.eq(fidcontainer.get(i))).build().list();
+                    PushDownSubDao.Properties.FBillNo.eq(fidcontainer.get(i)),
+                    PushDownSubDao.Properties.FAccountID.eq(CommonUtil.getAccountID())
+            ).build().list();
             container.addAll(list);
         }
         if (container.size() > 0) {
@@ -896,6 +910,8 @@ public class FragmentSaleOutDetailForPDBox extends BaseFragment {
             main.FCustomerID = pushDownMain.FSupplyID;
             main.F_FFF_Text = activityPager.getFOrderNo();
             main.FFieldMan = pushDownMain.FFieldMan;
+            main.FAcPrd = pushDownMain.FAcPrd;
+            main.FPayType = pushDownMain.FPayType;
 //            main.setClient(activityPager.getClient());
             long insert1 = t_mainDao.insert(main);
 

@@ -44,11 +44,15 @@ public class UpLoadModel {
                 t_mainList.addAll(mains);
                 for (T_main main:t_mainList) {
                     //合并回单
-                    List<T_Detail> details = DataModel.mergeDetail(mContext,main.FOrderId+"",activity);
-//                    List<T_Detail> details = t_detailDao.queryBuilder().where(
-//                            T_DetailDao.Properties.Activity.eq(activity),
-//                            T_DetailDao.Properties.FOrderId.eq(main.FOrderId)
-//                    ).build().list();
+                    List<T_Detail> details;
+                    if (activity == Config.CpFloorOutActivity){
+                        details = t_detailDao.queryBuilder().where(
+                                T_DetailDao.Properties.Activity.eq(activity),
+                                T_DetailDao.Properties.FOrderId.eq(main.FOrderId)
+                        ).build().list();
+                    }else{
+                        details = DataModel.mergeDetail(mContext,main.FOrderId+"",activity);
+                    }
                     Lg.e("detail:"+details.size(),details);
                     if (details.size()>0){
                         listMap.put(main.FOrderId+"",details);
@@ -194,6 +198,8 @@ public class UpLoadModel {
             case Config.WorkOrgIn4P2Activity://产品入库
             case Config.BoxReAddP1Activity://混包新增
             case Config.ZbCheJianHunInActivity://混包新增
+            case Config.ZbCheJianHunInCp1Activity://混包新增
+            case Config.ZbCheJianHunInCp2Activity://混包新增
             case Config.SplitBoxHunInActivity://混包新增
             case Config.Tb1HunInActivity://混包新增
             case Config.Tb2HunInActivity://混包新增
@@ -213,6 +219,8 @@ public class UpLoadModel {
             case Config.ZbIn5Activity://挑板入库
             case Config.ChangeInActivity://挑板入库
             case Config.ZbCheJianInActivity://挑板入库
+            case Config.ZbCheJianInCp1Activity://挑板入库
+            case Config.ZbCheJianInCp2Activity://挑板入库
             case Config.Bg1CheJianInActivity://挑板入库
             case Config.CpWgInActivity://挑板入库
             case Config.Bg2CheJianInActivity://挑板入库
@@ -240,6 +248,8 @@ public class UpLoadModel {
             case Config.ZbGet4Activity://挑板领料
             case Config.ZbGet5Activity://挑板领料
             case Config.ZbCheJianDiZGetActivity://挑板领料
+            case Config.ZbCheJianDiZGetCp1Activity://挑板领料
+            case Config.ZbCheJianDiZGetCp2Activity://挑板领料
             case Config.TbGet2Activity://挑板领料
             case Config.TbGet3Activity://挑板领料
             case Config.GbGetActivity://改板领料
@@ -248,8 +258,8 @@ public class UpLoadModel {
             case Config.SaleOutActivity://销售出库
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOut(mains,details)));
                 break;
-            case Config.PdSaleOrder2SaleOut4BoxActivity://销售订单下推销售出库
-            case Config.PdSaleOrder2SaleOut4BoxP2Activity://销售订单下推销售出库
+            case Config.PdSaleOrder2SaleOut4BoxActivity://销售订单下推销售出库箱码一期
+            case Config.PdSaleOrder2SaleOut4BoxP2Activity://销售订单下推销售出库箱码二期
             case Config.PdSaleOrder2SaleOutActivity://销售订单下推销售出库
             case Config.PdSaleOrder2SaleOut2Activity://VMI销售订单下推销售出库
                 DataModel.upload(Config.C_BatcnSave,Info.getJson(activity,JsonDealUtils.JSonSaleOrder2SaleOut(mains,details)));
@@ -267,6 +277,7 @@ public class UpLoadModel {
             case Config.OtherOutStoreActivity://其他出库
             case Config.YbOutActivity://样板出库
             case Config.HwOut3Activity://第三方货物出库
+            case Config.CpFloorOutActivity://第三方货物出库
                 DataModel.upload(Config.C_BatcnSave, Info.getJson(activity,JsonDealUtils.JSonOOS(mains,details)));
                 break;
             case Config.SaleOrderActivity://销售订单
